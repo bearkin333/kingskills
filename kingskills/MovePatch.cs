@@ -12,96 +12,96 @@ namespace kingskills
     class MovePatch
     {
         //These are the base stats already in valheim
-        const float BaseSwimSpeed = 2f;
-        const float BaseSwimAccel = .05f;
-        const float BaseSwimTurn = 100f;
+        public const float BaseSwimSpeed = 2f;
+        public const float BaseSwimAccel = .05f;
+        public const float BaseSwimTurn = 100f;
 
         //These are percents, max and min referencing effects at level 100 and 0
-        const float SwimSpeedMax = 3f;
-        const float SwimSpeedMin = 0f;
-        const float SwimAccelMax = 3f;
-        const float SwimAccelMin = 0f;
-        const float SwimTurnMax = 5f;
-        const float SwimTurnMin = 0f;
+        public const float SwimSpeedMax = 3f;
+        public const float SwimSpeedMin = 0f;
+        public const float SwimAccelMax = 3f;
+        public const float SwimAccelMin = 0f;
+        public const float SwimTurnMax = 5f;
+        public const float SwimTurnMin = 0f;
 
         //Swim stamina drain per second in absolute value
-        const float SwimStaminaPSMax = .5f;
-        const float SwimStaminaPSMin = 5f;
+        public const float SwimStaminaPSMax = .5f;
+        public const float SwimStaminaPSMin = 5f;
 
         //The maximum and minimum viable weight you can get a bonus for carrying
-        const float AbsoluteWeightMaxWeight = 1800;
-        const float AbsoluteWeightMinWeight = 100;
+        public const float AbsoluteWeightMaxWeight = 1800;
+        public const float AbsoluteWeightMinWeight = 100;
 
         //The number to determine the curve of the absolute weight experience
-        const float AbsoluteWeightExponent = 2.2f;
+        public const float AbsoluteWeightExponent = 2.2f;
         //And a weighting for the overall bonus. Set very high
-        const float AbsoluteWeightExpMod = 20f;
+        public const float AbsoluteWeightExpMod = 20f;
 
         //These represent the percentages of the various states of
         //relative encumberance, included with the respective
         //experience bonuses you get for being in them
-        const float RelativeWeightLight = .33f;
-            const float RelativeWeightLightMod = -.25f;
-        const float RelativeWeightMed = .5f;
-            const float RelativeWeightMedMod = 0f;
-        const float RelativeWeightHighMed = .66f;
-            const float RelativeWeightHighMedMod = .25f;
-        const float RelativeWeightHeavy = .8f;
-            const float RelativeWeightHeavyMod = .5f;
-        const float RelativeWeightFull = 1f;
-            const float RelativeWeightFullMod = .8f;
+        public const float RelativeWeightLight = .33f;
+            public const float RelativeWeightLightMod = -.25f;
+        public const float RelativeWeightMed = .5f;
+            public const float RelativeWeightMedMod = 0f;
+        public const float RelativeWeightHighMed = .66f;
+            public const float RelativeWeightHighMedMod = .25f;
+        public const float RelativeWeightHeavy = .8f;
+            public const float RelativeWeightHeavyMod = .5f;
+        public const float RelativeWeightFull = 1f;
+            public const float RelativeWeightFullMod = .8f;
         //This one is used for when you're over encumbered. Still a %
-        const float RelativeWeightOverMod = 2f;
+        public const float RelativeWeightOverMod = 2f;
 
         //This is the weight that Relative EXP will have, for quick changes
-        const float RelativeWeightExpMod = 1f;
+        public const float RelativeWeightExpMod = 1f;
 
         //This is the weight modifier for the bonus experience you get from run speed
-        const float RunSpeedExpMod = 1f;
+        public const float RunSpeedExpMod = 1f;
 
         //These are percents, max and min referencing effects at level 100 and 0
-        const float RunSpeedMax = 2.5f;
-        const float RunSpeedMin = 0f;
+        public const float RunSpeedMax = 2.5f;
+        public const float RunSpeedMin = 0f;
         //How much of a reduction to the movespeed minus you get from your equipment
-        const float RunEquipmentReduxMax = .5f;
-        const float RunEquipmentReduxMin = 0f;
+        public const float RunEquipmentReduxMax = .5f;
+        public const float RunEquipmentReduxMin = 0f;
         //How much our encumberance system can decrease your movespeed in percent
-        const float RunEncumberanceMax = .5f;
-        const float RunEncumberanceMin = 0f;
+        public const float RunEncumberanceMax = .5f;
+        public const float RunEncumberanceMin = 0f;
         //How much run speed reduces the effects of encumberance
-        const float RunEncumberanceReduxMax = .5f;
-        const float RunEncumberanceReduxMin = 0f;
+        public const float RunEncumberanceReduxMax = .5f;
+        public const float RunEncumberanceReduxMin = 0f;
         //These are the base run and turn speeds in the game's code
-        const float BaseRunSpeed = 20f;
-        const float BaseRunTurnSpeed = 300f;
+        public const float BaseRunSpeed = 20f;
+        public const float BaseRunTurnSpeed = 300f;
 
-        const float BaseRunStaminaDrain = 10f;
-        const float RunStaminaReduxMax = .8f;
-        const float RunStaminaReduxMin = -.25f;
+        public const float BaseRunStaminaDrain = 10f;
+        public const float RunStaminaReduxMax = .8f;
+        public const float RunStaminaReduxMin = -.25f;
 
         //How much stamina run grants per level
-        const float RunStaminaPerLevel = .6f;
+        public const float RunStaminaPerLevel = .6f;
 
         //Increases force you jump with by %
-        const float BaseJumpForce = 8f;
-        const float JumpForceMax = .9f;
-        const float JumpForceMin = -.1f;
+        public const float BaseJumpForce = 8f;
+        public const float JumpForceMax = .9f;
+        public const float JumpForceMin = -.1f;
 
         //Reduces stamina cost of jumping by a %
-        const float BaseJumpStaminaUse = 10f;
-        const float JumpStaminaReduxMax = .6f;
-        const float JumpStaminaReduxMin = 0f;
+        public const float BaseJumpStaminaUse = 10f;
+        public const float JumpStaminaReduxMax = .6f;
+        public const float JumpStaminaReduxMin = 0f;
 
         //Increases forwards force when jumping by %
-        const float BaseJumpForwardForce = 2f;
-        const float JumpForwardForceMax = 1.5f;
-        const float JumpForwardForceMin = 0f;
+        public const float BaseJumpForwardForce = 2f;
+        public const float JumpForwardForceMax = 1.5f;
+        public const float JumpForwardForceMin = 0f;
         //May not actually be used or be different from jump force
 
         //This absolute % affects your jump force when tired.
         //Base is taken from game code, max is our new value at level 100
-        const float BaseJumpTiredFactor = .7f;
-        const float MaxJumpTiredFactor = .9f;
+        public const float BaseJumpTiredFactor = .7f;
+        public const float MaxJumpTiredFactor = .9f;
 
         [HarmonyPatch(nameof(Player.OnSkillLevelup))]
         [HarmonyPostfix]
@@ -186,15 +186,8 @@ namespace kingskills
 
             float runSkillFactor = 1f + Mathf.Lerp(RunSpeedMin, RunSpeedMax, skillFactor);
 
-            float equipmentMalusRedux = 1f - Mathf.Lerp(RunEquipmentReduxMin, RunEquipmentReduxMax, skillFactor);
-            float equipmentFactor = __instance.m_equipmentMovementModifier;
-            if (equipmentFactor < 0f) { equipmentFactor *= equipmentMalusRedux; }
-            equipmentFactor += 1;
-           
-            float encumberancePercent = Mathf.Clamp01(__instance.GetInventory().GetTotalWeight() / __instance.GetMaxCarryWeight());
-            float encumberancePercentCurved = RunEncumberanceMin + ShapeFactorSin(encumberancePercent) * (RunEncumberanceMax - RunEncumberanceMin);
-            float skillEncumberanceRedux = 1f - Mathf.Lerp(RunEncumberanceReduxMin, RunEncumberanceReduxMax, skillFactor);
-            float encumberanceFactor = 1f - encumberancePercentCurved * skillEncumberanceRedux;
+            float equipmentFactor = GetEquipmentFactor(__instance, skillFactor);
+            float encumberanceFactor = GetEncumberanceFactor(__instance, skillFactor);
 
             float runSpeed = runSkillFactor * equipmentFactor * encumberanceFactor;
             __result = runSpeed;
@@ -209,10 +202,24 @@ namespace kingskills
                 $"encumberance factor was {encumberanceFactor},\n" +
                 $"total run speed was was {runSpeed},\n");*/
 
-
-
             //Returning false skips the original implementation of GetRunSpeedFactor
             return false;
+        }
+
+        public static float GetEncumberanceFactor(Player player, float skillFactor)
+        {
+            float encumberancePercent = Mathf.Clamp01(player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight());
+            float encumberancePercentCurved = Mathf.Lerp(RunEncumberanceMin, RunEncumberanceMax, ShapeFactorSin(encumberancePercent));
+            float skillEncumberanceRedux = 1f - Mathf.Lerp(RunEncumberanceReduxMin, RunEncumberanceReduxMax, skillFactor);
+            return 1f - encumberancePercentCurved * skillEncumberanceRedux;
+        }
+        public static float GetEquipmentFactor(Player player, float skillFactor)
+        {
+            float equipmentMalusRedux = 1f - Mathf.Lerp(RunEquipmentReduxMin, RunEquipmentReduxMax, skillFactor);
+            float equipmentFactor = player.m_equipmentMovementModifier;
+            if (equipmentFactor < 0f) { equipmentFactor *= equipmentMalusRedux; }
+
+            return equipmentFactor + 1;
         }
 
         public static float absoluteWeightBonus(Player player)

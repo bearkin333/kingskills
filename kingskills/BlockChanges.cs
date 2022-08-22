@@ -154,8 +154,8 @@ namespace kingskills
             //Jotunn.Logger.LogMessage($"block power of {currentBlocker.GetBlockPower(skillFactor)} is now mine, also am I parrying? {isParry}");
             float blockPower = 0f;
             float itemBlockPower = currentBlocker.GetBaseBlockPower();
-            float baseBlockPower = itemBlockPower + FlatBlockPowerMin + (skillFactor * (FlatBlockPowerMax - FlatBlockPowerMin));
-            blockPower = baseBlockPower + (baseBlockPower * PerBlockPowerMin) + baseBlockPower * (PerBlockPowerMax - PerBlockPowerMin);
+            float baseBlockPower = itemBlockPower + Mathf.Lerp(FlatBlockPowerMin, FlatBlockPowerMax, skillFactor);
+            blockPower = baseBlockPower * (1 + Mathf.Lerp(PerBlockPowerMin, PerBlockPowerMax, skillFactor));
 
             if (isParry)
             {

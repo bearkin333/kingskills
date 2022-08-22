@@ -5,10 +5,13 @@
 // Project: kingskills
 
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
+using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
 using kingskills.Commands;
+using UnityEngine;
 
 namespace kingskills
 {
@@ -24,6 +27,7 @@ namespace kingskills
         public static Skills.SkillType TestSkillType = 0;
 
         Harmony harmony = new Harmony(PluginGUID);
+        private ButtonConfig OpenSkillWindowBtn;
         
         // Use this class to add your own localization to the game
         // https://valheim-modding.github.io/Jotunn/tutorials/localization.html
@@ -36,7 +40,19 @@ namespace kingskills
             CommandManager.Instance.AddConsoleCommand(new BearSkillCommand());
             CommandManager.Instance.AddConsoleCommand(new SkillUpdateCommand());
             AddSkills();
+            AddInputs();
             harmony.PatchAll();
+        }
+
+        private void Update()
+        {
+            if (ZInput.instance != null)
+            {
+                if (ZInput.GetButtonDown(OpenSkillWindowBtn.Name))
+                {
+                    SkillGUI.ToggleSkillGUI();
+                }
+            }
         }
 
         private void InitConfig()
@@ -55,6 +71,17 @@ namespace kingskills
             TestSkillType = SkillManager.Instance.AddSkill(skill);
 
             Jotunn.Logger.LogMessage(TestSkillType);
+        }
+
+        private void AddInputs()
+        {
+            OpenSkillWindowBtn = new ButtonConfig
+            {
+                Name = "OpenSkillWindow",
+                Key = KeyCode.I,
+                ActiveInCustomGUI = true
+            };
+            InputManager.Instance.AddButton(PluginGUID, OpenSkillWindowBtn);
         }
     }
 }
