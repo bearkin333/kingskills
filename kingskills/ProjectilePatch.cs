@@ -14,20 +14,19 @@ namespace kingskills
     [HarmonyPatch(typeof(Projectile))]
     class ProjectilePatch
     {
-        public static float distanceTravelled;
         public const float SpearBXPThrown = 20f;
-        public const float BowBXPDistanceMod = .5f;
-        public static Projectile projRef;
-
+        public const float BowBXPDistanceMod = 3f;
+        public static Dictionary<int, Vector3> projectileList 
+            = new Dictionary<int, Vector3>();
+        
         [HarmonyPatch(nameof(Projectile.Awake))]
         [HarmonyPostfix]
         public static void InitProj(Projectile __instance)
         {
-            distanceTravelled = 0f;
-            projRef = __instance;
+            projectileList.Add(__instance.gameObject.GetInstanceID(), __instance.transform.position);
+            //Jotunn.Logger.LogMessage($"Added projectile {__instance.gameObject.GetInstanceID()}");
         }
-
-
+        /* Deprecated distance finding 
         [HarmonyPatch(nameof(Projectile.FixedUpdate))]
         [HarmonyPostfix]
         public static void FixedUpdateDistancePatch(Projectile __instance)
@@ -37,7 +36,7 @@ namespace kingskills
                 distanceTravelled += Time.fixedDeltaTime;
                 //Jotunn.Logger.LogMessage($"distance: {distanceTravelled}");
             }
-        }
+        }*/
 
 
         [HarmonyPatch(nameof(Projectile.OnHit))]
@@ -45,7 +44,6 @@ namespace kingskills
         public static IEnumerable<CodeInstruction> OnHitTranspile(IEnumerable<CodeInstruction> instructions)
         {
             //Jotunn.Logger.LogMessage("The call is replaced here");
-            var newInstructions = new List<CodeInstruction>(instructions);
             bool patchDone = false;
 
             foreach (var instruction in instructions)
@@ -54,40 +52,52 @@ namespace kingskills
                   {
                     instruction.opcode = OpCodes.Call;
                     instruction.operand = AccessTools.DeclaredMethod(typeof(ProjectilePatch), nameof(ProjectilePatch.RaiseProjectileSkill));
-                        
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
                     yield return instruction;
 
                     patchDone = true;
-                }
-                    
-                else
-                {
-                        yield return instruction;
-                }
-                
+                } else
+                    yield return instruction;
             }
 
             if (!patchDone)
             {
-                Jotunn.Logger.LogFatal("Didn't find the Raise skill during projectile transpile");
+                Jotunn.Logger.LogError("Didn't find the Raise skill during projectile transpile");
             }
         }
-    
-        public static void RaiseProjectileSkill (Skills.SkillType skill)
-        {
-            //Jotunn.Logger.LogMessage("Raise projectile skill is called");
-            if (projRef == null) return;
 
-            //Jotunn.Logger.LogMessage($"And carries on, and the skill is {skill}");
+        [HarmonyPatch(nameof(Projectile.RPC_OnHit))]
+        [HarmonyPostfix]
+        public static void RemoveProjectile(Projectile __instance)
+        {
+            Jotunn.Logger.LogMessage($"{__instance.gameObject.GetInstanceID()} destroyed");
+            projectileList.Remove(__instance.gameObject.GetInstanceID());
+        }
+
+        public static void RaiseProjectileSkill (Character player, Skills.SkillType skill, float useless, Projectile instance)
+        {
+            float distanceTravelled = 0;
+            if (projectileList.ContainsKey(instance.gameObject.GetInstanceID()))
+            {
+                distanceTravelled = (projectileList[instance.gameObject.GetInstanceID()] - instance.transform.position).magnitude;
+                //Jotunn.Logger.LogMessage($"That projectile travelled {distanceTravelled} units");
+            }
+            else
+            {
+                Jotunn.Logger.LogError("Projectile not in dictionairy!");
+            }
+
             if (skill == Skills.SkillType.Spears)
             {
-                projRef.m_owner.RaiseSkill(Skills.SkillType.Spears, SpearBXPThrown);
-                Jotunn.Logger.LogMessage($"Spear bonus exp!");
+                player.RaiseSkill(Skills.SkillType.Spears, SpearBXPThrown);
+                //Jotunn.Logger.LogMessage($"Spear bonus exp!");
             } else if (skill == Skills.SkillType.Bows)
             {
-                projRef.m_owner.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * BowBXPDistanceMod);
-                Jotunn.Logger.LogMessage($"Bow bonus exp: {distanceTravelled * BowBXPDistanceMod}");
+                player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * BowBXPDistanceMod);
+                //Jotunn.Logger.LogMessage($"Bow bonus exp: {distanceTravelled * BowBXPDistanceMod}");
             }
         }
+
+
     }
 }
