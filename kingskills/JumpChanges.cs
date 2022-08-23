@@ -43,6 +43,7 @@ namespace kingskills
         static ConstructorInfo hitDataConstructor = AccessTools.Constructor(typeof(HitData));
         static MethodInfo resetGroundContactMTD = AccessTools.Method(typeof(Character), "ResetGroundContact");
         static MethodInfo fallDamageOverrideMTD = AccessTools.DeclaredMethod(typeof(JumpChanges), nameof(JumpChanges.FallDamageOverride));
+        
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instruct)
         {
             var newInstructions = new List<CodeInstruction>(instruct);

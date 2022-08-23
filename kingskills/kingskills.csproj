@@ -85,6 +85,7 @@
     <Compile Include="BonusXP.cs" />
     <Compile Include="Commands\TestCommands.cs" />
     <Compile Include="JumpChanges.cs" />
+    <Compile Include="ProjectilePatch.cs" />
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
     <Compile Include="kingskills.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

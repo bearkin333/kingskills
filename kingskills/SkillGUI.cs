@@ -337,20 +337,20 @@ namespace kingskills
 
             ddFlag = false;
 
-            Jotunn.Logger.LogMessage($"There are {dd.options.Count} options. The first is {dd.options[0]}, the last is {dd.options[dd.options.Count-1]}"); 
-             /* Big long debug thing. Everything is fine over here apparently
-             string logDD = "";
-             int i = 0;
-             foreach (Dropdown.OptionData option in dd.options)
-             {
+            //Jotunn.Logger.LogMessage($"There are {dd.options.Count} options. The first is {dd.options[0].text}, the last is {dd.options[dd.options.Count-1].text}"); 
+            /* Big long debug thing. Everything is fine over here apparently
+            string logDD = "";
+            int i = 0;
+            foreach (Dropdown.OptionData option in dd.options)
+            {
                  logDD += "Option " + i + " is " + option.text + ", ";
                  logDD += "(Or " + dd.options[i].text +"), \n";
                  i++;
-             }
-             Jotunn.Logger.LogMessage(logDD);*/
+            }
+            Jotunn.Logger.LogMessage(logDD);*/
 
-             SkillGUIWindow.SetActive(false);
-
+            SkillGUIWindow.SetActive(false);
+            
             UpdateGUI();
         }
 
