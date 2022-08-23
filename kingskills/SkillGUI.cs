@@ -22,6 +22,8 @@ namespace kingskills
         public static GameObject SSkillExp;
 
         public static GameObject scroll;
+        public static Dropdown dd;
+        public static bool ddFlag;
 
         public static GameObject LeftPanelEffects;
         public static GameObject LeftPanelExperienceText;
@@ -217,6 +219,7 @@ namespace kingskills
 
 
             scrollSet.content = scrollVert.GetComponent<RectTransform>();
+            scrollSet.verticalNormalizedPosition = 0;
             
 
             //Create the Experience Title in the left panel
@@ -313,17 +316,40 @@ namespace kingskills
                 fontSize: 15,
                 width: 250f,
                 height: 60f);
-            SkillDropDown.GetComponent<Dropdown>().AddOptions(new List<string>{
+            dd = SkillDropDown.GetComponent<Dropdown>();
+            dd.ClearOptions();
+            dd.AddOptions(new List<string>{
                 "Axes", "Blocking", "Bows", "Clubs", "Fists", "Jump", "Knives",
                 "Polearms", "Run", "Spears", "Swim", "Swords", "Woodcutting"
             });
-            SkillDropDown.GetComponent<Dropdown>().onValueChanged.AddListener(
+            dd.onValueChanged.AddListener(
                 delegate {
-                    SkillGUI.UpdateGUI();
+                    SkillGUI.OnDropdownValueChange();
                 });
 
+            dd.captionText.fontSize = 15;
+            dd.itemText.fontSize = 15;
+            dd.captionText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            dd.itemText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            dd.captionText.resizeTextForBestFit = true;
+            dd.itemText.resizeTextForBestFit = true;
+            dd.itemText.resizeTextMaxSize = 15;
 
-            SkillGUIWindow.SetActive(false);
+            ddFlag = false;
+
+            Jotunn.Logger.LogMessage($"There are {dd.options.Count} options. The first is {dd.options[0]}, the last is {dd.options[dd.options.Count-1]}"); 
+             /* Big long debug thing. Everything is fine over here apparently
+             string logDD = "";
+             int i = 0;
+             foreach (Dropdown.OptionData option in dd.options)
+             {
+                 logDD += "Option " + i + " is " + option.text + ", ";
+                 logDD += "(Or " + dd.options[i].text +"), \n";
+                 i++;
+             }
+             Jotunn.Logger.LogMessage(logDD);*/
+
+             SkillGUIWindow.SetActive(false);
 
             UpdateGUI();
         }
@@ -342,15 +368,34 @@ namespace kingskills
             //GUIManager.BlockInput(state);
         }
 
+        public static void OnDropdownValueChange()
+        {
+            //This awful mess is an awful fix to the dropdown always selecting the option 1 in front of what was clicked
+            //This function gets called everytime dd.value gets changed
+            if (!ddFlag)
+            {
+                Jotunn.Logger.LogMessage($"Dropdown changed, setting the flag for another change and decreasing the value");
+                ddFlag = true;
+                dd.value--;
+            }
+            else
+            {
+                Jotunn.Logger.LogMessage($"Now I'm actually taking the value seriously");
+                UpdateGUI();
+                ddFlag = false;
+            }
+        }
+
         public static void UpdateGUI()
         {
+            scroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+
             //Jotunn.Logger.LogMessage($"Detected a dropdown value change.");
             Player player = Player.m_localPlayer;
             Skills.SkillType skill = Skills.SkillType.None;
-            Dropdown drop = SkillDropDown.GetComponent<Dropdown>();
 
-            string skillName = drop.options[drop.value].text;
-            //Jotunn.Logger.LogMessage($"The skill name I think is {skillName}");
+            string skillName = dd.options[dd.value].text;
+
             switch (skillName)
             {
                 case "Axes":
