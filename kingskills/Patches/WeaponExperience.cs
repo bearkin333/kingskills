@@ -46,7 +46,7 @@ namespace kingskills.WeaponExperience
     }
 
     [HarmonyPatch]
-    class PatchWeaponXp
+    class WeaponStrikeDetection
     {
         //Damage patch rerouting
         [HarmonyPostfix]
@@ -111,13 +111,17 @@ namespace kingskills.WeaponExperience
 
             Manager.Strike(playerRef, __instance, hit, factor, tool);
         }
+    }
 
-
+    [HarmonyPatch]
+    class WeaponSwingDetection
+    {
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.StartAttack))]
         static void Humanoid_StartAttack(Humanoid __instance, Character target, bool secondaryAttack, bool __result)
         {
-            if (__result && __instance is Player && __instance == Player.m_localPlayer) {
+            if (__result && __instance is Player && __instance == Player.m_localPlayer)
+            {
                 Manager.Swing(__instance as Player, __instance.GetCurrentWeapon().m_shared.m_skillType);
             }
         }
@@ -134,31 +138,10 @@ namespace kingskills.WeaponExperience
     }
 
     [HarmonyPatch]
-    class PatchWeaponHoldXp
+    class WeaponHold
     {
         static ItemDrop.ItemData last;
         static float timer;
-
-        // Get the actual weapon a player would swing with, or null if the player couldn't swing in this state.
-        // Compared to Player.GetCurrentWeapon(), for example, this returns null if the player is holding
-        // a hammer or pickaxe, but will return unarmed even if the player is holding a shield.
-        public static ItemDrop.ItemData GetPlayerWeapon(Player p)
-        {
-            if (p.m_leftItem != null && p.m_leftItem.IsWeapon() && p.m_leftItem.m_shared.m_skillType != Skills.SkillType.Pickaxes)
-            {
-                return p.m_leftItem;
-            }
-            if (p.m_rightItem != null && p.m_rightItem.IsWeapon() && p.m_rightItem.m_shared.m_skillType != Skills.SkillType.Pickaxes)
-            {
-                return p.m_rightItem;
-            }
-            if (p.m_rightItem == null && (p.m_leftItem == null
-                || p.m_leftItem.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Shield))
-            {
-                return p.m_unarmedWeapon.m_itemData;
-            }
-            return null;
-        }
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Player), nameof(Player.FixedUpdate))]
@@ -169,7 +152,7 @@ namespace kingskills.WeaponExperience
                 return;
             }
 
-            ItemDrop.ItemData weapon = GetPlayerWeapon(__instance);
+            ItemDrop.ItemData weapon = Util.GetPlayerWeapon(__instance);
             if (weapon == null)
             {
                 last = null;

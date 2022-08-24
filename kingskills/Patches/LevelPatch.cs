@@ -1,17 +1,16 @@
-﻿using BepInEx;
-using HarmonyLib;
-using Jotunn.Entities;
-using Jotunn.Managers;
-using kingskills.Commands;
+﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace kingskills
 {
-
     [HarmonyPatch(typeof(Player))]
-    class MovePatch
+    class LevelPatch
     {
-
         [HarmonyPatch(nameof(Player.OnSkillLevelup))]
         [HarmonyPostfix]
         static void SkillLevelupPatch(Player __instance, Skills.SkillType skill)
@@ -45,15 +44,15 @@ namespace kingskills
                 //Allow status effects to modify exp gain rate
                 __instance.GetSEMan().ModifyRaiseSkill(skill, ref expValue);
 
-                x = absoluteWeightBonus(__instance);
+                x = MovePatch.absoluteWeightBonus(__instance);
                 expValue *= x;
                 //Jotunn.Logger.LogMessage("Absolute weight mod: " + x);
 
-                x = relativeWeightBonus(__instance);
+                x = MovePatch.relativeWeightBonus(__instance);
                 expValue *= x;
                 //Jotunn.Logger.LogMessage("Relative weight mod: " + x);
 
-                x = runSpeedExpBonus(__instance);
+                x = MovePatch.runSpeedExpBonus(__instance);
                 expValue *= x;
                 //Jotunn.Logger.LogMessage("Run speed mod: " + x);
 
@@ -70,11 +69,11 @@ namespace kingskills
                 //Allow status effects to modify exp gain rate
                 __instance.GetSEMan().ModifyRaiseSkill(skill, ref expValue);
 
-                x = absoluteWeightBonus(__instance);
+                x = MovePatch.absoluteWeightBonus(__instance);
                 expValue *= x;
-                x = relativeWeightBonus(__instance);
+                x = MovePatch.relativeWeightBonus(__instance);
                 expValue *= x;
-                x = swimSpeedExpBonus(__instance);
+                x = MovePatch.swimSpeedExpBonus(__instance);
                 expValue *= x;
 
                 __instance.GetSkills().RaiseSkill(skill, expValue);
@@ -85,42 +84,13 @@ namespace kingskills
 
             return dontSkip;
         }
-
-
-        [HarmonyPatch(nameof(Player.GetRunSpeedFactor))]
-        [HarmonyPrefix]
-        public static bool GetRunSpeedPatch(Player __instance, ref float __result)
-        {
-            //This function provides a number to multiply the base run speed by
-            float skillFactor = __instance.m_skills.GetSkillFactor(Skills.SkillType.Run);
-
-            float runSkillFactor = ConfigManager.GetRunSpeedMod(skillFactor);
-
-            float equipmentFactor = GetEquipmentFactor(__instance, skillFactor);
-            float encumberanceFactor = GetEncumberanceFactor(__instance, skillFactor);
-
-            float runSpeed = runSkillFactor * equipmentFactor * encumberanceFactor;
-            __result = runSpeed;
-            /*
-            Jotunn.Logger.LogMessage($"Skill factor was {skillFactor},\n" +
-                $"runSkill factor was {runSkillFactor},\n" +
-                $"equipment malus redux was {equipmentMalusRedux},\n" +
-                $"equipment factor was {equipmentFactor},\n" +
-                $"encumberance percent was {encumberancePercent},\n" +
-                $"encumberance percent curved was {encumberancePercentCurved},\n" +
-                $"skill encumberance redux was {skillEncumberanceRedux},\n" +
-                $"encumberance factor was {encumberanceFactor},\n" +
-                $"total run speed was was {runSpeed},\n");*/
-
-            //Returning false skips the original implementation of GetRunSpeedFactor
-            return false;
-        }
-
-
-        //
-        // Updating functions
-        //
         public static float LastStaminaAdded = 0f;
+
+
+        //
+        // Level Updating functions
+        //
+
         public static void RunSpeedUpdate(Player player)
         {
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
@@ -188,51 +158,6 @@ namespace kingskills
                 $"New stamina use: {player.m_jumpStaminaUsage} \n" +
                 $"New forward force: {player.m_jumpForceForward} \n" +
                 $"New tired factor: {player.m_jumpForceTiredFactor}");*/
-        }
-
-
-
-        // 
-        // Experience determining functions
-        //
-        public static float GetEncumberanceFactor(Player player, float skillFactor)
-        {
-            float encumberancePercent = Mathf.Clamp01(player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight());
-            float encumberancePercentCurved = ConfigManager.GetEncumberanceCurve(encumberancePercent);
-            float skillEncumberanceRedux = ConfigManager.GetEncumberanceRedux(skillFactor);
-            return 1f - encumberancePercentCurved * skillEncumberanceRedux;
-        }
-        public static float GetEquipmentFactor(Player player, float skillFactor)
-        {
-            float equipmentMalusRedux = ConfigManager.GetEquipmentRedux(skillFactor);
-            float equipmentFactor = player.m_equipmentMovementModifier;
-            if (equipmentFactor < 0f) { equipmentFactor *= equipmentMalusRedux; }
-
-            return equipmentFactor + 1;
-        }
-        public static float absoluteWeightBonus(Player player)
-        {
-            float weightPercent = ConfigManager.GetAbsoluteWeightPercent(player.m_inventory.GetTotalWeight());
-            return ConfigManager.GetAbsoluteWeightCurve(weightPercent);
-        }
-        public static float relativeWeightBonus(Player player)
-        {
-            float weightPercent = player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight();
-            return ConfigManager.GetRelativeWeightStage(weightPercent);
-        }
-        public static float runSpeedExpBonus(Player player)
-        {
-            float runMod = player.GetRunSpeedFactor();
-            player.m_seman.ApplyStatusEffectSpeedMods(ref runMod);
-
-            return runMod * ConfigManager.RunEXPSpeedMod.Value;
-        }
-        public static float swimSpeedExpBonus(Player player)
-        {
-            float swimMod = player.m_swimSpeed;
-            player.m_seman.ApplyStatusEffectSpeedMods(ref swimMod);
-
-            return swimMod * ConfigManager.SwimEXPSpeedMod.Value;
         }
     }
 }

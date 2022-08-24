@@ -25,17 +25,6 @@ namespace kingskills
             projectileList.Add(__instance.gameObject.GetInstanceID(), __instance.transform.position);
             //Jotunn.Logger.LogMessage($"Added projectile {__instance.gameObject.GetInstanceID()}");
         }
-        /* Deprecated distance finding 
-        [HarmonyPatch(nameof(Projectile.FixedUpdate))]
-        [HarmonyPostfix]
-        public static void FixedUpdateDistancePatch(Projectile __instance)
-        {
-            if (!__instance.m_didHit)
-            {
-                distanceTravelled += Time.fixedDeltaTime;
-                //Jotunn.Logger.LogMessage($"distance: {distanceTravelled}");
-            }
-        }*/
 
 
         [HarmonyPatch(nameof(Projectile.OnHit))]

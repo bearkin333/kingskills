@@ -550,8 +550,8 @@ namespace kingskills
             float bonusJumpForwardForce = Mathf.Lerp(MovePatch.JumpForwardForceMin, MovePatch.JumpForwardForceMax, skillFactor) * 100;
             float tired = Mathf.Lerp(MovePatch.BaseJumpTiredFactor, MovePatch.MaxJumpTiredFactor, skillFactor) * 100;
 
-            float fallDamageThreshhold = Mathf.Lerp(JumpChanges.FallDamageThresholdMin, JumpChanges.FallDamageThresholdMax, skillFactor);
-            float fallDamageRedux = Mathf.Lerp(JumpChanges.FallDamageReduxMin, JumpChanges.FallDamageReduxMax, skillFactor) * 100;
+            float fallDamageThreshhold = Mathf.Lerp(JumpPatch.FallDamageThresholdMin, JumpPatch.FallDamageThresholdMax, skillFactor);
+            float fallDamageRedux = Mathf.Lerp(JumpPatch.FallDamageReduxMin, JumpPatch.FallDamageReduxMax, skillFactor) * 100;
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "Every time you jump, you gain a small amount of experience. \n" +

@@ -11,7 +11,7 @@ namespace kingskills
 {
 
     [HarmonyPatch(typeof(Character))]
-    class CharacterPatch
+    class SwordStaggerWatch
     {
         //For transferring stagger experience check
         static Player playerRef = null;
@@ -97,9 +97,8 @@ namespace kingskills
     }
 
     [HarmonyPatch(typeof(TreeLog))]
-    class TreeLogPatch
+    class AxeLogWatch
     {
-
         [HarmonyPatch(nameof(TreeLog.Destroy))]
         [HarmonyPrefix]
         public static void TreeLogDestroyPatch(TreeLog __instance)
@@ -108,7 +107,7 @@ namespace kingskills
             Player closestPlayer = Player.GetClosestPlayer(__instance.m_body.transform.position, ConfigManager.WeaponBXPAxeRange.Value);
             if (closestPlayer != null)
             {
-                if (PatchWeaponHoldXp.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
+                if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
                     closestPlayer.RaiseSkill(Skills.SkillType.Axes, ConfigManager.WeaponBXPAxeTreeAmount.Value);
             }
         }
