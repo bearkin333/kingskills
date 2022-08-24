@@ -320,7 +320,7 @@ namespace kingskills
             dd.ClearOptions();
             dd.AddOptions(new List<string>{
                 "Axes", "Blocking", "Bows", "Clubs", "Fists", "Jump", "Knives",
-                "Polearms", "Run", "Spears", "Swim", "Swords", "Woodcutting"
+                "Polearms", "Run", "Spears", "Sneak", "Swim", "Swords", "Woodcutting"
             });
             dd.onValueChanged.AddListener(
                 delegate {
@@ -438,6 +438,10 @@ namespace kingskills
                     skill = Skills.SkillType.Spears;
                     OpenSpearPanels();
                     break;
+                case "Sneak":
+                    skill = Skills.SkillType.Sneak;
+                    OpenSneakPanels();
+                    break;
                 case "Swim":
                     skill = Skills.SkillType.Swim;
                     OpenSwimPanels();
@@ -496,6 +500,10 @@ namespace kingskills
         }
         public static void OpenBowPanels()
         {
+            float skillFactor = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Bows);
+
+            float bowDropRate = ToPercent(ConfigManager.GetBowDropRate(skillFactor));
+
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all bow damage dealt is turned into experience. \n" +
                 "The exp gain rate is much higher versus living targets. \n" +
@@ -507,7 +515,7 @@ namespace kingskills
                 "0" + "% less stamina usage with bows\n" +
                 "0" + "% extra arrow velocity\n" +
                 "0" + "% faster draw speed\n" +
-                "0" + "% more loot drops from creatures";
+                bowDropRate + "% more loot drops from creatures";
         }
         public static void OpenClubPanels()
         {
@@ -646,6 +654,21 @@ namespace kingskills
                 "0" + "% increased velocity with all thrown weapons\n" +
                 "0" + "% increased damage with all thrown weapons\n" +
                 "0" + " higher flat block armor";
+        }
+
+        public static void OpenSneakPanels()
+        {
+            LeftPanelExperienceText.GetComponent<Text>().text =
+                "While you are inside the vision angle of an enemy " +
+                "but outside its vision range, you gain a flat amount of sneak " +
+                "experience every second. \n This value is reduced to 10% while" +
+                "you aren't being observed.";
+            //I would like to implement an increase in exp gain based on level of enemy
+            LeftPanelEffectsText.GetComponent<Text>().text =
+                "0" + "% increased speed while crouching\n" +
+                "0" + "% reduced stamina cost while crouching" +
+                "0" + "% reduced vision cones while in total dark\n" +
+                "0" + "% reduced vision cones while in the open";
         }
         public static void OpenSwimPanels()
         {
