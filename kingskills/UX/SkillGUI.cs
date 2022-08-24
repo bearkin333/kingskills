@@ -479,10 +479,10 @@ namespace kingskills
         public static void OpenBlockPanels()
         {
             float skillFactor = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Blocking);
-            float staminaRedux = Mathf.Lerp(BlockPatch.BlockStaminaReduxMin, BlockPatch.BlockStaminaReduxMax, skillFactor) * 100;
-            float baseBlockPower = Mathf.Lerp(BlockPatch.FlatBlockPowerMin, BlockPatch.FlatBlockPowerMax, skillFactor);
-            float blockPerArmor = Mathf.Lerp(BlockPatch.PerBlockPowerMin, BlockPatch.PerBlockPowerMax, skillFactor) * 100;
-            float parryExpMod = BlockPatch.ParryExpMod * 100;
+            float staminaRedux = ToPercent(ConfigManager.GetBlockStaminaRedux(skillFactor));
+            float baseBlockPower = ToPercent(ConfigManager.GetFlatBlockPower(skillFactor));
+            float blockPerArmor = ToPercent(ConfigManager.GetBlockPowerMod(skillFactor));
+            float parryExpMod = ToPercent(ConfigManager.BlockParryExpMod.Value);
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all damage you block is turned into experience. \n" +
@@ -542,16 +542,16 @@ namespace kingskills
         public static void OpenJumpPanels()
         {
             Player player = Player.m_localPlayer;
-            MovePatch.JumpForceUpdate(player);
+            LevelPatch.JumpForceUpdate(player);
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Jump);
 
-            float bonusJumpForce = Mathf.Lerp(MovePatch.JumpForceMin, MovePatch.JumpForceMax, skillFactor) * 100;
-            float staminaRedux = Mathf.Lerp(MovePatch.JumpStaminaReduxMin, MovePatch.JumpStaminaReduxMax, skillFactor) * 100;
-            float bonusJumpForwardForce = Mathf.Lerp(MovePatch.JumpForwardForceMin, MovePatch.JumpForwardForceMax, skillFactor) * 100;
-            float tired = Mathf.Lerp(MovePatch.BaseJumpTiredFactor, MovePatch.MaxJumpTiredFactor, skillFactor) * 100;
+            float bonusJumpForce = ToPercent(ConfigManager.GetJumpForceMod(skillFactor));
+            float bonusJumpForwardForce = ToPercent(ConfigManager.GetJumpForwardForceMod(skillFactor));
+            float staminaRedux = ToPercent(ConfigManager.GetJumpStaminaRedux(skillFactor));
+            float tired = ToPercent(ConfigManager.GetJumpTiredRedux(skillFactor));
 
-            float fallDamageThreshhold = Mathf.Lerp(JumpPatch.FallDamageThresholdMin, JumpPatch.FallDamageThresholdMax, skillFactor);
-            float fallDamageRedux = Mathf.Lerp(JumpPatch.FallDamageReduxMin, JumpPatch.FallDamageReduxMax, skillFactor) * 100;
+            float fallDamageThreshhold = ConfigManager.GetFallDamageThreshold(skillFactor);
+            float fallDamageRedux = ToPercent(ConfigManager.GetFallDamageRedux(skillFactor));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "Every time you jump, you gain a small amount of experience. \n" +
@@ -598,22 +598,22 @@ namespace kingskills
         public static void OpenRunPanels()
         {
             Player player = Player.m_localPlayer;
-            MovePatch.RunSpeedUpdate(player);
+            LevelPatch.RunSpeedUpdate(player);
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
 
-            float runSpeedBonus = Mathf.Lerp(MovePatch.RunSpeedMin, MovePatch.RunSpeedMax, skillFactor) * 100;
-            float equipmentMalusRedux = Mathf.Lerp(MovePatch.RunEquipmentReduxMin, MovePatch.RunEquipmentReduxMax, skillFactor) * 100;
-            float encumberanceRedux = Mathf.Lerp(MovePatch.RunEncumberanceReduxMin, MovePatch.RunEncumberanceReduxMax, skillFactor) * 100;
-            float staminaDrainRedux = Mathf.Lerp(MovePatch.RunStaminaReduxMin, MovePatch.RunStaminaReduxMax, skillFactor) * 100;
-            float baseStaminaGain = skillFactor * 100 * MovePatch.RunStaminaPerLevel;
+            float runSpeedBonus = ToPercent(ConfigManager.GetRunSpeedMod(skillFactor));
+            float equipmentMalusRedux = ToPercent(ConfigManager.GetEquipmentRedux(skillFactor));
+            float encumberanceRedux = ToPercent(ConfigManager.GetEncumberanceRedux(skillFactor));
+            float staminaDrainRedux = ToPercent(ConfigManager.GetRunStaminaRedux(skillFactor));
+            float baseStaminaGain = skillFactor * 100 * ConfigManager.RunStaminaPerLevel.Value;
 
 
-            float encumberanceFactor = (MovePatch.GetEncumberanceFactor(player, skillFactor) - 1) * 100;
-            float equipmentFactor = (MovePatch.GetEquipmentFactor(player, skillFactor) - 1) * 100;
+            float encumberanceFactor = ToPercent(MovePatch.GetEncumberanceFactor(player, skillFactor));
+            float equipmentFactor = ToPercent(MovePatch.GetEquipmentFactor(player, skillFactor));
 
-            float absWeightExp = (MovePatch.absoluteWeightBonus(player)-1)*100;
-            float relWeightExp = (MovePatch.relativeWeightBonus(player)-1)*100;
-            float runSpeedExp = (MovePatch.runSpeedExpBonus(player)-1)*100;
+            float absWeightExp = ToPercent(MovePatch.absoluteWeightBonus(player));
+            float relWeightExp = ToPercent(MovePatch.relativeWeightBonus(player));
+            float runSpeedExp = ToPercent(MovePatch.runSpeedExpBonus(player));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "The faster you are moving, the more experience you get.\n" +
@@ -650,17 +650,17 @@ namespace kingskills
         public static void OpenSwimPanels()
         {
             Player player = Player.m_localPlayer;
-            MovePatch.SwimSpeedUpdate(player);
+            LevelPatch.SwimSpeedUpdate(player);
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
 
-            float swimSpeed = Mathf.Lerp(MovePatch.SwimSpeedMin, MovePatch.SwimSpeedMax, skillFactor) * 100;
-            float swimAccel = Mathf.Lerp(MovePatch.SwimAccelMin, MovePatch.SwimAccelMax, skillFactor) * 100;
-            float swimTurn = Mathf.Lerp(MovePatch.SwimTurnMin, MovePatch.SwimTurnMax, skillFactor) * 100;
-            float swimStaminaCost = Mathf.Lerp(MovePatch.SwimStaminaPSMin, MovePatch.SwimStaminaPSMax, skillFactor);
+            float swimSpeed = ToPercent(ConfigManager.GetSwimSpeedMod(skillFactor));
+            float swimAccel = ToPercent(ConfigManager.GetSwimAccelMod(skillFactor));
+            float swimTurn = ToPercent(ConfigManager.GetSwimTurnMod(skillFactor));
+            float swimStaminaCost = ConfigManager.GetSwimStaminaPerSec(skillFactor);
 
-            float absWeightExp = (MovePatch.absoluteWeightBonus(player) - 1) * 100;
-            float relWeightExp = (MovePatch.relativeWeightBonus(player) - 1) * 100;
-            float swimSpeedExp = (MovePatch.swimSpeedExpBonus(player) - 1) * 100;
+            float absWeightExp = ToPercent(MovePatch.absoluteWeightBonus(player));
+            float relWeightExp = ToPercent(MovePatch.relativeWeightBonus(player));
+            float swimSpeedExp = ToPercent(MovePatch.swimSpeedExpBonus(player));
 
 
             LeftPanelExperienceText.GetComponent<Text>().text =
@@ -701,6 +701,11 @@ namespace kingskills
                 "0" + "% increased wood drop rates from trees\n" +
                 "0" + "% rebate on axe swings that hit a tree\n" +
                 "0" + " something else!";
+        }
+
+        public static float ToPercent(float number)
+        {
+            return (number - 1) * 100;
         }
     }
 }

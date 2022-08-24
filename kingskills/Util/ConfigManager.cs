@@ -513,6 +513,10 @@ namespace kingskills
         {
             return ToolEXPStrikeDamageMod.Value * Mathf.Pow(damage, ToolEXPStrikeDamageFactor.Value);
         }
+        public static float GetSwimStaminaPerSec(float skillFactor)
+        {
+            return Mathf.Lerp(SwimStaminaPerSecMin.Value, SwimStaminaPerSecMax.Value, skillFactor);
+        }
 
     }    
 }

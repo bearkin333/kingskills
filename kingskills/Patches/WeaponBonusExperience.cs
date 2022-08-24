@@ -71,7 +71,7 @@ namespace kingskills
             if (staggerFlag)
             {
                 //Jotunn.Logger.LogMessage($"Stagger flag redeemed! Turned back off");
-                if (PatchWeaponHoldXp.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
+                if (Util.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
                     playerRef.RaiseSkill(Skills.SkillType.Clubs, ConfigManager.WeaponBXPClubStagger.Value);
                 staggerFlag = false;
             }
@@ -79,7 +79,7 @@ namespace kingskills
 
         private static void OnStaggerHurt(Player attacker)
         {
-            if (PatchWeaponHoldXp.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
+            if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
             {
                 attacker.RaiseSkill(Skills.SkillType.Swords, ConfigManager.WeaponBXPSwordStagger.Value);
                 //Jotunn.Logger.LogMessage($"A player just hit us with a sword while we were staggered, so applying bonus exp");
@@ -88,7 +88,7 @@ namespace kingskills
 
         private static void OnBackstab(Player attacker)
         {
-            if (PatchWeaponHoldXp.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
+            if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
             {
                 attacker.RaiseSkill(Skills.SkillType.Swords, ConfigManager.WeaponBXPKnifeBackstab.Value);
                 //Jotunn.Logger.LogMessage($"A player just backstabbed us with a knife, so +exp");
