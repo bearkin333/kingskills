@@ -30,7 +30,6 @@ namespace kingskills
         private ButtonConfig OpenSkillWindowBtn;
         
         // Use this class to add your own localization to the game
-        // https://valheim-modding.github.io/Jotunn/tutorials/localization.html
         public static CustomLocalization Localization = LocalizationManager.Instance.GetLocalization();
 
         private void Awake()
@@ -57,7 +56,7 @@ namespace kingskills
 
         private void InitConfig()
         {
-            WeaponExperience.Config.Init(Config);
+            ConfigManager.Init(Config);
         }
 
         private void AddSkills()
