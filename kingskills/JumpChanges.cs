@@ -12,21 +12,17 @@ namespace kingskills
 {
     class JumpChanges : Character
     {
-        public const float FallDamageThresholdMax = 12f;
-        public const float FallDamageThresholdMin = 4f;
-        public const float FallDamageReduxMax = .6f;
-        public const float FallDamageReduxMin = -.15f;
 
         public void FallDamageOverride()
         {
             float fallHeight = Mathf.Max(0f, m_maxAirAltitude - this.GetTransform().position.y);
             float skillFactor = GetSkillFactor(Skills.SkillType.Jump);
-            float fallThreshold = Mathf.Lerp(FallDamageThresholdMin,FallDamageThresholdMax, skillFactor);
+            float fallThreshold = ConfigManager.GetFallDamageThreshold(skillFactor);
             if (IsPlayer() && fallHeight > fallThreshold)
             {
                 HitData hitData = new HitData();
                 float fallDamage = (fallHeight - fallThreshold) * 8.33f;
-                fallDamage *= (1 - Mathf.Lerp(FallDamageReduxMin, FallDamageReduxMax, skillFactor));
+                fallDamage *= ConfigManager.GetFallDamageRedux(skillFactor);
                 hitData.m_damage.m_damage = fallDamage;
                 hitData.m_point = m_lastGroundPoint;
                 hitData.m_dir = m_lastGroundNormal;

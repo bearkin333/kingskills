@@ -14,8 +14,7 @@ namespace kingskills
     [HarmonyPatch(typeof(Projectile))]
     class ProjectilePatch
     {
-        public const float SpearBXPThrown = 20f;
-        public const float BowBXPDistanceMod = 3f;
+
         public static Dictionary<int, Vector3> projectileList 
             = new Dictionary<int, Vector3>();
         
@@ -89,11 +88,11 @@ namespace kingskills
 
             if (skill == Skills.SkillType.Spears)
             {
-                player.RaiseSkill(Skills.SkillType.Spears, SpearBXPThrown);
+                player.RaiseSkill(Skills.SkillType.Spears, ConfigManager.WeaponBXPSpearThrown.Value);
                 //Jotunn.Logger.LogMessage($"Spear bonus exp!");
             } else if (skill == Skills.SkillType.Bows)
             {
-                player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * BowBXPDistanceMod);
+                player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * ConfigManager.WeaponBXPBowDistanceMod.Value);
                 //Jotunn.Logger.LogMessage($"Bow bonus exp: {distanceTravelled * BowBXPDistanceMod}");
             }
         }

@@ -10,43 +10,11 @@ using UnityEngine;
 
 namespace kingskills
 {
-    /*
-    [HarmonyPatch(typeof(HitData), nameof(HitData.BlockDamage))]
-    class BlockExp
-    {
-        public static void Postfix(HitData __instance, float damage)
-        {
-            Player.m_localPlayer.RaiseSkill(Skills.SkillType.Blocking, damage);
-            Jotunn.Logger.LogMessage("Increased block skill by " + damage + " thanks to blocked damage");
-        }
-    }
-    */
 
     [HarmonyPatch(typeof(Humanoid), "BlockAttack")]
     class BlockPatch : Humanoid
     {
-        //How much flat block armor do we get per level up to max
-        public const float FlatBlockPowerMax = 50f;
-        public const float FlatBlockPowerMin = 0f;
-        //What percent block armor do we get per level min to max
-        public const float PerBlockPowerMax = 1f;
-        public const float PerBlockPowerMin = -.25f;
-        //How much is the stamina cost for blocking reduced from min to max
-        public const float BlockStaminaReduxMax = .5f;
-        public const float BlockStaminaReduxMin = -.1f;
-        //How much is the player's stagger limit increased from min to max
-        public const float AbsoluteStaggerLimitIncreaseMax = .3f;
-        public const float AbsoluteStaggerLimitIncreaseMin = 0f;
-        //Used for perks, shouldn't be a float eventually
-        public const float AdditionalParryBonus = 1f;
-        //How much experience do we get per damage blocked?
-        public const float BlockExpMod = .22f;
-        //What is the bonus experience for parrying?
-        public const float ParryExpMod = 2f;
-
-        //How much bonus xp do we get for unarmed when we unarmed block?
-        public const float UnarmedBXPBlock = 20f;
-
+        public static float AdditionalParryBonus = 1f;
 
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
@@ -118,7 +86,7 @@ namespace kingskills
         {
             float skillFactor = __instance.GetSkillFactor(Skills.SkillType.Blocking);
             //Jotunn.Logger.LogMessage($"Stamina before redux is {stamina}");
-            stamina *= 1f - Mathf.Lerp(BlockStaminaReduxMin, BlockStaminaReduxMax, skillFactor);
+            stamina *= ConfigManager.GetBlockStaminaRedux(skillFactor);
             //Jotunn.Logger.LogMessage($"Stamina after redux is {stamina}");
             __instance.UseStamina(stamina);
         }
@@ -127,17 +95,17 @@ namespace kingskills
         private static void BlockDamageExpPatch(HitData hit, float damage, Humanoid __instance, bool isParry)
         {
             hit.BlockDamage(damage);
-            float expValue = damage * BlockExpMod;
+            float expValue = damage * ConfigManager.BlockExpMod.Value;
             if (isParry)
             {
-                expValue *= ParryExpMod;
+                expValue *= ConfigManager.BlockParryExpMod.Value;
                 //Jotunn.Logger.LogMessage($"Parried! Exp Value doubled!");
             }
             __instance.RaiseSkill(Skills.SkillType.Blocking, expValue);
             if (__instance.GetCurrentBlocker() == __instance.m_unarmedWeapon.m_itemData)
             {
                 //Bonus exp for unarmed block!
-                __instance.RaiseSkill(Skills.SkillType.Unarmed, UnarmedBXPBlock);
+                __instance.RaiseSkill(Skills.SkillType.Unarmed, ConfigManager.WeaponBXPUnarmedBlock.Value);
             }
             //Jotunn.Logger.LogMessage($"Increased blocking skill by {expValue} due to damage");
         }
@@ -152,10 +120,9 @@ namespace kingskills
             )
         {
             //Jotunn.Logger.LogMessage($"block power of {currentBlocker.GetBlockPower(skillFactor)} is now mine, also am I parrying? {isParry}");
-            float blockPower = 0f;
             float itemBlockPower = currentBlocker.GetBaseBlockPower();
-            float baseBlockPower = itemBlockPower + Mathf.Lerp(FlatBlockPowerMin, FlatBlockPowerMax, skillFactor);
-            blockPower = baseBlockPower * (1 + Mathf.Lerp(PerBlockPowerMin, PerBlockPowerMax, skillFactor));
+            float baseBlockPower = itemBlockPower + ConfigManager.GetFlatBlockPower(skillFactor);
+            float blockPower = baseBlockPower * ConfigManager.GetBlockPowerMod(skillFactor);
 
             if (isParry)
             {

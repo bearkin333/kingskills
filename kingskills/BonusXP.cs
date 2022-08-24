@@ -13,13 +13,6 @@ namespace kingskills
     [HarmonyPatch(typeof(Character))]
     class CharacterPatch
     {
-        //How much bonus xp do we get for staggering an enemy with the club?
-        public const float ClubBXPStagger = 20f;
-
-        public const float SwordBXPStaggerHit = 20f;
-
-        public const float KnifeBXPBackstab = 20f;
-
         //For transferring stagger experience check
         static Player playerRef = null;
         static bool staggerFlag = false;
@@ -71,8 +64,7 @@ namespace kingskills
             }
         }
 
-
-            [HarmonyPatch(nameof(Character.RPC_Stagger))]
+        [HarmonyPatch(nameof(Character.RPC_Stagger))]
         [HarmonyPostfix]
         private static void StaggerPostFix(Character __instance)
         {
@@ -80,7 +72,7 @@ namespace kingskills
             {
                 //Jotunn.Logger.LogMessage($"Stagger flag redeemed! Turned back off");
                 if (PatchWeaponHoldXp.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
-                    playerRef.RaiseSkill(Skills.SkillType.Clubs, ClubBXPStagger);
+                    playerRef.RaiseSkill(Skills.SkillType.Clubs, ConfigManager.WeaponBXPClubStagger.Value);
                 staggerFlag = false;
             }
         }
@@ -89,7 +81,7 @@ namespace kingskills
         {
             if (PatchWeaponHoldXp.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
             {
-                attacker.RaiseSkill(Skills.SkillType.Swords, SwordBXPStaggerHit);
+                attacker.RaiseSkill(Skills.SkillType.Swords, ConfigManager.WeaponBXPSwordStagger.Value);
                 //Jotunn.Logger.LogMessage($"A player just hit us with a sword while we were staggered, so applying bonus exp");
             }
         }
@@ -98,29 +90,26 @@ namespace kingskills
         {
             if (PatchWeaponHoldXp.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
             {
-                attacker.RaiseSkill(Skills.SkillType.Swords, KnifeBXPBackstab);
+                attacker.RaiseSkill(Skills.SkillType.Swords, ConfigManager.WeaponBXPKnifeBackstab.Value);
                 //Jotunn.Logger.LogMessage($"A player just backstabbed us with a knife, so +exp");
             }
         }
     }
 
-
     [HarmonyPatch(typeof(TreeLog))]
     class TreeLogPatch
     {
-        public const float AxeBXPRange = 100f;
-        public const float AxeBXPTreeAmount = 20f;
 
         [HarmonyPatch(nameof(TreeLog.Destroy))]
         [HarmonyPrefix]
         public static void TreeLogDestroyPatch(TreeLog __instance)
         {
             //Jotunn.Logger.LogMessage($"This log is killed. Closest player's getting the exp");
-            Player closestPlayer = Player.GetClosestPlayer(__instance.m_body.transform.position, AxeBXPRange);
+            Player closestPlayer = Player.GetClosestPlayer(__instance.m_body.transform.position, ConfigManager.WeaponBXPAxeRange.Value);
             if (closestPlayer != null)
             {
                 if (PatchWeaponHoldXp.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
-                    closestPlayer.RaiseSkill(Skills.SkillType.Axes, AxeBXPTreeAmount);
+                    closestPlayer.RaiseSkill(Skills.SkillType.Axes, ConfigManager.WeaponBXPAxeTreeAmount.Value);
             }
         }
     }

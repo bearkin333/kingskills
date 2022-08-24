@@ -15,14 +15,19 @@ namespace kingskills.WeaponExperience
     class Manager
     {
         // Patch IDestructible.Damage() to gain experience for player based on damage events.
-        public static void Strike(Player p, IDestructible __instance, HitData hit, float factor=1.0f)
+        public static void Strike(Player p, IDestructible __instance, HitData hit, float factor=1.0f, bool tool=false)
         {
             if (hit.m_attacker == p.GetZDOID())
             {
                 //Jotunn.Logger.LogMessage($"Player dealt damage to {__instance.GetDestructibleType()}");
                 float damage = hit.m_damage.GetTotalDamage();
 
-                float damage_xp = 2 * ConfigManager.XpStrikeFactor.Value * Mathf.Pow(damage, ConfigManager.XpDamageDegree);
+                float damage_xp = 0;
+
+                if (tool)
+                    damage_xp = ConfigManager.GetToolDamageToExperience(damage);
+                else
+                    damage_xp = ConfigManager.GetWeaponDamageToExperience(damage);
                 
                 float final_xp = damage_xp * factor;
                 //Jotunn.Logger.LogMessage($"Incrementing {hit.m_skill} by {final_xp} = damage {damage} ^ {ConfigManager.XpDamageDegree} * factor {factor}");
@@ -33,60 +38,80 @@ namespace kingskills.WeaponExperience
         public static void Swing(Player p, Skills.SkillType skill)
         {
             //Jotunn.Logger.LogMessage($"Player swinging with {skill} for {ConfigManager.XpSwingRate} XP");
-            p.RaiseSkill(skill, ConfigManager.XpSwingRate);
+            p.RaiseSkill(skill, ConfigManager.WeaponEXPSwing.Value);
+
+            if (skill == Skills.SkillType.Axes)
+                p.RaiseSkill(Skills.SkillType.WoodCutting, ConfigManager.WeaponEXPSwing.Value);
         }
     }
 
     [HarmonyPatch]
     class PatchWeaponXp
     {
+        //Damage patch rerouting
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Character), nameof(Character.Damage))]
         static void Character_Damage(Character __instance, HitData hit)
         {
-            Manager.Strike(Player.m_localPlayer, __instance, hit, ConfigManager.XpStrikeCharFactor.Value);
+            DamagePatch(__instance, hit, true);
         }
-
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Destructible), nameof(Destructible.Damage))]
         static void Destructible_Damage(Destructible __instance, HitData hit)
         {
-            Manager.Strike(Player.m_localPlayer, __instance, hit,
-                hit.m_skill == Skills.SkillType.WoodCutting || hit.m_skill == Skills.SkillType.Pickaxes
-                ? ConfigManager.XpStrikeResourceFactor.Value : ConfigManager.XpStrikeDestructableFactor.Value);
+            DamagePatch(__instance, hit, false);
         }
-
         [HarmonyPostfix]
         [HarmonyPatch(typeof(MineRock), nameof(MineRock.Damage))]
         static void MineRock_Damage(Destructible __instance, HitData hit)
         {
-            Manager.Strike(Player.m_localPlayer, __instance, hit,
-                hit.m_skill == Skills.SkillType.Pickaxes ? ConfigManager.XpStrikeResourceFactor.Value : ConfigManager.XpStrikeDestructableFactor.Value);
+            DamagePatch(__instance, hit, false);
         }
-
         [HarmonyPostfix]
         [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Damage))]
         static void MineRock5_Damage(Destructible __instance, HitData hit)
         {
-            Manager.Strike(Player.m_localPlayer, __instance, hit,
-                hit.m_skill == Skills.SkillType.Pickaxes ? ConfigManager.XpStrikeResourceFactor.Value : ConfigManager.XpStrikeDestructableFactor.Value);
+            DamagePatch(__instance, hit, false);
         }
-
         [HarmonyPostfix]
         [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Damage))]
         static void TreeBase_Damage(Destructible __instance, HitData hit)
         {
-            Manager.Strike(Player.m_localPlayer, __instance, hit,
-                hit.m_skill == Skills.SkillType.WoodCutting ? ConfigManager.XpStrikeResourceFactor.Value : ConfigManager.XpStrikeDestructableFactor.Value);
+            DamagePatch(__instance, hit, false);
         }
-
         [HarmonyPostfix]
         [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))]
         static void TreeLog_Damage(Destructible __instance, HitData hit)
         {
-            Manager.Strike(Player.m_localPlayer, __instance, hit,
-                hit.m_skill == Skills.SkillType.WoodCutting ? ConfigManager.XpStrikeResourceFactor.Value : ConfigManager.XpStrikeDestructableFactor.Value);
+            DamagePatch(__instance, hit, false);
         }
+        static void DamagePatch(IDestructible __instance, HitData hit, bool livingTarget)
+        {
+            Player playerRef = Player.m_localPlayer;
+            bool tool = false;
+            float factor = 0f;
+
+            if (hit.m_skill == Skills.SkillType.WoodCutting || hit.m_skill == Skills.SkillType.Pickaxes)
+            {
+                tool = true;
+
+                if (livingTarget)
+                    factor = 0f;
+                else
+                    factor = 1f;
+            }
+            else
+            {
+                if (livingTarget)
+                    factor = 1f;
+                else
+                    factor = ConfigManager.WeaponEXPStrikeDestructibleMod.Value;
+            }
+
+
+            Manager.Strike(playerRef, __instance, hit, factor, tool);
+        }
+
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.StartAttack))]
@@ -162,18 +187,18 @@ namespace kingskills.WeaponExperience
             else
             {
                 timer += dt;
-                if (timer >= ConfigManager.XpHoldTimer.Value)
+                if (timer >= ConfigManager.WeaponEXPHoldTickLength.Value)
                 {
-                    float ticks = timer / ConfigManager.XpHoldTimer.Value;
-                    float holdXp = ticks * ConfigManager.XpHoldRate;
+                    float ticks = timer / ConfigManager.WeaponEXPHoldTickLength.Value;
+                    float holdXp = ticks * ConfigManager.WeaponEXPHoldPerTick.Value;
                     if (weapon == __instance.m_unarmedWeapon.m_itemData)
                     {
-                        holdXp *= ConfigManager.XpHoldUnarmedFactor.Value;
+                        holdXp *= ConfigManager.WeaponEXPHoldUnarmedMod.Value;
                     }
                     Skills.SkillType skill = weapon.m_shared.m_skillType;
                     //Jotunn.Logger.LogMessage($"Holding {skill} for {timer}s, adding {holdXp} xp");
                     __instance.RaiseSkill(skill, holdXp);
-                    timer -= ticks * ConfigManager.XpHoldTimer.Value;
+                    timer -= ticks * ConfigManager.WeaponEXPHoldTickLength.Value;
                 }
             }
         }
