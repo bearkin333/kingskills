@@ -191,9 +191,9 @@ namespace kingskills
         public static ConfigEntry<float> MiningDropModMax;
 
         //Constants for use that aren't configurable
-        public static Dictionary<string, float> WoodcuttingDropTable;
-        public static Dictionary<string, float> MiningDropTable;
-        public static Dictionary<string, float> BowDropTable;
+        public static Dictionary<string, float> WoodcuttingDropTable = new Dictionary<string, float>();
+        public static Dictionary<string, float> MiningDropTable = new Dictionary<string, float>();
+        public static Dictionary<string, float> BowDropTable = new Dictionary<string, float>();
 
         //These are the base stats already in valheim
         public const float BaseSwimSpeed = 2f;
