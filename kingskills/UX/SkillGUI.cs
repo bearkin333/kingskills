@@ -497,7 +497,7 @@ namespace kingskills
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Blocking);
 
             float staminaRedux = ToPercent(ConfigManager.GetBlockStaminaRedux(skill));
-            float baseBlockPower = ToPercent(ConfigManager.GetBlockPowerFlat(skill));
+            float baseBlockPower = ConfigManager.GetBlockPowerFlat(skill);
             float blockPerArmor = ToPercent(ConfigManager.GetBlockPowerMod(skill));
             float blockHealth = ConfigManager.BlockHealthPerLevel.Value * 100 * skill;
             float parryExpMod = ToPercent(ConfigManager.GetBlockParryExpMod());
@@ -666,8 +666,8 @@ namespace kingskills
             float baseStaminaGain = skill * 100 * ConfigManager.RunStaminaPerLevel.Value;
 
 
-            float encumberanceFactor = ToPercent(MovePatch.GetEncumberanceFactor(player, skill));
-            float equipmentFactor = ToPercent(MovePatch.GetEquipmentFactor(player, skill));
+            float encumberanceFactor = ToPercent(MovePatch.GetEncumberanceFactor(player));
+            float equipmentFactor = ToPercent(MovePatch.GetEquipmentFactor(player));
 
             float absWeightExp = ToPercent(MovePatch.absoluteWeightBonus(player));
             float relWeightExp = ToPercent(MovePatch.relativeWeightBonus(player));

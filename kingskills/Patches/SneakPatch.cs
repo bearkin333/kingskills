@@ -18,7 +18,7 @@ namespace kingskills.Patches
 			//This code is pretty much ripped straight from valheim
 			//since I have to replace or transpile it to do most of what I want to do
 
-			float staminaUse = ConfigManager.GetSneakStaminaDrain(__instance.GetSkillFactor(Skills.SkillType.Sneak);
+			float staminaUse = ConfigManager.GetSneakStaminaDrain(__instance.GetSkillFactor(Skills.SkillType.Sneak));
 			__instance.UseStamina(dt * staminaUse);
 			if (!__instance.HaveStamina())
 			{

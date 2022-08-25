@@ -509,7 +509,7 @@ namespace kingskills
                 "% extra knockback to ALL weapons at level 100");
             ClubStaggerModMin = cfg.Bind("Club.Effect", "Generic Stagger Bonus Min", 0f, 
                 "% extra stagger damage to ALL ATTACKS at level 0");
-            ClubStaggerModMax = cfg.Bind("Club.Effect", "Generic Stagger Bonus Min", 150f,
+            ClubStaggerModMax = cfg.Bind("Club.Effect", "Generic Stagger Bonus Max", 150f,
                 "% extra stagger damage to ALL ATTACKS at level 100");
             FistDamageModMin = cfg.Bind("Fist.Effect", "Damage Min", 0f,
                 "% extra damage done with bare fists at level 0");

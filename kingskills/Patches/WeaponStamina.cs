@@ -18,7 +18,8 @@ namespace kingskills.Patches
             Skills.SkillType skillT = __instance.m_weapon.m_shared.m_skillType;
             float skillFactor = __instance.m_character.GetSkillFactor(skillT);
             if (stamina <= 0f) __result = 0;
-
+            Jotunn.Logger.LogMessage($"Going for stamina use - attack stamina is supposed to be " +
+                $"{stamina}, but since the skill is {skillT}, ");
             switch (skillT)
             {
                 case Skills.SkillType.Swords:
@@ -50,6 +51,7 @@ namespace kingskills.Patches
                         ConfigManager.GetPolearmStaminaRedux(skillFactor);
                     break;
             }
+            Jotunn.Logger.LogMessage($"It's only going to be {stamina }");
 
             __result = stamina;
 
