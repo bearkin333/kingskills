@@ -95,10 +95,10 @@ namespace kingskills
         private static void BlockDamageExpPatch(HitData hit, float damage, Humanoid __instance, bool isParry)
         {
             hit.BlockDamage(damage);
-            float expValue = damage * ConfigManager.BlockExpMod.Value;
+            float expValue = damage * ConfigManager.GetBlockExpMod();
             if (isParry)
             {
-                expValue *= ConfigManager.BlockParryExpMod.Value;
+                expValue *= ConfigManager.GetBlockParryExpMod();
                 //Jotunn.Logger.LogMessage($"Parried! Exp Value doubled!");
             }
             __instance.RaiseSkill(Skills.SkillType.Blocking, expValue);
@@ -121,12 +121,26 @@ namespace kingskills
         {
             //Jotunn.Logger.LogMessage($"block power of {currentBlocker.GetBlockPower(skillFactor)} is now mine, also am I parrying? {isParry}");
             float itemBlockPower = currentBlocker.GetBaseBlockPower();
-            float baseBlockPower = itemBlockPower + ConfigManager.GetFlatBlockPower(skillFactor);
+            float baseBlockPower = itemBlockPower + ConfigManager.GetBlockPowerFlat(skillFactor);
+
+            //The flat block armor bonus from spears
+            baseBlockPower += 
+                ConfigManager.GetSpearBlockArmor(instance.GetSkillFactor(Skills.SkillType.Spears));
+            if (currentBlocker == instance.m_unarmedWeapon.m_itemData)
+            { //The flat bonus from unarmed blocks
+                baseBlockPower += 
+                    ConfigManager.GetFistBlockArmor(instance.GetSkillFactor(Skills.SkillType.Unarmed));
+            } else if (currentBlocker.m_shared.m_skillType == Skills.SkillType.Polearms)
+            {
+                baseBlockPower +=
+                    ConfigManager.GetPolearmBlock(instance.GetSkillFactor(Skills.SkillType.Polearms));
+            }
             float blockPower = baseBlockPower * ConfigManager.GetBlockPowerMod(skillFactor);
 
             if (isParry)
-            {
-                blockPower *= AdditionalParryBonus;
+            { //The sword additional parry bonus
+                blockPower *= 
+                    ConfigManager.GetSwordParryMod(instance.GetSkillFactor(Skills.SkillType.Swords));
             }
             return blockPower;
         }

@@ -107,20 +107,23 @@ namespace kingskills
             //Jotunn.Logger.LogMessage($"Adding in our own skill effects, it's now {newRunStaminaDrain}.");
             //This number will not sound right - that's because the game will run it's own Lerp on it later.
 
-            float newRunLevel = skillFactor * 100;
-            float totalRunStaminaBonus = newRunLevel * ConfigManager.RunStaminaPerLevel.Value;
+
+            //Then a whole bunch of deprecated nonsense to try to increase the stamina.
+            //Now I simply tack my number on to the "GetMaxStamina" call by player
+            //float newRunLevel = skillFactor * 100;
+            //float totalRunStaminaBonus = newRunLevel * ConfigManager.RunStaminaPerLevel.Value;
 
             //First, we remove the last recorded update to the player's base stamina
             //Jotunn.Logger.LogMessage($"The player's base stamina is {player.m_baseStamina}, and last time we added to it we added {LastStaminaAdded}.");
-            player.m_baseStamina -= LastStaminaAdded;
+            // player.m_baseStamina -= LastStaminaAdded;
 
             //Jotunn.Logger.LogMessage($"Now it is {player.m_baseStamina}.");
             //Then, we add the new value
-            player.m_baseStamina += totalRunStaminaBonus;
+            //player.m_baseStamina += totalRunStaminaBonus;
 
             //Jotunn.Logger.LogMessage($"We just added {totalRunStaminaBonus} to it, making it {player.m_baseStamina}.");
             //Then, we record it for next time this function is run
-            LastStaminaAdded = totalRunStaminaBonus;
+            //LastStaminaAdded = totalRunStaminaBonus;
 
             //Jotunn.Logger.LogMessage($"Now we reset the last stamina added to {LastStaminaAdded}.");
         }
@@ -158,6 +161,32 @@ namespace kingskills
                 $"New stamina use: {player.m_jumpStaminaUsage} \n" +
                 $"New forward force: {player.m_jumpForceForward} \n" +
                 $"New tired factor: {player.m_jumpForceTiredFactor}");*/
+        }
+
+        //New max health and stamina
+
+        [HarmonyPatch(nameof(Player.GetMaxStamina))]
+        [HarmonyPostfix]
+        public static void GetMyMaxStamina(Player __instance, ref float __result)
+        {
+            __result += ConfigManager.RunStaminaPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Run) +
+                ConfigManager.AxeStaminaPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Axes);
+        }
+
+        [HarmonyPatch(nameof(Player.GetMaxCarryWeight))]
+        [HarmonyPostfix]
+        public static void GetMyMaxCarryWeight(Player __instance, ref float __result)
+        {
+            __result += ConfigManager.GetAxeCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Axes));
+        }
+
+        [HarmonyPatch(typeof(Character))]
+        [HarmonyPatch(nameof(Character.GetMaxHealth))]
+        [HarmonyPostfix]
+        public static void GetMyMaxHealth(Character __instance, ref float __result)
+        {
+            if (__instance.IsPlayer())
+            __result += ConfigManager.BlockHealthPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Blocking);
         }
     }
 }

@@ -497,9 +497,9 @@ namespace kingskills
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Blocking);
 
             float staminaRedux = ToPercent(ConfigManager.GetBlockStaminaRedux(skill));
-            float baseBlockPower = ToPercent(ConfigManager.GetFlatBlockPower(skill));
+            float baseBlockPower = ToPercent(ConfigManager.GetBlockPowerFlat(skill));
             float blockPerArmor = ToPercent(ConfigManager.GetBlockPowerMod(skill));
-            float blockStaggerLimit = ToPercent(ConfigManager.GetBlockStaggerBonus(skill));
+            float blockHealth = ConfigManager.BlockHealthPerLevel.Value * 100 * skill;
             float parryExpMod = ToPercent(ConfigManager.GetBlockParryExpMod());
 
             LeftPanelExperienceText.GetComponent<Text>().text =
@@ -510,7 +510,7 @@ namespace kingskills
                 staminaRedux.ToString("F1") + "% stamina cost for blocks\n" +
                 baseBlockPower.ToString("F0") + " extra flat block armor\n" +
                 blockPerArmor.ToString("F1") + "% extra block armor\n" +
-                blockStaggerLimit.ToString("F0") + "% extra max health added to stagger limit";
+                blockHealth.ToString("F0") + " extra max health";
         }
         public static void OpenBowPanels()
         {

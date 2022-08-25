@@ -9,11 +9,11 @@ using static CharacterDrop;
 
 namespace kingskills.Patches
 {
-    [HarmonyPatch(typeof(DropTable))]
     class LootDropPatch
     {
-        //[HarmonyPatch("GetDropList")] //, new Type[] { typeof(int) })]
-        //[HarmonyPostfix]
+        [HarmonyPatch(typeof(DropTable))]
+        [HarmonyPatch("GetDropList", new Type[] { typeof(int) })]
+        [HarmonyPostfix]
         public static void DropTableFix(ref DropTable __instance, ref List<GameObject> __result, int amount)
         {
             Jotunn.Logger.LogMessage("drop table fix running");

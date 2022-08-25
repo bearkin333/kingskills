@@ -85,6 +85,8 @@
     <Compile Include="Patches\LootDropPatch.cs" />
     <Compile Include="Patches\WeaponBonusExperience.cs" />
     <Compile Include="Patches\LevelPatch.cs" />
+    <Compile Include="Patches\WeaponDamage.cs" />
+    <Compile Include="Patches\WeaponStamina.cs" />
     <Compile Include="Util\Utilities.cs" />
     <Compile Include="Util\TestCommands.cs" />
     <Compile Include="Util\ConfigManager.cs" />

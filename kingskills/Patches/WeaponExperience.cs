@@ -53,39 +53,39 @@ namespace kingskills.WeaponExperience
         [HarmonyPatch(typeof(Character), nameof(Character.Damage))]
         static void Character_Damage(Character __instance, HitData hit)
         {
-            DamagePatch(__instance, hit, true);
+            DamageToExp(__instance, hit, true);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Destructible), nameof(Destructible.Damage))]
         static void Destructible_Damage(Destructible __instance, HitData hit)
         {
-            DamagePatch(__instance, hit, false);
+            DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(MineRock), nameof(MineRock.Damage))]
         static void MineRock_Damage(Destructible __instance, HitData hit)
         {
-            DamagePatch(__instance, hit, false);
+            DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Damage))]
         static void MineRock5_Damage(Destructible __instance, HitData hit)
         {
-            DamagePatch(__instance, hit, false);
+            DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Damage))]
         static void TreeBase_Damage(Destructible __instance, HitData hit)
         {
-            DamagePatch(__instance, hit, false);
+            DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))]
         static void TreeLog_Damage(Destructible __instance, HitData hit)
         {
-            DamagePatch(__instance, hit, false);
+            DamageToExp(__instance, hit, false);
         }
-        static void DamagePatch(IDestructible __instance, HitData hit, bool livingTarget)
+        static void DamageToExp(IDestructible __instance, HitData hit, bool livingTarget)
         {
             Player playerRef = Player.m_localPlayer;
             bool tool = false;

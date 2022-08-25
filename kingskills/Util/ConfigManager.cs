@@ -39,8 +39,7 @@ namespace kingskills
         public static ConfigEntry<float> BlockPowerModMax;
         public static ConfigEntry<float> BlockStaminaReduxMin;
         public static ConfigEntry<float> BlockStaminaReduxMax;
-        public static ConfigEntry<float> BlockStaggerLimitModMin;
-        public static ConfigEntry<float> BlockStaggerLimitModMax;
+        public static ConfigEntry<float> BlockHealthPerLevel;
         public static ConfigEntry<float> JumpFallDamageThresholdMin;
         public static ConfigEntry<float> JumpFallDamageThresholdMax;
         public static ConfigEntry<float> JumpFallDamageReduxMin;
@@ -314,10 +313,8 @@ namespace kingskills
                 "% less stamina to block at level 0");
             BlockStaminaReduxMax = cfg.Bind("Block.Effect", "Stamina Cost Reduction Max", 50f,
                 "% less stamina to block at level 100");
-            BlockStaggerLimitModMin = cfg.Bind("Block.Effect", "Stagger Limit Bonus Min", 0f,
-                "% of max health to add to player's stagger limit at level 0");
-            BlockStaggerLimitModMax = cfg.Bind("Block.Effect", "Stagger Limit Bonus Max", 30f,
-                "% of max health to add to player's stagger limit at level 100");
+            BlockHealthPerLevel= cfg.Bind("Block.Effect", "Block Health", 0f,
+                "flat increase to max health per level of block");
             
             //Jump Effects
             JumpFallDamageThresholdMin = cfg.Bind("Jump.Effect", "Fall Damage Threshold Min", 4f,
@@ -359,7 +356,7 @@ namespace kingskills
                 "The lowest weight you will get an experience bonus for carrying");
             RunAbsoluteWeightMaxWeight = cfg.Bind("Run.Experience.AbsoluteWeight", "Max Weight", 1800f,
                 "The heighest weight you will get an experience bonus for carrying");
-            RunAbsoluteWeightFactor = cfg.Bind("Run.Experience.AbsoluteWeight", "Factor", 2.2f,
+            RunAbsoluteWeightFactor = cfg.Bind("Run.Experience.AbsoluteWeight", "Factor", .86f,
                 "Factor to define the slope of the absolute weight curve");
             RunAbsoluteWeightExpMod = cfg.Bind("Run.Experience.AbsoluteWeight", "Mod", 2000f, 
                 "% modifier for how much experience you get from absolute weight");
@@ -679,6 +676,10 @@ namespace kingskills
          * Here be the Get functions
          * 
          */
+        public static float GetBlockExpMod()
+        {
+            return PerToMult(BlockExpMod);
+        }
         public static float GetBlockParryExpMod()
         {
             return PerToMult(BlockParryExpMod);
@@ -688,7 +689,7 @@ namespace kingskills
             return Mathf.Lerp(PerToMult(BlockStaminaReduxMin, true), 
                 PerToMult(BlockStaminaReduxMax, true), skillFactor);
         }
-        public static float GetFlatBlockPower(float skillFactor)
+        public static float GetBlockPowerFlat(float skillFactor)
         {
             return Mathf.Lerp(BlockFlatPowerMin.Value, 
                 BlockFlatPowerMax.Value, skillFactor);
@@ -697,11 +698,6 @@ namespace kingskills
         {
             return Mathf.Lerp(PerToMult(BlockPowerModMin), 
                 PerToMult(BlockPowerModMax), skillFactor);
-        }
-        public static float GetBlockStaggerBonus(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMod(BlockStaggerLimitModMin),
-                PerToMod(BlockStaggerLimitModMax),skillFactor);
         }
         public static float GetFallDamageThreshold(float skillFactor)
         {
@@ -756,8 +752,8 @@ namespace kingskills
         {
             float minBonus = 1f;
             float maxBonus = PerToMult(RunAbsoluteWeightExpMod);
-            return Mathf.Lerp(minBonus, maxBonus, weightPercent) *
-                Mathf.Pow(weightPercent + 1f, RunAbsoluteWeightFactor.Value);
+            return Mathf.Lerp(minBonus, maxBonus, 
+                Mathf.Pow(weightPercent, RunAbsoluteWeightFactor.Value));
             /*
             Jotunn.Logger.LogMessage($"Absolute weight exp mod: I was given {weightPercent} as weight percent\n" +
                 $"The overall exp mod is {RunAbsoluteWeightExpMod.Value}, which I've converted to {PerToMult(RunAbsoluteWeightExpMod)}\n" +

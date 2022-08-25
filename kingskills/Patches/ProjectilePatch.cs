@@ -22,8 +22,26 @@ namespace kingskills
         [HarmonyPostfix]
         public static void InitProj(Projectile __instance)
         {
-            projectileList.Add(__instance.gameObject.GetInstanceID(), __instance.transform.position);
-            //Jotunn.Logger.LogMessage($"Added projectile {__instance.gameObject.GetInstanceID()}");
+            Player playerRef = Player.m_localPlayer;
+            if (__instance.m_owner.IsPlayer() && __instance.m_owner.GetZDOID() == playerRef.GetZDOID())
+            {
+                projectileList.Add(__instance.gameObject.GetInstanceID(), __instance.transform.position);
+                //Jotunn.Logger.LogMessage($"Added projectile {__instance.gameObject.GetInstanceID()}");
+
+                if (__instance.m_skill == Skills.SkillType.Bows)
+                {
+                    __instance.m_vel *=
+                        ConfigManager.GetBowVelocityMod(playerRef.GetSkillFactor(Skills.SkillType.Bows));
+                }
+                else if (__instance.m_skill == Skills.SkillType.Spears)
+                {
+                    __instance.m_damage.Modify(
+                        ConfigManager.GetSpearProjectileDamageMod(playerRef.GetSkillFactor(Skills.SkillType.Spears)));
+                    __instance.m_vel *=
+                        ConfigManager.GetSpearVelocityMod(playerRef.GetSkillFactor(Skills.SkillType.Spears));
+                }
+
+            }
         }
 
 
