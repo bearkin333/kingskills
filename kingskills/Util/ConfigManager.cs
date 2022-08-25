@@ -256,19 +256,16 @@ namespace kingskills
                 "Seconds between ticks of hold experience");
             WeaponEXPHoldUnarmedMod = cfg.Bind("Experience.Weapons", "Unarmed Mod", 20f,
                 "% of normal hold experience gained for unarmed when holding nothing");
-            PercentToMultiplier(ref  WeaponEXPHoldUnarmedMod);
-
+            
 
             //Weapon Strike Experience
             WeaponEXPStrikeDamageMod = cfg.Bind("Experience.Weapons", "XP Per Damage", 40f,
                 "% of damage dealt that becomes experience earned");
-            PercentToMultiplier(ref WeaponEXPStrikeDamageMod);
             WeaponEXPStrikeDamageFactor = cfg.Bind("Experience.Weapons", "XP Per Damage Curve", .42f,
                 "Factor to define the slope of the damage to xp curve");
             WeaponEXPStrikeDestructibleMod = cfg.Bind("Experience.Weapons", "Destructible Mod", 10f,
                 "% of experience gained when you hit a non living thing");
-            PercentToMultiplier(ref WeaponEXPStrikeDestructibleMod);
-
+            
 
             //Weapon Bonus experience (BXP)
             WeaponBXPUnarmedBlock = cfg.Bind("Weapon.BonusExperience", "Unarmed Block", 20f,
@@ -287,14 +284,12 @@ namespace kingskills
                 "Flat BXP gained every time you hit with a thrown spear");
             WeaponBXPBowDistanceMod = cfg.Bind("Weapon.BonusExperience", "Bow Distance Mod", 50f,
                 "% of distance that becomes bow experience on hit.");
-            PercentToMultiplier(ref WeaponBXPBowDistanceMod);
-
+            
 
             //Tool experience
             ToolEXPStrikeDamageMod = cfg.Bind("Experience.Tools", "Tool Damage Mod", 150f,
                 "% of damage done to resources that becomes experience for gathering skills " +
                 "(Woodcutting, Mining)");
-            PercentToMultiplier(ref ToolEXPStrikeDamageMod);
             ToolEXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .22f,
                 "Factor to define the slope of the damage to xp curve");
 
@@ -302,11 +297,9 @@ namespace kingskills
             //Block experience
             BlockExpMod = cfg.Bind("Block.Experience", "Experience Mod", 22f,
                 "% of damage blocked that turns into experience");
-            PercentToMultiplier(ref BlockExpMod);
             BlockParryExpMod = cfg.Bind("Block.Experience", "Parry Bonus", 200f,
                 "% extra experience earned when parrying an attack");
-            PercentToMultiplier(ref BlockParryExpMod);
-
+            
 
             //Block effects
             BlockFlatPowerMin = cfg.Bind("Block.Effect", "Flat Armor Bonus Min", 0f,
@@ -315,23 +308,17 @@ namespace kingskills
                 "This flat value is added to block armor at level 100");
             BlockPowerModMin = cfg.Bind("Block.Effect", "% Bonus Block Armor Min", -25f,
                 "% change in total block armor at level 0");
-            PercentToMultiplier(ref BlockPowerModMin);
             BlockPowerModMax = cfg.Bind("Block.Effect", "% Bonus Block Armor Max", 100f,
                 "% change in total block armor at level 100");
-            PercentToMultiplier(ref BlockPowerModMax);
             BlockStaminaReduxMin = cfg.Bind("Block.Effect", "Stamina Cost Reduction Min", -10f,
                 "% less stamina to block at level 0");
-            PercentToMultiplier(ref BlockStaminaReduxMin, true);
             BlockStaminaReduxMax = cfg.Bind("Block.Effect", "Stamina Cost Reduction Max", 50f,
                 "% less stamina to block at level 100");
-            PercentToMultiplier(ref BlockStaminaReduxMax, true);
             BlockStaggerLimitModMin = cfg.Bind("Block.Effect", "Stagger Limit Bonus Min", 0f,
                 "% of max health to add to player's stagger limit at level 0");
-            PercentToMultiplier(ref BlockStaggerLimitModMin);
             BlockStaggerLimitModMax = cfg.Bind("Block.Effect", "Stagger Limit Bonus Max", 30f,
                 "% of max health to add to player's stagger limit at level 100");
-            PercentToMultiplier(ref BlockStaggerLimitModMax);
-
+            
             //Jump Effects
             JumpFallDamageThresholdMin = cfg.Bind("Jump.Effect", "Fall Damage Threshold Min", 4f,
                 "meters to fall before you start calculating fall damage at level 0");
@@ -339,37 +326,28 @@ namespace kingskills
                 "meters to fall before you start calculating fall damage at level 100");
             JumpFallDamageReduxMin = cfg.Bind("Jump.Effect", "Fall Damage Reduction Min", -15f,
                 "% less fall damage to take at level 0");
-            PercentToMultiplier(ref JumpFallDamageReduxMin, true);
             JumpFallDamageReduxMax = cfg.Bind("Jump.Effect", "Fall Damage Reduction Max", 60f,
                 "% less fall damage to take at level 100");
-            PercentToMultiplier(ref JumpFallDamageReduxMax, true);
-
+            
 
             //Swim Experience
             SwimEXPSpeedMod = cfg.Bind("Swim.Experience", "Swim Experience Mod", 100f,
                 "% of swim speed that becomes bonus experience gain");
-            PercentToMultiplier(ref SwimEXPSpeedMod);
-
+            
 
             //Swim effects
             SwimSpeedModMin = cfg.Bind("Swim.Effect", "Speed Min", 0f,
                 "% to increase swim speed at level 0");
-            PercentToMultiplier(ref SwimSpeedModMin);
             SwimSpeedModMax = cfg.Bind("Swim.Effect", "Speed Max", 300f,
                 "% to increase swim speed at level 100");
-            PercentToMultiplier(ref SwimSpeedModMax);
             SwimAccelModMin = cfg.Bind("Swim.Effect", "Acceleration Min", 0f,
                 "% to increase swim acceleration at level 0");
-            PercentToMultiplier(ref SwimAccelModMin);
             SwimAccelModMax = cfg.Bind("Swim.Effect", "Acceleration Max", 300f,
                 "% to increase swim acceleration at level 100");
-            PercentToMultiplier(ref SwimAccelModMax);
             SwimTurnModMin = cfg.Bind("Swim.Effect", "Turn Speed Min", 0f,
                 "% to increase swim turn speed at level 0");
-            PercentToMultiplier(ref SwimTurnModMin);
             SwimTurnModMax = cfg.Bind("Swim.Effect", "Turn Speed Max", 500f,
                 "% to increase swim turn speed at level 100");
-            PercentToMultiplier(ref SwimTurnModMax);
             SwimStaminaPerSecMin = cfg.Bind("Swim.Effect", "Stamina cost min", 5f,
                 "How much stamina swimming will take per second at level 0");
             SwimStaminaPerSecMax = cfg.Bind("Swim.Effect", "Stamina cost max", .5f,
@@ -381,89 +359,65 @@ namespace kingskills
                 "The lowest weight you will get an experience bonus for carrying");
             RunAbsoluteWeightMaxWeight = cfg.Bind("Run.Experience.AbsoluteWeight", "Max Weight", 1800f,
                 "The heighest weight you will get an experience bonus for carrying");
-            RunAbsoluteWeightFactor = cfg.Bind("Run.Experience.AbsoluteWeight", "Factor ", 2.2f,
+            RunAbsoluteWeightFactor = cfg.Bind("Run.Experience.AbsoluteWeight", "Factor", 2.2f,
                 "Factor to define the slope of the absolute weight curve");
             RunAbsoluteWeightExpMod = cfg.Bind("Run.Experience.AbsoluteWeight", "Mod", 2000f, 
                 "% modifier for how much experience you get from absolute weight");
-            PercentToMultiplier(ref RunAbsoluteWeightExpMod);
-
+            
 
             //Run Relative Weight Experience
             RunRelativeWeightLight = cfg.Bind("Run.Experience.RelativeWeight", "Light Threshold", 33f,
                 "Threshold for being at 'light' encumberance");
-            PercentToMultiplier(ref RunRelativeWeightLight);
             RunRelativeWeightLightMod = cfg.Bind("Run.Experience.RelativeWeight", "Light Modifier", -25f,
                 "Experience Bonus for being at 'light' encumberance");
-            PercentToMultiplier(ref RunRelativeWeightLightMod);
             RunRelativeWeightMed = cfg.Bind("Run.Experience.RelativeWeight", "Medium Threshold", 50f,
                 "Threshold for being at 'medium' encumberance");
-            PercentToMultiplier(ref RunRelativeWeightMed);
             RunRelativeWeightMedMod = cfg.Bind("Run.Experience.RelativeWeight", "Medium Modifier", 0f,
                 "Experience Bonus for being at 'medium' encumberance");
-            PercentToMultiplier(ref RunRelativeWeightMedMod);
             RunRelativeWeightHighMed = cfg.Bind("Run.Experience.RelativeWeight", "High Threshold", 66f,
                 "Threshold for being at 'high' encumberance");
-            PercentToMultiplier(ref RunRelativeWeightHighMed);
             RunRelativeWeightHighMedMod = cfg.Bind("Run.Experience.RelativeWeight", "High Modifier", 25f,
                 "Experience Bonus for being at 'high' encumberance");
-            PercentToMultiplier(ref RunRelativeWeightHighMedMod);
             RunRelativeWeightHeavy = cfg.Bind("Run.Experience.RelativeWeight", "Heavy Threshold", 80f,
                 "Threshold for being at 'heavy' encumberance");
-            PercentToMultiplier(ref RunRelativeWeightHeavy);
             RunRelativeWeightHeavyMod = cfg.Bind("Run.Experience.RelativeWeight", "Heavy Modifier", 50f,
                 "Experience Bonus for being at 'heavy' encumberance");
-            PercentToMultiplier(ref RunRelativeWeightHeavyMod);
             RunRelativeWeightFull = cfg.Bind("Run.Experience.RelativeWeight", "Full Threshold", 100f,
                 "Threshold for being at 'full' encumberance");
-            PercentToMultiplier(ref RunRelativeWeightFull);
             RunRelativeWeightFullMod = cfg.Bind("Run.Experience.RelativeWeight", "Full Modifier", 80f,
                 "Experience Bonus for being at 'full' encumberance");
-            PercentToMultiplier(ref RunRelativeWeightFullMod);
             RunRelativeWeightOverMod = cfg.Bind("Run.Experience.RelativeWeight", "Overweight Modifier", 200f,
                 "Experience Bonus for being overencumbered");
-            PercentToMultiplier(ref RunRelativeWeightOverMod);
             RunRelativeWeightExpMod = cfg.Bind("Run.Experience.RelativeWeight", "Overall Modifier", 100f,
                 "% modifier for how much experience you get from relative weight");
-            PercentToMultiplier(ref RunRelativeWeightExpMod);
-
+            
 
             //Run Experience
             RunEXPSpeedMod = cfg.Bind("Run.Experience", "Run Experience Mod", 100f,
                 "% of run speed that becomes bonus experience gain");
-            PercentToMultiplier(ref RunEXPSpeedMod);
-
+            
 
             //Run Effects
             RunSpeedModMin = cfg.Bind("Run.Effect", "Speed Min", 0f,
                 "% extra run speed at level 0");
-            PercentToMultiplier(ref RunSpeedModMin);
             RunSpeedModMax = cfg.Bind("Run.Effect", "Speed Max", 250f,
                 "% extra run speed at level 100");
-            PercentToMultiplier(ref RunSpeedModMax);
             RunEquipmentReduxMin = cfg.Bind("Run.Effect", "Equipment Reduction Min", 0f,
                 "% less movespeed reduction from equipment at level 0");
-            PercentToMultiplier(ref RunEquipmentReduxMin, true);
             RunEquipmentReduxMax = cfg.Bind("Run.Effect", "Equipment Reduction Max", 50f,
                 "% less movespeed reduction from equipment at level 100");
-            PercentToMultiplier(ref RunEquipmentReduxMax, true);
             RunEncumberanceModMin = cfg.Bind("Run.Effect", "Encumberance Min", 0f,
                 "% less run speed when your inventory is empty");
-            PercentToMultiplier(ref RunEncumberanceModMin);
             RunEncumberanceModMax = cfg.Bind("Run.Effect", "Encumberance Max", 50f,
                 "% less run speed when your inventory is full");
-            PercentToMultiplier(ref RunEncumberanceModMax);
             RunEncumberanceReduxMin = cfg.Bind("Run.Effect", "Encumberance Reduction Min", 0f,
                 "% less effect from encumberance at level 0");
-            PercentToMultiplier(ref RunEncumberanceReduxMin, true);
             RunEncumberanceReduxMax = cfg.Bind("Run.Effect", "Encumberance Reduction Max", 50f, 
                 "% less effect from encumberance at level 100");
-            PercentToMultiplier(ref RunEncumberanceReduxMax, true);
             RunStaminaReduxMin = cfg.Bind("Run.Effect", "Stamina Reduction Min", -25f,
                 "% less stamina cost to run at level 100");
-            PercentToMultiplier(ref RunStaminaReduxMin, true);
             RunStaminaReduxMax = cfg.Bind("Run.Effect", "Stamina Reduction Max", 80f,
                 "% less stamina cost to run at level 100");
-            PercentToMultiplier(ref RunStaminaReduxMax, true);
             RunStaminaPerLevel = cfg.Bind("Run.Effect", "Base Stamina Bonus", .6f,
                 "How much base stamina is added per level of run");
 
@@ -471,130 +425,91 @@ namespace kingskills
             //Jump Effects
             JumpForceModMin = cfg.Bind("Jump.Effect", "Vertical Force Bonus Min", -10f,
                 "% extra vertical jump force at level 0");
-            PercentToMultiplier(ref JumpForceModMin);
             JumpForceModMax = cfg.Bind("Jump.Effect", "Vertical Force Bonus Max", 90f,
                 "% extra vertical jump force at level 100");
-            PercentToMultiplier(ref JumpForceModMax);
             JumpStaminaReduxMin = cfg.Bind("Jump.Effect", "Stamina Cost Reduction Min", 0f,
                 "% less stamina cost to jump at level 0");
-            PercentToMultiplier(ref JumpStaminaReduxMin, true);
             JumpStaminaReduxMax = cfg.Bind("Jump.Effect", "Stamina Cost Reduction Max", 60f,
                 "% less stamina cost to jump at level 100");
-            PercentToMultiplier(ref JumpStaminaReduxMax, true);
             JumpForwardForceModMin = cfg.Bind("Jump.Effect", "Horizontal Force Bonus Min", 0f,
                 "% extra horizontal jump force at level 0");
-            PercentToMultiplier(ref JumpForwardForceModMin);
             JumpForwardForceModMax = cfg.Bind("Jump.Effect", "Horizontal Force Bonus Max", 150f,
                 "% extra horizontal jump force at level 100");
-            PercentToMultiplier(ref JumpForwardForceModMax);
             //May not actually be used or be different from jump force
             JumpTiredReduxMax = cfg.Bind("Jump.Effect", "Jump Tired Stamina Reduction Max", 20f,
                 "% added to the base game's tired factor, which reduces your jump force when out of stamina, at level 100");
-            PercentToMultiplier(ref JumpTiredReduxMax, true);
             JumpTiredReduxMin = cfg.Bind("Jump.Effect", "Jump Tired Stamina Reduction Min", 0f,
                 "% added to the base game's tired factor, which reduces your jump force when out of stamina, at level 0");
-            PercentToMultiplier(ref JumpTiredReduxMin, true);
-
+            
             //Unorganized
-
 
 
             AxeDamageModMin = cfg.Bind("Axe.Effect", "Damage Min", 0f, 
                 "% extra damage done with axes at level 0");
-            PercentToMultiplier(ref AxeDamageModMin);
             AxeDamageModMax = cfg.Bind("Axe.Effect", "Damage Max", 0f,
                 "% extra damage done with axes at level 100");
-            PercentToMultiplier(ref AxeDamageModMax);
             AxeStaminaReduxMin = cfg.Bind("Axe.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for axes at level 0");
-            PercentToMultiplier(ref AxeStaminaReduxMin, true);
             AxeStaminaReduxMax = cfg.Bind("Axe.Effect", "Stamina Reduction Max", 0f,
                 "% less stamina usage for axes at level 100");
-            PercentToMultiplier(ref AxeStaminaReduxMax, true);
             AxeStaminaPerLevel = cfg.Bind("Axe.Effect", "Base Stamina Gain per Level", 0f,
                 "Flat amount of base stamina gained per level in axe");
             AxeChopDamageModMin = cfg.Bind("Axe.Effect", "Woodcutting Damage Min", 0f,
                 "% extra woodcutting damage done at level 0");
-            PercentToMultiplier(ref AxeChopDamageModMin);
             AxeChopDamageModMax = cfg.Bind("Axe.Effect", "Woodcutting Damage Max", 0f,
                 "% extra woodcutting damage done at level 100");
-            PercentToMultiplier(ref AxeChopDamageModMax);
             AxeCarryCapacityMin = cfg.Bind("Axe.Effect", "Carry Capacity Bonus Min", 0f, 
                 "Flat extra carrying capacity at level 0");
             AxeCarryCapacityMax = cfg.Bind("Axe.Effect", "Carry Capacity Bonus Max", 0f, 
                 "Flat extra carrying capacity at level 100");
             BowDamageModMin = cfg.Bind("Bow.Effect", "Damage Min", 0f,
                 "% extra damage done with bows at level 0");
-            PercentToMultiplier(ref BowDamageModMin);
             BowDamageModMax = cfg.Bind("Bow.Effect", "Damage Max", 0f,
                 "% extra damage done with bows at level 100");
-            PercentToMultiplier(ref BowDamageModMax);
             BowStaminaReduxMin = cfg.Bind("Bow.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for bows at level 0");
-            PercentToMultiplier(ref BowStaminaReduxMin, true);
             BowStaminaReduxMax = cfg.Bind("Bow.Effect", "Stamina Reduction Max", 0f,
                 "% less stamina usage for bows at level 100");
-            PercentToMultiplier(ref BowStaminaReduxMax, true);
             BowVelocityModMin = cfg.Bind("Bow.Effect", "Velocity Bonus Min", 0f, 
                 "% extra velocity to fired arrows at level 0");
-            PercentToMultiplier(ref BowVelocityModMin);
             BowVelocityModMax = cfg.Bind("Bow.Effect", "Velocity Bonus Max", 0f, 
                 "% extra velocity to fired arrows at level 100");
-            PercentToMultiplier(ref BowVelocityModMax);
             BowDrawSpeedModMin = cfg.Bind("Bow.Effect", "Draw Speed Min", 0f, 
                 "% extra bow draw speed at level 0");
-            PercentToMultiplier(ref BowDrawSpeedModMin);
             BowDrawSpeedModMax = cfg.Bind("Bow.Effect", "Draw Speed Max", 0f, 
                 "% extra bow draw speed at level 100");
-            PercentToMultiplier(ref BowDrawSpeedModMax);
             BowDropModMin = cfg.Bind("Bow.Effect", "Drop rate mod min", 0f,
                 "% to increase creature drops at level 0");
-            PercentToMultiplier(ref BowDropModMin);
             BowDropModMax = cfg.Bind("Bow.Effect", "Drop rate mod max", 100f,
                 "% to increase creature drops at level 100");
-            PercentToMultiplier(ref BowDropModMax);
             ClubDamageModMin = cfg.Bind("Club.Effect", "Damage Min", 0f,
                 "% extra damage done with clubs at level 0");
-            PercentToMultiplier(ref ClubDamageModMin);
             ClubDamageModMax = cfg.Bind("Club.Effect", "Damage Max", 0f,
                 "% extra damage done with clubs at level 100");
-            PercentToMultiplier(ref ClubDamageModMax);
             ClubStaminaReduxMin = cfg.Bind("Club.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for clubs at level 0");
-            PercentToMultiplier(ref ClubStaminaReduxMin, true);
             ClubStaminaReduxMax = cfg.Bind("Club.Effect", "Stamina Reduction Max", 0f,
                 "% less stamina usage for clubs at level 100");
-            PercentToMultiplier(ref ClubStaminaReduxMax, true);
             ClubBluntModMin = cfg.Bind("Club.Effect", "Generic Blunt Bonus Min", 0f, 
                 "% extra blunt damage to ALL weapons at level 0");
-            PercentToMultiplier(ref ClubBluntModMin);
             ClubBluntModMax = cfg.Bind("Club.Effect", "Generic Blunt Bonus Max", 0f,
                 "% extra blunt damage to ALL weapons at level 100");
-            PercentToMultiplier(ref ClubBluntModMax);
             ClubKnockbackModMin = cfg.Bind("Club.Effect", "Generic Knockback Bonus Min", 0f,
                 "% extra knockback to ALL weapons at level 0");
-            PercentToMultiplier(ref ClubKnockbackModMin);
             ClubKnockbackModMax = cfg.Bind("Club.Effect", "Generic Knockback Bonus Max", 0f,
                 "% extra knockback to ALL weapons at level 100");
-            PercentToMultiplier(ref ClubKnockbackModMax);
             ClubStaggerModMin = cfg.Bind("Club.Effect", "Generic Stagger Bonus Min", 0f, 
                 "% extra stagger damage to ALL ATTACKS at level 0");
-            PercentToMultiplier(ref ClubStaggerModMin);
             ClubStaggerModMax = cfg.Bind("Club.Effect", "Generic Stagger Bonus Min", 0f,
                 "% extra stagger damage to ALL ATTACKS at level 100");
-            PercentToMultiplier(ref ClubStaggerModMax);
             FistDamageModMin = cfg.Bind("Fist.Effect", "Damage Min", 0f,
                 "% extra damage done with bare fists at level 0");
-            PercentToMultiplier(ref FistDamageModMin);
             FistDamageModMax = cfg.Bind("Fist.Effect", "Damage Max", 0f,
                 "% extra damage done with bare fists at level 100");
-            PercentToMultiplier(ref FistDamageModMax);
             FistStaminaReduxMin = cfg.Bind("Fist.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for fists at level 0");
-            PercentToMultiplier(ref FistStaminaReduxMin, true);
             FistStaminaReduxMax = cfg.Bind("Fist.Effect", "Stamina Reduction Max", 0f,
                 "% less stamina usage for fists at level 100");
-            PercentToMultiplier(ref FistStaminaReduxMax, true);
             FistDamageFlatMin = cfg.Bind("Fist.Effect", "Flat Damage Min", 0f, 
                 "Flat extra damage at level 0");
             FistDamageFlatMax = cfg.Bind("Fist.Effect", "Flat Damage Max", 0f, 
@@ -605,52 +520,36 @@ namespace kingskills
                 "Flat extra unarmed block armor at level 100");
             FistMovespeedModMin = cfg.Bind("Fist.Effect", "Movespeed Bonus Min", 0f, 
                 "% movespeed increase at level 0");
-            PercentToMultiplier(ref FistMovespeedModMin);
             FistMovespeedModMax = cfg.Bind("Fist.Effect", "Movespeed Bonus Min", 0f,
                 "% movespeed increase at level 100");
-            PercentToMultiplier(ref FistMovespeedModMax);
             KnifeDamageModMin = cfg.Bind("Knife.Effect", "Damage Min", 0f, 
                 "% extra damage done with knives at level 0");
-            PercentToMultiplier(ref KnifeDamageModMin);
             KnifeDamageModMax = cfg.Bind("Knife.Effect", "Damage Max", 0f,
                 "% extra damage done with knives at level 100");
-            PercentToMultiplier(ref KnifeDamageModMax);
             KnifeStaminaReduxMin = cfg.Bind("Knife.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for knives at level 0");
-            PercentToMultiplier(ref KnifeStaminaReduxMin, true);
             KnifeStaminaReduxMax = cfg.Bind("Knife.Effect", "Stamina Reduction Max", 0f,
                 "% less stamina usage for knives at level 100");
-            PercentToMultiplier(ref KnifeStaminaReduxMax, true);
             KnifeBackstabModMin = cfg.Bind("Knife.Effect", "Backstab Bonus Damage Min", 0f,
                 "% extra sneak attack damage with ALL weapons at level 0");
-            PercentToMultiplier(ref KnifeBackstabModMin);
             KnifeBackstabModMax = cfg.Bind("Knife.Effect", "Backstab Bonus Damage Max", 0f,
                 "% extra sneak attack damage with ALL weapons at level 100");
-            PercentToMultiplier(ref KnifeBackstabModMax);
             KnifeMovespeedModMin = cfg.Bind("Knife.Effect", "Movementspeed Bonus Min", 0f,
                 "% movespeed increase at level 0");
-            PercentToMultiplier(ref KnifeMovespeedModMin);
             KnifeMovespeedModMax = cfg.Bind("Knife.Effect", "Movementspeed Bonus Max", 0f,
                 "% movespeed increase at level 100");
-            PercentToMultiplier(ref KnifeMovespeedModMax);
             KnifePierceModMin = cfg.Bind("Knife.Effect", "Generic Pierce Damage Bonus Min", 0f,
                 "% extra pierce damage with ALL weapons at level 0");
-            PercentToMultiplier(ref KnifePierceModMin);
             KnifePierceModMax = cfg.Bind("Knife.Effect", "Generic Pierce Damage Bonus Max", 0f,
                 "% extra pierce damage with ALL weapons at level 0");
-            PercentToMultiplier(ref KnifePierceModMax);
             PolearmDamageModMin = cfg.Bind("Polearm.Effect", "Damage Min", 0f,
                 "% extra damage done with polearms at level 0");
-            PercentToMultiplier(ref PolearmDamageModMin);
             PolearmDamageModMax = cfg.Bind("Polearm.Effect", "Damage Max", 0f,
                 "% extra damage done with polearms at level 100");
-            PercentToMultiplier(ref PolearmDamageModMax);
             PolearmStaminaReduxMin = cfg.Bind("Polearm.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for polearms at level 0");
-            PercentToMultiplier(ref PolearmStaminaReduxMin, true);
             PolearmStaminaReduxMax = cfg.Bind("Polearm.Effect", "Stamina Reduction Max", 0f,
                 "% less stamina usage for polearms at level 100");
-            PercentToMultiplier(ref PolearmStaminaReduxMax, true);
             PolearmRangeMax = cfg.Bind("Polearm.Effect", "Generic Range Bonus Min", 0f,
                 "Added units of range to all weapon attacks at level 0");
             PolearmRangeMin = cfg.Bind("Polearm.Effect", "Generic Range Bonus Min", 0f,
@@ -665,111 +564,98 @@ namespace kingskills
                 "Flat block armor added to polearms at level 0");
             SpearDamageModMin = cfg.Bind("Spear.Effect", "Damage Min", 0f,
                 "% extra damage done with spears at level 0");
-            PercentToMultiplier(ref SpearDamageModMin);
             SpearDamageModMax = cfg.Bind("Spear.Effect", "Damage Max", 0f,
                 "% extra damage done with spears at level 100");
-            PercentToMultiplier(ref SpearDamageModMax);
             SpearStaminaReduxMin = cfg.Bind("Spear.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for spears at level 0");
-            PercentToMultiplier(ref SpearStaminaReduxMin, true);
             SpearStaminaReduxMax = cfg.Bind("Spear.Effect", "Stamina Reduction Max", 0f,
                 "% less stamina usage for spears at level 100");
-            PercentToMultiplier(ref SpearStaminaReduxMax, true);
             SpearVelocityModMin = cfg.Bind("Spear.Effect", "Thrown Velocity Min", 0f,
                 "% extra velocity on thrown weapons at level 0");
-            PercentToMultiplier(ref SpearVelocityModMin);
             SpearVelocityModMax = cfg.Bind("Spear.Effect", "Thrown Velocity Max", 0f,
                 "% extra velocity on thrown weapons at level 100");
-            PercentToMultiplier(ref SpearVelocityModMax);
             SpearProjectileDamageModMin = cfg.Bind("Spear.Effect", "Thrown Damage Min", 0f,
                 "% extra damage done with thrown weapons at level 0");
-            PercentToMultiplier(ref SpearProjectileDamageModMin);
             SpearProjectileDamageModMax = cfg.Bind("Spear.Effect", "Thrown Damage Max", 0f,
                 "% extra damage done with thrown weapons at level 100");
-            PercentToMultiplier(ref SpearProjectileDamageModMax);
             SpearBlockArmorMin = cfg.Bind("Spear.Effect", "Generic Block Armor Min", 0f, 
                 "Flat block armor always applied at level 0");
             SpearBlockArmorMax = cfg.Bind("Spear.Effect", "Generic Block Armor Max", 0f,
                 "Flat block armor always applied at level 100");
             SwordDamageModMin = cfg.Bind("Sword.Effect", "Damage Min", 0f,
                 "% extra damage done with swords at level 0");
-            PercentToMultiplier(ref SwordDamageModMin);
             SwordDamageModMax = cfg.Bind("Sword.Effect", "Damage Max", 0f,
                 "% extra damage done with swords at level 100");
-            PercentToMultiplier(ref SwordDamageModMax);
             SwordStaminaReduxMin = cfg.Bind("Sword.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for swords at level 0");
-            PercentToMultiplier(ref SwordStaminaReduxMin, true);
             SwordStaminaReduxMax = cfg.Bind("Sword.Effect", "Stamina Reduction Max", 0f,
                 "% less stamina usage for swords at level 100");
-            PercentToMultiplier(ref SwordStaminaReduxMax, true);
             SwordParryModMin = cfg.Bind("Sword.Effect", "Generic Parry Bonus Min", 0f,
                 "% extra parry bonus for ALL weapons at level 0"); 
-            PercentToMultiplier(ref SwordParryModMin);
             SwordParryModMax = cfg.Bind("Sword.Effect", "Generic Parry Bonus Max", 0f,
                 "% extra parry bonus for ALL weapons at level 100");
-            PercentToMultiplier(ref SwordParryModMax);
             SwordSlashModMin = cfg.Bind("Sword.Effect", "Generic Slash Damage Mod Min", 0f, 
                 "% extra slash damage for ALL weapons at level 0");
-            PercentToMultiplier(ref SwordSlashModMin);
             SwordSlashModMax = cfg.Bind("Sword.Effect", "Generic Slash Damage Mod Max", 0f,
                 "% extra slash damage for ALL weapons at level 100"); 
-            PercentToMultiplier(ref SwordSlashModMax);
             SwordDodgeStaminaReduxMin = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 0f, 
                 "% less stamina cost to dodge roll at level 0");
-            PercentToMultiplier(ref SwordDodgeStaminaReduxMin, true);
             SwordDodgeStaminaReduxMax = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 0f,
                 "% less stamina cost to dodge roll at level 0");
-            PercentToMultiplier(ref SwordDodgeStaminaReduxMax, true);
-
+            
 
             WoodcuttingChopDamageModMin = cfg.Bind("Wood.Effect", "Chop Damage Bonus Min", 0f,
                 "% increase to chop damage at level 0");
-            PercentToMultiplier(ref WoodcuttingChopDamageModMin);
             WoodcuttingChopDamageModMax = cfg.Bind("Wood.Effect", "Chop Damage Bonus Max", 0f,
                 "% increase to chop damage at level 100");
-            PercentToMultiplier(ref WoodcuttingChopDamageModMax);
             WoodcuttingStaminaRebateMin = cfg.Bind("Wood.Effect", "Stamina Rebate Min", 0f,
                 "Flat stamina rebate on each hit of a tree at level 0");
             WoodcuttingStaminaRebateMax = cfg.Bind("Wood.Effect", "Stamina Rebate Min", 0f,
                 "Flat stamina rebate on each hit of a tree at level 100");
             WoodcuttingDropModMin = cfg.Bind("Wood.Effect", "Drop rate mod min", 0f,
                 "% increase to wood drops at level 0");
-            PercentToMultiplier(ref WoodcuttingDropModMin);
-            WoodcuttingDropModMax = cfg.Bind("Wood.Effect", "Drop rate mod max", 100f,
+            WoodcuttingDropModMax = cfg.Bind("Wood.Effect", "Drop rate mod max", 1000f,
                 "% increase to wood drops at level 100");
-            PercentToMultiplier(ref WoodcuttingDropModMax);
             MiningPickDamageModMin = cfg.Bind("Mining.Effect", "Pick Damage Bonus Min", 0f,
                 "% increase to pick damage at level 0");
-            PercentToMultiplier(ref MiningPickDamageModMin);
             MiningPickDamageModMax = cfg.Bind("Mining.Effect", "Pick Damage Bonus Max", 0f,
                 "% increase to pick damage at level 100");
-            PercentToMultiplier(ref MiningPickDamageModMax);
             MiningStaminaRebateMin = cfg.Bind("Mining.Effect", "Stamina Rebate Min", 0f,
                 "Flat stamina rebate on each hit of a rock at level 0");
             MiningStaminaRebateMax = cfg.Bind("Mining.Effect", "Stamina Rebate Min", 0f,
                 "Flat stamina rebate on each hit of a rock at level 100");
             MiningDropModMin = cfg.Bind("Mining.Effect", "Drop rate mod min", 0f,
                 "% increase to ore drops at level 0");
-            PercentToMultiplier(ref MiningDropModMin);
             MiningDropModMax = cfg.Bind("Mining.Effect", "Drop rate mod max", 100f,
                 "% increase to ore drops at level 100");
-            PercentToMultiplier(ref MiningDropModMax);
-
+            
             DropNewItemThreshold = cfg.Bind("Drops", "Drop New Item Threshold", 50f,
                 "% of 1 item needed to generate before you round up to a full item.");
-            PercentToMultiplier(ref DropNewItemThreshold);
 
         }
 
 
-        private static void PercentToMultiplier(ref ConfigEntry<float> config, bool redux = false)
+        private static float PerToMult(ConfigEntry<float> config, bool redux = false)
         {
-            config.Value = config.Value / 100;
+            float mult = config.Value;
+            mult /= 100;
             if (redux)
-                config.Value = 1f - config.Value;
+                mult = 1 - mult;
             else
-                config.Value = config.Value + 1f;
+                mult++;
+            //Jotunn.Logger.LogMessage($"Reading out {config.Definition.Key} as {mult}");
+            return mult;
+        }
+
+        private static float PerToMod(ConfigEntry<float> config, bool redux = false)
+        {
+            float mod = config.Value;
+            mod /= 100;
+            if (redux)
+                mod = 1 - mod;
+
+           // Jotunn.Logger.LogMessage($"Reading out {config.Definition.Key} as {mod}");
+            return mod;
         }
 
 
@@ -782,6 +668,7 @@ namespace kingskills
             {
                 return x;
             }
+            //Jotunn.Logger.LogMessage($"{x} is being sin curved into {Mathf.Sin(Mathf.Lerp(0f, Mathf.PI / 2, x))}");
             return Mathf.Sin(Mathf.Lerp(0f, Mathf.PI / 2, x));
         }
 
@@ -792,41 +679,73 @@ namespace kingskills
          * Here be the Get functions
          * 
          */
+        public static float GetBlockParryExpMod()
+        {
+            return PerToMult(BlockParryExpMod);
+        }
         public static float GetBlockStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(BlockStaminaReduxMin.Value, BlockStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(BlockStaminaReduxMin, true), 
+                PerToMult(BlockStaminaReduxMax, true), skillFactor);
         }
         public static float GetFlatBlockPower(float skillFactor)
         {
-            return Mathf.Lerp(BlockFlatPowerMin.Value, BlockFlatPowerMax.Value, skillFactor);
+            return Mathf.Lerp(BlockFlatPowerMin.Value, 
+                BlockFlatPowerMax.Value, skillFactor);
         }
         public static float GetBlockPowerMod(float skillFactor)
         {
-            return Mathf.Lerp(BlockPowerModMin.Value, BlockPowerModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(BlockPowerModMin), 
+                PerToMult(BlockPowerModMax), skillFactor);
+        }
+        public static float GetBlockStaggerBonus(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(BlockStaggerLimitModMin),
+                PerToMod(BlockStaggerLimitModMax),skillFactor);
         }
         public static float GetFallDamageThreshold(float skillFactor)
         {
-            return Mathf.Lerp(JumpFallDamageThresholdMin.Value, JumpFallDamageThresholdMax.Value, skillFactor);
+            return Mathf.Lerp(JumpFallDamageThresholdMin.Value, 
+                JumpFallDamageThresholdMax.Value, skillFactor);
         }
         public static float GetFallDamageRedux(float skillFactor)
         {
-            return Mathf.Lerp(JumpFallDamageReduxMin.Value, JumpFallDamageReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(JumpFallDamageReduxMin, true), 
+                PerToMult(JumpFallDamageReduxMax, true), skillFactor);
         }
         public static float GetRunSpeedMod(float skillFactor)
         {
-            return Mathf.Lerp(RunSpeedModMin.Value, RunSpeedModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(RunSpeedModMin), 
+                PerToMult(RunSpeedModMax), skillFactor);
         }
         public static float GetEncumberanceCurve(float encumberancePercent)
         {
-            return Mathf.Lerp(RunEncumberanceModMin.Value, RunEncumberanceModMax.Value, ShapeFactorSin(encumberancePercent));
+            return Mathf.Lerp(PerToMult(RunEncumberanceModMin, true),
+                PerToMult(RunEncumberanceModMax, true), ShapeFactorSin(encumberancePercent));
+            /*
+            float runEncMin = PerToMult(RunEncumberanceModMin, true);
+            float runEncMax = PerToMult(RunEncumberanceModMax, true);
+            float result = Mathf.Lerp(runEncMin, runEncMax, ShapeFactorSin(encumberancePercent));
+            Jotunn.Logger.LogMessage($"Generating the encumberance factor: encumberance percent is apparently {encumberancePercent}\n" +
+                $"Min to max is read as {RunEncumberanceModMin.Value} - {RunEncumberanceModMax.Value}\n" +
+                $"Using PerToMult, they are displayed as {runEncMin} - {runEncMax}\n" +
+                $"running through my sin curve, I am returning {result}");
+            return result;*/
         }
         public static float GetEncumberanceRedux(float skillFactor)
         {
-            return Mathf.Lerp(RunEncumberanceReduxMin.Value, RunEncumberanceReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(RunEncumberanceReduxMin, true),
+                PerToMult(RunEncumberanceReduxMax, true), skillFactor);
+            /*
+            Jotunn.Logger.LogMessage($"Encumberance redux: Config values are {RunEncumberanceReduxMin} to {RunEncumberanceReduxMax}\n" +
+                $"PerToMult reads those values as {PerToMult(RunEncumberanceReduxMin, true)} to {PerToMult(RunEncumberanceReduxMax, true)}\n" +
+                $"because I'm given {skillFactor}, I'm going to put out {answer}");
+            return answer;*/
         }
         public static float GetEquipmentRedux(float skillFactor)
         {
-            return Mathf.Lerp(RunEquipmentReduxMin.Value, RunEquipmentReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(RunEquipmentReduxMin, true), 
+                PerToMult(RunEquipmentReduxMax, true), skillFactor);
         }
         public static float GetAbsoluteWeightPercent(float weight)
         {
@@ -835,73 +754,104 @@ namespace kingskills
         }
         public static float GetAbsoluteWeightCurve(float weightPercent)
         {
-            return RunAbsoluteWeightExpMod.Value * Mathf.Pow(weightPercent, RunAbsoluteWeightFactor.Value);
+            float minBonus = 1f;
+            float maxBonus = PerToMult(RunAbsoluteWeightExpMod);
+            return Mathf.Lerp(minBonus, maxBonus, weightPercent) *
+                Mathf.Pow(weightPercent + 1f, RunAbsoluteWeightFactor.Value);
+            /*
+            Jotunn.Logger.LogMessage($"Absolute weight exp mod: I was given {weightPercent} as weight percent\n" +
+                $"The overall exp mod is {RunAbsoluteWeightExpMod.Value}, which I've converted to {PerToMult(RunAbsoluteWeightExpMod)}\n" +
+                $"I just multiply that by my exponent curve, which is {weightPercent}^{RunAbsoluteWeightFactor.Value}," +
+                $"giving me {Mathf.Pow(weightPercent+1f, RunAbsoluteWeightFactor.Value)}");*/
         }
         public static float GetRelativeWeightStage(float weightPercent)
         {
-            float mod = 1f;
+            float mult = 1f;
+            //Jotunn.Logger.LogMessage($"Relative weight: I'm given a percent of {weightPercent}\n");
 
-            if (weightPercent <= RunRelativeWeightLight.Value)
-                mod = RunRelativeWeightLightMod.Value;
+            if (weightPercent <= PerToMod(RunRelativeWeightLight))
+                mult = PerToMult(RunRelativeWeightLightMod);
 
-            else if (weightPercent <= RunRelativeWeightMed.Value)
-                mod = RunRelativeWeightMedMod.Value;
+            else if (weightPercent <= PerToMod(RunRelativeWeightMed))
+                mult = PerToMult(RunRelativeWeightMedMod);
 
-            else if (weightPercent <= RunRelativeWeightHighMed.Value)
-                mod = RunRelativeWeightHighMedMod.Value;
+            else if (weightPercent <= PerToMod(RunRelativeWeightHighMed))
+                mult = PerToMult(RunRelativeWeightHighMedMod);
 
-            else if (weightPercent <= RunRelativeWeightHeavy.Value)
-                mod = RunRelativeWeightHeavyMod.Value;
+            else if (weightPercent <= PerToMod(RunRelativeWeightHeavy))
+                mult = PerToMult(RunRelativeWeightHeavyMod);
 
-            else if (weightPercent <= RunRelativeWeightFull.Value)
-                mod = RunRelativeWeightFullMod.Value;
+            else if (weightPercent <= PerToMod(RunRelativeWeightFull))
+                mult = PerToMult(RunRelativeWeightFullMod);
 
             else
-                mod = RunRelativeWeightOverMod.Value;
+                mult = PerToMult(RunRelativeWeightOverMod);
 
-            mod++;
+            //Jotunn.Logger.LogMessage($"Which means the multiplier I'm returning is {mult} times {PerToMult(RunRelativeWeightExpMod)}\n");
 
-            return mod * RunRelativeWeightExpMod.Value;
+            return mult * PerToMult(RunRelativeWeightExpMod);
         }
         public static float GetRunStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(RunStaminaReduxMin.Value, RunStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(RunStaminaReduxMin, true), 
+                PerToMult(RunStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetRunEXPSpeedMod()
+        {
+            return PerToMult(RunEXPSpeedMod);
         }
         public static float GetSwimSpeedMod(float skillFactor)
         {
-            return Mathf.Lerp(SwimSpeedModMin.Value, SwimSpeedModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SwimSpeedModMin), 
+                PerToMult(SwimSpeedModMax), skillFactor);
         }
         public static float GetSwimAccelMod(float skillFactor)
         {
-            return Mathf.Lerp(SwimAccelModMin.Value, SwimAccelModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SwimAccelModMin), 
+                PerToMult(SwimAccelModMax), skillFactor);
         }
         public static float GetSwimTurnMod(float skillFactor)
         {
-            return Mathf.Lerp(SwimTurnModMin.Value, SwimTurnModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SwimTurnModMin), 
+                PerToMult(SwimTurnModMax), skillFactor);
         }
         public static float GetJumpForceMod(float skillFactor)
         {
-            return Mathf.Lerp(JumpForceModMin.Value, JumpForceModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(JumpForceModMin), 
+                PerToMult(JumpForceModMax), skillFactor);
         }
         public static float GetJumpForwardForceMod(float skillFactor)
         {
-            return Mathf.Lerp(JumpForwardForceModMin.Value, JumpForwardForceModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(JumpForwardForceModMin), 
+                PerToMult(JumpForwardForceModMax), skillFactor);
         }
         public static float GetJumpStaminaRedux(float skillFactor)
         {
-            return 1 + Mathf.Lerp(JumpStaminaReduxMin.Value, JumpStaminaReduxMax.Value, skillFactor);
+            /*
+            Jotunn.Logger.LogMessage($"Jump stamina reduction. Reading level as" +
+                $"{skillFactor}. The two possible clamps are {JumpStaminaReduxMin.Value}" +
+                $"and {JumpStaminaReduxMax.Value}. Using PerToMult on both gives me" +
+                $"{PerToMult(JumpStaminaReduxMin, true)} to {PerToMult(JumpStaminaReduxMax, true)}." +
+                $"Based on that, my LERP is returning this number as " +
+                $"{Mathf.Lerp(PerToMult(JumpStaminaReduxMin, true),PerToMult(JumpStaminaReduxMax, true), skillFactor)}");
+            */
+            return Mathf.Lerp(PerToMult(JumpStaminaReduxMin, true), 
+                PerToMult(JumpStaminaReduxMax, true), skillFactor);
         }
         public static float GetJumpTiredRedux(float skillFactor)
         {
-            return Mathf.Lerp(JumpTiredReduxMin.Value, JumpTiredReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(JumpTiredReduxMin, true), 
+                PerToMult(JumpTiredReduxMax, true), skillFactor);
         }
         public static float GetWeaponDamageToExperience(float damage)
         {
-            return WeaponEXPStrikeDamageMod.Value * Mathf.Pow(damage, WeaponEXPStrikeDamageFactor.Value);
+            return PerToMult(WeaponEXPStrikeDamageMod) * 
+                Mathf.Pow(damage, WeaponEXPStrikeDamageFactor.Value);
         }
         public static float GetToolDamageToExperience(float damage)
         {
-            return ToolEXPStrikeDamageMod.Value * Mathf.Pow(damage, ToolEXPStrikeDamageFactor.Value);
+            return PerToMult(ToolEXPStrikeDamageMod) * 
+                Mathf.Pow(damage, ToolEXPStrikeDamageFactor.Value);
         }
         public static float GetSwimStaminaPerSec(float skillFactor)
         {
@@ -909,15 +859,18 @@ namespace kingskills
         }
         public static float GetAxeDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(AxeDamageModMin.Value,AxeDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(AxeDamageModMin), 
+                PerToMult(AxeDamageModMax), skillFactor);
         }
         public static float GetAxeStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(AxeStaminaReduxMin.Value,AxeStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(AxeStaminaReduxMin, true), 
+                PerToMult(AxeStaminaReduxMax, true), skillFactor);
         }
         public static float GetAxeChopDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(AxeChopDamageModMin.Value,AxeChopDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(AxeChopDamageModMin), 
+                PerToMult(AxeChopDamageModMax), skillFactor);
         }
         public static float GetAxeStamina(float skillFactor)
         { 
@@ -925,179 +878,216 @@ namespace kingskills
         }
         public static float GetAxeCarryCapacity(float skillFactor)
         {
-            return Mathf.Lerp(AxeCarryCapacityMin.Value,AxeCarryCapacityMax.Value, skillFactor);
+            return Mathf.Lerp(AxeCarryCapacityMin.Value, AxeCarryCapacityMax.Value, skillFactor);
         }
         public static float GetBowDamageMod(float skillFactor)
         { 
-            return Mathf.Lerp(BowDamageModMin.Value,BowDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(BowDamageModMin), 
+                PerToMult(BowDamageModMax), skillFactor);
         }
         public static float GetBowStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(BowStaminaReduxMin.Value,BowStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(BowStaminaReduxMin, true), 
+                PerToMult(BowStaminaReduxMax, true), skillFactor);
         }
         public static float GetBowVelocityMod(float skillFactor)
         {
-            return Mathf.Lerp(BowVelocityModMin.Value,BowVelocityModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(BowVelocityModMin), 
+                PerToMult(BowVelocityModMax), skillFactor);
         }
         public static float GetBowDrawSpeedMod(float skillFactor)
         {
-            return Mathf.Lerp(BowDrawSpeedModMin.Value,BowDrawSpeedModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(BowDrawSpeedModMin), 
+                PerToMult(BowDrawSpeedModMax), skillFactor);
         }
         public static float GetBowDropRate(float skillFactor)
         {
-            return Mathf.Lerp(BowDropModMin.Value, BowDropModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(BowDropModMin), 
+                PerToMult(BowDropModMax), skillFactor);
         }
         public static float GetClubDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(ClubDamageModMin.Value,ClubDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(ClubDamageModMin), 
+                PerToMult(ClubDamageModMax), skillFactor);
         }
         public static float GetClubStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(ClubStaminaReduxMin.Value,ClubStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(ClubStaminaReduxMin, true), 
+                PerToMult(ClubStaminaReduxMax, true), skillFactor);
         }
         public static float GetClubBluntMod(float skillFactor)
         {
-            return Mathf.Lerp(ClubBluntModMin.Value,ClubBluntModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(ClubBluntModMin), 
+                PerToMult(ClubBluntModMax), skillFactor);
         }
         public static float GetClubKnockbackMod(float skillFactor)
         {
-            return Mathf.Lerp(ClubKnockbackModMin.Value,ClubKnockbackModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(ClubKnockbackModMin), 
+                PerToMult(ClubKnockbackModMax), skillFactor);
         }
         public static float GetClubStaggerMod(float skillFactor)
         {
-            return Mathf.Lerp(ClubStaggerModMin.Value,ClubStaggerModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(ClubStaggerModMin), 
+                PerToMult(ClubStaggerModMax), skillFactor);
         }
         public static float GetFistDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(FistDamageModMin.Value,FistDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(FistDamageModMin), 
+                PerToMult(FistDamageModMax), skillFactor);
         }
         public static float GetFistStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(FistStaminaReduxMin.Value,FistStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(FistStaminaReduxMin, true), 
+                PerToMult(FistStaminaReduxMax, true), skillFactor);
         }
         public static float GetFistDamageFlat(float skillFactor)
         {
-            return Mathf.Lerp(FistDamageFlatMin.Value,FistDamageFlatMax.Value, skillFactor);
+            return Mathf.Lerp(FistDamageFlatMin.Value, FistDamageFlatMax.Value, skillFactor);
         }
         public static float GetFistBlockArmor(float skillFactor)
         {
-            return Mathf.Lerp(FistBlockArmorMin.Value,FistBlockArmorMax.Value, skillFactor);
+            return Mathf.Lerp(FistBlockArmorMin.Value, FistBlockArmorMax.Value, skillFactor);
         }
         public static float GetFistMovespeedMod(float skillFactor)
         {
-            return Mathf.Lerp(FistMovespeedModMin.Value,FistMovespeedModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(FistMovespeedModMin), 
+                PerToMult(FistMovespeedModMax), skillFactor);
         }
         public static float GetKnifeDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(KnifeDamageModMin.Value,KnifeDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(KnifeDamageModMin),
+                PerToMult(KnifeDamageModMax), skillFactor);
         }
         public static float GetKnifeStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(KnifeStaminaReduxMin.Value,KnifeStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(KnifeStaminaReduxMin, true), 
+                PerToMult(KnifeStaminaReduxMax, true), skillFactor);
         }
         public static float GetKnifeBackstabMod(float skillFactor)
         {
-            return Mathf.Lerp(KnifeBackstabModMin.Value,KnifeBackstabModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(KnifeBackstabModMin), 
+                PerToMult(KnifeBackstabModMax), skillFactor);
         }
         public static float GetKnifeMovespeedMod(float skillFactor)
         {
-            return Mathf.Lerp(KnifeMovespeedModMin.Value,KnifeMovespeedModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(KnifeMovespeedModMin), 
+                PerToMult(KnifeMovespeedModMax), skillFactor);
         }
         public static float GetKnifePierceMod(float skillFactor)
         {
-            return Mathf.Lerp(KnifePierceModMin.Value,KnifePierceModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(KnifePierceModMin), 
+                PerToMult(KnifePierceModMax), skillFactor);
         }
         public static float GetPolearmDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(PolearmDamageModMin.Value,PolearmDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(PolearmDamageModMin), 
+                PerToMult(PolearmDamageModMax), skillFactor);
         }
         public static float GetPolearmStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(PolearmStaminaReduxMin.Value,PolearmStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(PolearmStaminaReduxMin, true), 
+                PerToMult(PolearmStaminaReduxMax, true), skillFactor);
         }
         public static float GetPolearmRange(float skillFactor)
         {
-            return Mathf.Lerp(PolearmRangeMin.Value,PolearmRangeMax.Value, skillFactor);
+            return Mathf.Lerp(PolearmRangeMin.Value, PolearmRangeMax.Value, skillFactor);
         }
         public static float GetPolearmArmor(float skillFactor)
         {
-            return Mathf.Lerp(PolearmArmorMin.Value,PolearmArmorMax.Value, skillFactor);
+            return Mathf.Lerp(PolearmArmorMin.Value, PolearmArmorMax.Value, skillFactor);
         }
         public static float GetPolearmBlock(float skillFactor)
         {
-            return Mathf.Lerp(PolearmBlockMin.Value,PolearmBlockMax.Value, skillFactor);
+            return Mathf.Lerp(PolearmBlockMin.Value, PolearmBlockMax.Value, skillFactor);
         }
         public static float GetSpearDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(SpearDamageModMin.Value,SpearDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SpearDamageModMin), 
+                PerToMult(SpearDamageModMax), skillFactor);
         }
         public static float GetSpearStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(SpearStaminaReduxMin.Value,SpearStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SpearStaminaReduxMin, true), 
+                PerToMult(SpearStaminaReduxMax, true), skillFactor);
         }
         public static float GetSpearVelocityMod(float skillFactor)
         {
-            return Mathf.Lerp(SpearVelocityModMin.Value,SpearVelocityModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SpearVelocityModMin), 
+                PerToMult(SpearVelocityModMax), skillFactor);
         }
         public static float GetSpearProjectileDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(SpearProjectileDamageModMin.Value,SpearProjectileDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SpearProjectileDamageModMin), 
+                PerToMult(SpearProjectileDamageModMax), skillFactor);
         }
         public static float GetSpearBlockArmor(float skillFactor)
         {
-            return Mathf.Lerp(SpearBlockArmorMin.Value,SpearBlockArmorMax.Value, skillFactor);
+            return Mathf.Lerp(SpearBlockArmorMin.Value, SpearBlockArmorMax.Value, skillFactor);
         }
         public static float GetSwordDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(SwordDamageModMin.Value,SwordDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SwordDamageModMin), 
+                PerToMult(SwordDamageModMax), skillFactor);
         }
         public static float GetSwordStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(SwordDodgeStaminaReduxMin.Value,SwordDodgeStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SwordDodgeStaminaReduxMin, true), 
+                PerToMult(SwordDodgeStaminaReduxMax, true), skillFactor);
         }
         public static float GetSwordParryMod(float skillFactor)
         {
-            return Mathf.Lerp(SwordParryModMin.Value,SwordParryModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SwordParryModMin), 
+                PerToMult(SwordParryModMax), skillFactor);
         }
         public static float GetSwordSlashMod(float skillFactor)
         {
-            return Mathf.Lerp(SwordSlashModMin.Value,SwordSlashModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SwordSlashModMin), 
+                PerToMult(SwordSlashModMax), skillFactor);
         }
         public static float GetSwordDodgeStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(SwordDodgeStaminaReduxMin.Value,SwordDodgeStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(SwordDodgeStaminaReduxMin, true), 
+                PerToMult(SwordDodgeStaminaReduxMax, true), skillFactor);
         }
         public static float GetWoodcuttingDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(WoodcuttingChopDamageModMin.Value,WoodcuttingChopDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(WoodcuttingChopDamageModMin), 
+                PerToMult(WoodcuttingChopDamageModMax), skillFactor);
         }
         public static float GetWoodDropRate(float skillFactor)
         {
-            return Mathf.Lerp(WoodcuttingDropModMin.Value, WoodcuttingDropModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(WoodcuttingDropModMin), 
+                PerToMult(WoodcuttingDropModMax), skillFactor);
         }
         public static float GetWoodcuttingStaminaRebate(float skillFactor)
         {
-            return Mathf.Lerp(WoodcuttingStaminaRebateMin.Value,WoodcuttingStaminaRebateMax.Value, skillFactor);
+            return Mathf.Lerp(WoodcuttingStaminaRebateMin.Value, 
+                WoodcuttingStaminaRebateMax.Value, skillFactor);
         }
         public static float GetMiningDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(MiningPickDamageModMin.Value,MiningPickDamageModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(MiningPickDamageModMin), 
+                PerToMult(MiningPickDamageModMax), skillFactor);
         }
         public static float GetMiningDropRate(float skillFactor)
         {
-            return Mathf.Lerp(MiningDropModMin.Value, MiningDropModMax.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(MiningDropModMin), 
+                PerToMult(MiningDropModMax), skillFactor);
         }
         public static float GetMiningStaminaRebate(float skillFactor)
         {
-            return Mathf.Lerp(MiningStaminaRebateMin.Value,MiningStaminaRebateMax.Value, skillFactor);
+            return Mathf.Lerp(MiningStaminaRebateMin.Value, MiningStaminaRebateMax.Value, skillFactor);
         }
-
+        public static float GetDropItemThreshold()
+        {
+            return PerToMod(DropNewItemThreshold);
+        }
 
         /*
          * template
         public static float Get(float skillFactor)
         {
-            return Mathf.Lerp(.Value,.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(.Value,.Value, skillFactor);
         }
          */
 

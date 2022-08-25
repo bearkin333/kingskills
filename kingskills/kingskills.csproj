@@ -86,7 +86,7 @@
     <Compile Include="Patches\WeaponBonusExperience.cs" />
     <Compile Include="Patches\LevelPatch.cs" />
     <Compile Include="Util\Utilities.cs" />
-    <Compile Include="UX\TestCommands.cs" />
+    <Compile Include="Util\TestCommands.cs" />
     <Compile Include="Util\ConfigManager.cs" />
     <Compile Include="Patches\ProjectilePatch.cs" />
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />

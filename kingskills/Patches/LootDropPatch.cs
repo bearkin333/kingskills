@@ -15,8 +15,9 @@ namespace kingskills.Patches
         [HarmonyPostfix]
         public static void DropTableFix(ref DropTable __instance, ref List<GameObject> __result)
         {
+            Jotunn.Logger.LogMessage("drop table fix running");
             Player playerRef = Player.m_localPlayer;
-
+            
             //Check for player and do player stuff here
 
             List<GameObject> newDrops = __result;
@@ -40,6 +41,7 @@ namespace kingskills.Patches
 
             foreach (GameObject drop in __result)
             {
+                Jotunn.Logger.LogMessage("iterating through result list entry " + i);
                 i++;
                 if (i == __result.Count() - 1)
                     lastResult = true;
@@ -50,6 +52,7 @@ namespace kingskills.Patches
             }
 
             __result = newDrops;
+            
         }
 
         public static void dropChecker(Dictionary<string, float> dropCheckList, float dropRate,
@@ -65,12 +68,13 @@ namespace kingskills.Patches
                         float decreaseValue = 0;
                         for (int i = 0; i <= Mathf.Floor(item.Value); i++)
                         {
+                            Jotunn.Logger.LogMessage("Adding an extra drop");
                             newDrops.Add(drop);
                         }
                         dropCheckList[item.Key] -= decreaseValue;
                     }
                     if (lastResult &&
-                        item.Value >= ConfigManager.DropNewItemThreshold.Value)
+                        item.Value >= ConfigManager.GetDropItemThreshold())
                     {
                         newDrops.Add(drop);
                     }

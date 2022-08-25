@@ -319,7 +319,7 @@ namespace kingskills
             dd = SkillDropDown.GetComponent<Dropdown>();
             dd.ClearOptions();
             dd.AddOptions(new List<string>{
-                "Axes", "Blocking", "Bows", "Clubs", "Fists", "Jump", "Knives",
+                "Axes", "Blocking", "Bows", "Clubs", "Fists", "Jump", "Knives", "Mining",
                 "Polearms", "Run", "Spears", "Sneak", "Swim", "Swords", "Woodcutting"
             });
             dd.onValueChanged.AddListener(
@@ -426,6 +426,10 @@ namespace kingskills
                     skill = Skills.SkillType.Knives;
                     OpenKnifePanels();
                     break;
+                case "Mining":
+                    skill = Skills.SkillType.Pickaxes;
+                    OpenMiningPanels();
+                    break;
                 case "Polearms":
                     skill = Skills.SkillType.Polearms;
                     OpenPolearmPanels();
@@ -466,6 +470,14 @@ namespace kingskills
 
         public static void OpenAxePanels()
         {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Axes);
+
+            float axeDamage = ToPercent(ConfigManager.GetAxeDamageMod(skill));
+            float axeStaminaRedux = ToPercent(ConfigManager.GetAxeStaminaRedux(skill));
+            float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
+            float axeChopBonus = ToPercent(ConfigManager.GetAxeChopDamageMod(skill));
+            float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
+
             //Jotunn.Logger.LogMessage($"I'm changing the axe values in now");
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all axe damage dealt is turned into experience. \n" +
@@ -474,35 +486,41 @@ namespace kingskills
                 "Holding an axe gains you experience at a very slow rate. \n" +
                 "Bonus experience for the axe is gained every time you break a log. ";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                "0" + "% extra damage with axes\n" +
-                "0" + "% less stamina usage with axes\n" +
-                "0" + " higher base stamina \n" +
-                "0" + "% increased chop damage \n" +
-                "0" + " extra carry capacity";
+                axeDamage.ToString("F1") + "% extra damage with axes\n" +
+                axeStaminaRedux.ToString("F1") + "% stamina usage with axes\n" +
+                axeStaminaGain.ToString("F0") + " higher base stamina \n" +
+                axeChopBonus.ToString("F1") + "% extra chop damage \n" +
+                axeCarryCapacity.ToString("F0") + " extra carry capacity";
         }
         public static void OpenBlockPanels()
         {
-            float skillFactor = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Blocking);
-            float staminaRedux = ToPercent(ConfigManager.GetBlockStaminaRedux(skillFactor));
-            float baseBlockPower = ToPercent(ConfigManager.GetFlatBlockPower(skillFactor));
-            float blockPerArmor = ToPercent(ConfigManager.GetBlockPowerMod(skillFactor));
-            float parryExpMod = ToPercent(ConfigManager.BlockParryExpMod.Value);
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Blocking);
+
+            float staminaRedux = ToPercent(ConfigManager.GetBlockStaminaRedux(skill));
+            float baseBlockPower = ToPercent(ConfigManager.GetFlatBlockPower(skill));
+            float blockPerArmor = ToPercent(ConfigManager.GetBlockPowerMod(skill));
+            float blockStaggerLimit = ToPercent(ConfigManager.GetBlockStaggerBonus(skill));
+            float parryExpMod = ToPercent(ConfigManager.GetBlockParryExpMod());
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all damage you block is turned into experience. \n" +
                 "This number is unaffected by resistances. \n" +
                 "You get " + parryExpMod.ToString("F0") + "% experience for parrying an attack.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                staminaRedux.ToString("F0") + "% reduced stamina for blocks\n" +
+                staminaRedux.ToString("F1") + "% stamina cost for blocks\n" +
                 baseBlockPower.ToString("F0") + " extra flat block armor\n" +
-                blockPerArmor.ToString("F0") + "% increased overall block armor\n" +
-                "0" + "% increased stagger limit";
+                blockPerArmor.ToString("F1") + "% extra block armor\n" +
+                blockStaggerLimit.ToString("F0") + "% extra max health added to stagger limit";
         }
         public static void OpenBowPanels()
         {
-            float skillFactor = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Bows);
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Bows);
 
-            float bowDropRate = ToPercent(ConfigManager.GetBowDropRate(skillFactor));
+            float bowDamage = ToPercent(ConfigManager.GetBowDamageMod(skill));
+            float bowStaminaRedux = ToPercent(ConfigManager.GetBowStaminaRedux(skill));
+            float bowVelocity = ToPercent(ConfigManager.GetBowVelocityMod(skill));
+            float bowDrawSpeed = ToPercent(ConfigManager.GetBowDrawSpeedMod(skill));
+            float bowDropRate = ToPercent(ConfigManager.GetBowDropRate(skill));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all bow damage dealt is turned into experience. \n" +
@@ -511,14 +529,22 @@ namespace kingskills
                 "Holding a bow gains you experience at a very slow rate. \n" +
                 "Bonus experience is gained based on the length and difficulty of successful shots with a bow.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                "0" + "% extra damage with bows\n" +
-                "0" + "% less stamina usage with bows\n" +
-                "0" + "% extra arrow velocity\n" +
-                "0" + "% faster draw speed\n" +
-                bowDropRate + "% more loot drops from creatures";
+                bowDamage.ToString("F1") + "% extra damage with bows\n" +
+                bowStaminaRedux.ToString("F1") + "% stamina usage with bows\n" +
+                bowVelocity.ToString("F1") + "% extra arrow velocity\n" +
+                bowDrawSpeed.ToString("F1") + "% faster draw speed\n" +
+                bowDropRate.ToString("F1") + "% extra loot drops from creatures";
         }
         public static void OpenClubPanels()
         {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Clubs);
+
+            float clubDamage = ToPercent(ConfigManager.GetClubDamageMod(skill));
+            float clubStaminaRedux = ToPercent(ConfigManager.GetClubStaminaRedux(skill));
+            float clubBlunt = ToPercent(ConfigManager.GetClubBluntMod(skill));
+            float clubKnockback = ToPercent(ConfigManager.GetClubKnockbackMod(skill));
+            float clubStagger = ToPercent(ConfigManager.GetClubStaggerMod(skill));
+
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all club damage dealt is turned into experience. \n" +
                 "The exp gain rate is much higher versus living targets. \n" +
@@ -526,14 +552,22 @@ namespace kingskills
                 "Holding a club gains you experience at a very slow rate. \n" +
                 "Bonus experience every time you stagger an enemy with damage with a club.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                "0" + "% extra damage with clubs\n" +
-                "0" + "% less stamina usage with clubs\n" +
-                "0" + "% extra bonus to ALL blunt damage\n" +
-                "0" + "% knockback bonus to ALL weapons\n" +
-                "0" + "% extra stagger damage to ALL weapons";
+                clubDamage.ToString("F1") + "% extra damage with clubs\n" +
+                clubStaminaRedux.ToString("F1") + "% stamina usage with clubs\n" +
+                clubBlunt.ToString("F1") + "% extra bonus to ALL blunt damage\n" +
+                clubKnockback.ToString("F1") + "% knockback bonus to ALL weapons\n" +
+                clubStagger.ToString("F1") + "% extra stagger damage to ALL weapons";
         }
         public static void OpenFistPanels()
         {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Unarmed);
+
+            float fistDamage = ToPercent(ConfigManager.GetFistDamageMod(skill));
+            float fistStaminaRedux = ToPercent(ConfigManager.GetFistStaminaRedux(skill));
+            float fistFlatDamage = ConfigManager.GetFistDamageFlat(skill);
+            float fistBlock = ConfigManager.GetFistBlockArmor(skill);
+            float fistMovespeed = ToPercent(ConfigManager.GetFistMovespeedMod(skill));
+
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all unarmed damage dealt is turned into experience. \n" +
                 "The exp gain rate is much higher versus living targets. \n" +
@@ -541,40 +575,48 @@ namespace kingskills
                 "Holding no weapon gains you experience at a very slow rate. \n" +
                 "Bonus experence for fists is gained every time you perform an unarmed block.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                "0" + "% extra damage with fists\n" +
-                "0" + "% less stamina usage with fists\n" +
-                "0" + " extra flat damage\n" +
-                "0" + " extra unarmed block armor\n" +
-                "0" + "% extra move speed";
+                fistDamage.ToString("F1") + "% extra damage with fists\n" +
+                fistStaminaRedux.ToString("F1") + "% stamina usage with fists\n" +
+                fistFlatDamage.ToString("F0") + " extra flat damage\n" +
+                fistBlock.ToString("F0") + " extra unarmed block armor\n" +
+                fistMovespeed.ToString("F1") + "% extra move speed";
         }
         public static void OpenJumpPanels()
         {
             Player player = Player.m_localPlayer;
             LevelPatch.JumpForceUpdate(player);
-            float skillFactor = player.GetSkillFactor(Skills.SkillType.Jump);
+            float skill = player.GetSkillFactor(Skills.SkillType.Jump);
 
-            float bonusJumpForce = ToPercent(ConfigManager.GetJumpForceMod(skillFactor));
-            float bonusJumpForwardForce = ToPercent(ConfigManager.GetJumpForwardForceMod(skillFactor));
-            float staminaRedux = ToPercent(ConfigManager.GetJumpStaminaRedux(skillFactor));
-            float tired = ToPercent(ConfigManager.GetJumpTiredRedux(skillFactor));
+            float bonusJumpForce = ToPercent(ConfigManager.GetJumpForceMod(skill));
+            float bonusJumpForwardForce = ToPercent(ConfigManager.GetJumpForwardForceMod(skill));
+            float staminaRedux = ToPercent(ConfigManager.GetJumpStaminaRedux(skill));
+            float tired = ToPercent(ConfigManager.GetJumpTiredRedux(skill));
 
-            float fallDamageThreshhold = ConfigManager.GetFallDamageThreshold(skillFactor);
-            float fallDamageRedux = ToPercent(ConfigManager.GetFallDamageRedux(skillFactor));
+            float fallDamageThreshhold = ConfigManager.GetFallDamageThreshold(skill);
+            float fallDamageRedux = ToPercent(ConfigManager.GetFallDamageRedux(skill));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "Every time you jump, you gain a small amount of experience. \n" +
                 "Every time you land, you gain an amount of experience based on " +
                 "how far you fell and how much damage you'd take.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                bonusJumpForce.ToString("F0") + "% extra vertical jump force \n" +
-                bonusJumpForwardForce.ToString("F0") + "% extra horizontal jump force \n" +
-                staminaRedux.ToString("F0") + "% less stamina cost to jump \n" +
+                bonusJumpForce.ToString("F1") + "% extra vertical jump force \n" +
+                bonusJumpForwardForce.ToString("F1") + "% extra horizontal jump force \n" +
+                staminaRedux.ToString("F1") + "% less stamina cost to jump \n" +
                 tired.ToString("F0") + "% jump force modifier when tired \n" +
                 fallDamageThreshhold.ToString("F1") + "m minimum fall damage height \n" +
-                fallDamageRedux.ToString("F0") + "% less fall damage";
+                fallDamageRedux.ToString("F1") + "% less fall damage";
         }
         public static void OpenKnifePanels()
         {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Knives);
+
+            float knifeDamage = ToPercent(ConfigManager.GetKnifeDamageMod(skill));
+            float knifeStaminaRedux = ToPercent(ConfigManager.GetKnifeStaminaRedux(skill));
+            float knifeBackstab = ToPercent(ConfigManager.GetKnifeBackstabMod(skill));
+            float knifeMovespeed = ToPercent(ConfigManager.GetKnifeMovespeedMod(skill));
+            float knifePierce = ToPercent(ConfigManager.GetKnifePierceMod(skill));
+
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all knife damage dealt is turned into experience. \n" +
                 "The exp gain rate is much higher versus living targets. \n" +
@@ -582,14 +624,22 @@ namespace kingskills
                 "Holding a knife gains you experience at a very slow rate. \n" +
                 "Bonus experience is gained every time you perform a sneak attack with a knife.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                "0" + "% extra damage with knives\n" +
-                "0" + "% less stamina usage with knives\n" +
-                "0" + "% sneak attack bonus damage \n" +
-                "0" + "% bonus move speed \n" +
-                "0" + "% bonus to ALL pierce damage";
+                knifeDamage.ToString("F1") + "% extra damage with knives\n" +
+                knifeStaminaRedux.ToString("F1") + "% stamina usage with knives\n" +
+                knifeBackstab.ToString("F0") + "% sneak attack bonus damage \n" +
+                knifeMovespeed.ToString("F1") + "% extra move speed \n" +
+                knifePierce.ToString("F1") + "% extra to ALL pierce damage";
         }
         public static void OpenPolearmPanels()
         {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Polearms);
+
+            float polearmDamage = ToPercent(ConfigManager.GetPolearmDamageMod(skill));
+            float polearmStaminaRedux = ToPercent(ConfigManager.GetPolearmStaminaRedux(skill));
+            float polearmRange = ConfigManager.GetPolearmRange(skill);
+            float polearmArmor = ConfigManager.GetPolearmArmor(skill);
+            float polearmBlock = ConfigManager.GetPolearmBlock(skill);
+
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all polearm damage dealt is turned into experience. \n" +
                 "The exp gain rate is much higher versus living targets. \n" +
@@ -597,27 +647,27 @@ namespace kingskills
                 "Holding a polearm gains you experience at a very slow rate. \n" +
                 "Bonus experience for the polearm is gained everytime you hit multiple targets in a single swing.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                "0" + "% extra damage with polearms \n" +
-                "0" + "% less stamina usage with polearms\n" +
-                "0" + " increased units of range with all weapons\n" +
-                "0" + " increased armor\n" +
-                "0" + "% increased block power with polearms";
+                polearmDamage.ToString("F1") + "% extra damage with polearms \n" +
+                polearmStaminaRedux.ToString("F1") + "% stamina usage with polearms\n" +
+                polearmRange.ToString("F0") + " increased units of range with all weapons\n" +
+                polearmArmor.ToString("F0") + " increased armor\n" +
+                polearmBlock.ToString("F0") + " extra block power with polearms";
         }
         public static void OpenRunPanels()
         {
             Player player = Player.m_localPlayer;
             LevelPatch.RunSpeedUpdate(player);
-            float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
+            float skill = player.GetSkillFactor(Skills.SkillType.Run);
 
-            float runSpeedBonus = ToPercent(ConfigManager.GetRunSpeedMod(skillFactor));
-            float equipmentMalusRedux = ToPercent(ConfigManager.GetEquipmentRedux(skillFactor));
-            float encumberanceRedux = ToPercent(ConfigManager.GetEncumberanceRedux(skillFactor));
-            float staminaDrainRedux = ToPercent(ConfigManager.GetRunStaminaRedux(skillFactor));
-            float baseStaminaGain = skillFactor * 100 * ConfigManager.RunStaminaPerLevel.Value;
+            float runSpeedBonus = ToPercent(ConfigManager.GetRunSpeedMod(skill));
+            float equipmentMalusRedux = ToPercent(ConfigManager.GetEquipmentRedux(skill));
+            float encumberanceRedux = ToPercent(ConfigManager.GetEncumberanceRedux(skill));
+            float staminaDrainRedux = ToPercent(ConfigManager.GetRunStaminaRedux(skill));
+            float baseStaminaGain = skill * 100 * ConfigManager.RunStaminaPerLevel.Value;
 
 
-            float encumberanceFactor = ToPercent(MovePatch.GetEncumberanceFactor(player, skillFactor));
-            float equipmentFactor = ToPercent(MovePatch.GetEquipmentFactor(player, skillFactor));
+            float encumberanceFactor = ToPercent(MovePatch.GetEncumberanceFactor(player, skill));
+            float equipmentFactor = ToPercent(MovePatch.GetEquipmentFactor(player, skill));
 
             float absWeightExp = ToPercent(MovePatch.absoluteWeightBonus(player));
             float relWeightExp = ToPercent(MovePatch.relativeWeightBonus(player));
@@ -627,21 +677,29 @@ namespace kingskills
                 "The faster you are moving, the more experience you get.\n" +
                 "The closer you are to fully encumbered, the less movespeed you have.\n" +
                 "You also gain experience based on how encumbered you are. \n" +
-                runSpeedExp.ToString("F0") + "% experience bonus from current run speed \n" +
-                absWeightExp.ToString("F0") + "% experience bonus from absolute weight carried \n" +
-                relWeightExp.ToString("F0") + "% experience bonus from fullness of inventory";
+                runSpeedExp.ToString("F1") + "% experience bonus from current run speed \n" +
+                absWeightExp.ToString("F1") + "% experience bonus from absolute weight carried \n" +
+                relWeightExp.ToString("F1") + "% experience bonus from fullness of inventory";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                runSpeedBonus.ToString("F0") + "% extra run speed\n" +
-                equipmentMalusRedux.ToString("F0") + "% reduction to move speed penalties from equipment\n" +
-                encumberanceRedux.ToString("F0") + "% reduced speed malus from encumberance\n" +
-                staminaDrainRedux.ToString("F0") + "% less stamina cost to run\n" +
-                baseStaminaGain.ToString("F0") + " extra base stamina\n" +
+                runSpeedBonus.ToString("F1") + "% extra run speed\n" +
+                equipmentMalusRedux.ToString("F1") + "% reduction to equipment penalty\n" +
+                encumberanceRedux.ToString("F1") + "% reduction to encumberance penalty\n" +
+                staminaDrainRedux.ToString("F1") + "% stamina cost to run\n" +
+                baseStaminaGain.ToString("F1") + " extra base stamina\n" +
                 "\nCurrent effects from outside factors: \n" +
-                encumberanceFactor.ToString("F1") + "% reduced speed from encumberance\n" +
-                equipmentFactor.ToString("F0") + "% change to speed from equipment";
+                encumberanceFactor.ToString("F1") + "% speed from encumberance\n" +
+                equipmentFactor.ToString("F1") + "% speed from equipment";
         }
         public static void OpenSpearPanels()
         {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Spears);
+
+            float spearDamage = ToPercent(ConfigManager.GetSpearDamageMod(skill));
+            float spearStaminaRedux = ToPercent(ConfigManager.GetSpearStaminaRedux(skill));
+            float spearVelocity = ToPercent(ConfigManager.GetSpearVelocityMod(skill));
+            float spearThrowDamage = ToPercent(ConfigManager.GetSpearProjectileDamageMod(skill));
+            float spearBlock = ConfigManager.GetSpearBlockArmor(skill);
+
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all spear damage dealt is turned into experience. \n" +
                 "The exp gain rate is much higher versus living targets. \n" +
@@ -649,15 +707,21 @@ namespace kingskills
                 "Holding a spear gains you experience at a very slow rate. \n" +
                 "Bonus experience anytime you hit an enemy with a thrown weapon.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                "0" + "% extra damage with spears \n" +
-                "0" + "% less stamina usage with spears\n" +
-                "0" + "% increased velocity with all thrown weapons\n" +
-                "0" + "% increased damage with all thrown weapons\n" +
-                "0" + " higher flat block armor";
+                spearDamage.ToString("F1") + "% extra damage with spears \n" +
+                spearStaminaRedux.ToString("F1") + "% stamina usage with spears\n" +
+                spearVelocity.ToString("F1") + "% increased velocity with all thrown weapons\n" +
+                spearThrowDamage.ToString("F1") + "% increased damage with all thrown weapons\n" +
+                spearBlock.ToString("F0") + " higher flat block armor";
         }
 
         public static void OpenSneakPanels()
         {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Sneak);
+
+            float sneakSpeed = ToPercent(0f);
+            float sneakStaminaRedux = ToPercent(0f);
+            float sneakVision = ToPercent(0f);
+
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "While you are inside the vision angle of an enemy " +
                 "but outside its vision range, you gain a flat amount of sneak " +
@@ -665,21 +729,21 @@ namespace kingskills
                 "you aren't being observed.";
             //I would like to implement an increase in exp gain based on level of enemy
             LeftPanelEffectsText.GetComponent<Text>().text =
-                "0" + "% increased speed while crouching\n" +
-                "0" + "% reduced stamina cost while crouching" +
-                "0" + "% reduced vision cones while in total dark\n" +
-                "0" + "% reduced vision cones while in the open";
+                sneakSpeed.ToString("F1") + "% increased speed while crouching\n" +
+                sneakStaminaRedux.ToString("F1") + "% reduced stamina cost while crouching" +
+                sneakVision.ToString("F0") + "% reduced vision cones while in total dark\n" +
+                sneakVision.ToString("F0") + "% reduced vision cones while in the open";
         }
         public static void OpenSwimPanels()
         {
             Player player = Player.m_localPlayer;
             LevelPatch.SwimSpeedUpdate(player);
-            float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
+            float skill = player.GetSkillFactor(Skills.SkillType.Run);
 
-            float swimSpeed = ToPercent(ConfigManager.GetSwimSpeedMod(skillFactor));
-            float swimAccel = ToPercent(ConfigManager.GetSwimAccelMod(skillFactor));
-            float swimTurn = ToPercent(ConfigManager.GetSwimTurnMod(skillFactor));
-            float swimStaminaCost = ConfigManager.GetSwimStaminaPerSec(skillFactor);
+            float swimSpeed = ToPercent(ConfigManager.GetSwimSpeedMod(skill));
+            float swimAccel = ToPercent(ConfigManager.GetSwimAccelMod(skill));
+            float swimTurn = ToPercent(ConfigManager.GetSwimTurnMod(skill));
+            float swimStaminaCost = ConfigManager.GetSwimStaminaPerSec(skill);
 
             float absWeightExp = ToPercent(MovePatch.absoluteWeightBonus(player));
             float relWeightExp = ToPercent(MovePatch.relativeWeightBonus(player));
@@ -689,17 +753,25 @@ namespace kingskills
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "The faster you are moving, the more experience you get.\n" +
                 "You also gain experience based on how encumbered you are. \n" +
-                swimSpeedExp.ToString("F0") + "% experience bonus from current swimming speed \n" +
-                absWeightExp.ToString("F0") + "% experience bonus from absolute weight carried \n" +
-                relWeightExp.ToString("F0") + "% experience bonus from fullness of inventory";
+                swimSpeedExp.ToString("F1") + "% experience bonus from current swimming speed \n" +
+                absWeightExp.ToString("F1") + "% experience bonus from absolute weight carried \n" +
+                relWeightExp.ToString("F1") + "% experience bonus from fullness of inventory";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                swimSpeed.ToString("F0") + "% extra swim speed\n" +
-                swimAccel.ToString("F0") + "% extra acceleration in water\n" +
-                swimTurn.ToString("F0") + "% extra turn speed in water\n" +
-                swimStaminaCost.ToString("F0") + " stamina per second while swimming";
+                swimSpeed.ToString("F1") + "% extra swim speed\n" +
+                swimAccel.ToString("F1") + "% extra acceleration in water\n" +
+                swimTurn.ToString("F1") + "% extra turn speed in water\n" +
+                swimStaminaCost.ToString("F2") + " stamina per second while swimming";
         }
         public static void OpenSwordPanels()
         {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Swords);
+
+            float swordDamage = ToPercent(ConfigManager.GetSwordDamageMod(skill));
+            float swordStaminaRedux = ToPercent(ConfigManager.GetSwordStaminaRedux(skill));
+            float swordParry = ToPercent(ConfigManager.GetSwordParryMod(skill));
+            float swordSlash = ToPercent(ConfigManager.GetSwordSlashMod(skill));
+            float swordDodgeStaminaRedux = ToPercent(ConfigManager.GetSwordDodgeStaminaRedux(skill));
+
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all sword damage dealt is turned into experience. \n" +
                 "The exp gain rate is much higher versus living targets. \n" +
@@ -707,23 +779,51 @@ namespace kingskills
                 "Holding a sword gains you experience at a very slow rate. \n" +
                 "Bonus experience is gained every time you deal damage to a staggered enemy with a sword.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                "0" + "% extra damage with swords \n" +
-                "0" + "% less stamina usage with swords\n" +
-                "0" + "% higher parry bonus with ALL weapons \n" +
-                "0" + "% increased slash damage with ALL weapons \n" +
-                "0" + "% less stamina cost to dodge";
+                swordDamage.ToString("F1") + "% extra damage with swords \n" +
+                swordStaminaRedux.ToString("F1") + "% stamina usage with swords\n" +
+                swordParry.ToString("F0") + "% higher parry bonus with ALL weapons \n" +
+                swordSlash.ToString("F1") + "% increased slash damage with ALL weapons \n" +
+                swordDodgeStaminaRedux.ToString("F1") + "% stamina cost to dodge";
         }
         public static void OpenWoodcuttingPanels()
         {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.WoodCutting);
+
+            float woodDamage = ToPercent(ConfigManager.GetWoodcuttingDamageMod(skill));
+            float woodDrop = ToPercent(ConfigManager.GetWoodDropRate(skill));
+            float woodRebate = ConfigManager.GetWoodcuttingStaminaRebate(skill);
+            float woodSomething = ToPercent(0f);
+
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all chop damage dealt is turned into experience. \n" +
                 "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
                 "Bonus experience for the axe is gained based on the tier of the tool used.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                "0" + "% extra damage to trees\n" +
-                "0" + "% increased wood drop rates from trees\n" +
-                "0" + "% rebate on axe swings that hit a tree\n" +
-                "0" + " something else!";
+                woodDamage.ToString("F1") + "% extra damage to trees\n" +
+                woodDrop.ToString("F2") + "% increased wood drop rates from trees\n" +
+                woodRebate.ToString("F0") + " stamina rebate on axe swings that hit a tree\n" +
+                woodSomething.ToString("F0") + " something else!";
+        }
+
+        public static void OpenMiningPanels()
+        {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Pickaxes);
+
+            float mineDamage = ToPercent(ConfigManager.GetMiningDamageMod(skill));
+            float mineDrop = ToPercent(ConfigManager.GetMiningDropRate(skill));
+            float mineRebate = ConfigManager.GetMiningStaminaRebate(skill);
+            float mineSomething = ToPercent(0f);
+
+            LeftPanelExperienceText.GetComponent<Text>().text =
+                "A percentage of all pick damage dealt to ground turned into experience. \n" +
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
+                "Bonus experience for the pick is gained based on the tier of the tool used.\n" +
+                "You also gain experience, if reduced, for mining ground without ore.";
+            LeftPanelEffectsText.GetComponent<Text>().text =
+                mineDamage.ToString("F1") + "% extra damage to rocks\n" +
+                mineDrop.ToString("F2") + "% increased ore drop rates\n" +
+                mineRebate.ToString("F0") + " stamina rebate on pick swings that hit a rock\n" +
+                mineSomething.ToString("F0") + " something else!";
         }
 
         public static float ToPercent(float number)

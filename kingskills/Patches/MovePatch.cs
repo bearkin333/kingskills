@@ -49,9 +49,9 @@ namespace kingskills
         public static float GetEncumberanceFactor(Player player, float skillFactor)
         {
             float encumberancePercent = Mathf.Clamp01(player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight());
-            float encumberancePercentCurved = ConfigManager.GetEncumberanceCurve(encumberancePercent);
+            float encumberanceCurved = ConfigManager.GetEncumberanceCurve(encumberancePercent);
             float skillEncumberanceRedux = ConfigManager.GetEncumberanceRedux(skillFactor);
-            return 1f - encumberancePercentCurved * skillEncumberanceRedux;
+            return encumberanceCurved * skillEncumberanceRedux;
         }
         public static float GetEquipmentFactor(Player player, float skillFactor)
         {
@@ -59,7 +59,7 @@ namespace kingskills
             float equipmentFactor = player.m_equipmentMovementModifier;
             if (equipmentFactor < 0f) { equipmentFactor *= equipmentMalusRedux; }
 
-            return equipmentFactor + 1;
+            return equipmentFactor + 1f;
         }
         public static float absoluteWeightBonus(Player player)
         {
@@ -76,7 +76,7 @@ namespace kingskills
             float runMod = player.GetRunSpeedFactor();
             player.m_seman.ApplyStatusEffectSpeedMods(ref runMod);
 
-            return runMod * ConfigManager.RunEXPSpeedMod.Value;
+            return runMod * ConfigManager.GetRunEXPSpeedMod();
         }
         public static float swimSpeedExpBonus(Player player)
         {
