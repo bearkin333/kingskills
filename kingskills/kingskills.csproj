@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Patches\BlockPatch.cs" />
     <Compile Include="Patches\LootDropPatch.cs" />
+    <Compile Include="Patches\SneakPatch.cs" />
     <Compile Include="Patches\WeaponBonusExperience.cs" />
     <Compile Include="Patches\LevelPatch.cs" />
     <Compile Include="Patches\WeaponDamage.cs" />

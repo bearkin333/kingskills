@@ -718,21 +718,24 @@ namespace kingskills
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Sneak);
 
-            float sneakSpeed = ToPercent(0f);
-            float sneakStaminaRedux = ToPercent(0f);
-            float sneakVision = ToPercent(0f);
+            float sneakSpeed = ToPercent(ConfigManager.GetSneakSpeedMod(skill));
+            float sneakStaminaCost = ToPercent(ConfigManager.GetSneakStaminaDrain(skill));
+            float sneakDarkest = ToPercent(ConfigManager.GetSneakDarkest(skill));
+            float sneakBrightest = ToPercent(ConfigManager.GetSneakBrightest(skill));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "While you are inside the vision angle of an enemy " +
                 "but outside its vision range, you gain a flat amount of sneak " +
                 "experience every second. \n This value is reduced to 10% while" +
-                "you aren't being observed.";
+                "you aren't being observed. \n" +
+                "You get an additional experience bonus based on how dangerous the " +
+                "creature you're sneaking around is.";
             //I would like to implement an increase in exp gain based on level of enemy
             LeftPanelEffectsText.GetComponent<Text>().text =
                 sneakSpeed.ToString("F1") + "% increased speed while crouching\n" +
-                sneakStaminaRedux.ToString("F1") + "% reduced stamina cost while crouching" +
-                sneakVision.ToString("F0") + "% reduced vision cones while in total dark\n" +
-                sneakVision.ToString("F0") + "% reduced vision cones while in the open";
+                sneakStaminaCost.ToString("F1") + " stamina per second while crouching" +
+                sneakDarkest.ToString("F0") + "% reduced enemy vision range while in total dark\n" +
+                sneakBrightest.ToString("F0") + "% reduced enemy vision range while out in the open";
         }
         public static void OpenSwimPanels()
         {
@@ -765,6 +768,8 @@ namespace kingskills
         public static void OpenSwordPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Swords);
+            LevelPatch.SwordUpdate(Player.m_localPlayer);
+
 
             float swordDamage = ToPercent(ConfigManager.GetSwordDamageMod(skill));
             float swordStaminaRedux = ToPercent(ConfigManager.GetSwordStaminaRedux(skill));

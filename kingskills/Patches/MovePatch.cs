@@ -19,14 +19,9 @@ namespace kingskills
         public static bool GetRunSpeedPatch(Player __instance, ref float __result)
         {
             //This function provides a number to multiply the base run speed by
-            float skillFactor = __instance.m_skills.GetSkillFactor(Skills.SkillType.Run);
+            float runSkillFactor = ConfigManager.GetRunSpeedMod(__instance.m_skills.GetSkillFactor(Skills.SkillType.Run));
 
-            float runSkillFactor = ConfigManager.GetRunSpeedMod(skillFactor);
-
-            float equipmentFactor = GetEquipmentFactor(__instance, skillFactor);
-            float encumberanceFactor = GetEncumberanceFactor(__instance, skillFactor);
-
-            float runSpeed = runSkillFactor * equipmentFactor * encumberanceFactor;
+            float runSpeed = runSkillFactor * GetGenericMovespeedAdjustments(__instance);
             __result = runSpeed;
             /*
             Jotunn.Logger.LogMessage($"Skill factor was {skillFactor},\n" +
@@ -43,18 +38,46 @@ namespace kingskills
             return false;
         }
 
+        [HarmonyPatch(nameof(Player.GetJogSpeedFactor))]
+        [HarmonyPrefix]
+        public static bool GetJogSpeedPatch(Player __instance, ref float __result)
+        {
+            __result = GetGenericMovespeedAdjustments(__instance);
+            return false;
+        }
+
+        public static float GetGenericMovespeedAdjustments(Player player){
+            float mod = 1f;
+            mod *= GetSkillMovespeedMod(player) 
+                * GetEncumberanceFactor(player) 
+                * GetEquipmentFactor(player);
+            return mod;
+        }
+
+        public static float GetSkillMovespeedMod(Player player)
+        {
+            float mod = 1f;
+            mod *=
+                ConfigManager.GetFistMovespeedMod(player.GetSkillFactor(Skills.SkillType.Unarmed)) *
+                ConfigManager.GetKnifeMovespeedMod(player.GetSkillFactor(Skills.SkillType.Knives));
+
+            return mod;
+        }
+
         // 
         // Experience determining functions
         //
-        public static float GetEncumberanceFactor(Player player, float skillFactor)
+        public static float GetEncumberanceFactor(Player player)
         {
+            float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
             float encumberancePercent = Mathf.Clamp01(player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight());
             float encumberanceCurved = ConfigManager.GetEncumberanceCurve(encumberancePercent);
             float skillEncumberanceRedux = ConfigManager.GetEncumberanceRedux(skillFactor);
             return encumberanceCurved * skillEncumberanceRedux;
         }
-        public static float GetEquipmentFactor(Player player, float skillFactor)
+        public static float GetEquipmentFactor(Player player)
         {
+            float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
             float equipmentMalusRedux = ConfigManager.GetEquipmentRedux(skillFactor);
             float equipmentFactor = player.m_equipmentMovementModifier;
             if (equipmentFactor < 0f) { equipmentFactor *= equipmentMalusRedux; }

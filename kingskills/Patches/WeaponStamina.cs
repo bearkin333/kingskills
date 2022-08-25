@@ -56,5 +56,23 @@ namespace kingskills.Patches
             return false;
         }
 
+        [HarmonyPatch(typeof(ItemDrop.ItemData))]
+        [HarmonyPatch(nameof(ItemDrop.ItemData.GetHoldStaminaDrain))]
+        [HarmonyPrefix]
+        public static bool StaminaHoldPatch(ItemDrop.ItemData __instance, ref float __result)
+        {
+            float stamina = __instance.m_shared.m_holdStaminaDrain;
+            Skills.SkillType skillT = __instance.m_shared.m_skillType;
+            float skillFactor = Player.m_localPlayer.GetSkillFactor(skillT);
+            if (stamina <= 0f) __result = 0;
+
+            if (skillT == Skills.SkillType.Bows)
+                stamina *=
+                    ConfigManager.GetBowStaminaRedux(skillFactor);
+
+            __result = stamina;
+
+            return false;
+        }
     }
 }

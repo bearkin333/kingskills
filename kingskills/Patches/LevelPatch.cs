@@ -27,6 +27,10 @@ namespace kingskills
             {
                 JumpForceUpdate(__instance);
             }
+            else if (skill == Skills.SkillType.Swords)
+            {
+                SwordUpdate(__instance);
+            }
 
         }
 
@@ -161,6 +165,11 @@ namespace kingskills
                 $"New stamina use: {player.m_jumpStaminaUsage} \n" +
                 $"New forward force: {player.m_jumpForceForward} \n" +
                 $"New tired factor: {player.m_jumpForceTiredFactor}");*/
+        }
+
+        public static void SwordUpdate(Player player){
+            player.m_dodgeStaminaUsage = ConfigManager.BaseDodgeStaminaUsage *
+                ConfigManager.GetSwordDodgeStaminaRedux(player.GetSkillFactor(Skills.SkillType.Swords));
         }
 
         //New max health and stamina

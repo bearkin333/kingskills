@@ -100,6 +100,54 @@ namespace kingskills
 
         }
 
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(MineRock), nameof(MineRock.Damage))]
+        static void MineRock_Damage(Destructible __instance, HitData hit)
+        {
+            ResourceDamagePatch(__instance, ref hit);
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Damage))]
+        static void MineRock5_Damage(Destructible __instance, HitData hit)
+        {
+            ResourceDamagePatch(__instance, ref hit);
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Damage))]
+        static void TreeBase_Damage(Destructible __instance, HitData hit)
+        {
+            ResourceDamagePatch(__instance, ref hit);
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))]
+        static void TreeLog_Damage(Destructible __instance, HitData hit)
+        {
+            ResourceDamagePatch(__instance, ref hit);
+        }
+
+        public static void ResourceDamagePatch(Destructible __instance, ref HitData hit)
+        {
+            Jotunn.Logger.LogMessage("Hitting a resource patch detected!");
+            if (hit.m_attacker == Player.m_localPlayer.GetZDOID())
+            {
+                Player player = Player.m_localPlayer;
+                if (hit.m_skill == Skills.SkillType.WoodCutting)
+                {
+                    hit.m_damage.m_chop *=
+                        ConfigManager.GetWoodcuttingDamageMod(player.GetSkillFactor(Skills.SkillType.WoodCutting))
+                        * ConfigManager.GetAxeChopDamageMod(player.GetSkillFactor(Skills.SkillType.Axes));
+                    player.AddStamina(ConfigManager.GetWoodcuttingStaminaRebate(player.GetSkillFactor(Skills.SkillType.WoodCutting)));
+                } 
+                else if (hit.m_skill == Skills.SkillType.Pickaxes)
+                {
+                    hit.m_damage.m_pickaxe *=
+                        ConfigManager.GetMiningDamageMod(player.GetSkillFactor(Skills.SkillType.Pickaxes));
+                    player.AddStamina(ConfigManager.GetMiningStaminaRebate(player.GetSkillFactor(Skills.SkillType.Pickaxes)));
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(Character))]
         [HarmonyPatch(nameof(Character.GetRandomSkillFactor))]
         [HarmonyPrefix]

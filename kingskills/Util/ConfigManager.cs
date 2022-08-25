@@ -107,8 +107,8 @@ namespace kingskills
         public static ConfigEntry<float> BowStaminaReduxMax;
         public static ConfigEntry<float> BowVelocityModMin;
         public static ConfigEntry<float> BowVelocityModMax;
-        public static ConfigEntry<float> BowDrawSpeedModMin;
-        public static ConfigEntry<float> BowDrawSpeedModMax;
+        //public static ConfigEntry<float> BowDrawSpeedModMin;
+        //public static ConfigEntry<float> BowDrawSpeedModMax;
         public static ConfigEntry<float> BowDropModMin;
         public static ConfigEntry<float> BowDropModMax;
         public static ConfigEntry<float> ClubDamageModMin;
@@ -183,6 +183,15 @@ namespace kingskills
         public static ConfigEntry<float> MiningStaminaRebateMax;
         public static ConfigEntry<float> MiningDropModMin;
         public static ConfigEntry<float> MiningDropModMax;
+        public static ConfigEntry<float> SneakEXPPerDangerMod;
+        public static ConfigEntry<float> SneakStaminaDrainMin;
+        public static ConfigEntry<float> SneakStaminaDrainMax;
+        public static ConfigEntry<float> SneakSpeedModMin;
+        public static ConfigEntry<float> SneakSpeedModMax;
+        public static ConfigEntry<float> SneakBrightestMin;
+        public static ConfigEntry<float> SneakBrightestMax;
+        public static ConfigEntry<float> SneakDarkestMin;
+        public static ConfigEntry<float> SneakDarkestMax;
 
         //Constants for use that aren't configurable
         public static Dictionary<string, float> WoodcuttingDropTable = new Dictionary<string, float>();
@@ -200,6 +209,9 @@ namespace kingskills
         public const float BaseJumpStaminaUse = 10f;
         public const float BaseJumpForwardForce = 2f;
         public const float BaseJumpTiredFactor = .7f;
+        public const float BaseBowDrawSpeedMin = 0f;
+        public const float BaseBowDrawSpeedMax = .8f;
+        public const float BaseDodgeStaminaUsage = 10f;
 
         /* flavor curve numbers
         const float TotalXp = 20553.6f;
@@ -471,10 +483,10 @@ namespace kingskills
                 "% extra velocity to fired arrows at level 0");
             BowVelocityModMax = cfg.Bind("Bow.Effect", "Velocity Bonus Max", 0f, 
                 "% extra velocity to fired arrows at level 100");
-            BowDrawSpeedModMin = cfg.Bind("Bow.Effect", "Draw Speed Min", 0f, 
-                "% extra bow draw speed at level 0");
-            BowDrawSpeedModMax = cfg.Bind("Bow.Effect", "Draw Speed Max", 0f, 
-                "% extra bow draw speed at level 100");
+            //BowDrawSpeedModMin = cfg.Bind("Bow.Effect", "Draw Speed Min", 0f, 
+            //    "% extra bow draw speed at level 0");
+            //BowDrawSpeedModMax = cfg.Bind("Bow.Effect", "Draw Speed Max", 0f, 
+            //    "% extra bow draw speed at level 100");
             BowDropModMin = cfg.Bind("Bow.Effect", "Drop rate mod min", 0f,
                 "% to increase creature drops at level 0");
             BowDropModMax = cfg.Bind("Bow.Effect", "Drop rate mod max", 100f,
@@ -625,8 +637,29 @@ namespace kingskills
                 "% increase to ore drops at level 0");
             MiningDropModMax = cfg.Bind("Mining.Effect", "Drop rate mod max", 100f,
                 "% increase to ore drops at level 100");
-            
-            DropNewItemThreshold = cfg.Bind("Drops", "Drop New Item Threshold", 50f,
+
+
+        SneakEXPPerDangerMod = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 0f, 
+                "Determines how much each 'point of danger' is worth in sneak exp");
+        SneakStaminaDrainMin = cfg.Bind("Sneak.Effect", "Stamina Drain Min", 0f, 
+                "Amount of stamina drain per second while sneaking at level 0");
+        SneakStaminaDrainMax = cfg.Bind("Sneak.Effect", "Stamina Drain Max", 0f,
+                "Amount of stamina drain per second while sneaking at level 100");
+        SneakSpeedModMin = cfg.Bind("Sneak.Effect", "Speed mod Min", 0f, 
+                "% speed increase while sneaking at level 0");
+        SneakSpeedModMax = cfg.Bind("Sneak.Effect", "Speed mod Max", 0f,
+                "% speed increase while sneaking at level 100");
+        SneakBrightestMin = cfg.Bind("Sneak.Effect", "Brightest Value Min", 0f, 
+                "% decrease to enemy sight range while in the brightest possible area at level 0");
+        SneakBrightestMax = cfg.Bind("Sneak.Effect", "Brightest Value Max", 0f,
+                "% decrease to enemy sight range while in the brightest possible area at level 100");
+        SneakDarkestMin = cfg.Bind("Sneak.Effect", "Darkest Value Min", 0f,
+                "% decrease to enemy sight range while in the darkest possible area at level 0");
+        SneakDarkestMax = cfg.Bind("Sneak.Effect", "Darkest Value Max", 0f,
+                "% decrease to enemy sight range while in the darkest possible area at level 100");
+
+
+        DropNewItemThreshold = cfg.Bind("Drops", "Drop New Item Threshold", 50f,
                 "% of 1 item needed to generate before you round up to a full item.");
 
         }
@@ -893,8 +926,8 @@ namespace kingskills
         }
         public static float GetBowDrawSpeedMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(BowDrawSpeedModMin), 
-                PerToMult(BowDrawSpeedModMax), skillFactor);
+            return Mathf.Lerp(BaseBowDrawSpeedMin, 
+                BaseBowDrawSpeedMax, skillFactor);
         }
         public static float GetBowDropRate(float skillFactor)
         {
@@ -1078,12 +1111,36 @@ namespace kingskills
         {
             return PerToMod(DropNewItemThreshold);
         }
+        public static float GetSneakEXPPerDangerMod()
+        {
+            return PerToMult(SneakEXPPerDangerMod);
+        }
+        public static float GetSneakStaminaDrain(float skillFactor)
+        {
+            return Mathf.Lerp(SneakStaminaDrainMin.Value,SneakStaminaDrainMax.Value, skillFactor);
+        }
+        public static float GetSneakSpeedMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SneakSpeedModMin),
+                PerToMult(SneakSpeedModMax), skillFactor);
+        }
+        public static float GetSneakBrightest(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SneakBrightestMin), 
+                PerToMult(SneakBrightestMax), skillFactor);
+        }
+        public static float GetSneakDarkest(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SneakDarkestMin),
+                PerToMult(SneakDarkestMax), skillFactor);
+        }
 
         /*
          * template
         public static float Get(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(.Value,.Value, skillFactor);
+            return Mathf.Lerp(PerToMult(), 
+                PerToMult(), skillFactor);
         }
          */
 
