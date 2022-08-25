@@ -8,11 +8,6 @@ using UnityEngine;
 
 namespace kingskills
 {
-    /*
-     * 
-        
-    */
-
     class ConfigManager
     {
         /* Template
@@ -772,7 +767,9 @@ namespace kingskills
         {
             config.Value = config.Value / 100;
             if (redux)
-                config.Value = 1 - config.Value;
+                config.Value = 1f - config.Value;
+            else
+                config.Value = config.Value + 1f;
         }
 
 
@@ -797,7 +794,7 @@ namespace kingskills
          */
         public static float GetBlockStaminaRedux(float skillFactor)
         {
-            return 1f + Mathf.Lerp(BlockStaminaReduxMin.Value, BlockStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(BlockStaminaReduxMin.Value, BlockStaminaReduxMax.Value, skillFactor);
         }
         public static float GetFlatBlockPower(float skillFactor)
         {
@@ -805,7 +802,7 @@ namespace kingskills
         }
         public static float GetBlockPowerMod(float skillFactor)
         {
-            return 1f + Mathf.Lerp(BlockPowerModMin.Value, BlockPowerModMax.Value, skillFactor);
+            return Mathf.Lerp(BlockPowerModMin.Value, BlockPowerModMax.Value, skillFactor);
         }
         public static float GetFallDamageThreshold(float skillFactor)
         {
@@ -813,11 +810,11 @@ namespace kingskills
         }
         public static float GetFallDamageRedux(float skillFactor)
         {
-            return 1f + Mathf.Lerp(JumpFallDamageReduxMin.Value, JumpFallDamageReduxMax.Value, skillFactor);
+            return Mathf.Lerp(JumpFallDamageReduxMin.Value, JumpFallDamageReduxMax.Value, skillFactor);
         }
         public static float GetRunSpeedMod(float skillFactor)
         {
-            return 1f + Mathf.Lerp(RunSpeedModMin.Value, RunSpeedModMax.Value, skillFactor);
+            return Mathf.Lerp(RunSpeedModMin.Value, RunSpeedModMax.Value, skillFactor);
         }
         public static float GetEncumberanceCurve(float encumberancePercent)
         {
@@ -825,11 +822,11 @@ namespace kingskills
         }
         public static float GetEncumberanceRedux(float skillFactor)
         {
-            return 1f + Mathf.Lerp(RunEncumberanceReduxMin.Value, RunEncumberanceReduxMax.Value, skillFactor);
+            return Mathf.Lerp(RunEncumberanceReduxMin.Value, RunEncumberanceReduxMax.Value, skillFactor);
         }
         public static float GetEquipmentRedux(float skillFactor)
         {
-            return 1f + Mathf.Lerp(RunEquipmentReduxMin.Value, RunEquipmentReduxMax.Value, skillFactor);
+            return Mathf.Lerp(RunEquipmentReduxMin.Value, RunEquipmentReduxMax.Value, skillFactor);
         }
         public static float GetAbsoluteWeightPercent(float weight)
         {
@@ -838,7 +835,7 @@ namespace kingskills
         }
         public static float GetAbsoluteWeightCurve(float weightPercent)
         {
-            return 1f + RunAbsoluteWeightExpMod.Value * Mathf.Pow(weightPercent, RunAbsoluteWeightFactor.Value);
+            return RunAbsoluteWeightExpMod.Value * Mathf.Pow(weightPercent, RunAbsoluteWeightFactor.Value);
         }
         public static float GetRelativeWeightStage(float weightPercent)
         {
@@ -868,27 +865,27 @@ namespace kingskills
         }
         public static float GetRunStaminaRedux(float skillFactor)
         {
-            return 1f + Mathf.Lerp(RunStaminaReduxMin.Value, RunStaminaReduxMax.Value, skillFactor);
+            return Mathf.Lerp(RunStaminaReduxMin.Value, RunStaminaReduxMax.Value, skillFactor);
         }
         public static float GetSwimSpeedMod(float skillFactor)
         {
-            return 1f + Mathf.Lerp(SwimSpeedModMin.Value, SwimSpeedModMax.Value, skillFactor);
+            return Mathf.Lerp(SwimSpeedModMin.Value, SwimSpeedModMax.Value, skillFactor);
         }
         public static float GetSwimAccelMod(float skillFactor)
         {
-            return 1f + Mathf.Lerp(SwimAccelModMin.Value, SwimAccelModMax.Value, skillFactor);
+            return Mathf.Lerp(SwimAccelModMin.Value, SwimAccelModMax.Value, skillFactor);
         }
         public static float GetSwimTurnMod(float skillFactor)
         {
-            return 1f + Mathf.Lerp(SwimTurnModMin.Value, SwimTurnModMax.Value, skillFactor);
+            return Mathf.Lerp(SwimTurnModMin.Value, SwimTurnModMax.Value, skillFactor);
         }
         public static float GetJumpForceMod(float skillFactor)
         {
-            return 1f + Mathf.Lerp(JumpForceModMin.Value, JumpForceModMax.Value, skillFactor);
+            return Mathf.Lerp(JumpForceModMin.Value, JumpForceModMax.Value, skillFactor);
         }
         public static float GetJumpForwardForceMod(float skillFactor)
         {
-            return 1f + Mathf.Lerp(JumpForwardForceModMin.Value, JumpForwardForceModMax.Value, skillFactor);
+            return Mathf.Lerp(JumpForwardForceModMin.Value, JumpForwardForceModMax.Value, skillFactor);
         }
         public static float GetJumpStaminaRedux(float skillFactor)
         {
@@ -910,18 +907,191 @@ namespace kingskills
         {
             return Mathf.Lerp(SwimStaminaPerSecMin.Value, SwimStaminaPerSecMax.Value, skillFactor);
         }
+        public static float GetAxeDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(AxeDamageModMin.Value,AxeDamageModMax.Value, skillFactor);
+        }
+        public static float GetAxeStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(AxeStaminaReduxMin.Value,AxeStaminaReduxMax.Value, skillFactor);
+        }
+        public static float GetAxeChopDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(AxeChopDamageModMin.Value,AxeChopDamageModMax.Value, skillFactor);
+        }
+        public static float GetAxeStamina(float skillFactor)
+        { 
+            return AxeStaminaPerLevel.Value * skillFactor * 100;
+        }
+        public static float GetAxeCarryCapacity(float skillFactor)
+        {
+            return Mathf.Lerp(AxeCarryCapacityMin.Value,AxeCarryCapacityMax.Value, skillFactor);
+        }
+        public static float GetBowDamageMod(float skillFactor)
+        { 
+            return Mathf.Lerp(BowDamageModMin.Value,BowDamageModMax.Value, skillFactor);
+        }
+        public static float GetBowStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(BowStaminaReduxMin.Value,BowStaminaReduxMax.Value, skillFactor);
+        }
+        public static float GetBowVelocityMod(float skillFactor)
+        {
+            return Mathf.Lerp(BowVelocityModMin.Value,BowVelocityModMax.Value, skillFactor);
+        }
+        public static float GetBowDrawSpeedMod(float skillFactor)
+        {
+            return Mathf.Lerp(BowDrawSpeedModMin.Value,BowDrawSpeedModMax.Value, skillFactor);
+        }
+        public static float GetBowDropRate(float skillFactor)
+        {
+            return Mathf.Lerp(BowDropModMin.Value, BowDropModMax.Value, skillFactor);
+        }
+        public static float GetClubDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(ClubDamageModMin.Value,ClubDamageModMax.Value, skillFactor);
+        }
+        public static float GetClubStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(ClubStaminaReduxMin.Value,ClubStaminaReduxMax.Value, skillFactor);
+        }
+        public static float GetClubBluntMod(float skillFactor)
+        {
+            return Mathf.Lerp(ClubBluntModMin.Value,ClubBluntModMax.Value, skillFactor);
+        }
+        public static float GetClubKnockbackMod(float skillFactor)
+        {
+            return Mathf.Lerp(ClubKnockbackModMin.Value,ClubKnockbackModMax.Value, skillFactor);
+        }
+        public static float GetClubStaggerMod(float skillFactor)
+        {
+            return Mathf.Lerp(ClubStaggerModMin.Value,ClubStaggerModMax.Value, skillFactor);
+        }
+        public static float GetFistDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(FistDamageModMin.Value,FistDamageModMax.Value, skillFactor);
+        }
+        public static float GetFistStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(FistStaminaReduxMin.Value,FistStaminaReduxMax.Value, skillFactor);
+        }
+        public static float GetFistDamageFlat(float skillFactor)
+        {
+            return Mathf.Lerp(FistDamageFlatMin.Value,FistDamageFlatMax.Value, skillFactor);
+        }
+        public static float GetFistBlockArmor(float skillFactor)
+        {
+            return Mathf.Lerp(FistBlockArmorMin.Value,FistBlockArmorMax.Value, skillFactor);
+        }
+        public static float GetFistMovespeedMod(float skillFactor)
+        {
+            return Mathf.Lerp(FistMovespeedModMin.Value,FistMovespeedModMax.Value, skillFactor);
+        }
+        public static float GetKnifeDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(KnifeDamageModMin.Value,KnifeDamageModMax.Value, skillFactor);
+        }
+        public static float GetKnifeStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(KnifeStaminaReduxMin.Value,KnifeStaminaReduxMax.Value, skillFactor);
+        }
+        public static float GetKnifeBackstabMod(float skillFactor)
+        {
+            return Mathf.Lerp(KnifeBackstabModMin.Value,KnifeBackstabModMax.Value, skillFactor);
+        }
+        public static float GetKnifeMovespeedMod(float skillFactor)
+        {
+            return Mathf.Lerp(KnifeMovespeedModMin.Value,KnifeMovespeedModMax.Value, skillFactor);
+        }
+        public static float GetKnifePierceMod(float skillFactor)
+        {
+            return Mathf.Lerp(KnifePierceModMin.Value,KnifePierceModMax.Value, skillFactor);
+        }
+        public static float GetPolearmDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(PolearmDamageModMin.Value,PolearmDamageModMax.Value, skillFactor);
+        }
+        public static float GetPolearmStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PolearmStaminaReduxMin.Value,PolearmStaminaReduxMax.Value, skillFactor);
+        }
+        public static float GetPolearmRange(float skillFactor)
+        {
+            return Mathf.Lerp(PolearmRangeMin.Value,PolearmRangeMax.Value, skillFactor);
+        }
+        public static float GetPolearmArmor(float skillFactor)
+        {
+            return Mathf.Lerp(PolearmArmorMin.Value,PolearmArmorMax.Value, skillFactor);
+        }
+        public static float GetPolearmBlock(float skillFactor)
+        {
+            return Mathf.Lerp(PolearmBlockMin.Value,PolearmBlockMax.Value, skillFactor);
+        }
+        public static float GetSpearDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(SpearDamageModMin.Value,SpearDamageModMax.Value, skillFactor);
+        }
+        public static float GetSpearStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(SpearStaminaReduxMin.Value,SpearStaminaReduxMax.Value, skillFactor);
+        }
+        public static float GetSpearVelocityMod(float skillFactor)
+        {
+            return Mathf.Lerp(SpearVelocityModMin.Value,SpearVelocityModMax.Value, skillFactor);
+        }
+        public static float GetSpearProjectileDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(SpearProjectileDamageModMin.Value,SpearProjectileDamageModMax.Value, skillFactor);
+        }
+        public static float GetSpearBlockArmor(float skillFactor)
+        {
+            return Mathf.Lerp(SpearBlockArmorMin.Value,SpearBlockArmorMax.Value, skillFactor);
+        }
+        public static float GetSwordDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(SwordDamageModMin.Value,SwordDamageModMax.Value, skillFactor);
+        }
+        public static float GetSwordStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(SwordDodgeStaminaReduxMin.Value,SwordDodgeStaminaReduxMax.Value, skillFactor);
+        }
+        public static float GetSwordParryMod(float skillFactor)
+        {
+            return Mathf.Lerp(SwordParryModMin.Value,SwordParryModMax.Value, skillFactor);
+        }
+        public static float GetSwordSlashMod(float skillFactor)
+        {
+            return Mathf.Lerp(SwordSlashModMin.Value,SwordSlashModMax.Value, skillFactor);
+        }
+        public static float GetSwordDodgeStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(SwordDodgeStaminaReduxMin.Value,SwordDodgeStaminaReduxMax.Value, skillFactor);
+        }
+        public static float GetWoodcuttingDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(WoodcuttingChopDamageModMin.Value,WoodcuttingChopDamageModMax.Value, skillFactor);
+        }
         public static float GetWoodDropRate(float skillFactor)
         {
             return Mathf.Lerp(WoodcuttingDropModMin.Value, WoodcuttingDropModMax.Value, skillFactor);
         }
+        public static float GetWoodcuttingStaminaRebate(float skillFactor)
+        {
+            return Mathf.Lerp(WoodcuttingStaminaRebateMin.Value,WoodcuttingStaminaRebateMax.Value, skillFactor);
+        }
+        public static float GetMiningDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(MiningPickDamageModMin.Value,MiningPickDamageModMax.Value, skillFactor);
+        }
         public static float GetMiningDropRate(float skillFactor)
         {
-            return Mathf.Lerp(MiningDropModMin.Value,MiningDropModMax.Value, skillFactor);
+            return Mathf.Lerp(MiningDropModMin.Value, MiningDropModMax.Value, skillFactor);
         }
-        public static float GetBowDropRate(float skillFactor)
+        public static float GetMiningStaminaRebate(float skillFactor)
         {
-            return Mathf.Lerp(BowDropModMin.Value,BowDropModMax.Value, skillFactor);
+            return Mathf.Lerp(MiningStaminaRebateMin.Value,MiningStaminaRebateMax.Value, skillFactor);
         }
+
 
         /*
          * template
