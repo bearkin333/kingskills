@@ -166,7 +166,6 @@ namespace kingskills
                 $"New forward force: {player.m_jumpForceForward} \n" +
                 $"New tired factor: {player.m_jumpForceTiredFactor}");*/
         }
-
         public static void SwordUpdate(Player player){
             player.m_dodgeStaminaUsage = ConfigManager.BaseDodgeStaminaUsage *
                 ConfigManager.GetSwordDodgeStaminaRedux(player.GetSkillFactor(Skills.SkillType.Swords));
@@ -174,11 +173,11 @@ namespace kingskills
 
         //New max health and stamina
 
-        [HarmonyPatch(nameof(Player.GetMaxStamina))]
+        [HarmonyPatch(nameof(Player.SetMaxStamina))]
         [HarmonyPostfix]
-        public static void GetMyMaxStamina(Player __instance, ref float __result)
+        public static void SetMyMaxStamina(Player __instance)
         {
-            __result += ConfigManager.RunStaminaPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Run) +
+            __instance.m_maxStamina += ConfigManager.RunStaminaPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Run) +
                 ConfigManager.AxeStaminaPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Axes);
         }
 
@@ -189,13 +188,12 @@ namespace kingskills
             __result += ConfigManager.GetAxeCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Axes));
         }
 
-        [HarmonyPatch(typeof(Character))]
-        [HarmonyPatch(nameof(Character.GetMaxHealth))]
+        [HarmonyPatch(nameof(Player.SetMaxHealth))]
         [HarmonyPostfix]
-        public static void GetMyMaxHealth(Character __instance, ref float __result)
+        public static void SetMyMaxHealth(Player __instance, float health)
         {
-            if (__instance.IsPlayer())
-            __result += ConfigManager.BlockHealthPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Blocking);
+            health += ConfigManager.BlockHealthPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Blocking);
+            __instance.SetMaxHealth(health);
         }
     }
 }

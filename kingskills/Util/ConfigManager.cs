@@ -370,7 +370,7 @@ namespace kingskills
                 "The heighest weight you will get an experience bonus for carrying");
             RunAbsoluteWeightFactor = cfg.Bind("Run.Experience.AbsoluteWeight", "Factor", .86f,
                 "Factor to define the slope of the absolute weight curve");
-            RunAbsoluteWeightExpMod = cfg.Bind("Run.Experience.AbsoluteWeight", "Mod", 2000f, 
+            RunAbsoluteWeightExpMod = cfg.Bind("Run.Experience.AbsoluteWeight", "Mod", 1000f, 
                 "% modifier for how much experience you get from absolute weight");
             
 
@@ -455,33 +455,33 @@ namespace kingskills
 
             AxeDamageModMin = cfg.Bind("Axe.Effect", "Damage Min", 0f, 
                 "% extra damage done with axes at level 0");
-            AxeDamageModMax = cfg.Bind("Axe.Effect", "Damage Max", 0f,
+            AxeDamageModMax = cfg.Bind("Axe.Effect", "Damage Max", 400f,
                 "% extra damage done with axes at level 100");
             AxeStaminaReduxMin = cfg.Bind("Axe.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for axes at level 0");
-            AxeStaminaReduxMax = cfg.Bind("Axe.Effect", "Stamina Reduction Max", 0f,
+            AxeStaminaReduxMax = cfg.Bind("Axe.Effect", "Stamina Reduction Max", 60f,
                 "% less stamina usage for axes at level 100");
-            AxeStaminaPerLevel = cfg.Bind("Axe.Effect", "Base Stamina Gain per Level", 0f,
+            AxeStaminaPerLevel = cfg.Bind("Axe.Effect", "Base Stamina Gain per Level", 1.2f,
                 "Flat amount of base stamina gained per level in axe");
             AxeChopDamageModMin = cfg.Bind("Axe.Effect", "Woodcutting Damage Min", 0f,
                 "% extra woodcutting damage done at level 0");
-            AxeChopDamageModMax = cfg.Bind("Axe.Effect", "Woodcutting Damage Max", 0f,
+            AxeChopDamageModMax = cfg.Bind("Axe.Effect", "Woodcutting Damage Max", 100f,
                 "% extra woodcutting damage done at level 100");
             AxeCarryCapacityMin = cfg.Bind("Axe.Effect", "Carry Capacity Bonus Min", 0f, 
                 "Flat extra carrying capacity at level 0");
-            AxeCarryCapacityMax = cfg.Bind("Axe.Effect", "Carry Capacity Bonus Max", 0f, 
+            AxeCarryCapacityMax = cfg.Bind("Axe.Effect", "Carry Capacity Bonus Max", 250f, 
                 "Flat extra carrying capacity at level 100");
             BowDamageModMin = cfg.Bind("Bow.Effect", "Damage Min", 0f,
                 "% extra damage done with bows at level 0");
-            BowDamageModMax = cfg.Bind("Bow.Effect", "Damage Max", 0f,
+            BowDamageModMax = cfg.Bind("Bow.Effect", "Damage Max", 300f,
                 "% extra damage done with bows at level 100");
             BowStaminaReduxMin = cfg.Bind("Bow.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for bows at level 0");
-            BowStaminaReduxMax = cfg.Bind("Bow.Effect", "Stamina Reduction Max", 0f,
+            BowStaminaReduxMax = cfg.Bind("Bow.Effect", "Stamina Reduction Max", 70f,
                 "% less stamina usage for bows at level 100");
             BowVelocityModMin = cfg.Bind("Bow.Effect", "Velocity Bonus Min", 0f, 
                 "% extra velocity to fired arrows at level 0");
-            BowVelocityModMax = cfg.Bind("Bow.Effect", "Velocity Bonus Max", 0f, 
+            BowVelocityModMax = cfg.Bind("Bow.Effect", "Velocity Bonus Max", 200f, 
                 "% extra velocity to fired arrows at level 100");
             //BowDrawSpeedModMin = cfg.Bind("Bow.Effect", "Draw Speed Min", 0f, 
             //    "% extra bow draw speed at level 0");
@@ -493,133 +493,133 @@ namespace kingskills
                 "% to increase creature drops at level 100");
             ClubDamageModMin = cfg.Bind("Club.Effect", "Damage Min", 0f,
                 "% extra damage done with clubs at level 0");
-            ClubDamageModMax = cfg.Bind("Club.Effect", "Damage Max", 0f,
+            ClubDamageModMax = cfg.Bind("Club.Effect", "Damage Max", 400f,
                 "% extra damage done with clubs at level 100");
             ClubStaminaReduxMin = cfg.Bind("Club.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for clubs at level 0");
-            ClubStaminaReduxMax = cfg.Bind("Club.Effect", "Stamina Reduction Max", 0f,
+            ClubStaminaReduxMax = cfg.Bind("Club.Effect", "Stamina Reduction Max", 60f,
                 "% less stamina usage for clubs at level 100");
             ClubBluntModMin = cfg.Bind("Club.Effect", "Generic Blunt Bonus Min", 0f, 
                 "% extra blunt damage to ALL weapons at level 0");
-            ClubBluntModMax = cfg.Bind("Club.Effect", "Generic Blunt Bonus Max", 0f,
+            ClubBluntModMax = cfg.Bind("Club.Effect", "Generic Blunt Bonus Max", 100f,
                 "% extra blunt damage to ALL weapons at level 100");
             ClubKnockbackModMin = cfg.Bind("Club.Effect", "Generic Knockback Bonus Min", 0f,
                 "% extra knockback to ALL weapons at level 0");
-            ClubKnockbackModMax = cfg.Bind("Club.Effect", "Generic Knockback Bonus Max", 0f,
+            ClubKnockbackModMax = cfg.Bind("Club.Effect", "Generic Knockback Bonus Max", 200f,
                 "% extra knockback to ALL weapons at level 100");
             ClubStaggerModMin = cfg.Bind("Club.Effect", "Generic Stagger Bonus Min", 0f, 
                 "% extra stagger damage to ALL ATTACKS at level 0");
-            ClubStaggerModMax = cfg.Bind("Club.Effect", "Generic Stagger Bonus Min", 0f,
+            ClubStaggerModMax = cfg.Bind("Club.Effect", "Generic Stagger Bonus Min", 150f,
                 "% extra stagger damage to ALL ATTACKS at level 100");
             FistDamageModMin = cfg.Bind("Fist.Effect", "Damage Min", 0f,
                 "% extra damage done with bare fists at level 0");
-            FistDamageModMax = cfg.Bind("Fist.Effect", "Damage Max", 0f,
+            FistDamageModMax = cfg.Bind("Fist.Effect", "Damage Max", 400f,
                 "% extra damage done with bare fists at level 100");
             FistStaminaReduxMin = cfg.Bind("Fist.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for fists at level 0");
-            FistStaminaReduxMax = cfg.Bind("Fist.Effect", "Stamina Reduction Max", 0f,
+            FistStaminaReduxMax = cfg.Bind("Fist.Effect", "Stamina Reduction Max", 80f,
                 "% less stamina usage for fists at level 100");
-            FistDamageFlatMin = cfg.Bind("Fist.Effect", "Flat Damage Min", 0f, 
+            FistDamageFlatMin = cfg.Bind("Fist.Effect", "Flat Damage Min", -5f, 
                 "Flat extra damage at level 0");
-            FistDamageFlatMax = cfg.Bind("Fist.Effect", "Flat Damage Max", 0f, 
+            FistDamageFlatMax = cfg.Bind("Fist.Effect", "Flat Damage Max", 50f, 
                 "Flat extra damage at level 100");
-            FistBlockArmorMin = cfg.Bind("Fist.Effect", "Unarmed Block Armor Min", 0f, 
+            FistBlockArmorMin = cfg.Bind("Fist.Effect", "Unarmed Block Armor Min", -5f, 
                 "Flat extra unarmed block armor at level 0");
-            FistBlockArmorMax = cfg.Bind("Fist.Effect", "Unarmed Block Armor Min", 0f, 
+            FistBlockArmorMax = cfg.Bind("Fist.Effect", "Unarmed Block Armor Min", 40f, 
                 "Flat extra unarmed block armor at level 100");
             FistMovespeedModMin = cfg.Bind("Fist.Effect", "Movespeed Bonus Min", 0f, 
                 "% movespeed increase at level 0");
-            FistMovespeedModMax = cfg.Bind("Fist.Effect", "Movespeed Bonus Min", 0f,
+            FistMovespeedModMax = cfg.Bind("Fist.Effect", "Movespeed Bonus Min", 70f,
                 "% movespeed increase at level 100");
             KnifeDamageModMin = cfg.Bind("Knife.Effect", "Damage Min", 0f, 
                 "% extra damage done with knives at level 0");
-            KnifeDamageModMax = cfg.Bind("Knife.Effect", "Damage Max", 0f,
+            KnifeDamageModMax = cfg.Bind("Knife.Effect", "Damage Max", 400f,
                 "% extra damage done with knives at level 100");
             KnifeStaminaReduxMin = cfg.Bind("Knife.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for knives at level 0");
-            KnifeStaminaReduxMax = cfg.Bind("Knife.Effect", "Stamina Reduction Max", 0f,
+            KnifeStaminaReduxMax = cfg.Bind("Knife.Effect", "Stamina Reduction Max", 50f,
                 "% less stamina usage for knives at level 100");
             KnifeBackstabModMin = cfg.Bind("Knife.Effect", "Backstab Bonus Damage Min", 0f,
                 "% extra sneak attack damage with ALL weapons at level 0");
-            KnifeBackstabModMax = cfg.Bind("Knife.Effect", "Backstab Bonus Damage Max", 0f,
+            KnifeBackstabModMax = cfg.Bind("Knife.Effect", "Backstab Bonus Damage Max", 200f,
                 "% extra sneak attack damage with ALL weapons at level 100");
             KnifeMovespeedModMin = cfg.Bind("Knife.Effect", "Movementspeed Bonus Min", 0f,
                 "% movespeed increase at level 0");
-            KnifeMovespeedModMax = cfg.Bind("Knife.Effect", "Movementspeed Bonus Max", 0f,
+            KnifeMovespeedModMax = cfg.Bind("Knife.Effect", "Movementspeed Bonus Max", 100f,
                 "% movespeed increase at level 100");
             KnifePierceModMin = cfg.Bind("Knife.Effect", "Generic Pierce Damage Bonus Min", 0f,
                 "% extra pierce damage with ALL weapons at level 0");
-            KnifePierceModMax = cfg.Bind("Knife.Effect", "Generic Pierce Damage Bonus Max", 0f,
+            KnifePierceModMax = cfg.Bind("Knife.Effect", "Generic Pierce Damage Bonus Max", 100f,
                 "% extra pierce damage with ALL weapons at level 0");
             PolearmDamageModMin = cfg.Bind("Polearm.Effect", "Damage Min", 0f,
                 "% extra damage done with polearms at level 0");
-            PolearmDamageModMax = cfg.Bind("Polearm.Effect", "Damage Max", 0f,
+            PolearmDamageModMax = cfg.Bind("Polearm.Effect", "Damage Max", 400f,
                 "% extra damage done with polearms at level 100");
             PolearmStaminaReduxMin = cfg.Bind("Polearm.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for polearms at level 0");
-            PolearmStaminaReduxMax = cfg.Bind("Polearm.Effect", "Stamina Reduction Max", 0f,
+            PolearmStaminaReduxMax = cfg.Bind("Polearm.Effect", "Stamina Reduction Max", 70f,
                 "% less stamina usage for polearms at level 100");
-            PolearmRangeMax = cfg.Bind("Polearm.Effect", "Generic Range Bonus Min", 0f,
-                "Added units of range to all weapon attacks at level 0");
             PolearmRangeMin = cfg.Bind("Polearm.Effect", "Generic Range Bonus Min", 0f,
+                "Added units of range to all weapon attacks at level 0");
+            PolearmRangeMax = cfg.Bind("Polearm.Effect", "Generic Range Bonus Max", 20f,
                 "Added units of range to all weapon attacks at level 100");
-            PolearmArmorMax = cfg.Bind("Polearm.Effect", "Flat Armor Bonus Min", 0f,
+            PolearmArmorMin = cfg.Bind("Polearm.Effect", "Flat Armor Bonus Min", 0f,
                 "Flat armor added to character at level 0");
-            PolearmArmorMin = cfg.Bind("Polearm.Effect", "Flat Armor Bonus Max", 0f,
+            PolearmArmorMax = cfg.Bind("Polearm.Effect", "Flat Armor Bonus Max", 25f,
                 "Flat armor added to character at level 100");
-            PolearmBlockMax = cfg.Bind("Polearm.Effect", "Block Armor Min", 0f,
+            PolearmBlockMin = cfg.Bind("Polearm.Effect", "Block Armor Min", 0f,
                 "Flat block armor added to polearms at level 0");
-            PolearmBlockMin = cfg.Bind("Polearm.Effect", "Block Armor Max", 0f,
+            PolearmBlockMax = cfg.Bind("Polearm.Effect", "Block Armor Max", 50f,
                 "Flat block armor added to polearms at level 0");
             SpearDamageModMin = cfg.Bind("Spear.Effect", "Damage Min", 0f,
                 "% extra damage done with spears at level 0");
-            SpearDamageModMax = cfg.Bind("Spear.Effect", "Damage Max", 0f,
+            SpearDamageModMax = cfg.Bind("Spear.Effect", "Damage Max", 400f,
                 "% extra damage done with spears at level 100");
             SpearStaminaReduxMin = cfg.Bind("Spear.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for spears at level 0");
-            SpearStaminaReduxMax = cfg.Bind("Spear.Effect", "Stamina Reduction Max", 0f,
+            SpearStaminaReduxMax = cfg.Bind("Spear.Effect", "Stamina Reduction Max", 70f,
                 "% less stamina usage for spears at level 100");
             SpearVelocityModMin = cfg.Bind("Spear.Effect", "Thrown Velocity Min", 0f,
                 "% extra velocity on thrown weapons at level 0");
-            SpearVelocityModMax = cfg.Bind("Spear.Effect", "Thrown Velocity Max", 0f,
+            SpearVelocityModMax = cfg.Bind("Spear.Effect", "Thrown Velocity Max", 300f,
                 "% extra velocity on thrown weapons at level 100");
             SpearProjectileDamageModMin = cfg.Bind("Spear.Effect", "Thrown Damage Min", 0f,
                 "% extra damage done with thrown weapons at level 0");
-            SpearProjectileDamageModMax = cfg.Bind("Spear.Effect", "Thrown Damage Max", 0f,
+            SpearProjectileDamageModMax = cfg.Bind("Spear.Effect", "Thrown Damage Max", 200f,
                 "% extra damage done with thrown weapons at level 100");
             SpearBlockArmorMin = cfg.Bind("Spear.Effect", "Generic Block Armor Min", 0f, 
                 "Flat block armor always applied at level 0");
-            SpearBlockArmorMax = cfg.Bind("Spear.Effect", "Generic Block Armor Max", 0f,
+            SpearBlockArmorMax = cfg.Bind("Spear.Effect", "Generic Block Armor Max", 25f,
                 "Flat block armor always applied at level 100");
             SwordDamageModMin = cfg.Bind("Sword.Effect", "Damage Min", 0f,
                 "% extra damage done with swords at level 0");
-            SwordDamageModMax = cfg.Bind("Sword.Effect", "Damage Max", 0f,
+            SwordDamageModMax = cfg.Bind("Sword.Effect", "Damage Max", 400f,
                 "% extra damage done with swords at level 100");
             SwordStaminaReduxMin = cfg.Bind("Sword.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for swords at level 0");
-            SwordStaminaReduxMax = cfg.Bind("Sword.Effect", "Stamina Reduction Max", 0f,
+            SwordStaminaReduxMax = cfg.Bind("Sword.Effect", "Stamina Reduction Max", 60f,
                 "% less stamina usage for swords at level 100");
             SwordParryModMin = cfg.Bind("Sword.Effect", "Generic Parry Bonus Min", 0f,
                 "% extra parry bonus for ALL weapons at level 0"); 
-            SwordParryModMax = cfg.Bind("Sword.Effect", "Generic Parry Bonus Max", 0f,
+            SwordParryModMax = cfg.Bind("Sword.Effect", "Generic Parry Bonus Max", 150f,
                 "% extra parry bonus for ALL weapons at level 100");
             SwordSlashModMin = cfg.Bind("Sword.Effect", "Generic Slash Damage Mod Min", 0f, 
                 "% extra slash damage for ALL weapons at level 0");
-            SwordSlashModMax = cfg.Bind("Sword.Effect", "Generic Slash Damage Mod Max", 0f,
+            SwordSlashModMax = cfg.Bind("Sword.Effect", "Generic Slash Damage Mod Max", 100f,
                 "% extra slash damage for ALL weapons at level 100"); 
             SwordDodgeStaminaReduxMin = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 0f, 
                 "% less stamina cost to dodge roll at level 0");
-            SwordDodgeStaminaReduxMax = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 0f,
+            SwordDodgeStaminaReduxMax = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 40f,
                 "% less stamina cost to dodge roll at level 0");
             
 
             WoodcuttingChopDamageModMin = cfg.Bind("Wood.Effect", "Chop Damage Bonus Min", 0f,
                 "% increase to chop damage at level 0");
-            WoodcuttingChopDamageModMax = cfg.Bind("Wood.Effect", "Chop Damage Bonus Max", 0f,
+            WoodcuttingChopDamageModMax = cfg.Bind("Wood.Effect", "Chop Damage Bonus Max", 300f,
                 "% increase to chop damage at level 100");
             WoodcuttingStaminaRebateMin = cfg.Bind("Wood.Effect", "Stamina Rebate Min", 0f,
                 "Flat stamina rebate on each hit of a tree at level 0");
-            WoodcuttingStaminaRebateMax = cfg.Bind("Wood.Effect", "Stamina Rebate Min", 0f,
+            WoodcuttingStaminaRebateMax = cfg.Bind("Wood.Effect", "Stamina Rebate Min", 9f,
                 "Flat stamina rebate on each hit of a tree at level 100");
             WoodcuttingDropModMin = cfg.Bind("Wood.Effect", "Drop rate mod min", 0f,
                 "% increase to wood drops at level 0");
@@ -627,11 +627,11 @@ namespace kingskills
                 "% increase to wood drops at level 100");
             MiningPickDamageModMin = cfg.Bind("Mining.Effect", "Pick Damage Bonus Min", 0f,
                 "% increase to pick damage at level 0");
-            MiningPickDamageModMax = cfg.Bind("Mining.Effect", "Pick Damage Bonus Max", 0f,
+            MiningPickDamageModMax = cfg.Bind("Mining.Effect", "Pick Damage Bonus Max", 300f,
                 "% increase to pick damage at level 100");
             MiningStaminaRebateMin = cfg.Bind("Mining.Effect", "Stamina Rebate Min", 0f,
                 "Flat stamina rebate on each hit of a rock at level 0");
-            MiningStaminaRebateMax = cfg.Bind("Mining.Effect", "Stamina Rebate Min", 0f,
+            MiningStaminaRebateMax = cfg.Bind("Mining.Effect", "Stamina Rebate Min", 7f,
                 "Flat stamina rebate on each hit of a rock at level 100");
             MiningDropModMin = cfg.Bind("Mining.Effect", "Drop rate mod min", 0f,
                 "% increase to ore drops at level 0");
@@ -639,23 +639,23 @@ namespace kingskills
                 "% increase to ore drops at level 100");
 
 
-        SneakEXPPerDangerMod = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 0f, 
+        SneakEXPPerDangerMod = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 120f, 
                 "Determines how much each 'point of danger' is worth in sneak exp");
-        SneakStaminaDrainMin = cfg.Bind("Sneak.Effect", "Stamina Drain Min", 0f, 
+        SneakStaminaDrainMin = cfg.Bind("Sneak.Effect", "Stamina Drain Min", 10f, 
                 "Amount of stamina drain per second while sneaking at level 0");
-        SneakStaminaDrainMax = cfg.Bind("Sneak.Effect", "Stamina Drain Max", 0f,
+        SneakStaminaDrainMax = cfg.Bind("Sneak.Effect", "Stamina Drain Max", 2f,
                 "Amount of stamina drain per second while sneaking at level 100");
         SneakSpeedModMin = cfg.Bind("Sneak.Effect", "Speed mod Min", 0f, 
                 "% speed increase while sneaking at level 0");
-        SneakSpeedModMax = cfg.Bind("Sneak.Effect", "Speed mod Max", 0f,
+        SneakSpeedModMax = cfg.Bind("Sneak.Effect", "Speed mod Max", 250f,
                 "% speed increase while sneaking at level 100");
-        SneakBrightestMin = cfg.Bind("Sneak.Effect", "Brightest Value Min", 0f, 
+        SneakBrightestMin = cfg.Bind("Sneak.Effect", "Brightest Value Min", 20f, 
                 "% decrease to enemy sight range while in the brightest possible area at level 0");
-        SneakBrightestMax = cfg.Bind("Sneak.Effect", "Brightest Value Max", 0f,
+        SneakBrightestMax = cfg.Bind("Sneak.Effect", "Brightest Value Max", 60f,
                 "% decrease to enemy sight range while in the brightest possible area at level 100");
-        SneakDarkestMin = cfg.Bind("Sneak.Effect", "Darkest Value Min", 0f,
+        SneakDarkestMin = cfg.Bind("Sneak.Effect", "Darkest Value Min", 20f,
                 "% decrease to enemy sight range while in the darkest possible area at level 0");
-        SneakDarkestMax = cfg.Bind("Sneak.Effect", "Darkest Value Max", 0f,
+        SneakDarkestMax = cfg.Bind("Sneak.Effect", "Darkest Value Max", 60f,
                 "% decrease to enemy sight range while in the darkest possible area at level 100");
 
 
