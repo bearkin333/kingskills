@@ -31,6 +31,10 @@ namespace kingskills
             {
                 SwordUpdate(__instance);
             }
+            else if (skill == Skills.SkillType.Sneak)
+            {
+                SneakUpdate(__instance);
+            }
 
         }
 
@@ -169,6 +173,11 @@ namespace kingskills
         public static void SwordUpdate(Player player){
             player.m_dodgeStaminaUsage = ConfigManager.BaseDodgeStaminaUsage *
                 ConfigManager.GetSwordDodgeStaminaRedux(player.GetSkillFactor(Skills.SkillType.Swords));
+        }
+        public static void SneakUpdate(Player player)
+        {
+            player.m_crouchSpeed = ConfigManager.BaseCrouchSpeed *
+                ConfigManager.GetSneakSpeedMod(player.GetSkillFactor(Skills.SkillType.Sneak));
         }
 
         //New max health and stamina

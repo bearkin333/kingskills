@@ -44,7 +44,45 @@ namespace kingskills.Patches
 			return false;
 		}
 
-		public static Character GetStrongestEnemyInSight(Player player, float range=0f)
+		[HarmonyPatch(nameof(Player.OnSneaking))]
+		[HarmonyPrefix]
+		public static bool UpdateStealthTakeover(Player __instance, float dt)
+		{
+			//Again, this function is entirely taken over.
+			//It pretty much seems like the only way.
+			//Aside from a messy transpile that I won't be able to pull off myself.
+
+			__instance.m_stealthFactorUpdateTimer += dt;
+			if (__instance.m_stealthFactorUpdateTimer > 0.5f)
+			{
+				__instance.m_stealthFactorUpdateTimer = 0f;
+				__instance.m_stealthFactorTarget = 0f;
+				if (__instance.IsCrouching())
+				{
+					__instance.m_lastStealthPosition = __instance.transform.position;
+					float skillFactor = __instance.GetSkillFactor(Skills.SkillType.Sneak);
+					float lightFactor = StealthSystem.instance.GetLightFactor(__instance.GetCenterPoint());
+					Jotunn.Logger.LogMessage($"Your light factor is currently {lightFactor}");
+					__instance.m_stealthFactorTarget = ConfigManager.GetSneakFactor(skillFactor, lightFactor);
+					__instance.m_stealthFactorTarget = Mathf.Clamp01(__instance.m_stealthFactorTarget);
+					__instance.m_seman.ModifyStealth(__instance.m_stealthFactorTarget, ref __instance.m_stealthFactorTarget);
+					__instance.m_stealthFactorTarget = Mathf.Clamp01(__instance.m_stealthFactorTarget);
+				}
+				else
+				{
+					__instance.m_stealthFactorTarget = 1f;
+				}
+			}
+			__instance.m_stealthFactor = Mathf.MoveTowards(__instance.m_stealthFactor, __instance.m_stealthFactorTarget, dt / 4f);
+			__instance.m_nview.GetZDO().Set("Stealth", __instance.m_stealthFactor);
+
+			return false;
+		}
+
+
+
+
+			public static Character GetStrongestEnemyInSight(Player player, float range=0f)
         {
 			List<BaseAI> inRangeEnemies = new List<BaseAI>();
 			Character strongest = null;
@@ -67,6 +105,7 @@ namespace kingskills.Patches
                     }
                 }
             }
+			Jotunn.Logger.LogMessage($"Strongest enemy in sight was {strongest.m_name}");
 			return strongest;
         }
     }

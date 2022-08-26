@@ -717,11 +717,12 @@ namespace kingskills
         public static void OpenSneakPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Sneak);
+            LevelPatch.SneakUpdate(Player.m_localPlayer);
 
             float sneakSpeed = ToPercent(ConfigManager.GetSneakSpeedMod(skill));
             float sneakStaminaCost = ToPercent(ConfigManager.GetSneakStaminaDrain(skill));
-            float sneakDarkest = ToPercent(ConfigManager.GetSneakDarkest(skill));
-            float sneakBrightest = ToPercent(ConfigManager.GetSneakBrightest(skill));
+            float sneakLightFactor = ToPercent(ConfigManager.GetSneakFactor(skill, 2f));
+            float sneakDarkFactor = ToPercent(ConfigManager.GetSneakFactor(skill, 0f));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "While you are inside the vision angle of an enemy " +
@@ -733,8 +734,8 @@ namespace kingskills
             LeftPanelEffectsText.GetComponent<Text>().text =
                 sneakSpeed.ToString("F1") + "% increased speed while crouching\n" +
                 sneakStaminaCost.ToString("F1") + " stamina per second while crouching\n" +
-                sneakDarkest.ToString("F0") + "% reduced enemy vision range while in total dark\n" +
-                sneakBrightest.ToString("F0") + "% reduced enemy vision range while out in the open";
+                sneakLightFactor.ToString("F0") + "% increased sneakiness in the light \n" +
+                sneakDarkFactor.ToString("F0") + "% increased sneakiness in the dark";
         }
         public static void OpenSwimPanels()
         {

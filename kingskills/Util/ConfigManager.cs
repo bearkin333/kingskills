@@ -188,10 +188,6 @@ namespace kingskills
         public static ConfigEntry<float> SneakStaminaDrainMax;
         public static ConfigEntry<float> SneakSpeedModMin;
         public static ConfigEntry<float> SneakSpeedModMax;
-        public static ConfigEntry<float> SneakBrightestMin;
-        public static ConfigEntry<float> SneakBrightestMax;
-        public static ConfigEntry<float> SneakDarkestMin;
-        public static ConfigEntry<float> SneakDarkestMax;
 
         public static ConfigEntry<float> MaxSkillLevel;
 
@@ -215,6 +211,7 @@ namespace kingskills
         public const float BaseBowDrawSpeedMin = 0f;
         public const float BaseBowDrawSpeedMax = .8f;
         public const float BaseDodgeStaminaUsage = 10f;
+        public const float BaseCrouchSpeed = 2f;
 
         /* flavor curve numbers
         const float TotalXp = 20553.6f;
@@ -656,14 +653,6 @@ namespace kingskills
                 "% speed increase while sneaking at level 0");
         SneakSpeedModMax = cfg.Bind("Sneak.Effect", "Speed mod Max", 250f,
                 "% speed increase while sneaking at level 100");
-        SneakBrightestMin = cfg.Bind("Sneak.Effect", "Brightest Value Min", 20f, 
-                "% decrease to enemy sight range while in the brightest possible area at level 0");
-        SneakBrightestMax = cfg.Bind("Sneak.Effect", "Brightest Value Max", 60f,
-                "% decrease to enemy sight range while in the brightest possible area at level 100");
-        SneakDarkestMin = cfg.Bind("Sneak.Effect", "Darkest Value Min", 20f,
-                "% decrease to enemy sight range while in the darkest possible area at level 0");
-        SneakDarkestMax = cfg.Bind("Sneak.Effect", "Darkest Value Max", 60f,
-                "% decrease to enemy sight range while in the darkest possible area at level 100");
 
 
         DropNewItemThreshold = cfg.Bind("Drops", "Drop New Item Threshold", 50f,
@@ -1139,15 +1128,12 @@ namespace kingskills
             return Mathf.Lerp(PerToMult(SneakSpeedModMin),
                 PerToMult(SneakSpeedModMax), skillFactor);
         }
-        public static float GetSneakBrightest(float skillFactor)
+        public static float GetSneakFactor(float skillFactor, float lightFactor)
         {
-            return Mathf.Lerp(PerToMult(SneakBrightestMin), 
-                PerToMult(SneakBrightestMax), skillFactor);
-        }
-        public static float GetSneakDarkest(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(SneakDarkestMin),
-                PerToMult(SneakDarkestMax), skillFactor);
+            return Mathf.Lerp(0.5f + lightFactor * 0.5f, 0.2f + lightFactor * 0.4f, skillFactor);
+            /*Mathf.Lerp(PerToMult(),
+                PerToMult(), skillFactor);
+            */
         }
 
         /*
