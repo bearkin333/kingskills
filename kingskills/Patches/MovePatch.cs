@@ -58,8 +58,8 @@ namespace kingskills
         {
             float mod = 1f;
             mod *=
-                ConfigManager.GetFistMovespeedMod(player.GetSkillFactor(Skills.SkillType.Unarmed)) *
-                ConfigManager.GetKnifeMovespeedMod(player.GetSkillFactor(Skills.SkillType.Knives));
+                (ConfigManager.GetFistMovespeedMod(player.GetSkillFactor(Skills.SkillType.Unarmed)) +
+                ConfigManager.GetKnifeMovespeedMod(player.GetSkillFactor(Skills.SkillType.Knives)));
 
             return mod;
         }

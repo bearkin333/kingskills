@@ -114,7 +114,7 @@ namespace kingskills
 
             //Then a whole bunch of deprecated nonsense to try to increase the stamina.
             //Now I simply tack my number on to the "GetMaxStamina" call by player
-            //float newRunLevel = skillFactor * 100;
+            //float newRunLevel = skillFactor  * ConfigManager.MaxSkillLevel.Value;
             //float totalRunStaminaBonus = newRunLevel * ConfigManager.RunStaminaPerLevel.Value;
 
             //First, we remove the last recorded update to the player's base stamina
@@ -173,14 +173,6 @@ namespace kingskills
 
         //New max health and stamina
 
-        [HarmonyPatch(nameof(Player.SetMaxStamina))]
-        [HarmonyPostfix]
-        public static void SetMyMaxStamina(Player __instance)
-        {
-            __instance.m_maxStamina += ConfigManager.RunStaminaPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Run) +
-                ConfigManager.AxeStaminaPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Axes);
-        }
-
         [HarmonyPatch(nameof(Player.GetMaxCarryWeight))]
         [HarmonyPostfix]
         public static void GetMyMaxCarryWeight(Player __instance, ref float __result)
@@ -188,12 +180,26 @@ namespace kingskills
             __result += ConfigManager.GetAxeCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Axes));
         }
 
-        [HarmonyPatch(nameof(Player.SetMaxHealth))]
-        [HarmonyPostfix]
-        public static void SetMyMaxHealth(Player __instance, float health)
+        [HarmonyPatch(nameof(Player.SetMaxStamina))]
+        [HarmonyPrefix]
+        public static void SetMyMaxStamina(Player __instance, ref float stamina)
         {
-            health += ConfigManager.BlockHealthPerLevel.Value * __instance.GetSkillFactor(Skills.SkillType.Blocking);
-            __instance.SetMaxHealth(health);
+            //Jotunn.Logger.LogMessage($"tried to set max stamina to {stamina}...");
+            stamina += ConfigManager.GetRunStamina(__instance.GetSkillFactor(Skills.SkillType.Run)) +
+                ConfigManager.GetAxeStamina(__instance.GetSkillFactor(Skills.SkillType.Axes));
+            //Jotunn.Logger.LogMessage($"Setting max stamina to {stamina} instead!");
+        }
+
+        [HarmonyPatch(typeof(Character))]
+        [HarmonyPatch(nameof(Character.SetMaxHealth))]
+        [HarmonyPrefix]
+        public static void SetMyMaxHealth(Character __instance, ref float health)
+        {
+            if (!__instance.IsPlayer()) return;
+
+            //Jotunn.Logger.LogMessage($"tried to set max health to {health}...");
+            health += ConfigManager.GetBlockHealth(__instance.GetSkillFactor(Skills.SkillType.Blocking));
+            //Jotunn.Logger.LogMessage($"Setting max health to {health} instead!");
         }
     }
 }

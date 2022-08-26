@@ -193,6 +193,9 @@ namespace kingskills
         public static ConfigEntry<float> SneakDarkestMin;
         public static ConfigEntry<float> SneakDarkestMax;
 
+        public static ConfigEntry<float> MaxSkillLevel;
+
+
         //Constants for use that aren't configurable
         public static Dictionary<string, float> WoodcuttingDropTable = new Dictionary<string, float>();
         public static Dictionary<string, float> MiningDropTable = new Dictionary<string, float>();
@@ -256,6 +259,10 @@ namespace kingskills
                 "d");
              */
             //Weapon Swing Experience
+
+            MaxSkillLevel = cfg.Bind("Overall", "Max Skill Level", 100f,
+                "This is the level that all king skills can go up to.");
+
             WeaponEXPSwing = cfg.Bind("Experience.Weapons", "XP Per Swing", 1f,
                 "Flat experience to be gained on each swing, regardless of hit.");
 
@@ -732,6 +739,10 @@ namespace kingskills
             return Mathf.Lerp(PerToMult(BlockPowerModMin), 
                 PerToMult(BlockPowerModMax), skillFactor);
         }
+        public static float GetBlockHealth(float skillFactor)
+        {
+            return BlockHealthPerLevel.Value * MaxSkillLevel.Value * skillFactor;
+        }
         public static float GetFallDamageThreshold(float skillFactor)
         {
             return Mathf.Lerp(JumpFallDamageThresholdMin.Value, 
@@ -829,6 +840,10 @@ namespace kingskills
         {
             return PerToMult(RunEXPSpeedMod);
         }
+        public static float GetRunStamina(float skillFactor)
+        {
+            return RunStaminaPerLevel.Value * MaxSkillLevel.Value * skillFactor;
+        }
         public static float GetSwimSpeedMod(float skillFactor)
         {
             return Mathf.Lerp(PerToMult(SwimSpeedModMin), 
@@ -903,7 +918,7 @@ namespace kingskills
         }
         public static float GetAxeStamina(float skillFactor)
         { 
-            return AxeStaminaPerLevel.Value * skillFactor * 100;
+            return AxeStaminaPerLevel.Value * skillFactor * ConfigManager.MaxSkillLevel.Value;
         }
         public static float GetAxeCarryCapacity(float skillFactor)
         {

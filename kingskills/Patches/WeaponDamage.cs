@@ -21,14 +21,7 @@ namespace kingskills
         {
             //Jotunn.Logger.LogMessage($"Damage function running");
 
-            if (hit == null)
-            {
-                return;
-            }
-            if (hit.m_damage.GetTotalDamage() < 0.1f)
-            {
-                return;
-            }
+            if (!CheckHitGood(hit)) return;
 
             Character charac = hit.GetAttacker();
             //If the attacker is the local player 
@@ -69,7 +62,7 @@ namespace kingskills
                             ConfigManager.GetClubDamageMod(player.GetSkillFactor(Skills.SkillType.Clubs)));
                         break;
                     case Skills.SkillType.Unarmed: //Unarmed also gets a flat damage bonus
-                        hit.m_damage.m_blunt += 
+                        hit.m_damage.m_blunt +=
                             ConfigManager.GetFistDamageFlat(player.GetSkillFactor(Skills.SkillType.Unarmed));
                         hit.m_damage.Modify(
                             ConfigManager.GetFistDamageMod(player.GetSkillFactor(Skills.SkillType.Unarmed)));
@@ -113,11 +106,11 @@ namespace kingskills
                     ConfigManager.GetClubKnockbackMod(player.GetSkillFactor(Skills.SkillType.Clubs));
                 hit.m_staggerMultiplier *=
                     ConfigManager.GetClubStaggerMod(player.GetSkillFactor(Skills.SkillType.Clubs));
-                
+
                 //Jotunn.Logger.LogMessage($"To {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
 
 
-            } 
+            }
             //Or if the attacked is the local player
             else if (__instance.IsPlayer() && __instance.GetZDOID() == Player.m_localPlayer.GetZDOID())
             {
@@ -130,58 +123,59 @@ namespace kingskills
         }
 
 
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(MineRock), nameof(MineRock.Damage))]
-        static void MineRock_Damage(Destructible __instance, HitData hit)
+        static void MineRock_Damage(Destructible __instance, ref HitData hit)
         {
             ResourceDamagePatch(__instance, ref hit);
         }
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Damage))]
-        static void MineRock5_Damage(Destructible __instance, HitData hit)
+        static void MineRock5_Damage(Destructible __instance, ref HitData hit)
         {
             ResourceDamagePatch(__instance, ref hit);
         }
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Damage))]
-        static void TreeBase_Damage(Destructible __instance, HitData hit)
+        static void TreeBase_Damage(Destructible __instance, ref HitData hit)
         {
             ResourceDamagePatch(__instance, ref hit);
         }
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))]
-        static void TreeLog_Damage(Destructible __instance, HitData hit)
+        static void TreeLog_Damage(Destructible __instance, ref HitData hit)
         {
             ResourceDamagePatch(__instance, ref hit);
         }
 
         public static void ResourceDamagePatch(Destructible __instance, ref HitData hit)
         {
-            Jotunn.Logger.LogMessage("Hitting a resource patch detected!");
+            //Jotunn.Logger.LogMessage("Hitting a resource patch detected!");
+            if (!CheckHitGood(hit)) return;
 
             if (hit.m_attacker == Player.m_localPlayer.GetZDOID())
             {
                 Player player = Player.m_localPlayer;
                 if (hit.m_skill == Skills.SkillType.WoodCutting)
                 {
-                    Jotunn.Logger.LogMessage($"Chop damage was {hit.m_damage.m_chop}");
+                    //Jotunn.Logger.LogMessage($"Chop damage was {hit.m_damage.m_chop}");
 
                     hit.m_damage.m_chop *=
-                        ConfigManager.GetWoodcuttingDamageMod(player.GetSkillFactor(Skills.SkillType.WoodCutting))
-                        * ConfigManager.GetAxeChopDamageMod(player.GetSkillFactor(Skills.SkillType.Axes));
+                        (ConfigManager.GetWoodcuttingDamageMod(player.GetSkillFactor(Skills.SkillType.WoodCutting))
+                        + ConfigManager.GetAxeChopDamageMod(player.GetSkillFactor(Skills.SkillType.Axes)));
                     player.AddStamina(ConfigManager.GetWoodcuttingStaminaRebate(player.GetSkillFactor(Skills.SkillType.WoodCutting)));
 
-                    Jotunn.Logger.LogMessage($"Now it's {hit.m_damage.m_chop}! I also added some stamina");
-                } 
+                   //Jotunn.Logger.LogMessage($"Now it's {hit.m_damage.m_chop}! I also added some stamina");
+                }
                 else if (hit.m_skill == Skills.SkillType.Pickaxes)
                 {
-                    Jotunn.Logger.LogMessage($"Chop damage was {hit.m_damage.m_pickaxe}");
+                    //Jotunn.Logger.LogMessage($"Pick damage was {hit.m_damage.m_pickaxe}");
 
                     hit.m_damage.m_pickaxe *=
                         ConfigManager.GetMiningDamageMod(player.GetSkillFactor(Skills.SkillType.Pickaxes));
                     player.AddStamina(ConfigManager.GetMiningStaminaRebate(player.GetSkillFactor(Skills.SkillType.Pickaxes)));
 
-                    Jotunn.Logger.LogMessage($"Now it's {hit.m_damage.m_pickaxe}! I also added some stamina");
+                    //Jotunn.Logger.LogMessage($"Now it's {hit.m_damage.m_pickaxe}! I also added some stamina");
                 }
             }
         }
@@ -202,6 +196,23 @@ namespace kingskills
         public static float GetRandomAttackMod()
         {
             return UnityEngine.Random.Range(0.85f, 1.15f);
+        }
+
+        public static bool CheckHitGood(HitData hit)
+        {
+            if (hit == null)
+            {
+                return false;
+            }
+            if (hit.m_damage.GetTotalDamage() < 0.1f)
+            {
+                return false;
+            }
+            if (hit.GetAttacker() == null)
+            {
+                return false;
+            }
+            return true;
         }
 
     }

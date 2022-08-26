@@ -499,7 +499,7 @@ namespace kingskills
             float staminaRedux = ToPercent(ConfigManager.GetBlockStaminaRedux(skill));
             float baseBlockPower = ConfigManager.GetBlockPowerFlat(skill);
             float blockPerArmor = ToPercent(ConfigManager.GetBlockPowerMod(skill));
-            float blockHealth = ConfigManager.BlockHealthPerLevel.Value * 100 * skill;
+            float blockHealth = ConfigManager.GetBlockHealth(skill);
             float parryExpMod = ToPercent(ConfigManager.GetBlockParryExpMod());
 
             LeftPanelExperienceText.GetComponent<Text>().text =
@@ -663,7 +663,7 @@ namespace kingskills
             float equipmentMalusRedux = ToPercent(ConfigManager.GetEquipmentRedux(skill));
             float encumberanceRedux = ToPercent(ConfigManager.GetEncumberanceRedux(skill));
             float staminaDrainRedux = ToPercent(ConfigManager.GetRunStaminaRedux(skill));
-            float baseStaminaGain = skill * 100 * ConfigManager.RunStaminaPerLevel.Value;
+            float baseStaminaGain = ConfigManager.GetRunStamina(skill);
 
 
             float encumberanceFactor = ToPercent(MovePatch.GetEncumberanceFactor(player));
