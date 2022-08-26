@@ -16,7 +16,7 @@ namespace kingskills.Patches
         [HarmonyPostfix]
         public static void DropTableFix(ref DropTable __instance, ref List<GameObject> __result, int amount)
         {
-            Jotunn.Logger.LogMessage("drop table fix running");
+            //Jotunn.Logger.LogMessage("drop table fix running");
             Player playerRef = Player.m_localPlayer;
             
             //Check for player and do player stuff here
@@ -48,11 +48,11 @@ namespace kingskills.Patches
             {
                 if (i == __result.Count() - 1)
                 {
-                    Jotunn.Logger.LogMessage("this entry is the last one");
+                    //Jotunn.Logger.LogMessage("this entry is the last one");
                     lastResult = true;
                 }
 
-                Jotunn.Logger.LogMessage($"list entry {i}: Drop is called {drop.name}");
+                //Jotunn.Logger.LogMessage($"list entry {i}: Drop is called {drop.name}");
 
                 //Jotunn.Logger.LogMessage("Checking for wood drops..");
                 dropChecker(ConfigManager.WoodcuttingDropTable, ref woodDrops,
@@ -84,20 +84,20 @@ namespace kingskills.Patches
             {
                 if (drop.name == item.Key)
                 {
-                    Jotunn.Logger.LogMessage($"Successfully matched item key '{item.Key}'");
+                    //Jotunn.Logger.LogMessage($"Successfully matched item key '{item.Key}'");
                     dropBonus = dropTrackList[item.Key];
 
                     dropBonus += dropRate;
-                    Jotunn.Logger.LogMessage($"Increased that key's value to {dropBonus}");
+                    //Jotunn.Logger.LogMessage($"Increased that key's value to {dropBonus}");
                     if (dropBonus >= 1f)
                     {
                         for (int i = 1; i < Mathf.Floor(dropBonus); dropBonus--)
                         {
-                            Jotunn.Logger.LogMessage($"Adding an extra drop, making drop bonus {dropBonus}");
+                            //Jotunn.Logger.LogMessage($"Adding an extra drop, making drop bonus {dropBonus}");
                             newDrops.Add(drop);
                         }
 
-                        Jotunn.Logger.LogMessage($"Now that I've made all those, it should be {dropBonus}");
+                        //Jotunn.Logger.LogMessage($"Now that I've made all those, it should be {dropBonus}");
                     }
                     if (lastResult &&
                         dropBonus >= ConfigManager.GetDropItemThreshold())

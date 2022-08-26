@@ -72,7 +72,12 @@ namespace kingskills
             {
                 //Jotunn.Logger.LogMessage($"Stagger flag redeemed! Turned back off");
                 if (Util.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
+                {
                     playerRef.RaiseSkill(Skills.SkillType.Clubs, ConfigManager.WeaponBXPClubStagger.Value);
+                    BonusExperienceDamageText.CreateBXPText(
+                        BonusExperienceDamageText.GetInFrontOfCharacter(playerRef),
+                        ConfigManager.WeaponBXPClubStagger.Value);
+                }
                 staggerFlag = false;
             }
         }
@@ -82,6 +87,10 @@ namespace kingskills
             if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
             {
                 attacker.RaiseSkill(Skills.SkillType.Swords, ConfigManager.WeaponBXPSwordStagger.Value);
+
+                BonusExperienceDamageText.CreateBXPText(
+                    BonusExperienceDamageText.GetInFrontOfCharacter(attacker),
+                    ConfigManager.WeaponBXPSwordStagger.Value);
                 //Jotunn.Logger.LogMessage($"A player just hit us with a sword while we were staggered, so applying bonus exp");
             }
         }
@@ -91,6 +100,10 @@ namespace kingskills
             if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
             {
                 attacker.RaiseSkill(Skills.SkillType.Swords, ConfigManager.WeaponBXPKnifeBackstab.Value);
+
+                BonusExperienceDamageText.CreateBXPText(
+                    BonusExperienceDamageText.GetInFrontOfCharacter(attacker),
+                    ConfigManager.WeaponBXPKnifeBackstab.Value);
                 //Jotunn.Logger.LogMessage($"A player just backstabbed us with a knife, so +exp");
             }
         }
@@ -108,8 +121,38 @@ namespace kingskills
             if (closestPlayer != null)
             {
                 if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
+                {
                     closestPlayer.RaiseSkill(Skills.SkillType.Axes, ConfigManager.WeaponBXPAxeTreeAmount.Value);
+                    BonusExperienceDamageText.CreateBXPText(
+                        BonusExperienceDamageText.GetInFrontOfCharacter(closestPlayer), 
+                        ConfigManager.WeaponBXPAxeTreeAmount.Value);
+                }
+
             }
+        }
+    }
+
+    [HarmonyPatch]
+    class BonusExperienceDamageText
+    {
+        public static void CreateBXPText(Vector3 pos, float number)
+        {
+            Jotunn.Logger.LogMessage("Created Bonus Experience text!");
+            DamageText.instance.ShowText(DamageText.TextType.Normal, pos, number, true);
+        }
+
+        public const float InFrontRange = 1.5f;
+        public static Vector3 GetInFrontOfCharacter(Character character)
+        {
+            return character.transform.position + character.m_lookDir * InFrontRange;
+        }
+
+        [HarmonyPatch(typeof(DamageText))]
+        [HarmonyPatch(nameof(DamageText.UpdateWorldTexts))]
+        [HarmonyPrefix]
+        public static void AddWorldBXPText()
+        {
+
         }
     }
 }

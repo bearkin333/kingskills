@@ -82,11 +82,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Patches\BlockPatch.cs" />
+    <Compile Include="Patches\LevelUpPatches.cs" />
     <Compile Include="Patches\LootDropPatch.cs" />
     <Compile Include="Patches\PolearmPatch.cs" />
     <Compile Include="Patches\SneakPatch.cs" />
     <Compile Include="Patches\WeaponBonusExperience.cs" />
-    <Compile Include="Patches\LevelPatch.cs" />
+    <Compile Include="Patches\StatsPatch.cs" />
     <Compile Include="Patches\WeaponDamage.cs" />
     <Compile Include="Patches\WeaponStamina.cs" />
     <Compile Include="Util\Utilities.cs" />

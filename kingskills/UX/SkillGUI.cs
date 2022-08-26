@@ -1,4 +1,5 @@
-﻿using Jotunn;
+﻿using HarmonyLib;
+using Jotunn;
 using Jotunn.GUI;
 using Jotunn.Managers;
 using System;
@@ -11,11 +12,15 @@ using UnityEngine.UI;
 
 namespace kingskills
 {
+    [HarmonyPatch]
     class SkillGUI
     {
+        public const float updateGUITimer = 2f;
+        public static float timeSinceUpdate = 0f;
         public static bool GUIOpen = false;
         public static GameObject SkillGUIWindow;
 
+        public static GameObject SSIcon;
         public static GameObject SkillDropDown;
         public static GameObject SSkillName;
         public static GameObject SSkillLevel;
@@ -23,7 +28,7 @@ namespace kingskills
 
         public static GameObject scroll;
         public static Dropdown dd;
-        public static bool ddFlag;
+        //public static bool ddFlag;
 
         public static GameObject LeftPanelEffects;
         public static GameObject LeftPanelExperienceText;
@@ -74,10 +79,22 @@ namespace kingskills
                 color: GUIManager.Instance.ValheimOrange,
                 outline: true,
                 outlineColor: Color.black,
-                width: 300f,
+                width: 400f,
                 height: 80f,
                 addContentSizeFitter: false);
             SSkillName.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+
+            //Create skill icon
+            SSIcon = new GameObject();
+            Image SSIconImage = SSIcon.AddComponent<Image>();
+            SSIconImage.sprite = GUIManager.Instance.GetSprite("ArmorBronzeChest");
+            SSIcon.GetComponent<RectTransform>().SetParent(SkillGUIWindow.transform);
+            SSIcon.GetComponent<RectTransform>().anchorMin = new Vector2(0f, 1f);
+            SSIcon.GetComponent<RectTransform>().anchorMax = new Vector2(0f, 1f);
+            SSIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(150f, -60f);
+            //SSIcon.GetComponent<RectTransform>().localPosition = new Vector2(-40f, -30f);
+            SSIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(80f, 80f);
+            SSIcon.SetActive(true);
 
             // Create Level text
             SSkillLevel =
@@ -110,7 +127,7 @@ namespace kingskills
                 color: GUIManager.Instance.ValheimOrange,
                 outline: true,
                 outlineColor: Color.black,
-                width: 300f,
+                width: 400f,
                 height: 50f,
                 addContentSizeFitter: false);
             SSkillExp.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
@@ -121,15 +138,31 @@ namespace kingskills
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(1f, 1f),
                 anchorMax: new Vector2(1f, 1f),
-                position: new Vector2(-90f, -75f),
-                width: 150f,
-                height: 50f);
+                position: new Vector2(-90f, -35f),
+                width: 120f,
+                height: 45f);
             closeBtn.SetActive(true);
 
             // Add a listener to the button to close the panel again
             Button button = closeBtn.GetComponent<Button>();
             button.onClick.AddListener(ToggleSkillGUI);
 
+            // Create the close button
+            GameObject stickBtn = GUIManager.Instance.CreateButton(
+                text: "Stick",
+                parent: SkillGUIWindow.transform,
+                anchorMin: new Vector2(1f, 1f),
+                anchorMax: new Vector2(1f, 1f),
+                position: new Vector2(-90f, -85f),
+                width: 120f,
+                height: 45f);
+            closeBtn.SetActive(true);
+
+            // Add a listener to the button to close the panel again
+            button = stickBtn.GetComponent<Button>();
+            button.onClick.AddListener(StickGUI);
+
+            /*
             // Create the refresh button
             GameObject refreshBtn = GUIManager.Instance.CreateButton(
                 text: "Refresh",
@@ -137,13 +170,13 @@ namespace kingskills
                 anchorMin: new Vector2(1f, 0f),
                 anchorMax: new Vector2(1f, 0f),
                 position: new Vector2(-90f, 100f),
-                width: 150f,
-                height: 50f);
+                width: 120f,
+                height: 45f);
             refreshBtn.SetActive(true);
 
             // Add a listener to the button to close the panel again
-            Button refButton = refreshBtn.GetComponent<Button>();
-            refButton.onClick.AddListener(UpdateGUI);
+            button = refreshBtn.GetComponent<Button>();
+            button.onClick.AddListener(GUICheck);*/
 
             
 
@@ -219,7 +252,7 @@ namespace kingskills
 
 
             scrollSet.content = scrollVert.GetComponent<RectTransform>();
-            scrollSet.verticalNormalizedPosition = 0;
+            scrollSet.verticalNormalizedPosition = 1;
             
 
             //Create the Experience Title in the left panel
@@ -312,12 +345,11 @@ namespace kingskills
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(0f, 0f),
                 anchorMax: new Vector2(0f, 0f),
-                position: new Vector2(180f, 70f),
-                fontSize: 15,
-                width: 250f,
-                height: 60f);
+                position: new Vector2(120f, 70f),
+                fontSize: 20,
+                width: 200f,
+                height: 30f);
             dd = SkillDropDown.GetComponent<Dropdown>();
-            dd.ClearOptions();
             dd.AddOptions(new List<string>{
                 "Axes", "Blocking", "Bows", "Clubs", "Fists", "Jump", "Knives", "Mining",
                 "Polearms", "Run", "Spears", "Sneak", "Swim", "Swords", "Woodcutting"
@@ -326,16 +358,12 @@ namespace kingskills
                 delegate {
                     SkillGUI.OnDropdownValueChange();
                 });
+            var rect = SkillDropDown.GetComponent<RectTransform>();
 
-            dd.captionText.fontSize = 15;
-            dd.itemText.fontSize = 15;
             dd.captionText.horizontalOverflow = HorizontalWrapMode.Wrap;
             dd.itemText.horizontalOverflow = HorizontalWrapMode.Wrap;
-            dd.captionText.resizeTextForBestFit = true;
-            dd.itemText.resizeTextForBestFit = true;
-            dd.itemText.resizeTextMaxSize = 15;
+            //dd.captionText.resizeTextForBestFit = true;
 
-            ddFlag = false;
 
             //Jotunn.Logger.LogMessage($"There are {dd.options.Count} options. The first is {dd.options[0].text}, the last is {dd.options[dd.options.Count-1].text}"); 
             /* Big long debug thing. Everything is fine over here apparently
@@ -351,11 +379,15 @@ namespace kingskills
 
             SkillGUIWindow.SetActive(false);
             
-            UpdateGUI();
+            GUICheck();
         }
 
         public static void ToggleSkillGUI()
         {
+            if (Player.m_localPlayer == null)
+            {
+                return;
+            }
             if (!SkillGUIWindow)
             {
                 SkillGUIAwake();
@@ -365,30 +397,22 @@ namespace kingskills
 
             SkillGUIWindow.SetActive(state);
                 
-            //GUIManager.BlockInput(state);
+            GUIManager.BlockInput(state);
+        }
+
+        public static void StickGUI()
+        {
+            GUIManager.BlockInput(false);
         }
 
         public static void OnDropdownValueChange()
         {
-            //This awful mess is an awful fix to the dropdown always selecting the option 1 in front of what was clicked
-            //This function gets called everytime dd.value gets changed
-            if (!ddFlag)
-            {
-                Jotunn.Logger.LogMessage($"Dropdown changed, setting the flag for another change and decreasing the value");
-                ddFlag = true;
-                dd.value--;
-            }
-            else
-            {
-                Jotunn.Logger.LogMessage($"Now I'm actually taking the value seriously");
-                UpdateGUI();
-                ddFlag = false;
-            }
+            GUICheck();
         }
 
-        public static void UpdateGUI()
+        public static void GUICheck()
         {
-            scroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+            scroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
 
             //Jotunn.Logger.LogMessage($"Detected a dropdown value change.");
             Player player = Player.m_localPlayer;
@@ -459,13 +483,34 @@ namespace kingskills
                     OpenWoodcuttingPanels();
                     break;
             }
+
             Skills.Skill skillRef = player.GetSkills().GetSkill(skill);
             //Jotunn.Logger.LogMessage($"The skill the player seems to want is {skillRef.m_info}");
 
+            SSIcon.GetComponent<Image>().sprite = player.m_skills.GetSkillDef(skill).m_icon;
             SSkillName.GetComponent<Text>().text = skillName;
             SSkillLevel.GetComponent<Text>().text = "Level: " + skillRef.m_level.ToString("F0") + " / 100";
             SSkillExp.GetComponent<Text>().text = "Experience: " + skillRef.m_accumulator.ToString("F2") + " / " + skillRef.GetNextLevelRequirement().ToString("F2");
-            scroll.GetComponent<ScrollRect>().Rebuild(UnityEngine.UI.CanvasUpdate.PreRender);
+            //scroll.GetComponent<ScrollRect>().Rebuild(UnityEngine.UI.CanvasUpdate.PreRender);
+        }
+
+        [HarmonyPatch(typeof(Player),nameof(Player.FixedUpdate))]
+        [HarmonyPrefix]
+        public static void FixedUpdateGUI(Player __instance)
+        {
+            if (!__instance) return;
+            if (!__instance.m_nview) return;
+            if (!__instance.m_nview.IsOwner()) return;
+            if (!SkillGUIWindow) return;
+            if (!SkillGUIWindow.activeSelf) return;
+
+            timeSinceUpdate += Time.fixedDeltaTime;
+            if (timeSinceUpdate >= updateGUITimer)
+            {
+                timeSinceUpdate -= updateGUITimer;
+                //Jotunn.Logger.LogMessage("Updating the values on the GUI");
+                GUICheck();
+            }
         }
 
         public static void OpenAxePanels()
@@ -584,7 +629,7 @@ namespace kingskills
         public static void OpenJumpPanels()
         {
             Player player = Player.m_localPlayer;
-            LevelPatch.JumpForceUpdate(player);
+            StatsPatch.JumpForceUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Jump);
 
             float bonusJumpForce = ToPercent(ConfigManager.GetJumpForceMod(skill));
@@ -656,7 +701,7 @@ namespace kingskills
         public static void OpenRunPanels()
         {
             Player player = Player.m_localPlayer;
-            LevelPatch.RunSpeedUpdate(player);
+            StatsPatch.RunSpeedUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Run);
 
             float runSpeedBonus = ToPercent(ConfigManager.GetRunSpeedMod(skill));
@@ -713,11 +758,10 @@ namespace kingskills
                 spearThrowDamage.ToString("F1") + "% increased damage with all thrown weapons\n" +
                 spearBlock.ToString("F0") + " higher flat block armor";
         }
-
         public static void OpenSneakPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Sneak);
-            LevelPatch.SneakUpdate(Player.m_localPlayer);
+            StatsPatch.SneakUpdate(Player.m_localPlayer);
 
             float sneakSpeed = ToPercent(ConfigManager.GetSneakSpeedMod(skill));
             float sneakStaminaCost = ToPercent(ConfigManager.GetSneakStaminaDrain(skill));
@@ -740,7 +784,7 @@ namespace kingskills
         public static void OpenSwimPanels()
         {
             Player player = Player.m_localPlayer;
-            LevelPatch.SwimSpeedUpdate(player);
+            StatsPatch.SwimSpeedUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Run);
 
             float swimSpeed = ToPercent(ConfigManager.GetSwimSpeedMod(skill));
@@ -768,7 +812,7 @@ namespace kingskills
         public static void OpenSwordPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Swords);
-            LevelPatch.SwordUpdate(Player.m_localPlayer);
+            StatsPatch.SwordUpdate(Player.m_localPlayer);
 
 
             float swordDamage = ToPercent(ConfigManager.GetSwordDamageMod(skill));
@@ -809,7 +853,6 @@ namespace kingskills
                 woodRebate.ToString("F0") + " stamina rebate on axe swings that hit a tree\n" +
                 woodSomething.ToString("F0") + " something else!";
         }
-
         public static void OpenMiningPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Pickaxes);

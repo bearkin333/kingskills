@@ -17,6 +17,8 @@ namespace kingskills.WeaponExperience
         // Patch IDestructible.Damage() to gain experience for player based on damage events.
         public static void Strike(Player p, IDestructible __instance, HitData hit, float factor=1.0f, bool tool=false)
         {
+            if (hit.m_attacker == null) return;
+
             if (hit.m_attacker == p.GetZDOID())
             {
                 //Jotunn.Logger.LogMessage($"Player dealt damage to {__instance.GetDestructibleType()}");

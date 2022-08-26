@@ -89,13 +89,13 @@ namespace kingskills
         [HarmonyPostfix]
         public static void RemoveProjectile(Projectile __instance)
         {
-            Jotunn.Logger.LogMessage($"{__instance.gameObject.GetInstanceID()} destroyed");
+            //Jotunn.Logger.LogMessage($"{__instance.gameObject.GetInstanceID()} destroyed");
             projectileList.Remove(__instance.gameObject.GetInstanceID());
         }
 
         public static void RaiseProjectileSkill (Character player, Skills.SkillType skill, float useless, Projectile instance)
         {
-            //Jotunn.Logger.LogMessage($"On hit was triggerred");
+            Jotunn.Logger.LogMessage($"On hit was triggerred");
 
             float distanceTravelled = 0;
             if (projectileList.ContainsKey(instance.gameObject.GetInstanceID()))
@@ -111,10 +111,17 @@ namespace kingskills
             if (skill == Skills.SkillType.Spears)
             {
                 player.RaiseSkill(Skills.SkillType.Spears, ConfigManager.WeaponBXPSpearThrown.Value);
-                Jotunn.Logger.LogMessage($"Spear bonus exp!");
+
+                BonusExperienceDamageText.CreateBXPText(
+                    BonusExperienceDamageText.GetInFrontOfCharacter(player),
+                    ConfigManager.WeaponBXPSpearThrown.Value);
             } else if (skill == Skills.SkillType.Bows)
             {
                 player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * ConfigManager.WeaponBXPBowDistanceMod.Value);
+
+                BonusExperienceDamageText.CreateBXPText(
+                    BonusExperienceDamageText.GetInFrontOfCharacter(player),
+                    distanceTravelled * ConfigManager.WeaponBXPBowDistanceMod.Value);
                 //Jotunn.Logger.LogMessage($"Bow bonus exp: {distanceTravelled * BowBXPDistanceMod}");
             }
         }
