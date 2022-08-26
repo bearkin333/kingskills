@@ -38,6 +38,7 @@ namespace kingskills
             InitConfig();
             CommandManager.Instance.AddConsoleCommand(new BearSkillCommand());
             CommandManager.Instance.AddConsoleCommand(new SkillUpdateCommand());
+            CommandManager.Instance.AddConsoleCommand(new TestSkillsCommand());
             AddSkills();
             AddInputs();
             harmony.PatchAll();

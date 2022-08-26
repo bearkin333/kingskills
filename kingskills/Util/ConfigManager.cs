@@ -325,7 +325,7 @@ namespace kingskills
                 "% less stamina to block at level 0");
             BlockStaminaReduxMax = cfg.Bind("Block.Effect", "Stamina Cost Reduction Max", 50f,
                 "% less stamina to block at level 100");
-            BlockHealthPerLevel= cfg.Bind("Block.Effect", "Block Health", 0f,
+            BlockHealthPerLevel= cfg.Bind("Block.Effect", "Block Health", 1.2f,
                 "flat increase to max health per level of block");
             
             //Jump Effects
@@ -436,20 +436,20 @@ namespace kingskills
                 "% extra vertical jump force at level 0");
             JumpForceModMax = cfg.Bind("Jump.Effect", "Vertical Force Bonus Max", 90f,
                 "% extra vertical jump force at level 100");
-            JumpStaminaReduxMin = cfg.Bind("Jump.Effect", "Stamina Cost Reduction Min", 0f,
-                "% less stamina cost to jump at level 0");
-            JumpStaminaReduxMax = cfg.Bind("Jump.Effect", "Stamina Cost Reduction Max", 60f,
-                "% less stamina cost to jump at level 100");
             JumpForwardForceModMin = cfg.Bind("Jump.Effect", "Horizontal Force Bonus Min", 0f,
                 "% extra horizontal jump force at level 0");
             JumpForwardForceModMax = cfg.Bind("Jump.Effect", "Horizontal Force Bonus Max", 150f,
                 "% extra horizontal jump force at level 100");
+            JumpStaminaReduxMin = cfg.Bind("Jump.Effect", "Stamina Cost Reduction Min", 0f,
+                "% less stamina cost to jump at level 0");
+            JumpStaminaReduxMax = cfg.Bind("Jump.Effect", "Stamina Cost Reduction Max", 60f,
+                "% less stamina cost to jump at level 100");
             //May not actually be used or be different from jump force
-            JumpTiredReduxMax = cfg.Bind("Jump.Effect", "Jump Tired Stamina Reduction Max", 20f,
-                "% added to the base game's tired factor, which reduces your jump force when out of stamina, at level 100");
             JumpTiredReduxMin = cfg.Bind("Jump.Effect", "Jump Tired Stamina Reduction Min", 0f,
                 "% added to the base game's tired factor, which reduces your jump force when out of stamina, at level 0");
-            
+            JumpTiredReduxMax = cfg.Bind("Jump.Effect", "Jump Tired Stamina Reduction Max", 20f,
+                "% added to the base game's tired factor, which reduces your jump force when out of stamina, at level 100");
+
             //Unorganized
 
 
@@ -525,11 +525,11 @@ namespace kingskills
                 "Flat extra damage at level 100");
             FistBlockArmorMin = cfg.Bind("Fist.Effect", "Unarmed Block Armor Min", -5f, 
                 "Flat extra unarmed block armor at level 0");
-            FistBlockArmorMax = cfg.Bind("Fist.Effect", "Unarmed Block Armor Min", 40f, 
+            FistBlockArmorMax = cfg.Bind("Fist.Effect", "Unarmed Block Armor Max", 40f, 
                 "Flat extra unarmed block armor at level 100");
             FistMovespeedModMin = cfg.Bind("Fist.Effect", "Movespeed Bonus Min", 0f, 
                 "% movespeed increase at level 0");
-            FistMovespeedModMax = cfg.Bind("Fist.Effect", "Movespeed Bonus Min", 70f,
+            FistMovespeedModMax = cfg.Bind("Fist.Effect", "Movespeed Bonus Max", 70f,
                 "% movespeed increase at level 100");
             KnifeDamageModMin = cfg.Bind("Knife.Effect", "Damage Min", 0f, 
                 "% extra damage done with knives at level 0");
@@ -570,7 +570,7 @@ namespace kingskills
             PolearmBlockMin = cfg.Bind("Polearm.Effect", "Block Armor Min", 0f,
                 "Flat block armor added to polearms at level 0");
             PolearmBlockMax = cfg.Bind("Polearm.Effect", "Block Armor Max", 50f,
-                "Flat block armor added to polearms at level 0");
+                "Flat block armor added to polearms at level 100");
             SpearDamageModMin = cfg.Bind("Spear.Effect", "Damage Min", 0f,
                 "% extra damage done with spears at level 0");
             SpearDamageModMax = cfg.Bind("Spear.Effect", "Damage Max", 400f,
@@ -609,7 +609,7 @@ namespace kingskills
                 "% extra slash damage for ALL weapons at level 100"); 
             SwordDodgeStaminaReduxMin = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 0f, 
                 "% less stamina cost to dodge roll at level 0");
-            SwordDodgeStaminaReduxMax = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 40f,
+            SwordDodgeStaminaReduxMax = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Max", 40f,
                 "% less stamina cost to dodge roll at level 0");
             
 
@@ -619,7 +619,7 @@ namespace kingskills
                 "% increase to chop damage at level 100");
             WoodcuttingStaminaRebateMin = cfg.Bind("Wood.Effect", "Stamina Rebate Min", 0f,
                 "Flat stamina rebate on each hit of a tree at level 0");
-            WoodcuttingStaminaRebateMax = cfg.Bind("Wood.Effect", "Stamina Rebate Min", 9f,
+            WoodcuttingStaminaRebateMax = cfg.Bind("Wood.Effect", "Stamina Rebate Max", 9f,
                 "Flat stamina rebate on each hit of a tree at level 100");
             WoodcuttingDropModMin = cfg.Bind("Wood.Effect", "Drop rate mod min", 0f,
                 "% increase to wood drops at level 0");
@@ -631,11 +631,11 @@ namespace kingskills
                 "% increase to pick damage at level 100");
             MiningStaminaRebateMin = cfg.Bind("Mining.Effect", "Stamina Rebate Min", 0f,
                 "Flat stamina rebate on each hit of a rock at level 0");
-            MiningStaminaRebateMax = cfg.Bind("Mining.Effect", "Stamina Rebate Min", 7f,
+            MiningStaminaRebateMax = cfg.Bind("Mining.Effect", "Stamina Rebate Max", 7f,
                 "Flat stamina rebate on each hit of a rock at level 100");
-            MiningDropModMin = cfg.Bind("Mining.Effect", "Drop rate mod min", 0f,
+            MiningDropModMin = cfg.Bind("Mining.Effect", "Drop rate mod Min", 0f,
                 "% increase to ore drops at level 0");
-            MiningDropModMax = cfg.Bind("Mining.Effect", "Drop rate mod max", 100f,
+            MiningDropModMax = cfg.Bind("Mining.Effect", "Drop rate mod Max", 100f,
                 "% increase to ore drops at level 100");
 
 

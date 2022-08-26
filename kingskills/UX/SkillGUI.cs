@@ -624,8 +624,8 @@ namespace kingskills
                 "Holding a knife gains you experience at a very slow rate. \n" +
                 "Bonus experience is gained every time you perform a sneak attack with a knife.";
             LeftPanelEffectsText.GetComponent<Text>().text =
-                knifeDamage.ToString("F1") + "% extra damage with knives\n" +
-                knifeStaminaRedux.ToString("F1") + "% stamina usage with knives\n" +
+                knifeDamage.ToString("F1") + "% extra damage with knives \n" +
+                knifeStaminaRedux.ToString("F1") + "% stamina usage with knives \n" +
                 knifeBackstab.ToString("F0") + "% sneak attack bonus damage \n" +
                 knifeMovespeed.ToString("F1") + "% extra move speed \n" +
                 knifePierce.ToString("F1") + "% extra to ALL pierce damage";
@@ -730,10 +730,9 @@ namespace kingskills
                 "you aren't being observed. \n" +
                 "You get an additional experience bonus based on how dangerous the " +
                 "creature you're sneaking around is.";
-            //I would like to implement an increase in exp gain based on level of enemy
             LeftPanelEffectsText.GetComponent<Text>().text =
                 sneakSpeed.ToString("F1") + "% increased speed while crouching\n" +
-                sneakStaminaCost.ToString("F1") + " stamina per second while crouching" +
+                sneakStaminaCost.ToString("F1") + " stamina per second while crouching\n" +
                 sneakDarkest.ToString("F0") + "% reduced enemy vision range while in total dark\n" +
                 sneakBrightest.ToString("F0") + "% reduced enemy vision range while out in the open";
         }

@@ -22,25 +22,38 @@ namespace kingskills
         [HarmonyPostfix]
         public static void InitProj(Projectile __instance)
         {
-            Player playerRef = Player.m_localPlayer;
-            if (__instance.m_owner.IsPlayer() && __instance.m_owner.GetZDOID() == playerRef.GetZDOID())
+            //Jotunn.Logger.LogMessage($"Projectile just awakened.");
+        }
+
+        [HarmonyPatch(nameof(Projectile.FixedUpdate))]
+        [HarmonyPrefix]
+        public static void OnFirstUpdate(Projectile __instance)
+        {
+            if (__instance.m_didHit == true) return;
+            if (!projectileList.ContainsKey(__instance.gameObject.GetInstanceID()))
             {
-                projectileList.Add(__instance.gameObject.GetInstanceID(), __instance.transform.position);
-                //Jotunn.Logger.LogMessage($"Added projectile {__instance.gameObject.GetInstanceID()}");
-
-                if (__instance.m_skill == Skills.SkillType.Bows)
+                //Jotunn.Logger.LogMessage($"This projectile update, I've found a projectile that isn't in my dictionary.");
+                Player playerRef = Player.m_localPlayer;
+                if (__instance.m_owner.IsPlayer() && __instance.m_owner.GetZDOID() == playerRef.GetZDOID())
                 {
-                    __instance.m_vel *=
-                        ConfigManager.GetBowVelocityMod(playerRef.GetSkillFactor(Skills.SkillType.Bows));
-                }
-                else if (__instance.m_skill == Skills.SkillType.Spears)
-                {
-                    __instance.m_damage.Modify(
-                        ConfigManager.GetSpearProjectileDamageMod(playerRef.GetSkillFactor(Skills.SkillType.Spears)));
-                    __instance.m_vel *=
-                        ConfigManager.GetSpearVelocityMod(playerRef.GetSkillFactor(Skills.SkillType.Spears));
-                }
+                    projectileList.Add(__instance.gameObject.GetInstanceID(), __instance.transform.position);
+                    //Jotunn.Logger.LogMessage($"Added projectile {__instance.gameObject.GetInstanceID()}");
 
+                    //Jotunn.Logger.LogMessage($"The skill is {__instance.m_skill} and the current velocity is {__instance.m_vel}");
+                    if (__instance.m_skill == Skills.SkillType.Bows)
+                    {
+                        __instance.m_vel *=
+                            ConfigManager.GetBowVelocityMod(playerRef.GetSkillFactor(Skills.SkillType.Bows));
+                    }
+                    else if (__instance.m_skill == Skills.SkillType.Spears)
+                    {
+                        __instance.m_damage.Modify(
+                            ConfigManager.GetSpearProjectileDamageMod(playerRef.GetSkillFactor(Skills.SkillType.Spears)));
+                        __instance.m_vel *=
+                            ConfigManager.GetSpearVelocityMod(playerRef.GetSkillFactor(Skills.SkillType.Spears));
+                    }
+
+                }
             }
         }
 
@@ -68,7 +81,7 @@ namespace kingskills
 
             if (!patchDone)
             {
-                Jotunn.Logger.LogError("Didn't find the Raise skill during projectile transpile");
+                //Jotunn.Logger.LogError("Didn't find the Raise skill during projectile transpile");
             }
         }
 
@@ -82,11 +95,13 @@ namespace kingskills
 
         public static void RaiseProjectileSkill (Character player, Skills.SkillType skill, float useless, Projectile instance)
         {
+            //Jotunn.Logger.LogMessage($"On hit was triggerred");
+
             float distanceTravelled = 0;
             if (projectileList.ContainsKey(instance.gameObject.GetInstanceID()))
             {
                 distanceTravelled = (projectileList[instance.gameObject.GetInstanceID()] - instance.transform.position).magnitude;
-                //Jotunn.Logger.LogMessage($"That projectile travelled {distanceTravelled} units");
+                Jotunn.Logger.LogMessage($"That projectile travelled {distanceTravelled} units");
             }
             else
             {
@@ -96,7 +111,7 @@ namespace kingskills
             if (skill == Skills.SkillType.Spears)
             {
                 player.RaiseSkill(Skills.SkillType.Spears, ConfigManager.WeaponBXPSpearThrown.Value);
-                //Jotunn.Logger.LogMessage($"Spear bonus exp!");
+                Jotunn.Logger.LogMessage($"Spear bonus exp!");
             } else if (skill == Skills.SkillType.Bows)
             {
                 player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * ConfigManager.WeaponBXPBowDistanceMod.Value);

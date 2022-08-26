@@ -11,23 +11,41 @@ using System.Collections;
 
 namespace kingskills
 {
+    [HarmonyPatch]
     class WeaponDamagePatch
     {
         [HarmonyPatch(typeof(Character))]
-        [HarmonyPatch(nameof(Character.RPC_Damage))]
+        [HarmonyPatch(nameof(Character.Damage))]
         [HarmonyPrefix]
         public static void PreDamageHitPatch(Character __instance, ref HitData hit)
         {
+            //Jotunn.Logger.LogMessage($"Damage function running");
+
+            if (hit == null)
+            {
+                return;
+            }
+            if (hit.m_damage.GetTotalDamage() < 0.1f)
+            {
+                return;
+            }
+
             Character charac = hit.GetAttacker();
             //If the attacker is the local player 
+            /*
+            Jotunn.Logger.LogMessage($"The attacker is a player = {charac.IsPlayer()}");
+            Jotunn.Logger.LogMessage($"The local player's ZDOID is = {Player.m_localPlayer.GetZDOID()}");
+            Jotunn.Logger.LogMessage($"The attacker's ZDOID is = {charac.GetZDOID()}");
+            */
             if (charac.IsPlayer() && charac.GetZDOID() == Player.m_localPlayer.GetZDOID())
             {
                 Player player = (Player)charac;
 
-
+                //Jotunn.Logger.LogMessage($"This attack begins as having {hit.m_damage.GetTotalDamage()} damage");
                 //First, we add the randomness back in
                 hit.m_damage.Modify(GetRandomAttackMod());
 
+                //Jotunn.Logger.LogMessage($"After randomness, it's {hit.m_damage.GetTotalDamage()} damage");
                 //Now, we increase damage based on what kind of attack it is.
                 //Their solution was more elegant, but unfortunately, if we want to have any
                 //attack bonus be different from another one, we're gonna have to iterate through all
@@ -70,9 +88,14 @@ namespace kingskills
                         break;
                 }
 
+                //Jotunn.Logger.LogMessage($"Now, thanks to the skill, it's {hit.m_damage.GetTotalDamage()} damage");
+
+                //Jotunn.Logger.LogMessage($"Sneak attack bonus was {hit.m_backstabBonus}");
                 //Increase sneak attack damage for knife skill
                 hit.m_backstabBonus *=
                     ConfigManager.GetKnifeBackstabMod(player.GetSkillFactor(Skills.SkillType.Knives));
+
+                //Jotunn.Logger.LogMessage($"Now it's {hit.m_backstabBonus}");
 
                 //The generic bonuses from your various skill levels
                 hit.m_damage.m_blunt *=
@@ -82,11 +105,16 @@ namespace kingskills
                 hit.m_damage.m_pierce *=
                     ConfigManager.GetKnifeDamageMod(player.GetSkillFactor(Skills.SkillType.Knives));
 
+                //Jotunn.Logger.LogMessage($"Now, thanks to the b/p/s bonuses, the damage is {hit.m_damage.GetTotalDamage()}");
+
+                //Jotunn.Logger.LogMessage($"Pushforce and stagger damage go from {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
                 //The knockback and stagger bonuses from club levels
                 hit.m_pushForce *=
                     ConfigManager.GetClubKnockbackMod(player.GetSkillFactor(Skills.SkillType.Clubs));
                 hit.m_staggerMultiplier *=
                     ConfigManager.GetClubStaggerMod(player.GetSkillFactor(Skills.SkillType.Clubs));
+                
+                //Jotunn.Logger.LogMessage($"To {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
 
 
             } 
@@ -95,6 +123,7 @@ namespace kingskills
             {
                 Player player = (Player)__instance;
 
+                //Jotunn.Logger.LogMessage($"Player got hit");
                 //We can do stuff here probably. Will we need to? Who knows.
             }
 
@@ -129,21 +158,30 @@ namespace kingskills
         public static void ResourceDamagePatch(Destructible __instance, ref HitData hit)
         {
             Jotunn.Logger.LogMessage("Hitting a resource patch detected!");
+
             if (hit.m_attacker == Player.m_localPlayer.GetZDOID())
             {
                 Player player = Player.m_localPlayer;
                 if (hit.m_skill == Skills.SkillType.WoodCutting)
                 {
+                    Jotunn.Logger.LogMessage($"Chop damage was {hit.m_damage.m_chop}");
+
                     hit.m_damage.m_chop *=
                         ConfigManager.GetWoodcuttingDamageMod(player.GetSkillFactor(Skills.SkillType.WoodCutting))
                         * ConfigManager.GetAxeChopDamageMod(player.GetSkillFactor(Skills.SkillType.Axes));
                     player.AddStamina(ConfigManager.GetWoodcuttingStaminaRebate(player.GetSkillFactor(Skills.SkillType.WoodCutting)));
+
+                    Jotunn.Logger.LogMessage($"Now it's {hit.m_damage.m_chop}! I also added some stamina");
                 } 
                 else if (hit.m_skill == Skills.SkillType.Pickaxes)
                 {
+                    Jotunn.Logger.LogMessage($"Chop damage was {hit.m_damage.m_pickaxe}");
+
                     hit.m_damage.m_pickaxe *=
                         ConfigManager.GetMiningDamageMod(player.GetSkillFactor(Skills.SkillType.Pickaxes));
                     player.AddStamina(ConfigManager.GetMiningStaminaRebate(player.GetSkillFactor(Skills.SkillType.Pickaxes)));
+
+                    Jotunn.Logger.LogMessage($"Now it's {hit.m_damage.m_pickaxe}! I also added some stamina");
                 }
             }
         }
