@@ -49,37 +49,37 @@ namespace kingskills
                     {
                         case Skills.SkillType.Swords:
                             hit.m_damage.Modify(
-                                ConfigManager.GetSwordDamageMod(player.GetSkillFactor(Skills.SkillType.Swords)));
+                                ConfigManager.GetSwordDamageMult(player.GetSkillFactor(Skills.SkillType.Swords)));
                             break;
                         case Skills.SkillType.Axes:
                             hit.m_damage.Modify(
-                                ConfigManager.GetAxeDamageMod(player.GetSkillFactor(Skills.SkillType.Axes)));
+                                ConfigManager.GetAxeDamageMult(player.GetSkillFactor(Skills.SkillType.Axes)));
                             break;
                         case Skills.SkillType.Bows:
                             hit.m_damage.Modify(
-                                ConfigManager.GetBowDamageMod(player.GetSkillFactor(Skills.SkillType.Bows)));
+                                ConfigManager.GetBowDamageMult(player.GetSkillFactor(Skills.SkillType.Bows)));
                             break;
                         case Skills.SkillType.Clubs:
                             hit.m_damage.Modify(
-                                ConfigManager.GetClubDamageMod(player.GetSkillFactor(Skills.SkillType.Clubs)));
+                                ConfigManager.GetClubDamageMult(player.GetSkillFactor(Skills.SkillType.Clubs)));
                             break;
                         case Skills.SkillType.Unarmed: //Unarmed also gets a flat damage bonus
                             hit.m_damage.m_blunt +=
                                 ConfigManager.GetFistDamageFlat(player.GetSkillFactor(Skills.SkillType.Unarmed));
                             hit.m_damage.Modify(
-                                ConfigManager.GetFistDamageMod(player.GetSkillFactor(Skills.SkillType.Unarmed)));
+                                ConfigManager.GetFistDamageMult(player.GetSkillFactor(Skills.SkillType.Unarmed)));
                             break;
                         case Skills.SkillType.Knives:
                             hit.m_damage.Modify(
-                                ConfigManager.GetKnifeDamageMod(player.GetSkillFactor(Skills.SkillType.Knives)));
+                                ConfigManager.GetKnifeDamageMult(player.GetSkillFactor(Skills.SkillType.Knives)));
                             break;
                         case Skills.SkillType.Polearms:
                             hit.m_damage.Modify(
-                                ConfigManager.GetPolearmDamageMod(player.GetSkillFactor(Skills.SkillType.Polearms)));
+                                ConfigManager.GetPolearmDamageMult(player.GetSkillFactor(Skills.SkillType.Polearms)));
                             break;
                         case Skills.SkillType.Spears:
                             hit.m_damage.Modify(
-                                ConfigManager.GetSpearDamageMod(player.GetSkillFactor(Skills.SkillType.Spears)));
+                                ConfigManager.GetSpearDamageMult(player.GetSkillFactor(Skills.SkillType.Spears)));
                             break;
                     }
                 }
@@ -91,9 +91,9 @@ namespace kingskills
                 if (ConfigManager.IsSkillActive(Skills.SkillType.Knives)) 
                 { 
                     hit.m_backstabBonus *=
-                        ConfigManager.GetKnifeBackstabMod(player.GetSkillFactor(Skills.SkillType.Knives));
+                        ConfigManager.GetKnifeBackstabMult(player.GetSkillFactor(Skills.SkillType.Knives));
                     hit.m_damage.m_pierce *=
-                        ConfigManager.GetKnifeDamageMod(player.GetSkillFactor(Skills.SkillType.Knives));
+                        ConfigManager.GetKnifeDamageMult(player.GetSkillFactor(Skills.SkillType.Knives));
                 }
 
                 //Jotunn.Logger.LogMessage($"Now it's {hit.m_backstabBonus}");
@@ -101,7 +101,7 @@ namespace kingskills
                 //The generic bonuses from your various skill levels
                 if (ConfigManager.IsSkillActive(Skills.SkillType.Swords))
                     hit.m_damage.m_slash *=
-                        ConfigManager.GetSwordSlashMod(player.GetSkillFactor(Skills.SkillType.Swords));
+                        ConfigManager.GetSwordSlashMult(player.GetSkillFactor(Skills.SkillType.Swords));
 
                 //Jotunn.Logger.LogMessage($"Now, thanks to the b/p/s bonuses, the damage is {hit.m_damage.GetTotalDamage()}");
 
@@ -110,11 +110,11 @@ namespace kingskills
                 if (ConfigManager.IsSkillActive(Skills.SkillType.Clubs))
                 {
                     hit.m_damage.m_blunt *=
-                           ConfigManager.GetClubBluntMod(player.GetSkillFactor(Skills.SkillType.Clubs));
+                           ConfigManager.GetClubBluntMult(player.GetSkillFactor(Skills.SkillType.Clubs));
                     hit.m_pushForce *=
-                        ConfigManager.GetClubKnockbackMod(player.GetSkillFactor(Skills.SkillType.Clubs));
+                        ConfigManager.GetClubKnockbackMult(player.GetSkillFactor(Skills.SkillType.Clubs));
                     hit.m_staggerMultiplier *=
-                        ConfigManager.GetClubStaggerMod(player.GetSkillFactor(Skills.SkillType.Clubs));
+                        ConfigManager.GetClubStaggerMult(player.GetSkillFactor(Skills.SkillType.Clubs));
                 }
 
                 //Jotunn.Logger.LogMessage($"To {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
@@ -189,7 +189,7 @@ namespace kingskills
                     //Jotunn.Logger.LogMessage($"Pick damage was {hit.m_damage.m_pickaxe}");
 
                     hit.m_damage.m_pickaxe *=
-                        ConfigManager.GetMiningDamageMod(player.GetSkillFactor(Skills.SkillType.Pickaxes));
+                        ConfigManager.GetMiningDamageMult(player.GetSkillFactor(Skills.SkillType.Pickaxes));
 
                     player.AddStamina(ConfigManager.GetMiningStaminaRebate(player.GetSkillFactor(Skills.SkillType.Pickaxes)));
 

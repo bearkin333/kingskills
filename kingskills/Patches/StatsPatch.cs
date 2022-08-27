@@ -87,9 +87,9 @@ namespace kingskills
             if (!ConfigManager.IsSkillActive(Skills.SkillType.Swim)) return;
 
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Swim);
-            player.m_swimSpeed = ConfigManager.BaseSwimSpeed * ConfigManager.GetSwimSpeedMod(skillFactor);
-            player.m_swimAcceleration = ConfigManager.BaseSwimAccel * ConfigManager.GetSwimAccelMod(skillFactor);
-            player.m_swimTurnSpeed = ConfigManager.BaseSwimTurn * ConfigManager.GetSwimTurnMod(skillFactor);
+            player.m_swimSpeed = ConfigManager.BaseSwimSpeed * ConfigManager.GetSwimSpeedMult(skillFactor);
+            player.m_swimAcceleration = ConfigManager.BaseSwimAccel * ConfigManager.GetSwimAccelMult(skillFactor);
+            player.m_swimTurnSpeed = ConfigManager.BaseSwimTurn * ConfigManager.GetSwimTurnMult(skillFactor);
             player.m_swimStaminaDrainMinSkill = ConfigManager.SwimStaminaPerSecMin.Value;
             player.m_swimStaminaDrainMaxSkill = ConfigManager.SwimStaminaPerSecMax.Value;
         }
@@ -100,8 +100,8 @@ namespace kingskills
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Jump);
 
             float vanillaJumpAddition = 1f + skillFactor * .4f;
-            float newJumpForce = ConfigManager.BaseJumpForce * ConfigManager.GetJumpForceMod(skillFactor);
-            float newJumpForwardForce = ConfigManager.BaseJumpForwardForce * ConfigManager.GetJumpForwardForceMod(skillFactor);
+            float newJumpForce = ConfigManager.BaseJumpForce * ConfigManager.GetJumpForceMult(skillFactor);
+            float newJumpForwardForce = ConfigManager.BaseJumpForwardForce * ConfigManager.GetJumpForwardForceMult(skillFactor);
             float newStaminaUse = ConfigManager.BaseJumpStaminaUse * ConfigManager.GetJumpStaminaRedux(skillFactor);
             float newTiredFactor = ConfigManager.BaseJumpTiredFactor + ConfigManager.GetJumpTiredRedux(skillFactor);
 
@@ -133,7 +133,7 @@ namespace kingskills
             if (!ConfigManager.IsSkillActive(Skills.SkillType.Sneak)) return;
 
             player.m_crouchSpeed = ConfigManager.BaseCrouchSpeed *
-                ConfigManager.GetSneakSpeedMod(player.GetSkillFactor(Skills.SkillType.Sneak));
+                ConfigManager.GetSneakSpeedMult(player.GetSkillFactor(Skills.SkillType.Sneak));
         }
 
         //New max health and stamina

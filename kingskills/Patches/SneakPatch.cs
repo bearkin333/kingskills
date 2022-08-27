@@ -34,7 +34,7 @@ namespace kingskills.Patches
 				if (BaseAI.InStealthRange(__instance))
 				{
 					float sneakExpMod = GetStrongestEnemyInSight(__instance).GetLevel() *
-							ConfigManager.GetSneakEXPPerDangerMod();
+							ConfigManager.GetSneakXPMult();
 
 					__instance.RaiseSkill(Skills.SkillType.Sneak, sneakExpMod);
 				}

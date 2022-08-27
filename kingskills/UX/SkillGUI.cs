@@ -524,7 +524,7 @@ namespace kingskills
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Axes);
 
-            float axeDamage = ToPercent(ConfigManager.GetAxeDamageMod(skill));
+            float axeDamage = ToPercent(ConfigManager.GetAxeDamageMult(skill));
             float axeStaminaRedux = ToPercent(ConfigManager.GetAxeStaminaRedux(skill));
             float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
             float axeChopBonus = ToPercent(ConfigManager.GetAxeChopDamageMod(skill));
@@ -550,9 +550,9 @@ namespace kingskills
 
             float staminaRedux = ToPercent(ConfigManager.GetBlockStaminaRedux(skill));
             float baseBlockPower = ConfigManager.GetBlockPowerFlat(skill);
-            float blockPerArmor = ToPercent(ConfigManager.GetBlockPowerMod(skill));
+            float blockPerArmor = ToPercent(ConfigManager.GetBlockPowerMult(skill));
             float blockHealth = ConfigManager.GetBlockHealth(skill);
-            float parryExpMod = ToPercent(ConfigManager.GetBlockParryExpMod());
+            float parryExpMod = ToPercent(ConfigManager.GetBlockParryExpMult());
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all damage you block is turned into experience. \n" +
@@ -568,11 +568,11 @@ namespace kingskills
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Bows);
 
-            float bowDamage = ToPercent(ConfigManager.GetBowDamageMod(skill));
+            float bowDamage = ToPercent(ConfigManager.GetBowDamageMult(skill));
             float bowStaminaRedux = ToPercent(ConfigManager.GetBowStaminaRedux(skill));
-            float bowVelocity = ToPercent(ConfigManager.GetBowVelocityMod(skill));
-            float bowDrawSpeed = ToPercent(ConfigManager.GetBowDrawSpeedMod(skill));
-            float bowDropRate = ToPercent(ConfigManager.GetBowDropRate(skill));
+            float bowVelocity = ToPercent(ConfigManager.GetBowVelocityMult(skill));
+            float bowDrawSpeed = ToPercent(ConfigManager.GetBowDrawSpeed(skill));
+            float bowDropRate = ToPercent(ConfigManager.GetBowDropRateMult(skill));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all bow damage dealt is turned into experience. \n" +
@@ -591,11 +591,11 @@ namespace kingskills
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Clubs);
 
-            float clubDamage = ToPercent(ConfigManager.GetClubDamageMod(skill));
+            float clubDamage = ToPercent(ConfigManager.GetClubDamageMult(skill));
             float clubStaminaRedux = ToPercent(ConfigManager.GetClubStaminaRedux(skill));
-            float clubBlunt = ToPercent(ConfigManager.GetClubBluntMod(skill));
-            float clubKnockback = ToPercent(ConfigManager.GetClubKnockbackMod(skill));
-            float clubStagger = ToPercent(ConfigManager.GetClubStaggerMod(skill));
+            float clubBlunt = ToPercent(ConfigManager.GetClubBluntMult(skill));
+            float clubKnockback = ToPercent(ConfigManager.GetClubKnockbackMult(skill));
+            float clubStagger = ToPercent(ConfigManager.GetClubStaggerMult(skill));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all club damage dealt is turned into experience. \n" +
@@ -614,7 +614,7 @@ namespace kingskills
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Unarmed);
 
-            float fistDamage = ToPercent(ConfigManager.GetFistDamageMod(skill));
+            float fistDamage = ToPercent(ConfigManager.GetFistDamageMult(skill));
             float fistStaminaRedux = ToPercent(ConfigManager.GetFistStaminaRedux(skill));
             float fistFlatDamage = ConfigManager.GetFistDamageFlat(skill);
             float fistBlock = ConfigManager.GetFistBlockArmor(skill);
@@ -639,8 +639,8 @@ namespace kingskills
             StatsPatch.JumpForceUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Jump);
 
-            float bonusJumpForce = ToPercent(ConfigManager.GetJumpForceMod(skill));
-            float bonusJumpForwardForce = ToPercent(ConfigManager.GetJumpForwardForceMod(skill));
+            float bonusJumpForce = ToPercent(ConfigManager.GetJumpForceMult(skill));
+            float bonusJumpForwardForce = ToPercent(ConfigManager.GetJumpForwardForceMult(skill));
             float staminaRedux = ToPercent(ConfigManager.GetJumpStaminaRedux(skill));
             float tired = ToPercent(ConfigManager.GetJumpTiredRedux(skill));
 
@@ -663,11 +663,11 @@ namespace kingskills
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Knives);
 
-            float knifeDamage = ToPercent(ConfigManager.GetKnifeDamageMod(skill));
+            float knifeDamage = ToPercent(ConfigManager.GetKnifeDamageMult(skill));
             float knifeStaminaRedux = ToPercent(ConfigManager.GetKnifeStaminaRedux(skill));
-            float knifeBackstab = ToPercent(ConfigManager.GetKnifeBackstabMod(skill));
+            float knifeBackstab = ToPercent(ConfigManager.GetKnifeBackstabMult(skill));
             float knifeMovespeed = ToPercent(ConfigManager.GetKnifeMovespeedMod(skill));
-            float knifePierce = ToPercent(ConfigManager.GetKnifePierceMod(skill));
+            float knifePierce = ToPercent(ConfigManager.GetKnifePierceMult(skill));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all knife damage dealt is turned into experience. \n" +
@@ -686,7 +686,7 @@ namespace kingskills
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Polearms);
 
-            float polearmDamage = ToPercent(ConfigManager.GetPolearmDamageMod(skill));
+            float polearmDamage = ToPercent(ConfigManager.GetPolearmDamageMult(skill));
             float polearmStaminaRedux = ToPercent(ConfigManager.GetPolearmStaminaRedux(skill));
             float polearmRange = ConfigManager.GetPolearmRange(skill);
             float polearmArmor = ConfigManager.GetPolearmArmor(skill);
@@ -711,7 +711,7 @@ namespace kingskills
             StatsPatch.RunSpeedUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Run);
 
-            float runSpeedBonus = ToPercent(ConfigManager.GetRunSpeedMod(skill));
+            float runSpeedBonus = ToPercent(ConfigManager.GetRunSpeedMult(skill));
             float equipmentMalusRedux = ToPercent(ConfigManager.GetEquipmentRedux(skill));
             float encumberanceRedux = ToPercent(ConfigManager.GetEncumberanceRedux(skill));
             float staminaDrainRedux = ToPercent(ConfigManager.GetRunStaminaRedux(skill));
@@ -746,10 +746,10 @@ namespace kingskills
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Spears);
 
-            float spearDamage = ToPercent(ConfigManager.GetSpearDamageMod(skill));
+            float spearDamage = ToPercent(ConfigManager.GetSpearDamageMult(skill));
             float spearStaminaRedux = ToPercent(ConfigManager.GetSpearStaminaRedux(skill));
-            float spearVelocity = ToPercent(ConfigManager.GetSpearVelocityMod(skill));
-            float spearThrowDamage = ToPercent(ConfigManager.GetSpearProjectileDamageMod(skill));
+            float spearVelocity = ToPercent(ConfigManager.GetSpearVelocityMult(skill));
+            float spearThrowDamage = ToPercent(ConfigManager.GetSpearProjectileDamageMult(skill));
             float spearBlock = ConfigManager.GetSpearBlockArmor(skill);
 
             LeftPanelExperienceText.GetComponent<Text>().text =
@@ -770,7 +770,7 @@ namespace kingskills
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Sneak);
             StatsPatch.SneakUpdate(Player.m_localPlayer);
 
-            float sneakSpeed = ToPercent(ConfigManager.GetSneakSpeedMod(skill));
+            float sneakSpeed = ToPercent(ConfigManager.GetSneakSpeedMult(skill));
             float sneakStaminaCost = ToPercent(ConfigManager.GetSneakStaminaDrain(skill));
             float sneakLightFactor = ToPercent(ConfigManager.GetSneakFactor(skill, 2f));
             float sneakDarkFactor = ToPercent(ConfigManager.GetSneakFactor(skill, 0f));
@@ -794,9 +794,9 @@ namespace kingskills
             StatsPatch.SwimSpeedUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Run);
 
-            float swimSpeed = ToPercent(ConfigManager.GetSwimSpeedMod(skill));
-            float swimAccel = ToPercent(ConfigManager.GetSwimAccelMod(skill));
-            float swimTurn = ToPercent(ConfigManager.GetSwimTurnMod(skill));
+            float swimSpeed = ToPercent(ConfigManager.GetSwimSpeedMult(skill));
+            float swimAccel = ToPercent(ConfigManager.GetSwimAccelMult(skill));
+            float swimTurn = ToPercent(ConfigManager.GetSwimTurnMult(skill));
             float swimStaminaCost = ConfigManager.GetSwimStaminaPerSec(skill);
 
             float absWeightExp = ToPercent(MovePatch.absoluteWeightBonus(player));
@@ -822,10 +822,10 @@ namespace kingskills
             StatsPatch.SwordUpdate(Player.m_localPlayer);
 
 
-            float swordDamage = ToPercent(ConfigManager.GetSwordDamageMod(skill));
+            float swordDamage = ToPercent(ConfigManager.GetSwordDamageMult(skill));
             float swordStaminaRedux = ToPercent(ConfigManager.GetSwordStaminaRedux(skill));
-            float swordParry = ToPercent(ConfigManager.GetSwordParryMod(skill));
-            float swordSlash = ToPercent(ConfigManager.GetSwordSlashMod(skill));
+            float swordParry = ToPercent(ConfigManager.GetSwordParryMult(skill));
+            float swordSlash = ToPercent(ConfigManager.GetSwordSlashMult(skill));
             float swordDodgeStaminaRedux = ToPercent(ConfigManager.GetSwordDodgeStaminaRedux(skill));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
@@ -846,7 +846,7 @@ namespace kingskills
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.WoodCutting);
 
             float woodDamage = ToPercent(ConfigManager.GetWoodcuttingDamageMod(skill));
-            float woodDrop = ToPercent(ConfigManager.GetWoodDropRate(skill));
+            float woodDrop = ToPercent(ConfigManager.GetWoodDropMult(skill));
             float woodRebate = ConfigManager.GetWoodcuttingStaminaRebate(skill);
             float woodSomething = ToPercent(0f);
 
@@ -864,8 +864,8 @@ namespace kingskills
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Pickaxes);
 
-            float mineDamage = ToPercent(ConfigManager.GetMiningDamageMod(skill));
-            float mineDrop = ToPercent(ConfigManager.GetMiningDropRate(skill));
+            float mineDamage = ToPercent(ConfigManager.GetMiningDamageMult(skill));
+            float mineDrop = ToPercent(ConfigManager.GetMiningDropMult(skill));
             float mineRebate = ConfigManager.GetMiningStaminaRebate(skill);
             float mineSomething = ToPercent(0f);
 

@@ -30,9 +30,9 @@ namespace kingskills.Patches
             float mineSkill = playerRef.GetSkillFactor(Skills.SkillType.Pickaxes);
             float bowSkill = playerRef.GetSkillFactor(Skills.SkillType.Bows);
 
-            float woodDropRate = ConfigManager.GetWoodDropRate(woodSkill);
-            float mineDropRate = ConfigManager.GetMiningDropRate(mineSkill);
-            float bowDropRate = ConfigManager.GetBowDropRate(bowSkill);
+            float woodDropRate = ConfigManager.GetWoodDropMult(woodSkill);
+            float mineDropRate = ConfigManager.GetMiningDropMult(mineSkill);
+            float bowDropRate = ConfigManager.GetBowDropRateMult(bowSkill);
 
             Dictionary<string, float> woodDrops
                 = new Dictionary<string, float>(ConfigManager.WoodcuttingDropTable);

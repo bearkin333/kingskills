@@ -24,7 +24,7 @@ namespace kingskills
             }
 
             //This function provides a number to multiply the base run speed by
-            float runSkillFactor = ConfigManager.GetRunSpeedMod(__instance.m_skills.GetSkillFactor(Skills.SkillType.Run));
+            float runSkillFactor = ConfigManager.GetRunSpeedMult(__instance.m_skills.GetSkillFactor(Skills.SkillType.Run));
 
             float runSpeed = runSkillFactor * GetGenericMovespeedAdjustments(__instance);
             __result = runSpeed;
@@ -83,7 +83,7 @@ namespace kingskills
 
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
             float encumberancePercent = Mathf.Clamp01(player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight());
-            float encumberanceCurved = ConfigManager.GetEncumberanceCurve(encumberancePercent);
+            float encumberanceCurved = ConfigManager.GetEncumberanceCurveMult(encumberancePercent);
             float skillEncumberanceRedux = ConfigManager.GetEncumberanceRedux(skillFactor);
             return encumberanceCurved * skillEncumberanceRedux;
         }
@@ -100,13 +100,13 @@ namespace kingskills
         }
         public static float absoluteWeightBonus(Player player)
         {
-            float weightPercent = ConfigManager.GetAbsoluteWeightPercent(player.m_inventory.GetTotalWeight());
-            return ConfigManager.GetAbsoluteWeightCurve(weightPercent);
+            float weightPercent = ConfigManager.GetAbsoluteWeightMod(player.m_inventory.GetTotalWeight());
+            return ConfigManager.GetAbsoluteWeightCurveMult(weightPercent);
         }
         public static float relativeWeightBonus(Player player)
         {
             float weightPercent = player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight();
-            return ConfigManager.GetRelativeWeightStage(weightPercent);
+            return ConfigManager.GetRelativeWeightStageMult(weightPercent);
         }
         public static float runSpeedExpBonus(Player player)
         {
@@ -120,7 +120,7 @@ namespace kingskills
             float swimMod = player.m_swimSpeed;
             player.m_seman.ApplyStatusEffectSpeedMods(ref swimMod);
 
-            return swimMod * ConfigManager.SwimEXPSpeedMod.Value;
+            return swimMod * ConfigManager.SwimXPSpeedMod.Value;
         }
     }
        

@@ -45,10 +45,10 @@ namespace kingskills.WeaponExperience
             if (!ConfigManager.IsSkillActive(skill)) return;
 
             //Jotunn.Logger.LogMessage($"Player swinging with {skill} for {ConfigManager.XpSwingRate} XP");
-            p.RaiseSkill(skill, ConfigManager.WeaponEXPSwing.Value);
+            p.RaiseSkill(skill, ConfigManager.WeaponXPSwing.Value);
 
             if (skill == Skills.SkillType.Axes)
-                p.RaiseSkill(Skills.SkillType.WoodCutting, ConfigManager.WeaponEXPSwing.Value);
+                p.RaiseSkill(Skills.SkillType.WoodCutting, ConfigManager.WeaponXPSwing.Value);
         }
     }
 
@@ -112,7 +112,7 @@ namespace kingskills.WeaponExperience
                 if (livingTarget)
                     factor = 1f;
                 else
-                    factor = ConfigManager.GetWeaponEXPStrikeDestructibleMod();
+                    factor = ConfigManager.GetWeaponEXPStrikeDestructibleMult();
             }
 
 
@@ -182,18 +182,18 @@ namespace kingskills.WeaponExperience
             else
             {
                 timer += dt;
-                if (timer >= ConfigManager.WeaponEXPHoldTickLength.Value)
+                if (timer >= ConfigManager.WeaponXPHoldTickLength.Value)
                 {
-                    float ticks = timer / ConfigManager.WeaponEXPHoldTickLength.Value;
-                    float holdXp = ticks * ConfigManager.WeaponEXPHoldPerTick.Value;
+                    float ticks = timer / ConfigManager.WeaponXPHoldTickLength.Value;
+                    float holdXp = ticks * ConfigManager.WeaponXPHoldPerTick.Value;
                     if (weapon == __instance.m_unarmedWeapon.m_itemData)
                     {
-                        holdXp *= ConfigManager.GetWeaponEXPHoldUnarmedMod();
+                        holdXp *= ConfigManager.GetWeaponEXPHoldUnarmedMult();
                     }
                     Skills.SkillType skill = weapon.m_shared.m_skillType;
                     //Jotunn.Logger.LogMessage($"Holding {skill} for {timer}s, adding {holdXp} xp");
                     __instance.RaiseSkill(skill, holdXp);
-                    timer -= ticks * ConfigManager.WeaponEXPHoldTickLength.Value;
+                    timer -= ticks * ConfigManager.WeaponXPHoldTickLength.Value;
                 }
             }
         }

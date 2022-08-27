@@ -101,11 +101,11 @@ namespace kingskills
 
             if (ConfigManager.IsSkillActive(Skills.SkillType.Blocking)) 
             {
-                expValue *= damage * ConfigManager.GetBlockExpMod();
+                expValue *= damage * ConfigManager.GetBlockExpMult();
 
                 if (isParry)
                 {
-                    expValue *= ConfigManager.GetBlockParryExpMod();
+                    expValue *= ConfigManager.GetBlockParryExpMult();
                     //Jotunn.Logger.LogMessage($"Parried! Exp Value doubled!");
                 }
             }
@@ -162,18 +162,18 @@ namespace kingskills
 
             //Skill bonus for block level
             if (ConfigManager.IsSkillActive(Skills.SkillType.Blocking))
-                blockPower *= ConfigManager.GetBlockPowerMod(skillFactor);
+                blockPower *= ConfigManager.GetBlockPowerMult(skillFactor);
             //Otherwise, we have to use base numbers
             else
             {
-                blockPower *= ConfigManager.GetVanillaBlockMod(skillFactor);
+                blockPower *= ConfigManager.GetVanillaBlockMult(skillFactor);
             }
 
             //Here's the additional bonus to sword parry
             if (ConfigManager.IsSkillActive(Skills.SkillType.Swords) && isParry)
             { 
                 blockPower *= 
-                    ConfigManager.GetSwordParryMod(instance.GetSkillFactor(Skills.SkillType.Swords));
+                    ConfigManager.GetSwordParryMult(instance.GetSkillFactor(Skills.SkillType.Swords));
             }
 
             return blockPower;

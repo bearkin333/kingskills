@@ -46,15 +46,15 @@ namespace kingskills
                         __instance.m_skill == Skills.SkillType.Bows)
                     {
                         __instance.m_vel *=
-                            ConfigManager.GetBowVelocityMod(playerRef.GetSkillFactor(Skills.SkillType.Bows));
+                            ConfigManager.GetBowVelocityMult(playerRef.GetSkillFactor(Skills.SkillType.Bows));
                     }
                     else if (ConfigManager.IsSkillActive(Skills.SkillType.Spears) &&
                         __instance.m_skill == Skills.SkillType.Spears)
                     {
                         __instance.m_damage.Modify(
-                            ConfigManager.GetSpearProjectileDamageMod(playerRef.GetSkillFactor(Skills.SkillType.Spears)));
+                            ConfigManager.GetSpearProjectileDamageMult(playerRef.GetSkillFactor(Skills.SkillType.Spears)));
                         __instance.m_vel *=
-                            ConfigManager.GetSpearVelocityMod(playerRef.GetSkillFactor(Skills.SkillType.Spears));
+                            ConfigManager.GetSpearVelocityMult(playerRef.GetSkillFactor(Skills.SkillType.Spears));
                     }
 
                 }
