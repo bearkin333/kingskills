@@ -14,8 +14,10 @@ namespace kingskills.Patches
         [HarmonyPrefix]
         public static bool StaminaUsePatch(Attack __instance, ref float __result)
         {
-            float stamina = __instance.m_attackStamina;
             Skills.SkillType skillT = __instance.m_weapon.m_shared.m_skillType;
+            if (!ConfigManager.IsSkillActive(skillT)) return true;
+
+            float stamina = __instance.m_attackStamina;
             float skillFactor = __instance.m_character.GetSkillFactor(skillT);
 
             if (stamina <= 0f) __result = 0;
@@ -69,8 +71,10 @@ namespace kingskills.Patches
         [HarmonyPrefix]
         public static bool StaminaHoldPatch(ItemDrop.ItemData __instance, ref float __result)
         {
-            float stamina = __instance.m_shared.m_holdStaminaDrain;
             Skills.SkillType skillT = __instance.m_shared.m_skillType;
+            if (!ConfigManager.IsSkillActive(skillT)) return true;
+
+            float stamina = __instance.m_shared.m_holdStaminaDrain;
             float skillFactor = Player.m_localPlayer.GetSkillFactor(skillT);
             if (stamina <= 0f) __result = 0;
 

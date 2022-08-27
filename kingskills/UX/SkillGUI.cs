@@ -483,6 +483,13 @@ namespace kingskills
                     OpenWoodcuttingPanels();
                     break;
             }
+            if (!ConfigManager.IsSkillActive(skill))
+            {
+                LeftPanelExperienceText.GetComponent<Text>().text =
+                    "Not currently active";
+                LeftPanelEffectsText.GetComponent<Text>().text =
+                    "Not currently active";
+            }
 
             Skills.Skill skillRef = player.GetSkills().GetSkill(skill);
             //Jotunn.Logger.LogMessage($"The skill the player seems to want is {skillRef.m_info}");

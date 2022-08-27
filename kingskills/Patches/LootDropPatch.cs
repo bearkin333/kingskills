@@ -55,16 +55,19 @@ namespace kingskills.Patches
                 //Jotunn.Logger.LogMessage($"list entry {i}: Drop is called {drop.name}");
 
                 //Jotunn.Logger.LogMessage("Checking for wood drops..");
-                dropChecker(ConfigManager.WoodcuttingDropTable, ref woodDrops,
-                    woodDropRate, drop, ref newDrops, lastResult);
+                if (ConfigManager.IsSkillActive(Skills.SkillType.WoodCutting))
+                    dropChecker(ConfigManager.WoodcuttingDropTable, ref woodDrops,
+                        woodDropRate, drop, ref newDrops, lastResult);
 
                 //Jotunn.Logger.LogMessage("Checking for mine drops..");
-                dropChecker(ConfigManager.MiningDropTable, ref mineDrops,
-                    mineDropRate, drop, ref newDrops, lastResult);
+                if (ConfigManager.IsSkillActive(Skills.SkillType.Pickaxes))
+                    dropChecker(ConfigManager.MiningDropTable, ref mineDrops,
+                        mineDropRate, drop, ref newDrops, lastResult);
 
                 //Jotunn.Logger.LogMessage("Checking for bow drops..");
-                dropChecker(ConfigManager.BowDropTable, ref bowDrops,
-                    bowDropRate, drop, ref newDrops, lastResult);
+                if (ConfigManager.IsSkillActive(Skills.SkillType.Bows))
+                    dropChecker(ConfigManager.BowDropTable, ref bowDrops,
+                        bowDropRate, drop, ref newDrops, lastResult);
 
                 i++;
             }

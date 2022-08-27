@@ -18,12 +18,14 @@ namespace kingskills
         public static Dictionary<int, Vector3> projectileList 
             = new Dictionary<int, Vector3>();
         
+        /*
         [HarmonyPatch(nameof(Projectile.Awake))]
         [HarmonyPostfix]
         public static void InitProj(Projectile __instance)
         {
             //Jotunn.Logger.LogMessage($"Projectile just awakened.");
         }
+        */
 
         [HarmonyPatch(nameof(Projectile.FixedUpdate))]
         [HarmonyPrefix]
@@ -40,12 +42,14 @@ namespace kingskills
                     //Jotunn.Logger.LogMessage($"Added projectile {__instance.gameObject.GetInstanceID()}");
 
                     //Jotunn.Logger.LogMessage($"The skill is {__instance.m_skill} and the current velocity is {__instance.m_vel}");
-                    if (__instance.m_skill == Skills.SkillType.Bows)
+                    if (ConfigManager.IsSkillActive(Skills.SkillType.Bows) &&
+                        __instance.m_skill == Skills.SkillType.Bows)
                     {
                         __instance.m_vel *=
                             ConfigManager.GetBowVelocityMod(playerRef.GetSkillFactor(Skills.SkillType.Bows));
                     }
-                    else if (__instance.m_skill == Skills.SkillType.Spears)
+                    else if (ConfigManager.IsSkillActive(Skills.SkillType.Spears) &&
+                        __instance.m_skill == Skills.SkillType.Spears)
                     {
                         __instance.m_damage.Modify(
                             ConfigManager.GetSpearProjectileDamageMod(playerRef.GetSkillFactor(Skills.SkillType.Spears)));
@@ -108,14 +112,17 @@ namespace kingskills
                 Jotunn.Logger.LogError("Projectile not in dictionairy!");
             }
 
-            if (skill == Skills.SkillType.Spears)
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Spears) &&
+                skill == Skills.SkillType.Spears)
             {
                 player.RaiseSkill(Skills.SkillType.Spears, ConfigManager.WeaponBXPSpearThrown.Value);
 
                 BonusExperienceDamageText.CreateBXPText(
                     BonusExperienceDamageText.GetInFrontOfCharacter(player),
                     ConfigManager.WeaponBXPSpearThrown.Value);
-            } else if (skill == Skills.SkillType.Bows)
+            } 
+            else if (ConfigManager.IsSkillActive(Skills.SkillType.Bows) &&
+                skill == Skills.SkillType.Bows)
             {
                 player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * ConfigManager.WeaponBXPBowDistanceMod.Value);
 

@@ -71,7 +71,9 @@ namespace kingskills
             if (staggerFlag)
             {
                 //Jotunn.Logger.LogMessage($"Stagger flag redeemed! Turned back off");
-                if (Util.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
+
+                if ( ConfigManager.IsSkillActive(Skills.SkillType.Clubs) && 
+                    Util.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
                 {
                     playerRef.RaiseSkill(Skills.SkillType.Clubs, ConfigManager.WeaponBXPClubStagger.Value);
                     BonusExperienceDamageText.CreateBXPText(
@@ -84,7 +86,8 @@ namespace kingskills
 
         private static void OnStaggerHurt(Player attacker)
         {
-            if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Swords) &&
+                    Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
             {
                 attacker.RaiseSkill(Skills.SkillType.Swords, ConfigManager.WeaponBXPSwordStagger.Value);
 
@@ -97,7 +100,8 @@ namespace kingskills
 
         private static void OnBackstab(Player attacker)
         {
-            if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Knives) &&
+                    Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
             {
                 attacker.RaiseSkill(Skills.SkillType.Swords, ConfigManager.WeaponBXPKnifeBackstab.Value);
 
@@ -116,8 +120,10 @@ namespace kingskills
         [HarmonyPrefix]
         public static void TreeLogDestroyPatch(TreeLog __instance)
         {
-            //Jotunn.Logger.LogMessage($"This log is killed. Closest player's getting the exp");
-            Player closestPlayer = Player.GetClosestPlayer(__instance.m_body.transform.position, ConfigManager.WeaponBXPAxeRange.Value);
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Axes)) return;
+
+                //Jotunn.Logger.LogMessage($"This log is killed. Closest player's getting the exp");
+                Player closestPlayer = Player.GetClosestPlayer(__instance.m_body.transform.position, ConfigManager.WeaponBXPAxeRange.Value);
             if (closestPlayer != null)
             {
                 if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)

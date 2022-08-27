@@ -47,6 +47,7 @@ namespace kingskills
 
         public static void RunSpeedUpdate(Player player)
         {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Run)) return;
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
             float newRunStaminaDrain = ConfigManager.BaseRunStaminaDrain;
 
@@ -83,6 +84,8 @@ namespace kingskills
         }
         public static void SwimSpeedUpdate(Player player)
         {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Swim)) return;
+
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Swim);
             player.m_swimSpeed = ConfigManager.BaseSwimSpeed * ConfigManager.GetSwimSpeedMod(skillFactor);
             player.m_swimAcceleration = ConfigManager.BaseSwimAccel * ConfigManager.GetSwimAccelMod(skillFactor);
@@ -92,6 +95,8 @@ namespace kingskills
         }
         public static void JumpForceUpdate(Player player)
         {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Jump)) return;
+
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Jump);
 
             float vanillaJumpAddition = 1f + skillFactor * .4f;
@@ -116,12 +121,17 @@ namespace kingskills
                 $"New forward force: {player.m_jumpForceForward} \n" +
                 $"New tired factor: {player.m_jumpForceTiredFactor}");*/
         }
-        public static void SwordUpdate(Player player){
+        public static void SwordUpdate(Player player)
+        {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Swords)) return;
+
             player.m_dodgeStaminaUsage = ConfigManager.BaseDodgeStaminaUsage *
                 ConfigManager.GetSwordDodgeStaminaRedux(player.GetSkillFactor(Skills.SkillType.Swords));
         }
         public static void SneakUpdate(Player player)
         {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Sneak)) return;
+
             player.m_crouchSpeed = ConfigManager.BaseCrouchSpeed *
                 ConfigManager.GetSneakSpeedMod(player.GetSkillFactor(Skills.SkillType.Sneak));
         }
@@ -132,6 +142,8 @@ namespace kingskills
         [HarmonyPostfix]
         public static void GetMyMaxCarryWeight(Player __instance, ref float __result)
         {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Axes)) return;
+
             __result += ConfigManager.GetAxeCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Axes));
         }
 
@@ -140,8 +152,12 @@ namespace kingskills
         public static void SetMyMaxStamina(Player __instance, ref float stamina)
         {
             //Jotunn.Logger.LogMessage($"tried to set max stamina to {stamina}...");
-            stamina += ConfigManager.GetRunStamina(__instance.GetSkillFactor(Skills.SkillType.Run)) +
-                ConfigManager.GetAxeStamina(__instance.GetSkillFactor(Skills.SkillType.Axes));
+
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Run))
+                stamina += ConfigManager.GetRunStamina(__instance.GetSkillFactor(Skills.SkillType.Run));
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Axes))
+                stamina += ConfigManager.GetAxeStamina(__instance.GetSkillFactor(Skills.SkillType.Axes));
+
             //Jotunn.Logger.LogMessage($"Setting max stamina to {stamina} instead!");
         }
 
@@ -150,6 +166,7 @@ namespace kingskills
         [HarmonyPrefix]
         public static void SetMyMaxHealth(Character __instance, ref float health)
         {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Blocking)) return;
             if (!__instance.IsPlayer()) return;
 
             //Jotunn.Logger.LogMessage($"tried to set max health to {health}...");

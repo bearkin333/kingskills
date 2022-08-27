@@ -17,9 +17,12 @@ namespace kingskills.Patches
         {
 			//This code is pretty much ripped straight from valheim
 			//since I have to replace or transpile it to do most of what I want to do
+			if (!ConfigManager.IsSkillActive(Skills.SkillType.Sneak)) return true;
 
 			float staminaUse = ConfigManager.GetSneakStaminaDrain(__instance.GetSkillFactor(Skills.SkillType.Sneak));
+
 			__instance.UseStamina(dt * staminaUse);
+
 			if (!__instance.HaveStamina())
 			{
 				Hud.instance.StaminaBarNoStaminaFlash();
@@ -31,7 +34,7 @@ namespace kingskills.Patches
 				if (BaseAI.InStealthRange(__instance))
 				{
 					float sneakExpMod = GetStrongestEnemyInSight(__instance).GetLevel() *
-						ConfigManager.GetSneakEXPPerDangerMod();
+							ConfigManager.GetSneakEXPPerDangerMod();
 
 					__instance.RaiseSkill(Skills.SkillType.Sneak, sneakExpMod);
 				}
@@ -51,6 +54,7 @@ namespace kingskills.Patches
 			//Again, this function is entirely taken over.
 			//It pretty much seems like the only way.
 			//Aside from a messy transpile that I won't be able to pull off myself.
+			if (!ConfigManager.IsSkillActive(Skills.SkillType.Sneak)) return true;
 
 			__instance.m_stealthFactorUpdateTimer += dt;
 			if (__instance.m_stealthFactorUpdateTimer > 0.5f)

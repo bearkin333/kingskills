@@ -14,6 +14,27 @@ namespace kingskills
         public static ConfigEntry<float> ;
          */
 
+        /*
+         * Generalized language:
+         * 
+         * Per (or percent) refers to a number, typically between 1 and 100, that will
+         * probably be modified later on. Used for config entries.
+         * Ex: A per of 50% implies the final number will have a final value of 150%
+         * 
+         * Redux (or Reduction) refers to a percent that will be subtracted from 
+         * the whole.
+         * Ex: A redux of 50% implies the final number will have a final value of 50%
+         * 
+         * Mod (or modifier) is a version of a percentage that mulitplies something to
+         * change the entire number.
+         * Ex: a mod of .5 would be multiplied in if you wanted to halve a total number.
+         * 
+         * Mult (or multiplier) is math-ready verison of a percent that allows you
+         * to multiply the number. Used mostly in the actual code implementation.
+         * Ex: A per of 50% would generate a mult of 1.5 for actual handling in the math
+         * 
+         */
+
         public static ConfigEntry<float> WeaponEXPSwing;
         public static ConfigEntry<float> WeaponEXPHoldPerTick;
         public static ConfigEntry<float> WeaponEXPHoldTickLength;
@@ -89,6 +110,7 @@ namespace kingskills
         public static ConfigEntry<float> JumpForwardForceModMax;
         public static ConfigEntry<float> JumpTiredReduxMin;
         public static ConfigEntry<float> JumpTiredReduxMax;
+        public static ConfigEntry<float> JumpEXPMod;
 
         //Unorganized
         public static ConfigEntry<float> DropNewItemThreshold;
@@ -397,7 +419,9 @@ namespace kingskills
                 "% less stamina to block at level 100");
             BlockHealthPerLevel= cfg.Bind("Block.Effect", "Block Health", 1.2f,
                 "flat increase to max health per level of block");
-            
+
+            JumpEXPMod = cfg.Bind("Jump.Experience", "Jump Experience Mod", 50f,
+                "% of fall damage that becomes experience");
             //Jump Effects
             JumpFallDamageThresholdMin = cfg.Bind("Jump.Effect", "Fall Damage Threshold Min", 4f,
                 "meters to fall before you start calculating fall damage at level 0");
@@ -954,6 +978,10 @@ namespace kingskills
             return Mathf.Lerp(PerToMult(JumpTiredReduxMin, true), 
                 PerToMult(JumpTiredReduxMax, true), skillFactor);
         }
+        public static float GetJumpExpMod(float skillFactor)
+        {
+            return PerToMult(JumpEXPMod);
+        }
         public static float GetWeaponDamageToExperience(float damage)
         {
             return PerToMult(WeaponEXPStrikeDamageMod) * 
@@ -980,8 +1008,8 @@ namespace kingskills
         }
         public static float GetAxeChopDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(AxeChopDamageModMin), 
-                PerToMult(AxeChopDamageModMax), skillFactor);
+            return Mathf.Lerp(PerToMod(AxeChopDamageModMin), 
+                PerToMod(AxeChopDamageModMax), skillFactor);
         }
         public static float GetAxeStamina(float skillFactor)
         { 
@@ -1061,8 +1089,8 @@ namespace kingskills
         }
         public static float GetFistMovespeedMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(FistMovespeedModMin), 
-                PerToMult(FistMovespeedModMax), skillFactor);
+            return Mathf.Lerp(PerToMod(FistMovespeedModMin), 
+                PerToMod(FistMovespeedModMax), skillFactor);
         }
         public static float GetKnifeDamageMod(float skillFactor)
         {
@@ -1081,8 +1109,8 @@ namespace kingskills
         }
         public static float GetKnifeMovespeedMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(KnifeMovespeedModMin), 
-                PerToMult(KnifeMovespeedModMax), skillFactor);
+            return Mathf.Lerp(PerToMod(KnifeMovespeedModMin), 
+                PerToMod(KnifeMovespeedModMax), skillFactor);
         }
         public static float GetKnifePierceMod(float skillFactor)
         {
@@ -1162,8 +1190,8 @@ namespace kingskills
         }
         public static float GetWoodcuttingDamageMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(WoodcuttingChopDamageModMin), 
-                PerToMult(WoodcuttingChopDamageModMax), skillFactor);
+            return Mathf.Lerp(PerToMod(WoodcuttingChopDamageModMin), 
+                PerToMod(WoodcuttingChopDamageModMax), skillFactor);
         }
         public static float GetWoodDropRate(float skillFactor)
         {
@@ -1212,6 +1240,10 @@ namespace kingskills
             /*Mathf.Lerp(PerToMult(),
                 PerToMult(), skillFactor);
             */
+        }
+        public static float GetVanillaBlockMod(float skillFactor)
+        {
+            return 1f + skillFactor * .5f;
         }
 
         /*

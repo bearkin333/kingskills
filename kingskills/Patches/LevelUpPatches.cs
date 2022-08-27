@@ -46,13 +46,13 @@ namespace kingskills.Patches
             __instance.m_seman.ModifyRaiseSkill(skill, ref value);
 
 
-            if (skill == Skills.SkillType.Run)
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Run) && skill == Skills.SkillType.Run)
             {
                 value *= MovePatch.absoluteWeightBonus(__instance);
                 value *= MovePatch.relativeWeightBonus(__instance);
                 value *= MovePatch.runSpeedExpBonus(__instance);
             }
-            else if (skill == Skills.SkillType.Swim)
+            else if (ConfigManager.IsSkillActive(Skills.SkillType.Swim) && skill == Skills.SkillType.Swim)
             {
                 value *= MovePatch.absoluteWeightBonus(__instance);
                 value *= MovePatch.relativeWeightBonus(__instance);
@@ -71,7 +71,7 @@ namespace kingskills.Patches
         [HarmonyPrefix]
         public static void CheckUpdatesOnAwake(Player __instance)
         {
-
+            StatsPatch.RunStatUpdates(__instance);
         }
 
 

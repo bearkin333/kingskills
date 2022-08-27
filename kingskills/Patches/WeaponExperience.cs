@@ -24,12 +24,15 @@ namespace kingskills.WeaponExperience
                 //Jotunn.Logger.LogMessage($"Player dealt damage to {__instance.GetDestructibleType()}");
                 float damage = hit.m_damage.GetTotalDamage();
 
-                float damage_xp;
+                float damage_xp = 1f;
 
-                if (tool)
-                    damage_xp = ConfigManager.GetToolDamageToExperience(damage);
-                else
-                    damage_xp = ConfigManager.GetWeaponDamageToExperience(damage);
+                if (ConfigManager.IsSkillActive(hit.m_skill))
+                {
+                    if (tool)
+                        damage_xp = ConfigManager.GetToolDamageToExperience(damage);
+                    else
+                        damage_xp = ConfigManager.GetWeaponDamageToExperience(damage);
+                }
                 
                 float final_xp = damage_xp * factor;
                 //Jotunn.Logger.LogMessage($"Incrementing {hit.m_skill} by {final_xp} = damage {damage} ^ {ConfigManager.XpDamageDegree} * factor {factor}");
@@ -39,6 +42,8 @@ namespace kingskills.WeaponExperience
 
         public static void Swing(Player p, Skills.SkillType skill)
         {
+            if (!ConfigManager.IsSkillActive(skill)) return;
+
             //Jotunn.Logger.LogMessage($"Player swinging with {skill} for {ConfigManager.XpSwingRate} XP");
             p.RaiseSkill(skill, ConfigManager.WeaponEXPSwing.Value);
 
@@ -156,6 +161,11 @@ namespace kingskills.WeaponExperience
 
             ItemDrop.ItemData weapon = Util.GetPlayerWeapon(__instance);
             if (weapon == null)
+            {
+                last = null;
+                return;
+            }
+            if (!ConfigManager.IsSkillActive(weapon.m_shared.m_skillType))
             {
                 last = null;
                 return;

@@ -18,6 +18,11 @@ namespace kingskills
         [HarmonyPrefix]
         public static bool GetRunSpeedPatch(Player __instance, ref float __result)
         {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Run))
+            {
+                return true;
+            }
+
             //This function provides a number to multiply the base run speed by
             float runSkillFactor = ConfigManager.GetRunSpeedMod(__instance.m_skills.GetSkillFactor(Skills.SkillType.Run));
 
@@ -57,11 +62,16 @@ namespace kingskills
         public static float GetSkillMovespeedMod(Player player)
         {
             float mod = 1f;
-            mod *=
-                (ConfigManager.GetFistMovespeedMod(player.GetSkillFactor(Skills.SkillType.Unarmed)) +
-                ConfigManager.GetKnifeMovespeedMod(player.GetSkillFactor(Skills.SkillType.Knives)));
 
-            return mod;
+            float modAddition = 1f;
+
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Unarmed))
+                modAddition += ConfigManager.GetFistMovespeedMod(player.GetSkillFactor(Skills.SkillType.Unarmed));
+
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Run))
+                modAddition += ConfigManager.GetKnifeMovespeedMod(player.GetSkillFactor(Skills.SkillType.Knives));
+
+            return mod * modAddition;
         }
 
         // 
@@ -69,6 +79,8 @@ namespace kingskills
         //
         public static float GetEncumberanceFactor(Player player)
         {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Run)) return 1f;
+
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
             float encumberancePercent = Mathf.Clamp01(player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight());
             float encumberanceCurved = ConfigManager.GetEncumberanceCurve(encumberancePercent);
@@ -77,6 +89,8 @@ namespace kingskills
         }
         public static float GetEquipmentFactor(Player player)
         {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Run)) return 1f;
+
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
             float equipmentMalusRedux = ConfigManager.GetEquipmentRedux(skillFactor);
             float equipmentFactor = player.m_equipmentMovementModifier;
@@ -116,21 +130,30 @@ namespace kingskills
             {
             float fallHeight = Mathf.Max(0f, m_maxAirAltitude - this.GetTransform().position.y);
             float skillFactor = GetSkillFactor(Skills.SkillType.Jump);
-            float fallThreshold = ConfigManager.GetFallDamageThreshold(skillFactor);
+
+            float fallThreshold = 4;
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Jump))
+                fallThreshold = ConfigManager.GetFallDamageThreshold(skillFactor);
                 
             if (IsPlayer() && fallHeight > fallThreshold)
             {
                 HitData hitData = new HitData();
+
                 float fallDamage = (fallHeight - fallThreshold) * 8.33f;
-                fallDamage *= ConfigManager.GetFallDamageRedux(skillFactor);
+                float expGained = fallDamage;
+
+                if (ConfigManager.IsSkillActive(Skills.SkillType.Jump))
+                    fallDamage *= ConfigManager.GetFallDamageRedux(skillFactor);
+
                 hitData.m_damage.m_damage = fallDamage;
                 hitData.m_point = m_lastGroundPoint;
                 hitData.m_dir = m_lastGroundNormal;
                     
                 Damage(hitData);
-                RaiseSkill(Skills.SkillType.Jump, hitData.GetTotalDamage());
-                //Jotunn.Logger.LogMessage("Jump exp just increased by " + hitData.GetTotalDamage() + " thanks to fall damage");
-                
+
+                //Jotunn.Logger.LogMessage("Jump exp just increased by " + expGained + " thanks to fall damage");
+                if (ConfigManager.IsSkillActive(Skills.SkillType.Jump))
+                   RaiseSkill(Skills.SkillType.Jump, expGained);
             }
         }
     }
