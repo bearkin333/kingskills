@@ -113,14 +113,14 @@ namespace kingskills
             float runMod = player.GetRunSpeedFactor();
             player.m_seman.ApplyStatusEffectSpeedMods(ref runMod);
 
-            return runMod * ConfigManager.GetRunEXPSpeedMod();
+            return runMod * ConfigManager.GetRunEXPSpeedMult();
         }
         public static float swimSpeedExpBonus(Player player)
         {
             float swimMod = player.m_swimSpeed;
             player.m_seman.ApplyStatusEffectSpeedMods(ref swimMod);
 
-            return swimMod * ConfigManager.SwimXPSpeedMod.Value;
+            return swimMod * ConfigManager.GetSwimXPSpeedMult();
         }
     }
        

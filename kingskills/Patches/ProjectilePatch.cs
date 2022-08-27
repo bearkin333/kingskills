@@ -124,11 +124,11 @@ namespace kingskills
             else if (ConfigManager.IsSkillActive(Skills.SkillType.Bows) &&
                 skill == Skills.SkillType.Bows)
             {
-                player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * ConfigManager.WeaponBXPBowDistanceMod.Value);
+                player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * ConfigManager.GetWeaponBXPBowDistanceMult());
 
                 BonusExperienceDamageText.CreateBXPText(
                     BonusExperienceDamageText.GetInFrontOfCharacter(player),
-                    distanceTravelled * ConfigManager.WeaponBXPBowDistanceMod.Value);
+                    distanceTravelled * ConfigManager.GetWeaponBXPBowDistanceMult());
                 //Jotunn.Logger.LogMessage($"Bow bonus exp: {distanceTravelled * BowBXPDistanceMod}");
             }
         }
