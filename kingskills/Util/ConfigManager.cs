@@ -356,6 +356,7 @@ namespace kingskills
             ActiveSkillWood = cfg.Bind("Generic.Active", "Woodcutting", true,
                     "Whether or not to activate king's skills version of the woodcutting skill"); ;
 
+            
             SkillActive.Add(Skills.SkillType.Axes, ActiveSkillAxe.Value);
             SkillActive.Add(Skills.SkillType.Blocking, ActiveSkillBlock.Value);
             SkillActive.Add(Skills.SkillType.Bows, ActiveSkillBow.Value);
@@ -371,19 +372,19 @@ namespace kingskills
             SkillActive.Add(Skills.SkillType.Swim, ActiveSkillSwim.Value);
             SkillActive.Add(Skills.SkillType.Swords, ActiveSkillSword.Value);
             SkillActive.Add(Skills.SkillType.WoodCutting, ActiveSkillWood.Value);
-
+            
 
             //Weapon Swing Experence
-            WeaponXPSwing = cfg.Bind("Experience.Weapons.Swing", "XP Flat", .8f,
+            WeaponXPSwing = cfg.Bind("Experience.Weapons.Swing", "XP Flat", .25f,
                 "Flat experience to be gained on each swing, regardless of hit.");
 
 
             //Weapon Hold Experience
-            WeaponXPHoldPerTick = cfg.Bind("Experience.Weapons.Hold", "XP/s", .05f,
+            WeaponXPHoldPerTick = cfg.Bind("Experience.Weapons.Hold", "XP/s", .04f,
                 "Flat experience to be gained every second holding any weapon.");
             WeaponXPHoldTickLength = cfg.Bind("Experience.Weapons.Hold", "Timer", 1.0f,
                 "Seconds between ticks of hold experience.");
-            WeaponXPHoldUnarmedPercent = cfg.Bind("Experience.Weapons.Hold", "Unarmed", 33f,
+            WeaponXPHoldUnarmedPercent = cfg.Bind("Experience.Weapons.Hold", "Unarmed", 25f,
                 "% of normal hold experience to unarmed when holding nothing. Should be lower than 100% " +
                 "to account for how often a regular player is holding nothing.");
             
@@ -391,7 +392,7 @@ namespace kingskills
             //Weapon Strike Experience
             WeaponXPStrikeDamagePercent = cfg.Bind("Experience.Weapons", "XP", 20f,
                 "% modifier to overall experience gained from damage.");
-            WeaponXPStrikeDamageFactor = cfg.Bind("Experience.Weapons", "XP Factor", .32f,
+            WeaponXPStrikeDamageFactor = cfg.Bind("Experience.Weapons", "XP Factor", .24f,
                 "Factor to define the slope of the damage to xp curve.");
             WeaponXPStrikeDestructiblePercent = cfg.Bind("Experience.Weapons", "Destructible", 15f,
                 "% of experience gained when hit target is non living. Should be lover than 100%");
@@ -420,7 +421,7 @@ namespace kingskills
             ToolXPStrikeDamagePercent = cfg.Bind("Experience.Tools", "Tool Damage", 25f,
                 "% of damage done to resources that becomes experience for gathering skills " +
                 "(Woodcutting, Mining)");
-            ToolXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .32f,
+            ToolXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .24f,
                 "Factor to define the slope of the damage to xp curve");
 
 
@@ -448,7 +449,7 @@ namespace kingskills
 
 
             //Jump Experience
-            JumpXPPercent = cfg.Bind("Jump.Experience", "Jump Experience Mod", 63f,
+            JumpXPPercent = cfg.Bind("Jump.Experience", "Jump Experience Mod", 53f,
                 "% of fall damage that becomes experience");
 
             //Jump Effects
@@ -480,7 +481,7 @@ namespace kingskills
 
 
             //Swim Experience
-            SwimXPSpeedPercent = cfg.Bind("Swim.Experience", "XP", 40f,
+            SwimXPSpeedPercent = cfg.Bind("Swim.Experience", "XP", 60f,
                 "% of swim speed that becomes bonus experience gain");
             
             //Swim effects
@@ -507,9 +508,9 @@ namespace kingskills
                 "The lowest weight you will get an experience bonus for carrying");
             RunAbsoluteWeightMaxWeight = cfg.Bind("Run.Experience.AbsoluteWeight", "Maximum Weight", 1800f,
                 "The heighest weight you will get an experience bonus for carrying");
-            RunAbsoluteWeightFactor = cfg.Bind("Run.Experience.AbsoluteWeight", "Factor", .7f,
+            RunAbsoluteWeightFactor = cfg.Bind("Run.Experience.AbsoluteWeight", "Factor", .6f,
                 "Factor to define the slope of the absolute weight curve");
-            RunXPAbsoluteWeightPercent = cfg.Bind("Run.Experience.AbsoluteWeight", "XP", 500f, 
+            RunXPAbsoluteWeightPercent = cfg.Bind("Run.Experience.AbsoluteWeight", "XP", 400f, 
                 "% modifier for how much experience you get from absolute weight");
             
 
@@ -852,13 +853,13 @@ namespace kingskills
         {
             return SkillActive[skill];
         }
-        public static float GetWeaponEXPStrikeDestructibleMult()
+        public static float GetWeaponEXPStrikeDestructibleMod()
         {
-            return PerToMult(WeaponXPStrikeDestructiblePercent);
+            return PerToMod(WeaponXPStrikeDestructiblePercent);
         }
-        public static float GetWeaponEXPHoldUnarmedMult()
+        public static float GetWeaponEXPHoldUnarmedMod()
         {
-            return PerToMult(WeaponXPHoldUnarmedPercent);
+            return PerToMod(WeaponXPHoldUnarmedPercent);
         }
         public static float GetBlockExpMult()
         {
@@ -938,9 +939,9 @@ namespace kingskills
         }
         public static float GetAbsoluteWeightCurveMult(float weightMod)
         {
-            float minBonus = 1f;
-            float maxBonus = PerToMult(RunXPAbsoluteWeightPercent);
-            return Mathf.Lerp(minBonus, maxBonus, 
+            float minBonus = 0f;
+            float maxBonus = PerToMod(RunXPAbsoluteWeightPercent);
+            return 1f + Mathf.Lerp(minBonus, maxBonus, 
                 Mathf.Pow(weightMod, RunAbsoluteWeightFactor.Value));
             /*
             Jotunn.Logger.LogMessage($"Absolute weight exp mod: I was given {weightPercent} as weight percent\n" +
@@ -973,16 +974,16 @@ namespace kingskills
 
             //Jotunn.Logger.LogMessage($"Which means the multiplier I'm returning is {mult} times {PerToMult(RunRelativeWeightExpMod)}\n");
 
-            return mult * PerToMult(RunXPRelativeWeightPercent);
+            return mult * PerToMod(RunXPRelativeWeightPercent);
         }
         public static float GetRunStaminaRedux(float skillFactor)
         {
             return Mathf.Lerp(PerToMult(RunStaminaReduxMin, true), 
                 PerToMult(RunStaminaReduxMax, true), skillFactor);
         }
-        public static float GetRunEXPSpeedMult()
+        public static float GetRunEXPSpeedMod()
         {
-            return PerToMult(RunXPSpeedPercent);
+            return PerToMod(RunXPSpeedPercent);
         }
         public static float GetRunStamina(float skillFactor)
         {
@@ -1035,18 +1036,18 @@ namespace kingskills
             return Mathf.Lerp(PerToMult(JumpTiredReduxMin, true), 
                 PerToMult(JumpTiredReduxMax, true), skillFactor);
         }
-        public static float GetJumpXPMult(float skillFactor)
+        public static float GetJumpXPMod()
         {
-            return PerToMult(JumpXPPercent);
+            return PerToMod(JumpXPPercent);
         }
         public static float GetWeaponDamageToExperience(float damage)
         {
-            return PerToMult(WeaponXPStrikeDamagePercent) * 
+            return PerToMod(WeaponXPStrikeDamagePercent) * 
                 Mathf.Pow(damage, WeaponXPStrikeDamageFactor.Value);
         }
         public static float GetToolDamageToExperience(float damage)
         {
-            return PerToMult(ToolXPStrikeDamagePercent) * 
+            return PerToMod(ToolXPStrikeDamagePercent) * 
                 Mathf.Pow(damage, ToolXPStrikeDamageFactor.Value);
         }
         public static float GetSwimStaminaPerSec(float skillFactor)

@@ -71,7 +71,7 @@ namespace kingskills.Patches
         [HarmonyPrefix]
         public static void CheckUpdatesOnAwake(Player __instance)
         {
-            StatsPatch.RunStatUpdates(__instance);
+            //StatsPatch.RunStatUpdates(__instance);
         }
 
 

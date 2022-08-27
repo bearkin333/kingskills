@@ -15,7 +15,7 @@ namespace kingskills.WeaponExperience
     class Manager
     {
         // Patch IDestructible.Damage() to gain experience for player based on damage events.
-        public static void Strike(Player p, HitData hit, float factor=1.0f, bool tool=false)
+        public static void Strike(Player p, HitData hit, float mod=1.0f, bool tool=false)
         {
             if (!WeaponDamagePatch.CheckHitGood(hit)) return;
 
@@ -34,7 +34,7 @@ namespace kingskills.WeaponExperience
                         damage_xp = ConfigManager.GetWeaponDamageToExperience(damage);
                 }
                 
-                float final_xp = damage_xp * factor;
+                float final_xp = damage_xp * mod;
                 //Jotunn.Logger.LogMessage($"Incrementing {hit.m_skill} by {final_xp} = damage {damage} ^ {ConfigManager.XpDamageDegree} * factor {factor}");
                 p.RaiseSkill(hit.m_skill, final_xp);
             }
@@ -112,7 +112,7 @@ namespace kingskills.WeaponExperience
                 if (livingTarget)
                     factor = 1f;
                 else
-                    factor = ConfigManager.GetWeaponEXPStrikeDestructibleMult();
+                    factor = ConfigManager.GetWeaponEXPStrikeDestructibleMod();
             }
 
 
@@ -186,9 +186,10 @@ namespace kingskills.WeaponExperience
                 {
                     float ticks = timer / ConfigManager.WeaponXPHoldTickLength.Value;
                     float holdXp = ticks * ConfigManager.WeaponXPHoldPerTick.Value;
-                    if (weapon == __instance.m_unarmedWeapon.m_itemData)
+                    if (weapon == __instance.m_unarmedWeapon.m_itemData || 
+                        weapon.m_shared.m_skillType == Skills.SkillType.Unarmed)
                     {
-                        holdXp *= ConfigManager.GetWeaponEXPHoldUnarmedMult();
+                        holdXp *= ConfigManager.GetWeaponEXPHoldUnarmedMod();
                     }
                     Skills.SkillType skill = weapon.m_shared.m_skillType;
                     //Jotunn.Logger.LogMessage($"Holding {skill} for {timer}s, adding {holdXp} xp");

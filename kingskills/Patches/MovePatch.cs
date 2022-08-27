@@ -54,8 +54,8 @@ namespace kingskills
         public static float GetGenericMovespeedAdjustments(Player player){
             float mod = 1f;
             mod *= GetSkillMovespeedMod(player) 
-                * GetEncumberanceFactor(player) 
-                * GetEquipmentFactor(player);
+                * GetEncumberanceMult(player) 
+                * GetEquipmentMult(player);
             return mod;
         }
 
@@ -77,17 +77,17 @@ namespace kingskills
         // 
         // Experience determining functions
         //
-        public static float GetEncumberanceFactor(Player player)
+        public static float GetEncumberanceMult(Player player)
         {
             if (!ConfigManager.IsSkillActive(Skills.SkillType.Run)) return 1f;
 
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
-            float encumberancePercent = Mathf.Clamp01(player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight());
-            float encumberanceCurved = ConfigManager.GetEncumberanceCurveMult(encumberancePercent);
+            float encumberanceMod = Mathf.Clamp01(player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight());
+            float encumberanceCurved = ConfigManager.GetEncumberanceCurveMult(encumberanceMod);
             float skillEncumberanceRedux = ConfigManager.GetEncumberanceRedux(skillFactor);
             return encumberanceCurved * skillEncumberanceRedux;
         }
-        public static float GetEquipmentFactor(Player player)
+        public static float GetEquipmentMult(Player player)
         {
             if (!ConfigManager.IsSkillActive(Skills.SkillType.Run)) return 1f;
 
@@ -113,7 +113,7 @@ namespace kingskills
             float runMod = player.GetRunSpeedFactor();
             player.m_seman.ApplyStatusEffectSpeedMods(ref runMod);
 
-            return runMod * ConfigManager.GetRunEXPSpeedMult();
+            return runMod * ConfigManager.GetRunEXPSpeedMod();
         }
         public static float swimSpeedExpBonus(Player player)
         {
@@ -153,7 +153,10 @@ namespace kingskills
 
                 //Jotunn.Logger.LogMessage("Jump exp just increased by " + expGained + " thanks to fall damage");
                 if (ConfigManager.IsSkillActive(Skills.SkillType.Jump))
-                   RaiseSkill(Skills.SkillType.Jump, expGained);
+                {
+                    expGained *= ConfigManager.GetJumpXPMod();
+                    RaiseSkill(Skills.SkillType.Jump, expGained);
+                }
             }
         }
     }

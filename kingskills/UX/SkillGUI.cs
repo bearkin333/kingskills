@@ -527,7 +527,7 @@ namespace kingskills
             float axeDamage = ToPercent(ConfigManager.GetAxeDamageMult(skill));
             float axeStaminaRedux = ToPercent(ConfigManager.GetAxeStaminaRedux(skill));
             float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
-            float axeChopBonus = ToPercent(ConfigManager.GetAxeChopDamageMod(skill));
+            float axeChopBonus = ToPercent(1f+ ConfigManager.GetAxeChopDamageMod(skill));
             float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
 
             //Jotunn.Logger.LogMessage($"I'm changing the axe values in now");
@@ -571,7 +571,7 @@ namespace kingskills
             float bowDamage = ToPercent(ConfigManager.GetBowDamageMult(skill));
             float bowStaminaRedux = ToPercent(ConfigManager.GetBowStaminaRedux(skill));
             float bowVelocity = ToPercent(ConfigManager.GetBowVelocityMult(skill));
-            float bowDrawSpeed = ToPercent(ConfigManager.GetBowDrawSpeed(skill));
+            float bowDrawSpeed = ConfigManager.GetBowDrawSpeed(skill);
             float bowDropRate = ToPercent(ConfigManager.GetBowDropRateMult(skill));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
@@ -584,7 +584,7 @@ namespace kingskills
                 bowDamage.ToString("F1") + "% extra damage with bows\n" +
                 bowStaminaRedux.ToString("F1") + "% stamina usage with bows\n" +
                 bowVelocity.ToString("F1") + "% extra arrow velocity\n" +
-                bowDrawSpeed.ToString("F1") + "% faster draw speed\n" +
+                bowDrawSpeed.ToString("F1") + "% draw speed\n" +
                 bowDropRate.ToString("F1") + "% extra loot drops from creatures";
         }
         public static void OpenClubPanels()
@@ -618,7 +618,7 @@ namespace kingskills
             float fistStaminaRedux = ToPercent(ConfigManager.GetFistStaminaRedux(skill));
             float fistFlatDamage = ConfigManager.GetFistDamageFlat(skill);
             float fistBlock = ConfigManager.GetFistBlockArmor(skill);
-            float fistMovespeed = ToPercent(ConfigManager.GetFistMovespeedMod(skill));
+            float fistMovespeed = ToPercent(1f + ConfigManager.GetFistMovespeedMod(skill));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
                 "A percentage of all unarmed damage dealt is turned into experience. \n" +
@@ -666,7 +666,7 @@ namespace kingskills
             float knifeDamage = ToPercent(ConfigManager.GetKnifeDamageMult(skill));
             float knifeStaminaRedux = ToPercent(ConfigManager.GetKnifeStaminaRedux(skill));
             float knifeBackstab = ToPercent(ConfigManager.GetKnifeBackstabMult(skill));
-            float knifeMovespeed = ToPercent(ConfigManager.GetKnifeMovespeedMod(skill));
+            float knifeMovespeed = ToPercent(1f + ConfigManager.GetKnifeMovespeedMod(skill));
             float knifePierce = ToPercent(ConfigManager.GetKnifePierceMult(skill));
 
             LeftPanelExperienceText.GetComponent<Text>().text =
@@ -718,8 +718,8 @@ namespace kingskills
             float baseStaminaGain = ConfigManager.GetRunStamina(skill);
 
 
-            float encumberanceFactor = ToPercent(MovePatch.GetEncumberanceFactor(player));
-            float equipmentFactor = ToPercent(MovePatch.GetEquipmentFactor(player));
+            float encumberanceFactor = ToPercent(MovePatch.GetEncumberanceMult(player));
+            float equipmentFactor = ToPercent(MovePatch.GetEquipmentMult(player));
 
             float absWeightExp = ToPercent(MovePatch.absoluteWeightBonus(player));
             float relWeightExp = ToPercent(MovePatch.relativeWeightBonus(player));
@@ -734,9 +734,9 @@ namespace kingskills
                 relWeightExp.ToString("F1") + "% experience bonus from fullness of inventory";
             LeftPanelEffectsText.GetComponent<Text>().text =
                 runSpeedBonus.ToString("F1") + "% extra run speed\n" +
-                equipmentMalusRedux.ToString("F1") + "% reduction to equipment penalty\n" +
-                encumberanceRedux.ToString("F1") + "% reduction to encumberance penalty\n" +
-                staminaDrainRedux.ToString("F1") + "% stamina cost to run\n" +
+                equipmentMalusRedux.ToString("F1") + "% to equipment penalty\n" +
+                encumberanceRedux.ToString("F1") + "% to encumberance penalty\n" +
+                staminaDrainRedux.ToString("F1") + "% less stamina cost to run\n" +
                 baseStaminaGain.ToString("F1") + " extra base stamina\n" +
                 "\nCurrent effects from outside factors: \n" +
                 encumberanceFactor.ToString("F1") + "% speed from encumberance\n" +
@@ -771,7 +771,7 @@ namespace kingskills
             StatsPatch.SneakUpdate(Player.m_localPlayer);
 
             float sneakSpeed = ToPercent(ConfigManager.GetSneakSpeedMult(skill));
-            float sneakStaminaCost = ToPercent(ConfigManager.GetSneakStaminaDrain(skill));
+            float sneakStaminaCost = ConfigManager.GetSneakStaminaDrain(skill);
             float sneakLightFactor = ToPercent(ConfigManager.GetSneakFactor(skill, 2f));
             float sneakDarkFactor = ToPercent(ConfigManager.GetSneakFactor(skill, 0f));
 
@@ -845,7 +845,7 @@ namespace kingskills
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.WoodCutting);
 
-            float woodDamage = ToPercent(ConfigManager.GetWoodcuttingDamageMod(skill));
+            float woodDamage = ToPercent(1+ConfigManager.GetWoodcuttingDamageMod(skill));
             float woodDrop = ToPercent(ConfigManager.GetWoodDropMult(skill));
             float woodRebate = ConfigManager.GetWoodcuttingStaminaRebate(skill);
             float woodSomething = ToPercent(0f);
