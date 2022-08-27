@@ -38,9 +38,7 @@ namespace kingskills.Commands
                 return;
             }
 
-            StatsPatch.SwimSpeedUpdate(Player.m_localPlayer);
-            StatsPatch.RunSpeedUpdate(Player.m_localPlayer);
-            StatsPatch.JumpForceUpdate(Player.m_localPlayer);
+            StatsPatch.RunStatUpdates(Player.m_localPlayer);
         }
     }
 

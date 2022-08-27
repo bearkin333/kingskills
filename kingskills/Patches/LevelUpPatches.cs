@@ -18,7 +18,7 @@ namespace kingskills.Patches
         {
             //Jotunn.Logger.LogMessage("Checking skill");
             if (skill == Skills.SkillType.None) __result = 0f;
-
+            
             __result = Mathf.Clamp01(__instance.GetSkills().GetSkillLevel(skill) / ConfigManager.MaxSkillLevel.Value);
             return false;
         }
@@ -27,27 +27,7 @@ namespace kingskills.Patches
         [HarmonyPostfix]
         public static void SkillLevelupPatch(Player __instance, Skills.SkillType skill)
         {
-            if (skill == Skills.SkillType.Swim)
-            {
-                StatsPatch.SwimSpeedUpdate(__instance);
-            }
-            else if (skill == Skills.SkillType.Run)
-            {
-                StatsPatch.RunSpeedUpdate(__instance);
-            }
-            else if (skill == Skills.SkillType.Jump)
-            {
-                StatsPatch.JumpForceUpdate(__instance);
-            }
-            else if (skill == Skills.SkillType.Swords)
-            {
-                StatsPatch.SwordUpdate(__instance);
-            }
-            else if (skill == Skills.SkillType.Sneak)
-            {
-                StatsPatch.SneakUpdate(__instance);
-            }
-
+            StatsPatch.RunStatUpdates(__instance, true, skill);
         }
 
         [HarmonyPatch(nameof(Player.RaiseSkill))]
@@ -87,6 +67,14 @@ namespace kingskills.Patches
             return false;
         }
 
+        [HarmonyPatch(nameof(Player.Awake))]
+        [HarmonyPrefix]
+        public static void CheckUpdatesOnAwake(Player __instance)
+        {
+
+        }
+
+
         public static bool SkillRaise(Skills.Skill skill, Player player, float factor)
         {
             if (skill.m_level >= ConfigManager.MaxSkillLevel.Value)
@@ -97,9 +85,13 @@ namespace kingskills.Patches
             Skills.SkillType skillT = skill.m_info.m_skill;
             float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / ConfigManager.MaxSkillLevel.Value);
 
-            player.Message(MessageHud.MessageType.TopLeft, "Level " + skill.m_level.ToString("F0") + " " + skillT
-                + " [" + skill.m_accumulator.ToString("F2") + "/" + skill.GetNextLevelRequirement().ToString("F2") + "]"
-                + " (" + percent.ToString("F0") + "%)", 0, skill.m_info.m_icon);
+            if (factor >= ConfigManager.DisplayExperienceThreshold.Value)
+            {
+
+                player.Message(MessageHud.MessageType.TopLeft, "Level " + skill.m_level.ToString("F0") + " " + skillT
+                    + " [" + skill.m_accumulator.ToString("F2") + "/" + skill.GetNextLevelRequirement().ToString("F2") + "]"
+                    + " (" + percent.ToString("F0") + "%)", 0, skill.m_info.m_icon);
+            }
 
             float nextLevelRequirement = skill.GetNextLevelRequirement();
             while (skill.m_accumulator >= nextLevelRequirement)

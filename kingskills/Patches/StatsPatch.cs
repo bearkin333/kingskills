@@ -11,6 +11,40 @@ namespace kingskills
     [HarmonyPatch(typeof(Player))]
     class StatsPatch
     {
+        public static void RunStatUpdates(Player player, bool selectively = false, Skills.SkillType skill = Skills.SkillType.None)
+        {
+            if (!selectively)
+            {
+                RunSpeedUpdate(player);
+                SwimSpeedUpdate(player);
+                JumpForceUpdate(player);
+                SwordUpdate(player);
+                SneakUpdate(player);
+            }
+            else if (skill != Skills.SkillType.None)
+            {
+                switch (skill)
+                {
+                    case Skills.SkillType.Run:
+                        RunSpeedUpdate(player);
+                        break;
+                    case Skills.SkillType.Swim:
+                        SwimSpeedUpdate(player);
+                        break;
+                    case Skills.SkillType.Jump:
+                        JumpForceUpdate(player);
+                        break;
+                    case Skills.SkillType.Swords:
+                        SwordUpdate(player);
+                        break;
+                    case Skills.SkillType.Sneak:
+                        SneakUpdate(player);
+                        break;
+                }
+            }
+        }
+
+
         public static void RunSpeedUpdate(Player player)
         {
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);

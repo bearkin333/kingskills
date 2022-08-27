@@ -407,14 +407,14 @@ namespace kingskills
 
         public static void OnDropdownValueChange()
         {
+            scroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
             GUICheck();
         }
 
         public static void GUICheck()
         {
-            scroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
-
             //Jotunn.Logger.LogMessage($"Detected a dropdown value change.");
+
             Player player = Player.m_localPlayer;
             Skills.SkillType skill = Skills.SkillType.None;
 

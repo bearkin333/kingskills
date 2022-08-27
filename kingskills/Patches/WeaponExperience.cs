@@ -15,16 +15,16 @@ namespace kingskills.WeaponExperience
     class Manager
     {
         // Patch IDestructible.Damage() to gain experience for player based on damage events.
-        public static void Strike(Player p, IDestructible __instance, HitData hit, float factor=1.0f, bool tool=false)
+        public static void Strike(Player p, HitData hit, float factor=1.0f, bool tool=false)
         {
-            if (hit.m_attacker == null) return;
+            if (!WeaponDamagePatch.CheckHitGood(hit)) return;
 
             if (hit.m_attacker == p.GetZDOID())
             {
                 //Jotunn.Logger.LogMessage($"Player dealt damage to {__instance.GetDestructibleType()}");
                 float damage = hit.m_damage.GetTotalDamage();
 
-                float damage_xp = 0;
+                float damage_xp;
 
                 if (tool)
                     damage_xp = ConfigManager.GetToolDamageToExperience(damage);
@@ -107,11 +107,11 @@ namespace kingskills.WeaponExperience
                 if (livingTarget)
                     factor = 1f;
                 else
-                    factor = ConfigManager.WeaponEXPStrikeDestructibleMod.Value;
+                    factor = ConfigManager.GetWeaponEXPStrikeDestructibleMod();
             }
 
 
-            Manager.Strike(playerRef, __instance, hit, factor, tool);
+            Manager.Strike(playerRef, hit, factor, tool);
         }
     }
 
@@ -178,7 +178,7 @@ namespace kingskills.WeaponExperience
                     float holdXp = ticks * ConfigManager.WeaponEXPHoldPerTick.Value;
                     if (weapon == __instance.m_unarmedWeapon.m_itemData)
                     {
-                        holdXp *= ConfigManager.WeaponEXPHoldUnarmedMod.Value;
+                        holdXp *= ConfigManager.GetWeaponEXPHoldUnarmedMod();
                     }
                     Skills.SkillType skill = weapon.m_shared.m_skillType;
                     //Jotunn.Logger.LogMessage($"Holding {skill} for {timer}s, adding {holdXp} xp");

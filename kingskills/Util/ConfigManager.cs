@@ -190,9 +190,25 @@ namespace kingskills
         public static ConfigEntry<float> SneakSpeedModMax;
 
         public static ConfigEntry<float> MaxSkillLevel;
+        public static ConfigEntry<float> DisplayExperienceThreshold;
+        public static ConfigEntry<bool> ActiveSkillAxe;
+        public static ConfigEntry<bool> ActiveSkillBlock;
+        public static ConfigEntry<bool> ActiveSkillBow;
+        public static ConfigEntry<bool> ActiveSkillClub;
+        public static ConfigEntry<bool> ActiveSkillFist;
+        public static ConfigEntry<bool> ActiveSkillJump;
+        public static ConfigEntry<bool> ActiveSkillKnife;
+        public static ConfigEntry<bool> ActiveSkillMine;
+        public static ConfigEntry<bool> ActiveSkillPolearm;
+        public static ConfigEntry<bool> ActiveSkillRun;
+        public static ConfigEntry<bool> ActiveSkillSpear;
+        public static ConfigEntry<bool> ActiveSkillSneak;
+        public static ConfigEntry<bool> ActiveSkillSwim;
+        public static ConfigEntry<bool> ActiveSkillSword;
+        public static ConfigEntry<bool> ActiveSkillWood;
 
-
-        //Constants for use that aren't configurable
+        //Variables and constants for use that aren't configurable
+        public static Dictionary<Skills.SkillType, bool> SkillActive = new Dictionary<Skills.SkillType, bool>();
         public static Dictionary<string, float> WoodcuttingDropTable = new Dictionary<string, float>();
         public static Dictionary<string, float> MiningDropTable = new Dictionary<string, float>();
         public static Dictionary<string, float> BowDropTable = new Dictionary<string, float>();
@@ -257,8 +273,58 @@ namespace kingskills
              */
             //Weapon Swing Experience
 
+            ActiveSkillAxe = cfg.Bind("Overall.Active", "Axes Active", true,
+                    "Whether or not to activate king's skills version of the axes skill");
+            ActiveSkillBlock = cfg.Bind("Overall.Active", "Blocking Active", true,
+                    "Whether or not to activate king's skills version of the blocking skill"); ;
+            ActiveSkillBow = cfg.Bind("Overall.Active", "Bows Active", true,
+                    "Whether or not to activate king's skills version of the bows skill"); ;
+            ActiveSkillClub = cfg.Bind("Overall.Active", "Clubs Active", true,
+                    "Whether or not to activate king's skills version of the clubs skill"); ;
+            ActiveSkillFist = cfg.Bind("Overall.Active", "Fists Active", true,
+                    "Whether or not to activate king's skills version of the unarmed skill"); ;
+            ActiveSkillJump = cfg.Bind("Overall.Active", "Jump Active", true,
+                    "Whether or not to activate king's skills version of the jump skill"); ;
+            ActiveSkillKnife = cfg.Bind("Overall.Active", "Knives Active", true,
+                    "Whether or not to activate king's skills version of the knives skill"); ;
+            ActiveSkillMine = cfg.Bind("Overall.Active", "Mining Active", true,
+                    "Whether or not to activate king's skills version of the mining skill"); ;
+            ActiveSkillPolearm = cfg.Bind("Overall.Active", "Polearms Active", true,
+                    "Whether or not to activate king's skills version of the polearms skill"); ;
+            ActiveSkillRun = cfg.Bind("Overall.Active", "Run Active", true,
+                    "Whether or not to activate king's skills version of the run skill"); ;
+            ActiveSkillSpear = cfg.Bind("Overall.Active", "Spear Active", true,
+                    "Whether or not to activate king's skills version of the spear skill"); ;
+            ActiveSkillSneak = cfg.Bind("Overall.Active", "Sneak Active", true,
+                    "Whether or not to activate king's skills version of the sneak skill"); ;
+            ActiveSkillSwim = cfg.Bind("Overall.Active", "Swim Active", true,
+                    "Whether or not to activate king's skills version of the swim skill"); ;
+            ActiveSkillSword = cfg.Bind("Overall.Active", "Swords Active", true,
+                    "Whether or not to activate king's skills version of the swords skill"); ;
+            ActiveSkillWood = cfg.Bind("Overall.Active", "Woodcutting Active", true,
+                    "Whether or not to activate king's skills version of the woodcutting skill"); ;
+
+            SkillActive.Add(Skills.SkillType.Axes, ActiveSkillAxe.Value);
+            SkillActive.Add(Skills.SkillType.Blocking, ActiveSkillBlock.Value);
+            SkillActive.Add(Skills.SkillType.Bows, ActiveSkillBow.Value);
+            SkillActive.Add(Skills.SkillType.Clubs, ActiveSkillClub.Value);
+            SkillActive.Add(Skills.SkillType.Unarmed, ActiveSkillFist.Value);
+            SkillActive.Add(Skills.SkillType.Jump, ActiveSkillJump.Value);
+            SkillActive.Add(Skills.SkillType.Knives, ActiveSkillKnife.Value);
+            SkillActive.Add(Skills.SkillType.Pickaxes, ActiveSkillMine.Value);
+            SkillActive.Add(Skills.SkillType.Polearms, ActiveSkillPolearm.Value);
+            SkillActive.Add(Skills.SkillType.Run, ActiveSkillRun.Value);
+            SkillActive.Add(Skills.SkillType.Spears, ActiveSkillSpear.Value);
+            SkillActive.Add(Skills.SkillType.Sneak, ActiveSkillSneak.Value);
+            SkillActive.Add(Skills.SkillType.Swim, ActiveSkillSwim.Value);
+            SkillActive.Add(Skills.SkillType.Swords, ActiveSkillSword.Value);
+            SkillActive.Add(Skills.SkillType.WoodCutting, ActiveSkillWood.Value);
+
+
             MaxSkillLevel = cfg.Bind("Overall", "Max Skill Level", 100f,
                 "This is the level that all king skills can go up to.");
+            DisplayExperienceThreshold = cfg.Bind("Overall", "Experience Display Threshold", .8f,
+                "Threshold under which experience earned will not display as a message.");
 
             WeaponEXPSwing = cfg.Bind("Experience.Weapons", "XP Per Swing", 1f,
                 "Flat experience to be gained on each swing, regardless of hit.");
@@ -705,6 +771,18 @@ namespace kingskills
          * Here be the Get functions
          * 
          */
+        public static bool IsSkillActive(Skills.SkillType skill)
+        {
+            return SkillActive[skill];
+        }
+        public static float GetWeaponEXPStrikeDestructibleMod()
+        {
+            return PerToMult(WeaponEXPStrikeDestructibleMod);
+        }
+        public static float GetWeaponEXPHoldUnarmedMod()
+        {
+            return PerToMult(WeaponEXPHoldUnarmedMod);
+        }
         public static float GetBlockExpMod()
         {
             return PerToMult(BlockExpMod);
