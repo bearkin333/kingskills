@@ -41,7 +41,7 @@ Adds Sailing, Construction, Cooking, Gathering, and Mining
 
 As you hit significant skill milestones, like level 50 or 100, you will now get to make choices between big bonuses that will seriously affect the way you interact with that skill or the world. Manage to get Jump up to level 50, and suddenly you'll be able to perform special meteor drops that turn your downward velocity into ground and enemy-destroying shockwaves. Perform the incredible feat of levelling woodcutting to 100, and you'll suddenly be able to fell entire forests with a single blow. Every feat is rewarded!
 
-All perks will be hidden at the start of a game. This can be turned off in the configs, but where's your sense of adventure and discovery???
+All perks will be hidden at the start of a game. This can be turned off in the configs, but where's your sense of adventure and discovery??
 
 ## Warning
 **This mod totally reworks how every skill is gained and implemented. Every skill affects almost every part of the game now, even more than before, both massively increasing the range of possible gamestates and massively disrupting the game's base balancing. In addition to making skills overall more powerful and easier to acquire, it changes certain ways that experience is expected to be gained. *
