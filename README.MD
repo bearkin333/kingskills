@@ -44,7 +44,7 @@ As you hit significant skill milestones, like level 50 or 100, you will now get 
 All perks will be hidden at the start of a game. This can be turned off in the configs, but where's your sense of adventure and discovery??
 
 ## Warning
-**This mod totally reworks how every skill is gained and implemented. Every skill affects almost every part of the game now, even more than before, both massively increasing the range of possible gamestates and massively disrupting the game's base balancing. In addition to making skills overall more powerful and easier to acquire, it changes certain ways that experience is expected to be gained. *
+**This mod totally reworks how every skill is gained and implemented. Every skill affects almost every part of the game now, even more than before, both massively increasing the range of possible gamestates and massively disrupting the game's base balancing. In addition to making skills overall more powerful and easier to acquire, it changes certain ways that experience is expected to be gained.**
 
 **This means two things. First - despite great pains taken to make this mod compatible, *any other mod that so much as touches the base skills* is probably a bad choice to use with this mod. I would recommend against attempting it. Mods adding other new skills wouldn't be as incompatible, but would still likely be greatly disruptive to the game balance.**
 
