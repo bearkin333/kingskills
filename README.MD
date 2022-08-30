@@ -13,18 +13,3 @@ So now you can level up your skills - but what fun would that be if not for the 
 
 As you level up with each skill, you will gain Perks, which are powerful buffs and abilities that truly signify your mastery of the craft. Perks are hidden until you unlock them (which can be turned off in the config menu), so get out there and get exploring!
 King skills also adds several new skills so that no matter how to end up spending your time in midgard, you can feel truly rewarded for a job well done.
-
-# Priority List
-
-- [ ] change skill experience for all weapons
-- [ ] change skill experience gain for every other base skill
-- [ ] change effects for run, jump, swim
-- [ ] add UI elements to display detailed effects
-- [ ] change effects for wood cutting, blocking
-- [ ] change effects for all weapons
-- [ ] add UX to display experience numbers
-- [ ] implement perk system for weapons
-- [ ] implement perk system for other skills
-- [ ] add mining skill
-- [ ] add heavy weapons skill
-- [ ] add sailing, then building, then agriculture, then cooking
