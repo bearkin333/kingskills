@@ -22,7 +22,7 @@ namespace kingskills
     {
         public const string PluginGUID = "bearking.kingskills";
         public const string PluginName = "King's Skills";
-        public const string PluginVersion = "0.0.1";
+        public const string PluginVersion = "1.0.0";
 
         public static Skills.SkillType TestSkillType = 0;
 

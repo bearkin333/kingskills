@@ -475,9 +475,9 @@ namespace kingskills
             JumpStaminaReduxMax = cfg.Bind("Jump.Effect", "Stamina Cost Max", 60f,
                 "% less stamina cost to jump at level 100");
             JumpTiredReduxMin = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Min", 0f,
-                "% added to the base game's tired factor, which reduces your jump force when out of stamina, at level 0");
+                "% jump force added to the base game's tired factor, which reduces your jump force when out of stamina, at level 0");
             JumpTiredReduxMax = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Max", 20f,
-                "% added to the base game's tired factor, which reduces your jump force when out of stamina, at level 100");
+                "% jump force added to the base game's tired factor, which reduces your jump force when out of stamina, at level 100");
 
 
             //Swim Experience
@@ -1031,10 +1031,10 @@ namespace kingskills
             return Mathf.Lerp(PerToMult(JumpStaminaReduxMin, true), 
                 PerToMult(JumpStaminaReduxMax, true), skillFactor);
         }
-        public static float GetJumpTiredRedux(float skillFactor)
+        public static float GetJumpTiredMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(JumpTiredReduxMin, true), 
-                PerToMult(JumpTiredReduxMax, true), skillFactor);
+            return Mathf.Lerp(PerToMod(JumpTiredReduxMin, true), 
+                PerToMod(JumpTiredReduxMax, true), skillFactor);
         }
         public static float GetJumpXPMod()
         {

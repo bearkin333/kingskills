@@ -103,7 +103,7 @@ namespace kingskills
             float newJumpForce = ConfigManager.BaseJumpForce * ConfigManager.GetJumpForceMult(skillFactor);
             float newJumpForwardForce = ConfigManager.BaseJumpForwardForce * ConfigManager.GetJumpForwardForceMult(skillFactor);
             float newStaminaUse = ConfigManager.BaseJumpStaminaUse * ConfigManager.GetJumpStaminaRedux(skillFactor);
-            float newTiredFactor = ConfigManager.BaseJumpTiredFactor + ConfigManager.GetJumpTiredRedux(skillFactor);
+            float newTiredFactor = ConfigManager.BaseJumpTiredFactor + ConfigManager.GetJumpTiredMod(skillFactor);
 
             newJumpForce /= vanillaJumpAddition; //Removing the vanilla calculations
             newJumpForwardForce /= vanillaJumpAddition; //Removing the vanilla calculations

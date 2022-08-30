@@ -642,7 +642,7 @@ namespace kingskills
             float bonusJumpForce = ToPercent(ConfigManager.GetJumpForceMult(skill));
             float bonusJumpForwardForce = ToPercent(ConfigManager.GetJumpForwardForceMult(skill));
             float staminaRedux = ToPercent(ConfigManager.GetJumpStaminaRedux(skill));
-            float tired = ToPercent(ConfigManager.GetJumpTiredRedux(skill));
+            float tired = ToPercent(ConfigManager.GetJumpTiredMod(skill));
 
             float fallDamageThreshhold = ConfigManager.GetFallDamageThreshold(skill);
             float fallDamageRedux = ToPercent(ConfigManager.GetFallDamageRedux(skill));
