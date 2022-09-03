@@ -2,6 +2,7 @@
 using Jotunn;
 using Jotunn.GUI;
 using Jotunn.Managers;
+using Jotunn.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,11 +45,8 @@ namespace kingskills
         public static GameObject RightPanelAscendedText;
 
         public static GameObject RightPanelPerkOneLevel;
-            public static GameObject RightPanelPerkOneAImage;
-            public static GameObject RightPanelPerkOneBImage;
         public static GameObject RightPanelPerkTwoLevel;
-            public static GameObject RightPanelPerkTwoAImage;
-            public static GameObject RightPanelPerkTwoBImage;
+        public static Dictionary<string, GameObject> RightPanelPerkBoxes;
         //public static GameObject RightPanelPerkThreeLevel;
         //public static GameObject RightPanelPerkFourLevel;
 
@@ -68,6 +66,9 @@ namespace kingskills
                 Jotunn.Logger.LogError("GUIManager CustomGUI is null");
                 return;
             }
+            RectTransform rect;
+            Image image;
+            Assets.AssetLoader.InitPerkSprites();
 
             SkillGUIWindow = GUIManager.Instance.CreateWoodpanel(
                     parent: GUIManager.CustomGUIFront.transform,
@@ -100,14 +101,15 @@ namespace kingskills
 
             //Create skill icon
             SSIcon = new GameObject();
-            Image SSIconImage = SSIcon.AddComponent<Image>();
-            SSIconImage.sprite = GUIManager.Instance.GetSprite("ArmorBronzeChest");
-            SSIcon.GetComponent<RectTransform>().SetParent(SkillGUIWindow.transform);
-            SSIcon.GetComponent<RectTransform>().anchorMin = new Vector2(0f, 1f);
-            SSIcon.GetComponent<RectTransform>().anchorMax = new Vector2(0f, 1f);
-            SSIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(150f, -60f);
-            //SSIcon.GetComponent<RectTransform>().localPosition = new Vector2(-40f, -30f);
-            SSIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(80f, 80f);
+            image = SSIcon.AddComponent<Image>();
+            image.sprite = GUIManager.Instance.GetSprite("ArmorBronzeChest");
+            rect = SSIcon.GetComponent<RectTransform>();
+            rect.SetParent(SkillGUIWindow.transform);
+            rect.anchorMin = new Vector2(0f, 1f);
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.anchoredPosition = new Vector2(150f, -60f);
+            //rect.localPosition = new Vector2(-40f, -30f);
+            rect.sizeDelta = new Vector2(80f, 80f);
             SSIcon.SetActive(true);
 
             // Create Level text
@@ -211,7 +213,7 @@ namespace kingskills
                 delegate {
                     SkillGUI.OnDropdownValueChange();
                 });
-            var rect = SkillDropDown.GetComponent<RectTransform>();
+            rect = SkillDropDown.GetComponent<RectTransform>();
 
             dd.captionText.horizontalOverflow = HorizontalWrapMode.Wrap;
             dd.itemText.horizontalOverflow = HorizontalWrapMode.Wrap;
@@ -279,17 +281,18 @@ namespace kingskills
             GameObject.Destroy(scrollVert.GetComponent<Mask>());
             scrollVert.transform.SetParent(scroll.transform);
 
-            scrollVert.GetComponent<RectTransform>().sizeDelta = new Vector2(300, 600);
-            scrollVert.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
-            scrollVert.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
-            scrollVert.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+            rect = scrollVert.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(300, 600);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0, 0);
 
             VerticalLayoutGroup vertSettings = scrollVert.AddComponent(typeof(VerticalLayoutGroup)) as VerticalLayoutGroup;
             vertSettings.spacing = 1f;
             vertSettings.childControlWidth = true;
 
 
-            scrollSet.content = scrollVert.GetComponent<RectTransform>();
+            scrollSet.content = rect;
             scrollSet.verticalNormalizedPosition = 1;
             
 
@@ -399,7 +402,56 @@ namespace kingskills
                 addContentSizeFitter: false);
             RightPanelAscendedText.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
 
-            //dd.captionText.resizeTextForBestFit = true;
+
+            RightPanelPerkBoxes = new Dictionary<string, GameObject>();
+
+            RightPanelPerkBoxes.Add("1a", new GameObject());
+            image = RightPanelPerkBoxes["1a"].AddComponent<Image>();
+            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            rect = RightPanelPerkBoxes["1a"].GetComponent<RectTransform>();
+            rect.SetParent(SkillGUIWindow.transform);
+            rect.anchorMin = new Vector2(0.5f, 1f);
+            rect.anchorMax = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(-60f, -120f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+            
+            RightPanelPerkBoxes["1a"].SetActive(true);
+
+            RightPanelPerkBoxes.Add("1b", new GameObject());
+            //image = RightPanelPerkBoxes["1b"].AddComponent<Image>();
+            //image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            rect = RightPanelPerkBoxes["1b"].GetComponent<RectTransform>();
+            rect.SetParent(RightPanelPerks.transform);
+            rect.anchorMin = new Vector2(0.5f, 1f);
+            rect.anchorMax = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(60f, -120f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+            RightPanelPerkBoxes["1b"].SetActive(true);
+
+
+            RightPanelPerkBoxes.Add("2a", new GameObject());
+            //image = RightPanelPerkBoxes["2a"].AddComponent<Image>();
+            //image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            rect = RightPanelPerkBoxes["2a"].GetComponent<RectTransform>();
+            rect.SetParent(RightPanelPerks.transform);
+            rect.anchorMin = new Vector2(0.5f, 1f);
+            rect.anchorMax = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(-60f, -300f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+            RightPanelPerkBoxes["2a"].SetActive(true);
+
+
+            RightPanelPerkBoxes.Add("2b", new GameObject());
+            //image = RightPanelPerkBoxes["2b"].AddComponent<Image>();
+            //image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            rect = RightPanelPerkBoxes["2b"].GetComponent<RectTransform>();
+            rect.SetParent(RightPanelPerks.transform);
+            rect.anchorMin = new Vector2(0.5f, 1f);
+            rect.anchorMax = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(60f, -300f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+            RightPanelPerkBoxes["2b"].SetActive(true);
+
 
 
             //Jotunn.Logger.LogMessage($"There are {dd.options.Count} options. The first is {dd.options[0].text}, the last is {dd.options[dd.options.Count-1].text}"); 

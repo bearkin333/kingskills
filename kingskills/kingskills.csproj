@@ -81,6 +81,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AssetLoader.cs" />
     <Compile Include="Patches\BlockPatch.cs" />
     <Compile Include="Patches\LevelUpPatches.cs" />
     <Compile Include="Patches\LootDropPatch.cs" />
@@ -115,6 +116,8 @@
     <None Include="Package\manifest.json" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Assets\perkbox.png" />
+    <EmbeddedResource Include="Assets\perkboxLocked.png" />
     <Content Include="Package\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
