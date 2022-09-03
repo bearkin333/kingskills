@@ -6,120 +6,117 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kingskills.Perks
+namespace kingskills
 {
-    class Perks
+    public static class Perks
     {
-    }
+        public static Dictionary<Perk, bool> perkFlags;
+        public static Dictionary<Skills.SkillType, bool> skillAscendedFlags;
+        public static bool loaded = false;
 
-    [HarmonyPatch(typeof(PlayerProfile))]
-    public static class SaveLoad
-    {
-        public const string saveDirectory = "/characters/KS";
-        public const string fileEnding = "_ks.fch";
-
-        [HarmonyPatch(nameof(PlayerProfile.SavePlayerToDisk))]
-        [HarmonyPostfix]
-        public static void SaveKSPerks(PlayerProfile __instance)
+        public static void Awake()
         {
-            //Decide on the save paths for our new files
-            Directory.CreateDirectory(Utils.GetSaveDataPath(__instance.m_fileSource)
-                + saveDirectory);
-            string oldSavePath = Utils.GetSaveDataPath(__instance.m_fileSource)
-                + saveDirectory + "/" + __instance.m_filename + fileEnding;
-            string newSavePath = Utils.GetSaveDataPath(__instance.m_fileSource)
-                + saveDirectory + "/" + __instance.m_filename + fileEnding + ".new";
-            ZPackage zPackage = new ZPackage();
-            //Jotunn.Logger.LogWarning($"saving in path {oldSavePath}");
+            perkFlags = new Dictionary<Perk, bool>();
+            skillAscendedFlags = new Dictionary<Skills.SkillType, bool>();
+            InitSkillAcensions();
 
-            //Write all of our parseable information to a package
-            zPackage.Write(true);
-
-
-            //Writing the zpackage to binary
-            //Which writes to a file
-            byte[] array = zPackage.GenerateHash();
-            byte[] array2 = zPackage.GetArray();
-            FileStream fileStream = File.Create(newSavePath);
-            BinaryWriter binaryWriter = new BinaryWriter(fileStream);
-            binaryWriter.Write(array2.Length);
-            binaryWriter.Write(array2);
-            binaryWriter.Write(array.Length);
-            binaryWriter.Write(array);
-            binaryWriter.Flush();
-
-            //True means flushing to disk
-            fileStream.Flush(true);
-
-            //Close the filestream
-            fileStream.Close();
-            fileStream.Dispose();
-
-            //Delete the old save file (if it exists)
-            if (File.Exists(oldSavePath))
-                File.Delete(oldSavePath);
-
-            //Replace it with the new one
-            File.Move(newSavePath, oldSavePath);
+            loaded = true;
         }
 
-        [HarmonyPatch(nameof(PlayerProfile.LoadPlayerFromDisk))]
-        [HarmonyPostfix]
-        public static void LoadKSPerks(PlayerProfile __instance)
+        public static void InitSkillAcensions()
         {
-            try
-            {
-            string filePath = Utils.GetSaveDataPath(__instance.m_fileSource)
-                + saveDirectory + "/" + __instance.m_filename + fileEnding;
-
-            ZPackage zPackage = StreamFromFile(filePath);
-            //Jotunn.Logger.LogWarning($"loading from {filePath}");
-
-            if (zPackage == null) return;
-
-            //handle data extraction from file
-            bool testData = zPackage.ReadBool();
-            Jotunn.Logger.LogMessage($"Just read {testData} from {filePath}");
-
-            }
-            catch
-            {
-                Jotunn.Logger.LogWarning("Didn't load from King Skills");
-                return;
-            }
-
+            skillAscendedFlags.Add(Skills.SkillType.Axes, false);
+            skillAscendedFlags.Add(Skills.SkillType.Blocking, false);
+            skillAscendedFlags.Add(Skills.SkillType.Bows, false);
+            skillAscendedFlags.Add(Skills.SkillType.Clubs, false);
+            skillAscendedFlags.Add(Skills.SkillType.Jump, false);
+            skillAscendedFlags.Add(Skills.SkillType.Knives, false);
+            skillAscendedFlags.Add(Skills.SkillType.Pickaxes, false);
+            skillAscendedFlags.Add(Skills.SkillType.Polearms, false);
+            skillAscendedFlags.Add(Skills.SkillType.Run, false);
+            skillAscendedFlags.Add(Skills.SkillType.Sneak, false);
+            skillAscendedFlags.Add(Skills.SkillType.Spears, false);
+            skillAscendedFlags.Add(Skills.SkillType.Swim, false);
+            skillAscendedFlags.Add(Skills.SkillType.Swords, false);
+            skillAscendedFlags.Add(Skills.SkillType.Unarmed, false);
+            skillAscendedFlags.Add(Skills.SkillType.WoodCutting, false);
         }
 
-        public static ZPackage StreamFromFile(string filePath)
+        public static bool IsSkillAscended(Skills.SkillType skill)
         {
-            FileStream fileStream;
-            try
+            if (loaded)
             {
-                fileStream = File.OpenRead(filePath);
+                return skillAscendedFlags[skill];
             }
-            catch
+            else
             {
-                Jotunn.Logger.LogWarning("No save data for Kings Skills");
-                return null;
+                Jotunn.Logger.LogWarning("skill acensions haven't been loaded!");
+                return false;
             }
-
-            byte[] data;
-            try
-            {
-                BinaryReader binaryReader = new BinaryReader(fileStream);
-                int count = binaryReader.ReadInt32();
-                data = binaryReader.ReadBytes(count);
-                count = binaryReader.ReadInt32();
-                binaryReader.ReadBytes(count);
-            }
-            catch
-            {
-                Jotunn.Logger.LogError("File found, but error loading Kings Skills data");
-                fileStream.Dispose();
-                return null;
-            }
-
-            return new ZPackage(data);
         }
+
+        public enum Perk
+        {
+            //Axe
+            Decapitation, Berserkr,
+            Highlander, Throwback,
+
+            //Blocking
+            TitanEndurance, SpikedShield,
+            TitanStrength, BlackFlash,
+
+            //Bow
+            PowerDraw, Frugal,
+            RunedArrows, OfferToUllr,
+
+            //Club
+            ClosingTheGap, ThunderHammer,
+            TrollSmash, PlusUltra,
+
+            //Unarmed
+            IronSkin, LightningReflex,
+            FalconKick, PressurePoints,
+
+            //Jump
+            GoombaStomp, MarketGardener,
+            MeteorDrop, OdinJump,
+
+            //Knife
+            Deadeye, Iai,
+            LokisGift, DisarmingDefense,
+
+            //Mining
+            TrenchDigger, Stretch,
+            RockHauler, LodeBearingStone,
+
+            //Run
+            Tackle, HermesBoots,
+            WaterRunning,Juggernaut,
+
+            //Polearm
+            Jotunn, LivingStone,
+            BigStick, Asguard,
+
+            //Sneak
+            SmokeBomb, SilentSprinter,
+            HideInPlainSight, CloakOfShadows,
+
+            //Spear
+            ValkyriesBoon, Boomerang,
+            CouchedLance, EinherjarsBlessing,
+
+            //Swim
+            SeaLegs, Butterfly,
+            AlwaysPrepared, Aerodynamic,
+
+            //Sword
+            PerfectCombo, Meditation,
+            GodSlayingStrike, WarriorOfLight,
+
+            //Woodcutting
+            HeartOfTheForest, MasterOfTheLog,
+            HeartOfTheMonkey, PandemoniumSwing
+        }
+
     }
 }

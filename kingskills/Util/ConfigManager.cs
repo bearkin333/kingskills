@@ -248,6 +248,12 @@ namespace kingskills
         public static ConfigEntry<float> MaxSkillLevel;
         public static ConfigEntry<float> DisplayExperienceThreshold;
 
+        public static ConfigEntry<bool> PerkExplorationOn;
+        public static ConfigEntry<float> PerkOneLVLThreshold;
+        public static ConfigEntry<float> PerkTwoLVLThreshold;
+        public static ConfigEntry<float> PerkThreeLVLThreshold;
+        public static ConfigEntry<float> PerkFourLVLThreshold;
+
         //Variables and constants for use that aren't configurable
         public static Dictionary<Skills.SkillType, bool> SkillActive = new Dictionary<Skills.SkillType, bool>();
         public static Dictionary<string, float> WoodcuttingDropTable = new Dictionary<string, float>();
@@ -312,13 +318,23 @@ namespace kingskills
             x = cfg.Bind("g", "t", 0f, 
                 "d");
              */
+            PerkExplorationOn = cfg.Bind("Perks", "Perk Exploration", true,
+                    "Whether or not locked perks are hidden from view");
+            PerkOneLVLThreshold = cfg.Bind("Perks", "First Threshold", .5f,
+                    "mod of max level before you unlock the first set of perks");
+            PerkTwoLVLThreshold = cfg.Bind("Perks", "Second Threshold", 1f,
+                    "mod of max level before you unlock the second set of perks");
+            PerkThreeLVLThreshold = cfg.Bind("Perks", "ThirdThreshold", 10f,
+                    "mod of max level before you unlock the third set of perks - NOT IMPLEMENTED");
+            PerkFourLVLThreshold = cfg.Bind("Perks", "FourthThreshold", 10f,
+                    "mod of max level before you unlock the fourth set of perks - NOT IMPLEMENTED");
 
 
             //Overall Changes
             MaxSkillLevel = cfg.Bind("Generic", "Max Skill Level", 100f,
-                "This is the level that all king skills can go up to.");
+                    "This is the level that all king skills can go up to.");
             DisplayExperienceThreshold = cfg.Bind("Generic", "Experience Display Threshold", .8f,
-                "Threshold under which experience earned will not display as a message.");
+                    "Threshold under which experience earned will not display as a message.");
             DropNewItemThreshold = cfg.Bind("Generic", "Drop New Item Threshold", 50f,
                     "% of 1 item needed to generate before you round up to a full item.");
 

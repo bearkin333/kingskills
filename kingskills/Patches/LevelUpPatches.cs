@@ -19,7 +19,12 @@ namespace kingskills.Patches
             //Jotunn.Logger.LogMessage("Checking skill");
             if (skill == Skills.SkillType.None) __result = 0f;
             
-            __result = Mathf.Clamp01(__instance.GetSkills().GetSkillLevel(skill) / ConfigManager.MaxSkillLevel.Value);
+            //Ascended skills will always act as though at max level
+            if (Perks.IsSkillAscended(skill))
+                __result = 1f;
+            else
+                __result = Mathf.Clamp01(__instance.GetSkills().GetSkillLevel(skill) / ConfigManager.MaxSkillLevel.Value);
+
             return false;
         }
 
@@ -27,7 +32,7 @@ namespace kingskills.Patches
         [HarmonyPostfix]
         public static void SkillLevelupPatch(Player __instance, Skills.SkillType skill)
         {
-            StatsPatch.RunStatUpdates(__instance, true, skill);
+            StatsPatch.UpdateStats(__instance, true, skill);
         }
 
         [HarmonyPatch(nameof(Player.RaiseSkill))]
@@ -67,13 +72,6 @@ namespace kingskills.Patches
             return false;
         }
 
-        [HarmonyPatch(nameof(Player.Awake))]
-        [HarmonyPrefix]
-        public static void CheckUpdatesOnAwake(Player __instance)
-        {
-            //StatsPatch.RunStatUpdates(__instance);
-        }
-
 
         public static bool SkillRaise(Skills.Skill skill, Player player, float factor)
         {
@@ -102,12 +100,20 @@ namespace kingskills.Patches
 
                 skill.m_accumulator -= nextLevelRequirement;
                 if (skill.m_level >= ConfigManager.MaxSkillLevel.Value)
+                {
+                    OnMaxLevel(skillT);
                     return false;
+                }
 
                 nextLevelRequirement = skill.GetNextLevelRequirement();
             }
 
             return false;
+        }
+
+        public static void OnMaxLevel(Skills.SkillType skill)
+        {
+            Perks.skillAscendedFlags[skill] = true;
         }
 
         public static void LevelUpPing(Player player, Skills.Skill skill)

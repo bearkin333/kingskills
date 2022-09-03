@@ -11,7 +11,7 @@ namespace kingskills
     [HarmonyPatch(typeof(Player))]
     class StatsPatch
     {
-        public static void RunStatUpdates(Player player, bool selectively = false, Skills.SkillType skill = Skills.SkillType.None)
+        public static void UpdateStats(Player player, bool selectively = false, Skills.SkillType skill = Skills.SkillType.None)
         {
             if (!selectively)
             {
@@ -20,6 +20,7 @@ namespace kingskills
                 JumpForceUpdate(player);
                 SwordUpdate(player);
                 SneakUpdate(player);
+                CheckMaxLevel(player);
             }
             else if (skill != Skills.SkillType.None)
             {
@@ -134,6 +135,18 @@ namespace kingskills
 
             player.m_crouchSpeed = ConfigManager.BaseCrouchSpeed *
                 ConfigManager.GetSneakSpeedMult(player.GetSkillFactor(Skills.SkillType.Sneak));
+        }
+        public static void CheckMaxLevel(Player player)
+        {
+            Dictionary<Skills.SkillType, bool> temp = new Dictionary<Skills.SkillType, bool>(Perks.skillAscendedFlags);
+            foreach (KeyValuePair<Skills.SkillType, bool> skillAcension in temp)
+            {
+                if (player.GetSkills().GetSkillLevel(skillAcension.Key) >= ConfigManager.MaxSkillLevel.Value)
+                {
+                    Perks.skillAscendedFlags[skillAcension.Key] = true;
+                    Jotunn.Logger.LogMessage("Regular update found a maxed skill and set it to be ascended");
+                }
+            }
         }
 
         //New max health and stamina

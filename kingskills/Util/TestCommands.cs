@@ -38,7 +38,7 @@ namespace kingskills.Commands
                 return;
             }
 
-            StatsPatch.RunStatUpdates(Player.m_localPlayer);
+            StatsPatch.UpdateStats(Player.m_localPlayer);
         }
     }
 

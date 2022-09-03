@@ -15,7 +15,9 @@ namespace kingskills
     [HarmonyPatch]
     class SkillGUI
     {
+        //how many seconds between GUI update
         public const float updateGUITimer = 2f;
+
         public static float timeSinceUpdate = 0f;
         public static bool GUIOpen = false;
         public static GameObject SkillGUIWindow;
@@ -38,6 +40,18 @@ namespace kingskills
 
 
         public static GameObject RightPanelPerks;
+
+        public static GameObject RightPanelAscendedText;
+
+        public static GameObject RightPanelPerkOneLevel;
+            public static GameObject RightPanelPerkOneAImage;
+            public static GameObject RightPanelPerkOneBImage;
+        public static GameObject RightPanelPerkTwoLevel;
+            public static GameObject RightPanelPerkTwoAImage;
+            public static GameObject RightPanelPerkTwoBImage;
+        //public static GameObject RightPanelPerkThreeLevel;
+        //public static GameObject RightPanelPerkFourLevel;
+
 
 
         private static void SkillGUIAwake()
@@ -178,7 +192,31 @@ namespace kingskills
             button = refreshBtn.GetComponent<Button>();
             button.onClick.AddListener(GUICheck);*/
 
-            
+            // Create a dropdown
+            SkillDropDown =
+                GUIManager.Instance.CreateDropDown(
+                parent: SkillGUIWindow.transform,
+                anchorMin: new Vector2(0f, 0f),
+                anchorMax: new Vector2(0f, 0f),
+                position: new Vector2(120f, 70f),
+                fontSize: 20,
+                width: 200f,
+                height: 30f);
+            dd = SkillDropDown.GetComponent<Dropdown>();
+            dd.AddOptions(new List<string>{
+                "Axes", "Blocking", "Bows", "Clubs", "Fists", "Jump", "Knives", "Mining",
+                "Polearms", "Run", "Spears", "Sneak", "Swim", "Swords", "Woodcutting"
+            });
+            dd.onValueChanged.AddListener(
+                delegate {
+                    SkillGUI.OnDropdownValueChange();
+                });
+            var rect = SkillDropDown.GetComponent<RectTransform>();
+
+            dd.captionText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            dd.itemText.horizontalOverflow = HorizontalWrapMode.Wrap;
+
+
 
             //Create the King's Skills brand text
             GUIManager.Instance.CreateText(
@@ -273,6 +311,7 @@ namespace kingskills
                 addContentSizeFitter: false);
             LeftPanelExperienceTitle.GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
             LeftPanelExperienceTitle.GetComponent<Text>().alignment = TextAnchor.UpperCenter;
+
             //Create the variable Experience text in the left panel
             LeftPanelExperienceText =
             GUIManager.Instance.CreateText(
@@ -291,6 +330,7 @@ namespace kingskills
                 addContentSizeFitter: false);
             LeftPanelExperienceText.GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
             LeftPanelExperienceText.GetComponent<Text>().alignment = TextAnchor.UpperLeft;
+
             //Create the Effects Title in the left panel
             LeftPanelEffectsTitle =
             GUIManager.Instance.CreateText(
@@ -309,6 +349,7 @@ namespace kingskills
                 addContentSizeFitter: false);
             LeftPanelEffectsTitle.GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
             LeftPanelEffectsTitle.GetComponent<Text>().alignment = TextAnchor.UpperCenter;
+
             //Create the variable Effects text in the left panel
             LeftPanelEffectsText =
             GUIManager.Instance.CreateText(
@@ -328,6 +369,7 @@ namespace kingskills
             LeftPanelEffectsText.GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
             LeftPanelEffectsText.GetComponent<Text>().alignment = TextAnchor.UpperLeft;
 
+
             //Create the right panel
             RightPanelPerks =
             GUIManager.Instance.CreateWoodpanel(
@@ -339,29 +381,24 @@ namespace kingskills
                     height: 500,
                     draggable: false);
 
-            // Create a dropdown
-            SkillDropDown =
-                GUIManager.Instance.CreateDropDown(
-                parent: SkillGUIWindow.transform,
-                anchorMin: new Vector2(0f, 0f),
-                anchorMax: new Vector2(0f, 0f),
-                position: new Vector2(120f, 70f),
-                fontSize: 20,
+            // Create ascended text
+            RightPanelAscendedText =
+            GUIManager.Instance.CreateText(
+                text: "",
+                parent: RightPanelPerks.transform,
+                anchorMin: new Vector2(0.5f, 1f),
+                anchorMax: new Vector2(0.5f, 1f),
+                position: new Vector2(0f, -100f),
+                font: GUIManager.Instance.AveriaSerifBold,
+                fontSize: 35,
+                color: GUIManager.Instance.ValheimOrange,
+                outline: true,
+                outlineColor: Color.black,
                 width: 200f,
-                height: 30f);
-            dd = SkillDropDown.GetComponent<Dropdown>();
-            dd.AddOptions(new List<string>{
-                "Axes", "Blocking", "Bows", "Clubs", "Fists", "Jump", "Knives", "Mining",
-                "Polearms", "Run", "Spears", "Sneak", "Swim", "Swords", "Woodcutting"
-            });
-            dd.onValueChanged.AddListener(
-                delegate {
-                    SkillGUI.OnDropdownValueChange();
-                });
-            var rect = SkillDropDown.GetComponent<RectTransform>();
+                height: 80f,
+                addContentSizeFitter: false);
+            RightPanelAscendedText.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
 
-            dd.captionText.horizontalOverflow = HorizontalWrapMode.Wrap;
-            dd.itemText.horizontalOverflow = HorizontalWrapMode.Wrap;
             //dd.captionText.resizeTextForBestFit = true;
 
 
@@ -380,6 +417,32 @@ namespace kingskills
             SkillGUIWindow.SetActive(false);
             
             GUICheck();
+        }
+
+        [HarmonyPatch(typeof(Player), nameof(Player.FixedUpdate))]
+        [HarmonyPrefix]
+        public static void FixedUpdateGUI(Player __instance)
+        {
+            try
+            {
+                if (!__instance.m_nview) return;
+                if (!__instance.m_nview.IsOwner()) return;
+                if (!SkillGUIWindow) return;
+                if (!SkillGUIWindow.activeSelf) return;
+            }
+            catch
+            {
+                Jotunn.Logger.LogWarning("Didn't check for GUI Update");
+                return;
+            }
+
+            timeSinceUpdate += Time.fixedDeltaTime;
+            if (timeSinceUpdate >= updateGUITimer)
+            {
+                timeSinceUpdate -= updateGUITimer;
+                //Jotunn.Logger.LogMessage("Updating the values on the GUI");
+                GUICheck();
+            }
         }
 
         public static void ToggleSkillGUI()
@@ -419,6 +482,7 @@ namespace kingskills
             Skills.SkillType skill = Skills.SkillType.None;
 
             string skillName = dd.options[dd.value].text;
+            StatsPatch.UpdateStats(player);
 
             switch (skillName)
             {
@@ -499,33 +563,12 @@ namespace kingskills
             SSkillLevel.GetComponent<Text>().text = "Level: " + skillRef.m_level.ToString("F0") + " / 100";
             SSkillExp.GetComponent<Text>().text = "Experience: " + skillRef.m_accumulator.ToString("F2") + " / " + skillRef.GetNextLevelRequirement().ToString("F2");
             //scroll.GetComponent<ScrollRect>().Rebuild(UnityEngine.UI.CanvasUpdate.PreRender);
+
+            RightPanelAscendedText.GetComponent<Text>().text = "Ascended: " +
+                Perks.IsSkillAscended(skill).ToString();
+            //Jotunn.Logger.LogMessage($"{Perks.IsSkillAscended(skill).ToString()}");
         }
 
-        [HarmonyPatch(typeof(Player),nameof(Player.FixedUpdate))]
-        [HarmonyPrefix]
-        public static void FixedUpdateGUI(Player __instance)
-        {
-            try
-            {
-                if (!__instance.m_nview) return;
-                if (!__instance.m_nview.IsOwner()) return;
-                if (!SkillGUIWindow) return;
-                if (!SkillGUIWindow.activeSelf) return;
-            }
-            catch
-            {
-                Jotunn.Logger.LogWarning("Didn't check for GUI Update");
-                return;
-            }
-
-            timeSinceUpdate += Time.fixedDeltaTime;
-            if (timeSinceUpdate >= updateGUITimer)
-            {
-                timeSinceUpdate -= updateGUITimer;
-                //Jotunn.Logger.LogMessage("Updating the values on the GUI");
-                GUICheck();
-            }
-        }
 
         public static void OpenAxePanels()
         {
