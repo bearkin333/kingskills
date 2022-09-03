@@ -505,11 +505,18 @@ namespace kingskills
         [HarmonyPrefix]
         public static void FixedUpdateGUI(Player __instance)
         {
-            if (!__instance) return;
-            if (!__instance.m_nview) return;
-            if (!__instance.m_nview.IsOwner()) return;
-            if (!SkillGUIWindow) return;
-            if (!SkillGUIWindow.activeSelf) return;
+            try
+            {
+                if (!__instance.m_nview) return;
+                if (!__instance.m_nview.IsOwner()) return;
+                if (!SkillGUIWindow) return;
+                if (!SkillGUIWindow.activeSelf) return;
+            }
+            catch
+            {
+                Jotunn.Logger.LogWarning("Didn't check for GUI Update");
+                return;
+            }
 
             timeSinceUpdate += Time.fixedDeltaTime;
             if (timeSinceUpdate >= updateGUITimer)
