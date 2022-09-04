@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <EmbeddedResource Include="Assets\ks_assetbundle" />
     <None Include="packages.config" />
     <None Include="README.md" />
   </ItemGroup>
@@ -116,8 +117,6 @@
     <None Include="Package\manifest.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\perkbox.png" />
-    <EmbeddedResource Include="Assets\perkboxLocked.png" />
     <Content Include="Package\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

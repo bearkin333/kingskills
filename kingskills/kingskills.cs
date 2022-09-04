@@ -11,6 +11,7 @@ using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
 using kingskills.Commands;
+using System.IO;
 using UnityEngine;
 
 namespace kingskills
@@ -42,6 +43,8 @@ namespace kingskills
             AddSkills();
             AddInputs();
             harmony.PatchAll();
+
+            Assets.AssetLoader.Folder = Path.GetDirectoryName(this.Info.Location);
         }
 
         private void Update()

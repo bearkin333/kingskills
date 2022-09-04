@@ -68,7 +68,7 @@ namespace kingskills
             }
             RectTransform rect;
             Image image;
-            Assets.AssetLoader.InitPerkSprites();
+            Assets.AssetLoader.InitAssets();
 
             SkillGUIWindow = GUIManager.Instance.CreateWoodpanel(
                     parent: GUIManager.CustomGUIFront.transform,
@@ -417,6 +417,7 @@ namespace kingskills
             
             RightPanelPerkBoxes["1a"].SetActive(true);
 
+            /*
             RightPanelPerkBoxes.Add("1b", new GameObject());
             //image = RightPanelPerkBoxes["1b"].AddComponent<Image>();
             //image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
@@ -450,7 +451,7 @@ namespace kingskills
             rect.anchorMax = new Vector2(0.5f, 1f);
             rect.anchoredPosition = new Vector2(60f, -300f);
             rect.sizeDelta = new Vector2(80f, 80f);
-            RightPanelPerkBoxes["2b"].SetActive(true);
+            RightPanelPerkBoxes["2b"].SetActive(true);*/
 
 
 
