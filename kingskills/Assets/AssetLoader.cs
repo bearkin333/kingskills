@@ -14,17 +14,19 @@ namespace kingskills.Assets
     {
         public static string filePath = "kingskills/Assets/";
 
-        public static Dictionary<string, Sprite> perkSprites;
+        public static Dictionary<string, Sprite> perkBoxSprites;
         public static AssetBundle assets;
 
 
         public static void InitAssets()
         {
-            perkSprites = new Dictionary<string, Sprite>();
+            perkBoxSprites = new Dictionary<string, Sprite>();
 
 
-            perkSprites.Add("perkbox", LoadSpriteFromFilename("perkbox.png"));
-            perkSprites.Add("perkboxLocked", LoadSpriteFromFilename("perkboxLocked.png"));
+            perkBoxSprites.Add("perkbox", LoadSpriteFromFilename("perkbox.png"));
+            perkBoxSprites.Add("perkboxLocked", LoadSpriteFromFilename("perkboxLocked.png"));
+            perkBoxSprites.Add("graytint", LoadSpriteFromFilename("graytint.png"));
+            perkBoxSprites.Add("goldtint", LoadSpriteFromFilename("goldtint.png"));
         }
 
 

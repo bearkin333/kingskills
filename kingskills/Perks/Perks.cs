@@ -473,4 +473,9 @@ namespace kingskills
             icon = Assets.AssetLoader.LoadSpriteFromFilename(nIcon);
         }
     }
+
+    public class IsPerkBox : MonoBehaviour
+    {
+
+    }
 }

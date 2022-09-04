@@ -455,17 +455,31 @@ namespace kingskills.UX
             text.text = "Level " + (int)(ConfigManager.PerkTwoLVLThreshold.Value
                 * ConfigManager.MaxSkillLevel.Value);
 
+
+
             RightPanelPerkBoxes = new Dictionary<string, GameObject>();
 
             RightPanelPerkBoxes.Add("1a", new GameObject());
             image = RightPanelPerkBoxes["1a"].AddComponent<Image>();
-            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            image.sprite = Assets.AssetLoader.perkBoxSprites["perkbox"];
             rect = RightPanelPerkBoxes["1a"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerks.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
             rect.anchoredPosition = new Vector2(-100f, -140f);
             rect.sizeDelta = new Vector2(80f, 80f);
+            rect.gameObject.AddComponent<IsPerkBox>();
+
+            RightPanelPerkBoxes.Add("1aTint", new GameObject());
+            image = RightPanelPerkBoxes["1aTint"].AddComponent<Image>();
+            image.sprite = null;
+            rect = RightPanelPerkBoxes["1aTint"].GetComponent<RectTransform>();
+            rect.SetParent(RightPanelPerkBoxes["1a"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+
             RightPanelPerkBoxes.Add("1aPerk", new GameObject()); 
             image = RightPanelPerkBoxes["1aPerk"].AddComponent<Image>();
             image.sprite = null;
@@ -476,15 +490,29 @@ namespace kingskills.UX
             rect.anchoredPosition = new Vector2(0f, 0f);
             rect.sizeDelta = new Vector2(60f, 60f);
 
+
+
             RightPanelPerkBoxes.Add("1b", new GameObject());
             image = RightPanelPerkBoxes["1b"].AddComponent<Image>();
-            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            image.sprite = Assets.AssetLoader.perkBoxSprites["perkbox"];
             rect = RightPanelPerkBoxes["1b"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerks.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
             rect.anchoredPosition = new Vector2(100f, -140f);
             rect.sizeDelta = new Vector2(80f, 80f);
+            rect.gameObject.AddComponent<IsPerkBox>();
+
+            RightPanelPerkBoxes.Add("1bTint", new GameObject());
+            image = RightPanelPerkBoxes["1bTint"].AddComponent<Image>();
+            image.sprite = null;
+            rect = RightPanelPerkBoxes["1bTint"].GetComponent<RectTransform>();
+            rect.SetParent(RightPanelPerkBoxes["1b"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+
             RightPanelPerkBoxes.Add("1bPerk", new GameObject());
             image = RightPanelPerkBoxes["1bPerk"].AddComponent<Image>();
             image.sprite = null;
@@ -498,13 +526,25 @@ namespace kingskills.UX
 
             RightPanelPerkBoxes.Add("2a", new GameObject());
             image = RightPanelPerkBoxes["2a"].AddComponent<Image>();
-            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            image.sprite = Assets.AssetLoader.perkBoxSprites["perkbox"];
             rect = RightPanelPerkBoxes["2a"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerks.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
             rect.anchoredPosition = new Vector2(-100f, -310f);
             rect.sizeDelta = new Vector2(80f, 80f);
+            rect.gameObject.AddComponent<IsPerkBox>();
+
+            RightPanelPerkBoxes.Add("2aTint", new GameObject());
+            image = RightPanelPerkBoxes["2aTint"].AddComponent<Image>();
+            image.sprite = null;
+            rect = RightPanelPerkBoxes["2aTint"].GetComponent<RectTransform>();
+            rect.SetParent(RightPanelPerkBoxes["2a"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+
             RightPanelPerkBoxes.Add("2aPerk", new GameObject());
             image = RightPanelPerkBoxes["2aPerk"].AddComponent<Image>();
             image.sprite = null;
@@ -518,13 +558,25 @@ namespace kingskills.UX
 
             RightPanelPerkBoxes.Add("2b", new GameObject());
             image = RightPanelPerkBoxes["2b"].AddComponent<Image>();
-            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            image.sprite = Assets.AssetLoader.perkBoxSprites["perkbox"];
             rect = RightPanelPerkBoxes["2b"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerks.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
             rect.anchoredPosition = new Vector2(100f, -310f);
             rect.sizeDelta = new Vector2(80f, 80f);
+            rect.gameObject.AddComponent<IsPerkBox>();
+
+            RightPanelPerkBoxes.Add("2bTint", new GameObject());
+            image = RightPanelPerkBoxes["2bTint"].AddComponent<Image>();
+            image.sprite = null;
+            rect = RightPanelPerkBoxes["2bTint"].GetComponent<RectTransform>();
+            rect.SetParent(RightPanelPerkBoxes["2b"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+
             RightPanelPerkBoxes.Add("2bPerk", new GameObject());
             image = RightPanelPerkBoxes["2bPerk"].AddComponent<Image>();
             image.sprite = null;
