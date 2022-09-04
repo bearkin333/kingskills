@@ -57,7 +57,7 @@ namespace kingskills
             perk = new Perk("Berserkr",
                 "When you take damage, there's a small chance to enter a berserker rage, which increases" +
                 " your damage, reduces stamina costs, and increases your movespeed.",
-                PerkType.Berserkr, "Icons/berserker.png");
+                PerkType.Berserkr, "Icons/berserkr.png");
             perkList.Add(perk.type, perk);
 
             perk = new Perk("Highlander",
@@ -370,6 +370,7 @@ namespace kingskills
                 if (flaggedPerk.Value)
                 {
                     perkList[flaggedPerk.Key].learned = true;
+                    perkList[flaggedPerk.Key].learnable = false;
                 }
             }
         }
@@ -458,6 +459,7 @@ namespace kingskills
         public string name;
         public string description;
         public bool learned;
+        public bool learnable;
         public Perks.PerkType type;
         public Sprite icon;
 
@@ -466,6 +468,7 @@ namespace kingskills
             name = nName;
             description = nDescription;
             learned = false;
+            learnable = true;
             type = nType;
             icon = Assets.AssetLoader.LoadSpriteFromFilename(nIcon);
         }

@@ -16,24 +16,64 @@ namespace kingskills.UX
             Perks.PerkType perk1a, Perks.PerkType perk1b,
             Perks.PerkType perk2a, Perks.PerkType perk2b)
         {
+            float skillFactor = Player.m_localPlayer.GetSkillFactor(skill);
+
             openedPerks.Clear();
             openedPerks.Add(Perks.perkList[perk1a]);
             openedPerks.Add(Perks.perkList[perk1b]);
             openedPerks.Add(Perks.perkList[perk2a]);
             openedPerks.Add(Perks.perkList[perk2b]);
 
-            SetPerkBox(openedPerks[0], "1aPerk");
-            SetPerkBox(openedPerks[1], "1bPerk");
-            SetPerkBox(openedPerks[2], "2aPerk");
-            SetPerkBox(openedPerks[3], "2bPerk");
+            SetPerkBoxPair(openedPerks[0], openedPerks[1], 
+                "1aPerk", "1bPerk",
+                skillFactor, ConfigManager.PerkOneLVLThreshold.Value);
+            SetPerkBoxPair(openedPerks[2], openedPerks[3],
+                "2aPerk", "2bPerk",
+                skillFactor, ConfigManager.PerkTwoLVLThreshold.Value);
         }
 
-        public static void SetPerkBox(Perk perk, string perkBoxString)
+        public static void SetPerkBoxPair(Perk perkA, Perk perkB, 
+            string perkBoxAString, string perkBoxBString,
+            float skillLevel, float skillThreshold)
         {
-            GameObject perkBox = SkillGUI.RightPanelPerkBoxes[perkBoxString];
-            if (perk.learned)
-            {
+            GameObject perkBoxA = SkillGUI.RightPanelPerkBoxes[perkBoxAString];
+            GameObject perkBoxB = SkillGUI.RightPanelPerkBoxes[perkBoxBString];
+            Image perkBoxAImage = perkBoxA.GetComponent<Image>();
+            Image perkBoxBImage = perkBoxB.GetComponent<Image>();
 
+            if (skillLevel < skillThreshold)
+            {
+                perkBoxAImage.sprite = Assets.AssetLoader.perkSprites["perkboxLocked"];
+                perkBoxBImage.sprite = Assets.AssetLoader.perkSprites["perkboxLocked"];
+            }
+            else
+            {
+                perkBoxAImage.sprite = perkA.icon;
+                perkBoxBImage.sprite = perkB.icon;
+
+                if (perkA.learned || perkA.learnable)
+                {
+                    //Jotunn.Logger.LogMessage($"color {ConfigManager.PerkOnTint}");
+                    //perkBoxAImage.color = ConfigManager.PerkOnTint;
+                    //tinting images is gonna be harder than expected. gonna have to attempt
+                    //a different methodology
+                }
+                else
+                {
+                    //Jotunn.Logger.LogMessage($"color {ConfigManager.PerkOffTint}");
+                    //perkBoxAImage.color = ConfigManager.PerkOffTint;
+                }
+               
+                if (perkB.learned || perkB.learnable)
+                {
+                    //Jotunn.Logger.LogMessage($"color {ConfigManager.PerkOnTint}");
+                    //perkBoxBImage.color = ConfigManager.PerkOnTint;
+                }
+                else
+                {
+                    //Jotunn.Logger.LogMessage($"color {ConfigManager.PerkOffTint}");
+                    //perkBoxBImage.color = ConfigManager.PerkOffTint;
+                }
             }
         }
 

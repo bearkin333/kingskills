@@ -405,7 +405,7 @@ namespace kingskills.UX
                 position: new Vector2(0f, 50f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 26,
-                color: new Color(121, 239, 84),
+                color: new Color(.45f, .92f, .32f),
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
@@ -459,7 +459,7 @@ namespace kingskills.UX
 
             RightPanelPerkBoxes.Add("1a", new GameObject());
             image = RightPanelPerkBoxes["1a"].AddComponent<Image>();
-            image.sprite = Assets.AssetLoader.perkSprites["perkboxLocked"];
+            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
             rect = RightPanelPerkBoxes["1a"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerks.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
@@ -474,11 +474,11 @@ namespace kingskills.UX
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);
-            rect.sizeDelta = new Vector2(80f, 80f);
+            rect.sizeDelta = new Vector2(60f, 60f);
 
             RightPanelPerkBoxes.Add("1b", new GameObject());
             image = RightPanelPerkBoxes["1b"].AddComponent<Image>();
-            image.sprite = Assets.AssetLoader.perkSprites["perkboxLocked"];
+            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
             rect = RightPanelPerkBoxes["1b"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerks.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
@@ -493,12 +493,12 @@ namespace kingskills.UX
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);
-            rect.sizeDelta = new Vector2(80f, 80f);
+            rect.sizeDelta = new Vector2(60f, 60f);
 
 
             RightPanelPerkBoxes.Add("2a", new GameObject());
             image = RightPanelPerkBoxes["2a"].AddComponent<Image>();
-            image.sprite = Assets.AssetLoader.perkSprites["perkboxLocked"];
+            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
             rect = RightPanelPerkBoxes["2a"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerks.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
@@ -513,12 +513,12 @@ namespace kingskills.UX
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);
-            rect.sizeDelta = new Vector2(80f, 80f);
+            rect.sizeDelta = new Vector2(60f, 60f);
 
 
             RightPanelPerkBoxes.Add("2b", new GameObject());
             image = RightPanelPerkBoxes["2b"].AddComponent<Image>();
-            image.sprite = Assets.AssetLoader.perkSprites["perkboxLocked"];
+            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
             rect = RightPanelPerkBoxes["2b"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerks.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
@@ -533,7 +533,7 @@ namespace kingskills.UX
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);
-            rect.sizeDelta = new Vector2(80f, 80f);
+            rect.sizeDelta = new Vector2(60f, 60f);
 
 
 

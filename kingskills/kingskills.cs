@@ -11,6 +11,7 @@ using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
 using kingskills.Commands;
+using kingskills.UX;
 using System.IO;
 using UnityEngine;
 
@@ -51,7 +52,7 @@ namespace kingskills
             {
                 if (ZInput.GetButtonDown(OpenSkillWindowBtn.Name))
                 {
-                    SkillGUI.ToggleSkillGUI();
+                    GUIUpdate.ToggleSkillGUI();
                 }
             }
         }

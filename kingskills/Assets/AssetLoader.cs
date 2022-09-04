@@ -30,7 +30,7 @@ namespace kingskills.Assets
 
         public static Sprite LoadSpriteFromFilename(string filename)
         {
-            Jotunn.Logger.LogMessage($"Attempting to load a sprite from bepinex/plugins/{filePath + filename}");
+            //Jotunn.Logger.LogMessage($"Attempting to load a sprite from bepinex/plugins/{filePath + filename}");
             try
             {
                 Texture2D texture = AssetUtils.LoadTexture(filePath + filename);
