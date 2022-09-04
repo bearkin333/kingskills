@@ -11,7 +11,7 @@ using UnityEngine.UI;
 namespace kingskills.UX
 {
     [HarmonyPatch]
-    class GUIUpdate
+    class UpdateGUI
     {
         //how many seconds between GUI update
         public const float updateGUITimer = 2f;
@@ -61,6 +61,11 @@ namespace kingskills.UX
             SkillGUI.SkillGUIWindow.SetActive(state);
 
             GUIManager.BlockInput(state);
+
+            if (state)
+            {
+                GUICheck();
+            }
         }
 
         public static void StickGUI()
@@ -89,77 +94,77 @@ namespace kingskills.UX
                 case "Axes":
                     skill = Skills.SkillType.Axes;
                     OpenAxePanels();
-                    PerkBoxes.OpenAxePerkBoxes();
+                    OpenPerks.OpenAxePerkBoxes();
                     break;
                 case "Blocking":
                     skill = Skills.SkillType.Blocking;
                     OpenBlockPanels();
-                    PerkBoxes.OpenBlockPerkBoxes();
+                    OpenPerks.OpenBlockPerkBoxes();
                     break;
                 case "Bows":
                     skill = Skills.SkillType.Bows;
                     OpenBowPanels();
-                    PerkBoxes.OpenBowPerkBoxes();
+                    OpenPerks.OpenBowPerkBoxes();
                     break;
                 case "Clubs":
                     skill = Skills.SkillType.Clubs;
                     OpenClubPanels();
-                    PerkBoxes.OpenClubPerkBoxes();
+                    OpenPerks.OpenClubPerkBoxes();
                     break;
                 case "Fists":
                     skill = Skills.SkillType.Unarmed;
                     OpenFistPanels();
-                    PerkBoxes.OpenFistPerkBoxes();
+                    OpenPerks.OpenFistPerkBoxes();
                     break;
                 case "Jump":
                     skill = Skills.SkillType.Jump;
                     OpenJumpPanels();
-                    PerkBoxes.OpenJumpPerkBoxes();
+                    OpenPerks.OpenJumpPerkBoxes();
                     break;
                 case "Knives":
                     skill = Skills.SkillType.Knives;
                     OpenKnifePanels();
-                    PerkBoxes.OpenKnifePerkBoxes();
+                    OpenPerks.OpenKnifePerkBoxes();
                     break;
                 case "Mining":
                     skill = Skills.SkillType.Pickaxes;
                     OpenMiningPanels();
-                    PerkBoxes.OpenMiningPerkBoxes();
+                    OpenPerks.OpenMiningPerkBoxes();
                     break;
                 case "Polearms":
                     skill = Skills.SkillType.Polearms;
                     OpenPolearmPanels();
-                    PerkBoxes.OpenPolearmPerkBoxes();
+                    OpenPerks.OpenPolearmPerkBoxes();
                     break;
                 case "Run":
                     skill = Skills.SkillType.Run;
                     OpenRunPanels();
-                    PerkBoxes.OpenRunPerkBoxes();
+                    OpenPerks.OpenRunPerkBoxes();
                     break;
                 case "Spears":
                     skill = Skills.SkillType.Spears;
                     OpenSpearPanels();
-                    PerkBoxes.OpenSpearPerkBoxes();
+                    OpenPerks.OpenSpearPerkBoxes();
                     break;
                 case "Sneak":
                     skill = Skills.SkillType.Sneak;
                     OpenSneakPanels();
-                    PerkBoxes.OpenSneakPerkBoxes();
+                    OpenPerks.OpenSneakPerkBoxes();
                     break;
                 case "Swim":
                     skill = Skills.SkillType.Swim;
                     OpenSwimPanels();
-                    PerkBoxes.OpenSwimPerkBoxes();
+                    OpenPerks.OpenSwimPerkBoxes();
                     break;
                 case "Swords":
                     skill = Skills.SkillType.Swords;
                     OpenSwordPanels();
-                    PerkBoxes.OpenSwordPerkBoxes();
+                    OpenPerks.OpenSwordPerkBoxes();
                     break;
                 case "Woodcutting":
                     skill = Skills.SkillType.WoodCutting;
                     OpenWoodcuttingPanels();
-                    PerkBoxes.OpenWoodcuttingPerkBoxes();
+                    OpenPerks.OpenWoodcuttingPerkBoxes();
                     break;
             }
             if (!ConfigManager.IsSkillActive(skill))

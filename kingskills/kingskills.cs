@@ -41,6 +41,7 @@ namespace kingskills
             CommandManager.Instance.AddConsoleCommand(new BearSkillCommand());
             CommandManager.Instance.AddConsoleCommand(new SkillUpdateCommand());
             CommandManager.Instance.AddConsoleCommand(new TestSkillsCommand());
+            CommandManager.Instance.AddConsoleCommand(new ResetPerksCommand());
             AddSkills();
             AddInputs();
             harmony.PatchAll();
@@ -52,9 +53,11 @@ namespace kingskills
             {
                 if (ZInput.GetButtonDown(OpenSkillWindowBtn.Name))
                 {
-                    GUIUpdate.ToggleSkillGUI();
+                    UpdateGUI.ToggleSkillGUI();
                 }
             }
+
+            OpenPerks.UpdateOpenPerks();
         }
 
         private void InitConfig()

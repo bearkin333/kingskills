@@ -100,8 +100,10 @@
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
     <Compile Include="kingskills.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UX\GUIUpdate.cs" />
-    <Compile Include="UX\PerkBoxes.cs" />
+    <Compile Include="UX\PerkTooltipGUI.cs" />
+    <Compile Include="UX\UpdateGUI.cs" />
+    <Compile Include="UX\LearnConfirmationGUI.cs" />
+    <Compile Include="UX\OpenPerks.cs" />
     <Compile Include="UX\SkillGUI.cs" />
     <Compile Include="Patches\WeaponExperience.cs" />
     <Compile Include="Patches\MovePatch.cs" />

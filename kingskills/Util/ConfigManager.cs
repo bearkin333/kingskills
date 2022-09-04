@@ -260,8 +260,6 @@ namespace kingskills
         public static Dictionary<string, float> MiningDropTable = new Dictionary<string, float>();
         public static Dictionary<string, float> BowDropTable = new Dictionary<string, float>();
 
-        public static Color PerkOffTint;
-        public static Color PerkOnTint;
 
         //These are the base stats already in valheim
         public const float BaseSwimSpeed = 2f;
@@ -317,8 +315,6 @@ namespace kingskills
             BowDropTable.Add("WitheredBone", 0);
             BowDropTable.Add("BoneFragments", 0);
 
-            PerkOffTint = Color.gray;
-            PerkOffTint = Color.white;
 
             /* Template
             x = cfg.Bind("g", "t", 0f, 

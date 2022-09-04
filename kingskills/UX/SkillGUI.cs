@@ -155,7 +155,7 @@ namespace kingskills.UX
 
             // Add a listener to the button to close the panel again
             Button button = closeBtn.GetComponent<Button>();
-            button.onClick.AddListener(GUIUpdate.ToggleSkillGUI);
+            button.onClick.AddListener(UpdateGUI.ToggleSkillGUI);
 
             // Create the close button
             GameObject stickBtn = GUIManager.Instance.CreateButton(
@@ -170,7 +170,7 @@ namespace kingskills.UX
 
             // Add a listener to the button to close the panel again
             button = stickBtn.GetComponent<Button>();
-            button.onClick.AddListener(GUIUpdate.StickGUI);
+            button.onClick.AddListener(UpdateGUI.StickGUI);
 
             /*
             // Create the refresh button
@@ -205,7 +205,7 @@ namespace kingskills.UX
             });
             dd.onValueChanged.AddListener(
                 delegate {
-                    GUIUpdate.OnDropdownValueChange();
+                    UpdateGUI.OnDropdownValueChange();
                 });
             rect = SkillDropDown.GetComponent<RectTransform>();
 
@@ -473,6 +473,7 @@ namespace kingskills.UX
             RightPanelPerkBoxes.Add("1aTint", new GameObject());
             image = RightPanelPerkBoxes["1aTint"].AddComponent<Image>();
             image.sprite = null;
+            image.enabled = false;
             rect = RightPanelPerkBoxes["1aTint"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerkBoxes["1a"].transform);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -483,6 +484,7 @@ namespace kingskills.UX
             RightPanelPerkBoxes.Add("1aPerk", new GameObject()); 
             image = RightPanelPerkBoxes["1aPerk"].AddComponent<Image>();
             image.sprite = null;
+            image.enabled = false;
             rect = RightPanelPerkBoxes["1aPerk"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerkBoxes["1a"].transform);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -506,6 +508,7 @@ namespace kingskills.UX
             RightPanelPerkBoxes.Add("1bTint", new GameObject());
             image = RightPanelPerkBoxes["1bTint"].AddComponent<Image>();
             image.sprite = null;
+            image.enabled = false;
             rect = RightPanelPerkBoxes["1bTint"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerkBoxes["1b"].transform);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -516,6 +519,7 @@ namespace kingskills.UX
             RightPanelPerkBoxes.Add("1bPerk", new GameObject());
             image = RightPanelPerkBoxes["1bPerk"].AddComponent<Image>();
             image.sprite = null;
+            image.enabled = false;
             rect = RightPanelPerkBoxes["1bPerk"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerkBoxes["1b"].transform);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -538,6 +542,7 @@ namespace kingskills.UX
             RightPanelPerkBoxes.Add("2aTint", new GameObject());
             image = RightPanelPerkBoxes["2aTint"].AddComponent<Image>();
             image.sprite = null;
+            image.enabled = false;
             rect = RightPanelPerkBoxes["2aTint"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerkBoxes["2a"].transform);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -548,6 +553,7 @@ namespace kingskills.UX
             RightPanelPerkBoxes.Add("2aPerk", new GameObject());
             image = RightPanelPerkBoxes["2aPerk"].AddComponent<Image>();
             image.sprite = null;
+            image.enabled = false;
             rect = RightPanelPerkBoxes["2aPerk"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerkBoxes["2a"].transform);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -570,6 +576,7 @@ namespace kingskills.UX
             RightPanelPerkBoxes.Add("2bTint", new GameObject());
             image = RightPanelPerkBoxes["2bTint"].AddComponent<Image>();
             image.sprite = null;
+            image.enabled = false;
             rect = RightPanelPerkBoxes["2bTint"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerkBoxes["2b"].transform);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -580,6 +587,7 @@ namespace kingskills.UX
             RightPanelPerkBoxes.Add("2bPerk", new GameObject());
             image = RightPanelPerkBoxes["2bPerk"].AddComponent<Image>();
             image.sprite = null;
+            image.enabled = false;
             rect = RightPanelPerkBoxes["2bPerk"].GetComponent<RectTransform>();
             rect.SetParent(RightPanelPerkBoxes["2b"].transform);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
@@ -603,7 +611,7 @@ namespace kingskills.UX
 
             SkillGUIWindow.SetActive(false);
 
-            GUIUpdate.GUICheck();
+            UpdateGUI.GUICheck();
         }
     }
 }

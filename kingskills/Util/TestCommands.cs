@@ -24,6 +24,22 @@ namespace kingskills.Commands
             Player.m_localPlayer.RaiseSkill(KingSkills.TestSkillType, 10);
         }
     }
+    public class ResetPerksCommand : ConsoleCommand
+    {
+        public override string Name => "resetperks";
+
+        public override string Help => "resets all perk selections";
+
+        public override void Run(string[] args)
+        {
+            if (args.Length != 0)
+            {
+                return;
+            }
+
+            Perks.ResetAllPerks();
+        }
+    }
 
     public class SkillUpdateCommand : ConsoleCommand
     {

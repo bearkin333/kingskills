@@ -12,7 +12,7 @@ using Jotunn.Managers;
 namespace kingskills.UX
 {
 
-    public class PerkBoxes : MonoBehaviour
+    public class OpenPerks
     {
         public const int NoPerk = 20;
 
@@ -21,156 +21,42 @@ namespace kingskills.UX
         public static List<bool> perkClickable;
         public static float skillLevel;
 
-        public static int confirmPerkKey;
+        public static void UpdateOpenPerks()
+        {
+            if (openedPerks == null) return;
+            if (SkillGUI.SkillGUIWindow == null) return;
+            if (!SkillGUI.SkillGUIWindow.activeSelf) return;
 
-        public void Awake()
+            //Jotunn.Logger.LogMessage("eeeee");
+            if (LearnConfirmationGUI.IsConfirmOpen())
+                return;
+
+            int hoveredPerkKey = MouseOverPerkBox();
+            if (hoveredPerkKey == NoPerk)
+            {
+                PerkTooltipGUI.CloseTooltip();
+                return;
+            }
+
+            PerkTooltipGUI.UpdateTooltip(openedPerks[hoveredPerkKey]);
+
+            //and then check for learning
+            if (perkClickable[hoveredPerkKey] && Input.GetMouseButtonDown(0))
+            {
+                LearnConfirmationGUI.OpenLearnConfirmation(hoveredPerkKey);
+            }
+        }
+
+        public static void Init()
         {
             openedPerks = new List<Perk>();
             perkLocked = new List<bool>();
             perkClickable = new List<bool>();
             skillLevel = 0;
-            confirmPerkKey = NoPerk;
         }
 
-        public void Update()
-        {
-            if (openedPerks.Count < 1) return;
 
-            int hoveredPerkKey = MouseOverPerkBox();
-            if (hoveredPerkKey == NoPerk) return;
-
-            //create tooltip stuff here
-
-
-            //and then check for learning
-            if (perkClickable[hoveredPerkKey] && Input.GetMouseButtonDown(0))
-            {
-                OpenLearnConfirmation(hoveredPerkKey);
-            }
-        }
-
-        public void OpenLearnConfirmation(int confirmPerk)
-        {
-            if (LearnConfirmWindow == null) AwakeLearnConfirmation();
-
-            LearnConfirmWindow.SetActive(true);
-            GUIManager.BlockInput(true);
-            confirmPerkKey = confirmPerk;
-
-            LCPerkTitle.GetComponent<Text>().text = openedPerks[confirmPerk].name;
-            LCPerkDescription.GetComponent<Text>().text = openedPerks[confirmPerk].description;
-        }
-
-        public static GameObject LearnConfirmWindow;
-        public static GameObject LCPerkTitle;
-        public static GameObject LCPerkDescription;
-        public static GameObject LCYesBtn;
-        public static GameObject LCNoBtn;
-
-        public void AwakeLearnConfirmation()
-        {
-            LearnConfirmWindow = GUIManager.Instance.CreateWoodpanel(
-                    parent: GUIManager.CustomGUIFront.transform,
-                    anchorMin: new Vector2(0.5f, 0.5f),
-                    anchorMax: new Vector2(0.5f, 0.5f),
-                    position: new Vector2(0f, 0),
-                    width: 400,
-                    height: 300,
-                    draggable: true);
-            LearnConfirmWindow.SetActive(false);
-
-
-            GameObject obj = GUIManager.Instance.CreateText(
-                text: "Are you sure you want to learn",
-                parent: LearnConfirmWindow.transform,
-                anchorMin: new Vector2(0.5f, 1f),
-                anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(0f, -75f),
-                font: GUIManager.Instance.AveriaSerifBold,
-                fontSize: 40,
-                color: GUIManager.Instance.ValheimOrange,
-                outline: true,
-                outlineColor: Color.black,
-                width: 400f,
-                height: 80f,
-                addContentSizeFitter: false);
-            obj.GetComponent<Text>().alignment = TextAnchor.UpperCenter;
-
-
-            LCPerkTitle = GUIManager.Instance.CreateText(
-                text: "",
-                parent: LearnConfirmWindow.transform,
-                anchorMin: new Vector2(0.5f, 1f),
-                anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(0f, -140f),
-                font: GUIManager.Instance.AveriaSerifBold,
-                fontSize: 30,
-                color: GUIManager.Instance.ValheimOrange,
-                outline: true,
-                outlineColor: Color.black,
-                width: 400f,
-                height: 80f,
-                addContentSizeFitter: false);
-            LCPerkTitle.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
-
-
-            LCPerkDescription = GUIManager.Instance.CreateText(
-                text: "",
-                parent: LearnConfirmWindow.transform,
-                anchorMin: new Vector2(0.5f, 1f),
-                anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(0f, -200f),
-                font: GUIManager.Instance.AveriaSerifBold,
-                fontSize: 25,
-                color: GUIManager.Instance.ValheimOrange,
-                outline: true,
-                outlineColor: Color.black,
-                width: 400f,
-                height: 80f,
-                addContentSizeFitter: false);
-            Text text = LCPerkDescription.GetComponent<Text>();
-            text.alignment = TextAnchor.MiddleCenter;
-            text.horizontalOverflow = HorizontalWrapMode.Wrap;
-
-
-            LCYesBtn = GUIManager.Instance.CreateButton(
-                text: "Yes",
-                parent: LearnConfirmWindow.transform,
-                anchorMin: new Vector2(0.5f, 0f),
-                anchorMax: new Vector2(0.5f, 0f),
-                position: new Vector2(-150f, 30f),
-                width: 80f,
-                height: 45f);
-            Button btn = LCYesBtn.GetComponent<Button>();
-            btn.onClick.AddListener(OnConfirmClick);
-
-            LCNoBtn = GUIManager.Instance.CreateButton(
-                text: "No",
-                parent: LearnConfirmWindow.transform,
-                anchorMin: new Vector2(0.5f, 0f),
-                anchorMax: new Vector2(0.5f, 0f),
-                position: new Vector2(150f, 30f),
-                width: 80f,
-                height: 45f);
-            btn = LCNoBtn.GetComponent<Button>();
-            btn.onClick.AddListener(CloseLearnConfirmWindow);
-        }
-
-        public void OnConfirmClick()
-        {
-            LearnPerk(confirmPerkKey);
-            CloseLearnConfirmWindow();
-        }
-
-        public void CloseLearnConfirmWindow()
-        {
-            LearnConfirmWindow.SetActive(false);
-            GUIManager.BlockInput(false);
-
-            confirmPerkKey = NoPerk;
-        }
-            
-        public void LearnPerk(int perk)
+        public static void LearnPerk(int perk)
         {
             if (!openedPerks[perk].learnable) return;
             if (perk == NoPerk) return;
@@ -180,7 +66,7 @@ namespace kingskills.UX
             Perks.perkFlags.Add(openedPerks[perk].type, true);
 
             UpdateLearnables();
-            GUIUpdate.GUICheck();
+            UpdateGUI.GUICheck();
         }
 
         public static void UpdateLearnables()
@@ -201,7 +87,6 @@ namespace kingskills.UX
                 openedPerks[2].learnable = false;
 
         }
-
 
         public static int MouseOverPerkBox()
         {
@@ -240,6 +125,7 @@ namespace kingskills.UX
             Perks.PerkType perk2a, Perks.PerkType perk2b)
         {
             skillLevel = Player.m_localPlayer.GetSkillFactor(skill);
+            if (openedPerks == null) Init();
 
             openedPerks.Clear();
             openedPerks.Add(Perks.perkList[perk1a]);
@@ -261,26 +147,29 @@ namespace kingskills.UX
 
             SetPerkBox(0, "1a", ConfigManager.PerkOneLVLThreshold.Value);
             SetPerkBox(1, "1b", ConfigManager.PerkOneLVLThreshold.Value);
-            SetPerkBox(2, "2a", ConfigManager.PerkOneLVLThreshold.Value);
-            SetPerkBox(3, "2b", ConfigManager.PerkOneLVLThreshold.Value);
+            SetPerkBox(2, "2a", ConfigManager.PerkTwoLVLThreshold.Value);
+            SetPerkBox(3, "2b", ConfigManager.PerkTwoLVLThreshold.Value);
 
             UpdateLearnables();
         }
 
         public static void SetPerkBox(int perk, string perkBoxString, float skillThreshold)
         {
-            GameObject perkBoxA = SkillGUI.RightPanelPerkBoxes[perkBoxString + "Perk"];
-            Image perkBoxAImage = perkBoxA.GetComponent<Image>();
-            GameObject tintA = SkillGUI.RightPanelPerkBoxes[perkBoxString + "Tint"];
-            Image tintAimg = tintA.GetComponent<Image>();
+            GameObject perkSprite = SkillGUI.RightPanelPerkBoxes[perkBoxString + "Perk"];
+            Image perkImage = perkSprite.GetComponent<Image>();
+            GameObject tint = SkillGUI.RightPanelPerkBoxes[perkBoxString + "Tint"];
+            Image tintImg = tint.GetComponent<Image>();
 
+            //Jotunn.Logger.LogMessage($"skill vs threshold: {skillLevel} < {skillThreshold}");
             if (skillLevel < skillThreshold)
             {
+                //Jotunn.Logger.LogMessage($"too low. setting locked for perk {perk}");
                 //If the player isn't high enough level to see them, they are always locked
                 perkLocked[perk] = true;
 
                 //Which means we don't get to see the perk's sprites themselves
-                perkBoxAImage.sprite = null;
+                perkImage.enabled = false;
+                tintImg.enabled = false;
 
                 //And the parent perkbox will also show as locked
                 SkillGUI.RightPanelPerkBoxes[perkBoxString].GetComponent<Image>().sprite =
@@ -288,29 +177,43 @@ namespace kingskills.UX
             }
             else
             {
+                //Jotunn.Logger.LogMessage($"good enough. unlocked perk {perk}");
                 //If the player is high enough, they aren't locked, 
                 perkLocked[perk] = false;
 
                 //and you get to see the icon
-                perkBoxAImage.sprite = openedPerks[perk].icon;
+                perkImage.sprite = openedPerks[perk].icon;
+                perkImage.enabled = true;
 
-                //If it's learned, it has a gold tint, and it's not clickable.
-                if (openedPerks[perk].learned) {
+
+                SkillGUI.RightPanelPerkBoxes[perkBoxString].GetComponent<Image>().sprite =
+                    Assets.AssetLoader.perkBoxSprites["perkbox"];
+
+                //If it's learned, it has no tint, and isn't clickable.
+                if (openedPerks[perk].learned)
+                {
+                    //Jotunn.Logger.LogMessage($"{perk} is learned. making gold");
+
                     perkClickable[perk] = false;
-                    tintAimg.sprite = Assets.AssetLoader.perkBoxSprites["goldtint"];
-
+                    tintImg.enabled = false;
                 }
-                //If it's learnable, and not learned, it has no tint, and it's clickable.
+                //If it's learnable, and not learned, it has a gold tint, and it's clickable.
                 else if (openedPerks[perk].learnable)
                 {
+                    //Jotunn.Logger.LogMessage($"{perk} is learnable. making clear");
+
                     perkClickable[perk] = true;
-                    tintAimg.sprite = null;
+                    tintImg.sprite = Assets.AssetLoader.perkBoxSprites["goldtint"];
+                    tintImg.enabled = true;
                 }
                 //Otherwise, neither learnable nor learned, it has a gray tint and isn't clickable.
                 else
                 {
+                    //Jotunn.Logger.LogMessage($"{perk} isn't learned or learnable. making gray");
+
                     perkClickable[perk] = false;
-                    tintAimg.sprite = Assets.AssetLoader.perkBoxSprites["graytint"];
+                    tintImg.sprite = Assets.AssetLoader.perkBoxSprites["graytint"];
+                    tintImg.enabled = true;
                 }
             }
         }
@@ -436,5 +339,6 @@ namespace kingskills.UX
                 Perks.PerkType.HeartOfTheMonkey,
                 Perks.PerkType.PandemoniumSwing);
         }
+
     }
 }
