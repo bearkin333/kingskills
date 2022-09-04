@@ -39,7 +39,7 @@ namespace kingskills
                 Dictionary<int, bool> savePerkFlags = new Dictionary<int, bool>();
                 Dictionary<int, bool> saveSkillAscendedFlags = new Dictionary<int, bool>();
 
-                foreach (KeyValuePair<Perks.Perk, bool> datum in Perks.perkFlags)
+                foreach (KeyValuePair<Perks.PerkType, bool> datum in Perks.perkFlags)
                 {
                     savePerkFlags.Add((int)datum.Key, datum.Value);
                 }
@@ -109,7 +109,7 @@ namespace kingskills
 
                 foreach (KeyValuePair<int, bool> datum in loadPerkFlags)
                 {
-                    Perks.perkFlags.Add((Perks.Perk)datum.Key, datum.Value);
+                    Perks.perkFlags.Add((Perks.PerkType)datum.Key, datum.Value);
                 }
                 foreach (KeyValuePair<int, bool> datum in loadSkillAscendedFlags)
                 {
@@ -117,6 +117,7 @@ namespace kingskills
                     //Jotunn.Logger.LogMessage($"Set {((Skills.SkillType)datum.Key).ToString()} to {datum.Value}");
                 }
 
+                Perks.UpdatePerkList();
                 Perks.loaded = true;
 
             }
