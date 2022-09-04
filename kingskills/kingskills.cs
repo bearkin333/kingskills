@@ -43,8 +43,6 @@ namespace kingskills
             AddSkills();
             AddInputs();
             harmony.PatchAll();
-
-            Assets.AssetLoader.Folder = Path.GetDirectoryName(this.Info.Location);
         }
 
         private void Update()

@@ -412,46 +412,44 @@ namespace kingskills
             rect.SetParent(SkillGUIWindow.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(-60f, -120f);
+            rect.localPosition = new Vector2(-90f, -120f);
             rect.sizeDelta = new Vector2(80f, 80f);
-            
             RightPanelPerkBoxes["1a"].SetActive(true);
 
-            /*
             RightPanelPerkBoxes.Add("1b", new GameObject());
-            //image = RightPanelPerkBoxes["1b"].AddComponent<Image>();
-            //image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            image = RightPanelPerkBoxes["1b"].AddComponent<Image>();
+            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
             rect = RightPanelPerkBoxes["1b"].GetComponent<RectTransform>();
-            rect.SetParent(RightPanelPerks.transform);
+            rect.SetParent(SkillGUIWindow.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(60f, -120f);
+            rect.localPosition = new Vector2(90f, -120f);
             rect.sizeDelta = new Vector2(80f, 80f);
             RightPanelPerkBoxes["1b"].SetActive(true);
 
 
             RightPanelPerkBoxes.Add("2a", new GameObject());
-            //image = RightPanelPerkBoxes["2a"].AddComponent<Image>();
-            //image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            image = RightPanelPerkBoxes["2a"].AddComponent<Image>();
+            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
             rect = RightPanelPerkBoxes["2a"].GetComponent<RectTransform>();
-            rect.SetParent(RightPanelPerks.transform);
+            rect.SetParent(SkillGUIWindow.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(-60f, -300f);
+            rect.localPosition = new Vector2(-90f, -320f);
             rect.sizeDelta = new Vector2(80f, 80f);
             RightPanelPerkBoxes["2a"].SetActive(true);
 
 
             RightPanelPerkBoxes.Add("2b", new GameObject());
-            //image = RightPanelPerkBoxes["2b"].AddComponent<Image>();
-            //image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
+            image = RightPanelPerkBoxes["2b"].AddComponent<Image>();
+            image.sprite = Assets.AssetLoader.perkSprites["perkbox"];
             rect = RightPanelPerkBoxes["2b"].GetComponent<RectTransform>();
-            rect.SetParent(RightPanelPerks.transform);
+            rect.SetParent(SkillGUIWindow.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(60f, -300f);
+            rect.localPosition = new Vector2(90f, -320f);
             rect.sizeDelta = new Vector2(80f, 80f);
-            RightPanelPerkBoxes["2b"].SetActive(true);*/
+            RightPanelPerkBoxes["2b"].SetActive(true);
 
 
 
