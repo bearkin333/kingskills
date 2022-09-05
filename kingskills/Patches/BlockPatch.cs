@@ -118,8 +118,8 @@ namespace kingskills
                 //Bonus exp for unarmed block!
                 __instance.RaiseSkill(Skills.SkillType.Unarmed, ConfigManager.WeaponBXPUnarmedBlock.Value);
 
-                BonusExperienceDamageText.CreateBXPText(
-                    BonusExperienceDamageText.GetInFrontOfCharacter(__instance),
+                CustomWorldTextManager.CreateBXPText(
+                    CustomWorldTextManager.GetInFrontOfCharacter(__instance),
                     ConfigManager.WeaponBXPUnarmedBlock.Value);
             }
             //Jotunn.Logger.LogMessage($"Increased blocking skill by {expValue} due to damage");

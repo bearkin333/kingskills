@@ -117,8 +117,8 @@ namespace kingskills
             {
                 player.RaiseSkill(Skills.SkillType.Spears, ConfigManager.WeaponBXPSpearThrown.Value);
 
-                BonusExperienceDamageText.CreateBXPText(
-                    BonusExperienceDamageText.GetInFrontOfCharacter(player),
+                CustomWorldTextManager.CreateBXPText(
+                    CustomWorldTextManager.GetInFrontOfCharacter(player),
                     ConfigManager.WeaponBXPSpearThrown.Value);
             } 
             else if (ConfigManager.IsSkillActive(Skills.SkillType.Bows) &&
@@ -126,8 +126,8 @@ namespace kingskills
             {
                 player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * ConfigManager.GetWeaponBXPBowDistanceMult());
 
-                BonusExperienceDamageText.CreateBXPText(
-                    BonusExperienceDamageText.GetInFrontOfCharacter(player),
+                CustomWorldTextManager.CreateBXPText(
+                    CustomWorldTextManager.GetInFrontOfCharacter(player),
                     distanceTravelled * ConfigManager.GetWeaponBXPBowDistanceMult());
                 //Jotunn.Logger.LogMessage($"Bow bonus exp: {distanceTravelled * BowBXPDistanceMod}");
             }

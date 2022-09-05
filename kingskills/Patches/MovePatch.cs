@@ -51,6 +51,63 @@ namespace kingskills
             return false;
         }
 
+        [HarmonyPatch(nameof(Player.UpdateMovementModifier))]
+        [HarmonyPrefix]
+        public static bool UpdateEquipmentModOverride(Player __instance)
+        {
+            //Another override of the original with mostly copied code.
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Run)) return true;
+
+            float equipmentMalusRedux = ConfigManager.GetEquipmentRedux(__instance.GetSkillFactor(Skills.SkillType.Run));
+            float m;
+
+            __instance.m_equipmentMovementModifier = 0;
+            if (__instance.m_rightItem != null)
+            {
+                m = __instance.m_rightItem.m_shared.m_movementModifier;
+                if (m < 0) m *= equipmentMalusRedux;
+                __instance.m_equipmentMovementModifier += m;
+            }
+            if (__instance.m_leftItem != null)
+            {
+                m = __instance.m_leftItem.m_shared.m_movementModifier;
+                if (m < 0) m *= equipmentMalusRedux;
+                __instance.m_equipmentMovementModifier += m;
+            }
+            if (__instance.m_chestItem != null)
+            {
+                m = __instance.m_chestItem.m_shared.m_movementModifier;
+                if (m < 0) m *= equipmentMalusRedux;
+                __instance.m_equipmentMovementModifier += m;
+            }
+            if (__instance.m_legItem != null)
+            {
+                m = __instance.m_legItem.m_shared.m_movementModifier;
+                if (m < 0) m *= equipmentMalusRedux;
+                __instance.m_equipmentMovementModifier += m;
+            }
+            if (__instance.m_helmetItem != null)
+            {
+                m = __instance.m_helmetItem.m_shared.m_movementModifier;
+                if (m < 0) m *= equipmentMalusRedux;
+                __instance.m_equipmentMovementModifier += m;
+            }
+            if (__instance.m_shoulderItem != null)
+            {
+                m = __instance.m_shoulderItem.m_shared.m_movementModifier;
+                if (m < 0) m *= equipmentMalusRedux;
+                __instance.m_equipmentMovementModifier += m;
+            }
+            if (__instance.m_utilityItem != null)
+            {
+                m = __instance.m_utilityItem.m_shared.m_movementModifier;
+                if (m < 0) m *= equipmentMalusRedux;
+                __instance.m_equipmentMovementModifier += m;
+            }
+
+            return false;
+        }
+
         public static float GetGenericMovespeedAdjustments(Player player){
             float mod = 1f;
             mod *= GetSkillMovespeedMod(player) 
@@ -63,15 +120,13 @@ namespace kingskills
         {
             float mod = 1f;
 
-            float modAddition = 1f;
-
             if (ConfigManager.IsSkillActive(Skills.SkillType.Unarmed))
-                modAddition += ConfigManager.GetFistMovespeedMod(player.GetSkillFactor(Skills.SkillType.Unarmed));
+                mod += ConfigManager.GetFistMovespeedMod(player.GetSkillFactor(Skills.SkillType.Unarmed));
 
             if (ConfigManager.IsSkillActive(Skills.SkillType.Run))
-                modAddition += ConfigManager.GetKnifeMovespeedMod(player.GetSkillFactor(Skills.SkillType.Knives));
+                mod += ConfigManager.GetKnifeMovespeedMod(player.GetSkillFactor(Skills.SkillType.Knives));
 
-            return mod * modAddition;
+            return mod;
         }
 
         // 
@@ -89,12 +144,7 @@ namespace kingskills
         }
         public static float GetEquipmentMult(Player player)
         {
-            if (!ConfigManager.IsSkillActive(Skills.SkillType.Run)) return 1f;
-
-            float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
-            float equipmentMalusRedux = ConfigManager.GetEquipmentRedux(skillFactor);
             float equipmentFactor = player.m_equipmentMovementModifier;
-            if (equipmentFactor < 0f) { equipmentFactor *= equipmentMalusRedux; }
 
             return equipmentFactor + 1f;
         }
@@ -113,7 +163,7 @@ namespace kingskills
             float runMod = player.GetRunSpeedFactor();
             player.m_seman.ApplyStatusEffectSpeedMods(ref runMod);
 
-            return runMod * ConfigManager.GetRunEXPSpeedMod();
+            return runMod * ConfigManager.GetRunEXPSpeedMult();
         }
         public static float swimSpeedExpBonus(Player player)
         {
@@ -134,24 +184,32 @@ namespace kingskills
             float fallThreshold = 4;
             if (ConfigManager.IsSkillActive(Skills.SkillType.Jump))
                 fallThreshold = ConfigManager.GetFallDamageThreshold(skillFactor);
-                
-            if (IsPlayer() && fallHeight > fallThreshold)
+
+
+            float expGained = 0f;
+            if (fallHeight > 4f)
             {
-                HitData hitData = new HitData();
+                expGained = (fallHeight - 4) * 8.33f;
+            }
+            if (IsPlayer() && !InIntro())
+            {
+                if (fallHeight > fallThreshold)
+                {
+                    HitData hitData = new HitData();
 
-                float fallDamage = (fallHeight - fallThreshold) * 8.33f;
-                float expGained = fallDamage;
+                    float fallDamage = (fallHeight - fallThreshold) * 8.33f;
 
-                if (ConfigManager.IsSkillActive(Skills.SkillType.Jump))
-                    fallDamage *= ConfigManager.GetFallDamageRedux(skillFactor);
+                    if (ConfigManager.IsSkillActive(Skills.SkillType.Jump))
+                        fallDamage *= ConfigManager.GetFallDamageRedux(skillFactor);
 
-                hitData.m_damage.m_damage = fallDamage;
-                hitData.m_point = m_lastGroundPoint;
-                hitData.m_dir = m_lastGroundNormal;
-                    
-                Damage(hitData);
+                    hitData.m_damage.m_damage = fallDamage;
+                    hitData.m_point = m_lastGroundPoint;
+                    hitData.m_dir = m_lastGroundNormal;
 
-                //Jotunn.Logger.LogMessage("Jump exp just increased by " + expGained + " thanks to fall damage");
+                    Damage(hitData);
+
+                }
+                Jotunn.Logger.LogMessage("Jump exp just increased by " + expGained + " thanks to fall damage");
                 if (ConfigManager.IsSkillActive(Skills.SkillType.Jump))
                 {
                     expGained *= ConfigManager.GetJumpXPMod();

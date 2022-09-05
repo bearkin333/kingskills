@@ -25,7 +25,7 @@ namespace kingskills
          * the whole.
          * Ex: A redux of 50% implies the final number will have a final value of 50%
          * 
-         * Mod (or modifier) is a version of a percentage that mulitplies something to
+         * Mod (or modifier) is a version of a percentage that multiplies something to
          * change the entire number.
          * Ex: a mod of .5 would be multiplied in if you wanted to halve a total number.
          * 
@@ -56,6 +56,8 @@ namespace kingskills
         public static ConfigEntry<float> WeaponBXPAxeTreeAmount;
         public static ConfigEntry<float> WeaponBXPSpearThrown;
         public static ConfigEntry<float> WeaponBXPBowDistancePercent;
+
+        public static ConfigEntry<float> ToolBXPWoodStubReward;
 
         public static ConfigEntry<float> ToolXPStrikeDamagePercent;
         public static ConfigEntry<float> ToolXPStrikeDamageFactor;
@@ -121,8 +123,8 @@ namespace kingskills
         public static ConfigEntry<float> JumpStaminaReduxMax;
         public static ConfigEntry<float> JumpForwardForcePercentMin;
         public static ConfigEntry<float> JumpForwardForcePercentMax;
-        public static ConfigEntry<float> JumpTiredReduxMin;
-        public static ConfigEntry<float> JumpTiredReduxMax;
+        public static ConfigEntry<float> JumpTiredModMin;
+        public static ConfigEntry<float> JumpTiredModMax;
         public static ConfigEntry<float> JumpXPPercent;
 
         public static ConfigEntry<float> SwimXPSpeedPercent;
@@ -332,6 +334,8 @@ namespace kingskills
             x = cfg.Bind("g", "t", 0f, 
                 "d");
              */
+
+
             PerkExplorationOn = cfg.Bind("Perks", "Perk Exploration", true,
                     "Whether or not locked perks are hidden from view");
             PerkOneLVLThreshold = cfg.Bind("Perks", "First Threshold", .5f,
@@ -347,7 +351,7 @@ namespace kingskills
             //Overall Changes
             MaxSkillLevel = cfg.Bind("Generic", "Max Skill Level", 100f,
                     "This is the level that all king skills can go up to.");
-            DisplayExperienceThreshold = cfg.Bind("Generic", "Experience Display Threshold", .8f,
+            DisplayExperienceThreshold = cfg.Bind("Generic", "Experience Display Threshold", .2f,
                     "Threshold under which experience earned will not display as a message.");
             DropNewItemThreshold = cfg.Bind("Generic", "Drop New Item Threshold", 50f,
                     "% of 1 item needed to generate before you round up to a full item.");
@@ -402,7 +406,7 @@ namespace kingskills
             SkillActive.Add(Skills.SkillType.Swim, ActiveSkillSwim.Value);
             SkillActive.Add(Skills.SkillType.Swords, ActiveSkillSword.Value);
             SkillActive.Add(Skills.SkillType.WoodCutting, ActiveSkillWood.Value);
-            
+
 
             //Weapon Swing Experence
             WeaponXPSwing = cfg.Bind("Experience.Weapons.Swing", "XP Flat", .25f,
@@ -453,6 +457,8 @@ namespace kingskills
                 "(Woodcutting, Mining)");
             ToolXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .24f,
                 "Factor to define the slope of the damage to xp curve");
+            ToolBXPWoodStubReward = cfg.Bind("Experience.Tools", "Woodcutting BXP for Stump", 20f,
+                "The amount of experience you get for breaking a stump");
 
 
             //Block experience
@@ -504,9 +510,9 @@ namespace kingskills
                 "% less stamina cost to jump at level 0");
             JumpStaminaReduxMax = cfg.Bind("Jump.Effect", "Stamina Cost Max", 60f,
                 "% less stamina cost to jump at level 100");
-            JumpTiredReduxMin = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Min", 0f,
+            JumpTiredModMin = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Min", 0f,
                 "% jump force added to the base game's tired factor, which reduces your jump force when out of stamina, at level 0");
-            JumpTiredReduxMax = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Max", 20f,
+            JumpTiredModMax = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Max", 20f,
                 "% jump force added to the base game's tired factor, which reduces your jump force when out of stamina, at level 100");
 
 
@@ -573,7 +579,7 @@ namespace kingskills
 
             //Run Experience
             RunXPSpeedPercent = cfg.Bind("Run.Experience", "XP", 25f,
-                "% of run speed that becomes bonus experience gain");
+                "% of extra experience gained from run speed");
             
 
             //Run Effects
@@ -1011,9 +1017,9 @@ namespace kingskills
             return Mathf.Lerp(PerToMult(RunStaminaReduxMin, true), 
                 PerToMult(RunStaminaReduxMax, true), skillFactor);
         }
-        public static float GetRunEXPSpeedMod()
+        public static float GetRunEXPSpeedMult()
         {
-            return PerToMod(RunXPSpeedPercent);
+            return PerToMult(RunXPSpeedPercent);
         }
         public static float GetRunStamina(float skillFactor)
         {
@@ -1063,8 +1069,8 @@ namespace kingskills
         }
         public static float GetJumpTiredMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMod(JumpTiredReduxMin, true), 
-                PerToMod(JumpTiredReduxMax, true), skillFactor);
+            return Mathf.Lerp(PerToMod(JumpTiredModMin), 
+                PerToMod(JumpTiredModMax), skillFactor);
         }
         public static float GetJumpXPMod()
         {
@@ -1131,10 +1137,10 @@ namespace kingskills
             return Mathf.Lerp(BaseBowDrawSpeedMin, 
                 BaseBowDrawSpeedMax, skillFactor);
         }
-        public static float GetBowDropRateMult(float skillFactor)
+        public static float GetBowDropRateMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(BowDropPercentMin), 
-                PerToMult(BowDropPercentMax), skillFactor);
+            return Mathf.Lerp(PerToMod(BowDropPercentMin), 
+                PerToMod(BowDropPercentMax), skillFactor);
         }
         public static float GetClubDamageMult(float skillFactor)
         {
@@ -1285,10 +1291,10 @@ namespace kingskills
             return Mathf.Lerp(PerToMod(WoodcuttingChopDamagePercentMin), 
                 PerToMod(WoodcuttingChopDamagePercentMax), skillFactor);
         }
-        public static float GetWoodDropMult(float skillFactor)
+        public static float GetWoodDropMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(WoodcuttingDropPercentMin), 
-                PerToMult(WoodcuttingDropPercentMax), skillFactor);
+            return Mathf.Lerp(PerToMod(WoodcuttingDropPercentMin), 
+                PerToMod(WoodcuttingDropPercentMax), skillFactor);
         }
         public static float GetWoodcuttingStaminaRebate(float skillFactor)
         {
@@ -1300,10 +1306,10 @@ namespace kingskills
             return Mathf.Lerp(PerToMult(MiningPickDamagePercentMin), 
                 PerToMult(MiningPickDamagePercentMax), skillFactor);
         }
-        public static float GetMiningDropMult(float skillFactor)
+        public static float GetMiningDropMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(MiningDropPercentMin), 
-                PerToMult(MiningDropPercentMax), skillFactor);
+            return Mathf.Lerp(PerToMod(MiningDropPercentMin), 
+                PerToMod(MiningDropPercentMax), skillFactor);
         }
         public static float GetMiningStaminaRebate(float skillFactor)
         {

@@ -14,12 +14,11 @@ namespace kingskills.UX
         public static GameObject PerkTooltipWindow;
         public static GameObject PTTitle;
         public static GameObject PTTooltip;
-        public static bool init = false;
 
         public static Perk highlightedPerk;
 
         public static void UpdateTooltip(Perk perk){
-            if (!init) InitTooltip();
+            if (!PerkTooltipWindow) InitTooltip();
             if (highlightedPerk == null) NewTooltip(perk);
             if (!PerkTooltipWindow.activeSelf) PerkTooltipWindow.SetActive(true);
 
@@ -27,7 +26,7 @@ namespace kingskills.UX
         }
         public static void CloseTooltip()
         {
-            if (!init) InitTooltip();
+            if (!PerkTooltipWindow) InitTooltip();
             highlightedPerk = null;
             PerkTooltipWindow.SetActive(false);
         }
@@ -40,8 +39,7 @@ namespace kingskills.UX
 
         public static void InitTooltip()
         {
-            init = true;
-            Jotunn.Logger.LogMessage("Init the perk tooltip window");
+            //Jotunn.Logger.LogMessage("Init the perk tooltip window");
             PerkTooltipWindow = GUIManager.Instance.CreateWoodpanel(
                     parent: SkillGUI.RightPanel.transform,
                     anchorMin: new Vector2(.5f, .5f),

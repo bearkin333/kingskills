@@ -41,6 +41,23 @@ namespace kingskills.Commands
         }
     }
 
+    public class ResetAscensionsCommand : ConsoleCommand
+    {
+        public override string Name => "resetascend";
+
+        public override string Help => "resets all ascensions";
+
+        public override void Run(string[] args)
+        {
+            if (args.Length != 0)
+            {
+                return;
+            }
+
+            Perks.ResetAscensions();
+        }
+    }
+
     public class SkillUpdateCommand : ConsoleCommand
     {
         public override string Name => "updateks";

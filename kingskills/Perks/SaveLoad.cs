@@ -5,13 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace kingskills
 {
     [HarmonyPatch(typeof(PlayerProfile))]
     public static class SaveLoad
     {
-        public const string saveDirectory = "/KS";
+        public const string saveDirectory = "KS";
         public const string fileEnding = "_ks.fch";
 
         [HarmonyPatch(nameof(PlayerProfile.SavePlayerToDisk))]
@@ -19,19 +20,16 @@ namespace kingskills
         public static void SaveKSPerks(PlayerProfile __instance)
         {
             //Decide on the save paths for our new files
-            string saveFolderPath = PlayerProfile.GetCharacterFolderPath(__instance.m_fileSource)
-                + saveDirectory;
-            if (!Directory.Exists(saveFolderPath) && __instance.m_fileSource != FileHelpers.FileSource.SteamCloud)
-            {
-                Directory.CreateDirectory(saveFolderPath);
-            }
+            string saveFolderPath = Application.persistentDataPath +
+                    "/characters/" + saveDirectory + "/";
 
-            string oldSavePath = PlayerProfile.GetCharacterFolderPath(__instance.m_fileSource)
-                + saveDirectory + "/" + __instance.m_filename + fileEnding;
-            string newSavePath = PlayerProfile.GetCharacterFolderPath(__instance.m_fileSource)
-                + saveDirectory + "/" + __instance.m_filename + fileEnding + ".new";
+            Directory.CreateDirectory(saveFolderPath);
+
+            string oldSavePath = saveFolderPath + __instance.m_filename + fileEnding;
+
+            string newSavePath = saveFolderPath + __instance.m_filename + fileEnding + ".new";
             ZPackage zPackage = new ZPackage();
-            //Jotunn.Logger.LogWarning($"saving in path {oldSavePath}");
+            //Jotunn.Logger.LogWarning($"old save path is {oldSavePath}\n now saving in {newSavePath}");
 
             //Write all of our parseable information to a package
             if (Perks.loaded)
@@ -88,10 +86,12 @@ namespace kingskills
         [HarmonyPostfix]
         public static void LoadKSPerks(PlayerProfile __instance)
         {
+            Perks.Awake();
+
             try
             {
-                string filePath = PlayerProfile.GetCharacterFolderPath(__instance.m_fileSource)
-                    + saveDirectory + "/" + __instance.m_filename + fileEnding;
+                string filePath = Application.persistentDataPath + 
+                    "/characters/" + saveDirectory + "/" + __instance.m_filename + fileEnding;
 
                 ZPackage zPackage = StreamFromFile(filePath);
                 //Jotunn.Logger.LogWarning($"loading from {filePath}");
@@ -102,7 +102,6 @@ namespace kingskills
                 //handle the new data from the zpackage
                 Dictionary<int, bool> loadPerkFlags = new Dictionary<int, bool>();
                 Dictionary<int, bool> loadSkillAscendedFlags = new Dictionary<int, bool>();
-                Perks.Awake();
 
                 loadPerkFlags = LoadFlagsFromZPackage(zPackage);
                 loadSkillAscendedFlags = LoadFlagsFromZPackage(zPackage);
@@ -118,7 +117,6 @@ namespace kingskills
                 }
 
                 Perks.UpdatePerkList();
-                Perks.loaded = true;
 
             }
             catch
@@ -126,6 +124,7 @@ namespace kingskills
                 Jotunn.Logger.LogWarning("Didn't load from King Skills");
                 return;
             }
+            Perks.UpdatePerkList();
 
         }
 

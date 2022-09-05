@@ -63,6 +63,7 @@ namespace kingskills.UX
 
             openedPerks[perk].learned = true;
             openedPerks[perk].learnable = false;
+            //Jotunn.Logger.LogMessage($"{openedPerks[perk].name} just got learned, making it now unlearnable.");
             Perks.perkFlags.Add(openedPerks[perk].type, true);
 
             UpdateLearnables();
@@ -71,20 +72,32 @@ namespace kingskills.UX
 
         public static void UpdateLearnables()
         {
-            if (openedPerks.Count < 1) return;
+            if (openedPerks == null) return;
 
 
             if (openedPerks[0].learned)
+            {
                 openedPerks[1].learnable = false;
+                //Jotunn.Logger.LogMessage($"just set perk {openedPerks[1].name} to unlearnable, since the other one is learned");
+            }
 
             else if (openedPerks[1].learned)
+            {
                 openedPerks[0].learnable = false;
+                //Jotunn.Logger.LogMessage($"just set perk {openedPerks[0].name} to unlearnable, since the other one is learned");
+            }
 
             if (openedPerks[2].learned)
+            {
                 openedPerks[3].learnable = false;
+                //Jotunn.Logger.LogMessage($"just set perk {openedPerks[3].name} to unlearnable, since the other one is learned");
+            }
 
             else if (openedPerks[3].learned)
+            {
                 openedPerks[2].learnable = false;
+                //Jotunn.Logger.LogMessage($"just set perk {openedPerks[2].name} to unlearnable, since the other one is learned");
+            }
 
         }
 
@@ -318,7 +331,7 @@ namespace kingskills.UX
         public static void OpenSwimPerkBoxes()
         {
             OpenPerksByType(Skills.SkillType.Swim,
-                Perks.PerkType.SeaLegs,
+                Perks.PerkType.Treading,
                 Perks.PerkType.Butterfly,
                 Perks.PerkType.AlwaysPrepared,
                 Perks.PerkType.Aerodynamic);

@@ -20,12 +20,12 @@ namespace kingskills
         {
             perkFlags = new Dictionary<PerkType, bool>();
             skillAscendedFlags = new Dictionary<Skills.SkillType, bool>();
-            InitSkillAcensions();
+            InitSkillAscensions();
             InitPerkList();
 
             loaded = true;
         }
-        public static void InitSkillAcensions()
+        public static void InitSkillAscensions()
         {
             skillAscendedFlags.Add(Skills.SkillType.Axes, false);
             skillAscendedFlags.Add(Skills.SkillType.Blocking, false);
@@ -348,10 +348,10 @@ namespace kingskills
                 PerkType.EinherjarsBlessing, "Icons/einherjarsblessing.png");
             perkList.Add(perk.type, perk);
 
-            perk = new Perk("Sea Legs",
-                "You now take half damage while in water.",
-                "Landlubbers not welcome.",
-                PerkType.SeaLegs, "Icons/sealegs.png");
+            perk = new Perk("Effortless Treading",
+                "When treading water, you now regenerate stamina.",
+                "Become the kind of man Jotaro Kujo expects you to be",
+                PerkType.Treading, "Icons/sealegs.png");
             perkList.Add(perk.type, perk);
 
             perk = new Perk("Butterfly",
@@ -431,6 +431,7 @@ namespace kingskills
                 {
                     perkList[flaggedPerk.Key].learned = true;
                     perkList[flaggedPerk.Key].learnable = false;
+                    //Jotunn.Logger.LogMessage($"Freshly loaded, just set perk {flaggedPerk.Key} to learned and unlearnable because it was in the data");
                 }
             }
         }
@@ -444,7 +445,7 @@ namespace kingskills
             }
             else
             {
-                Jotunn.Logger.LogWarning("skill acensions haven't been loaded!");
+                Jotunn.Logger.LogWarning("skill ascensions haven't been loaded!");
                 return false;
             }
         }
@@ -500,7 +501,7 @@ namespace kingskills
             CouchedLance, EinherjarsBlessing,
 
             //Swim
-            SeaLegs, Butterfly,
+            Treading, Butterfly,
             AlwaysPrepared, Aerodynamic,
 
             //Sword
@@ -514,11 +515,18 @@ namespace kingskills
 
         public static void ResetAllPerks()
         {
+            //Jotunn.Logger.LogMessage($"Every perk in the perklist is now learnable and not learned");
             foreach (KeyValuePair<Perks.PerkType, Perk> perk in perkList)
             {
                 perk.Value.learnable = true;
                 perk.Value.learned = false;
             }
+        }
+
+        public static void ResetAscensions()
+        {
+            skillAscendedFlags = new Dictionary<Skills.SkillType, bool>();
+            InitSkillAscensions();
         }
     }
 

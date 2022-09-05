@@ -85,10 +85,16 @@ namespace kingskills.Patches
 
             if (factor >= ConfigManager.DisplayExperienceThreshold.Value)
             {
+                string expMsg = "+" + factor.ToString("F1") + " experience - Level " + 
+                    skill.m_level.ToString("F0") + " " + skillT
+                    + " (" + percent.ToString("F0") + "%)";
 
-                player.Message(MessageHud.MessageType.TopLeft, "Level " + skill.m_level.ToString("F0") + " " + skillT
-                    + " [" + skill.m_accumulator.ToString("F2") + "/" + skill.GetNextLevelRequirement().ToString("F2") + "]"
-                    + " (" + percent.ToString("F0") + "%)", 0, skill.m_info.m_icon);
+                CustomWorldTextManager.AddCustomWorldText(ConfigManager.ColorExperienceYellow, 
+                    CustomWorldTextManager.GetAboveCharacter(player) + CustomWorldTextManager.GetRandomPosOffset(), 
+                    22, expMsg);
+                /*
+                player.Message(MessageHud.MessageType.TopLeft, expMsg, 0, skill.m_info.m_icon);
+                */
             }
 
             float nextLevelRequirement = skill.GetNextLevelRequirement();

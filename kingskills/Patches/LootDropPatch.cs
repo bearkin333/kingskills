@@ -30,9 +30,9 @@ namespace kingskills.Patches
             float mineSkill = playerRef.GetSkillFactor(Skills.SkillType.Pickaxes);
             float bowSkill = playerRef.GetSkillFactor(Skills.SkillType.Bows);
 
-            float woodDropRate = ConfigManager.GetWoodDropMult(woodSkill);
-            float mineDropRate = ConfigManager.GetMiningDropMult(mineSkill);
-            float bowDropRate = ConfigManager.GetBowDropRateMult(bowSkill);
+            float woodDropRate = ConfigManager.GetWoodDropMod(woodSkill);
+            float mineDropRate = ConfigManager.GetMiningDropMod(mineSkill);
+            float bowDropRate = ConfigManager.GetBowDropRateMod(bowSkill);
 
             Dictionary<string, float> woodDrops
                 = new Dictionary<string, float>(ConfigManager.WoodcuttingDropTable);
@@ -96,7 +96,7 @@ namespace kingskills.Patches
                     {
                         for (int i = 1; i < Mathf.Floor(dropBonus); dropBonus--)
                         {
-                            //Jotunn.Logger.LogMessage($"Adding an extra drop, making drop bonus {dropBonus}");
+                            Jotunn.Logger.LogMessage($"Adding an extra drop, making drop bonus {dropBonus}");
                             newDrops.Add(drop);
                         }
 

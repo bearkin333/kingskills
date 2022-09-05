@@ -273,7 +273,7 @@ namespace kingskills.UX
             float bowStaminaRedux = ToPercent(ConfigManager.GetBowStaminaRedux(skill));
             float bowVelocity = ToPercent(ConfigManager.GetBowVelocityMult(skill));
             float bowDrawSpeed = ConfigManager.GetBowDrawSpeed(skill);
-            float bowDropRate = ToPercent(ConfigManager.GetBowDropRateMult(skill));
+            float bowDropRate = ToPercent(ConfigManager.GetBowDropRateMod(skill));
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -521,7 +521,7 @@ namespace kingskills.UX
                 encumberanceRedux.ToString("F1") + "% to encumberance penalty";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                staminaDrainRedux.ToString("F1") + "% less stamina cost to run";
+                staminaDrainRedux.ToString("F1") + "% to stamina cost to run";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 baseStaminaGain.ToString("F1") + " extra base stamina";
@@ -678,7 +678,7 @@ namespace kingskills.UX
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.WoodCutting);
 
             float woodDamage = ToPercent(1 + ConfigManager.GetWoodcuttingDamageMod(skill));
-            float woodDrop = ToPercent(ConfigManager.GetWoodDropMult(skill));
+            float woodDrop = ToPercent(ConfigManager.GetWoodDropMod(skill));
             float woodRebate = ConfigManager.GetWoodcuttingStaminaRebate(skill);
             float woodSomething = ToPercent(0f);
 
@@ -706,7 +706,7 @@ namespace kingskills.UX
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Pickaxes);
 
             float mineDamage = ToPercent(ConfigManager.GetMiningDamageMult(skill));
-            float mineDrop = ToPercent(ConfigManager.GetMiningDropMult(skill));
+            float mineDrop = ToPercent(ConfigManager.GetMiningDropMod(skill));
             float mineRebate = ConfigManager.GetMiningStaminaRebate(skill);
             float mineSomething = ToPercent(0f);
 

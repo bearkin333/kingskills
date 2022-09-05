@@ -90,7 +90,8 @@ namespace kingskills.WeaponExperience
         [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))]
         static void TreeLog_Damage(Destructible __instance, HitData hit)
         {
-            DamageToExp(__instance, hit, false);
+            //DamageToExp(__instance, hit, false);
+            //Redundant with TreeBase
         }
         static void DamageToExp(IDestructible __instance, HitData hit, bool livingTarget)
         {

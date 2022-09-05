@@ -141,7 +141,11 @@ namespace kingskills
             Dictionary<Skills.SkillType, bool> temp = new Dictionary<Skills.SkillType, bool>(Perks.skillAscendedFlags);
             foreach (KeyValuePair<Skills.SkillType, bool> skillAcension in temp)
             {
-                if (player.GetSkills().GetSkillLevel(skillAcension.Key) >= ConfigManager.MaxSkillLevel.Value)
+                if (Perks.skillAscendedFlags[skillAcension.Key])
+                {
+                    //No need to check if it's already ascended
+                }
+                else if (player.GetSkills().GetSkillLevel(skillAcension.Key) >= ConfigManager.MaxSkillLevel.Value)
                 {
                     Perks.skillAscendedFlags[skillAcension.Key] = true;
                     Jotunn.Logger.LogMessage("Regular update found a maxed skill and set it to be ascended");
