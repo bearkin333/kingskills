@@ -209,8 +209,8 @@ namespace kingskills
                     Damage(hitData);
 
                 }
-                Jotunn.Logger.LogMessage("Jump exp just increased by " + expGained + " thanks to fall damage");
-                if (ConfigManager.IsSkillActive(Skills.SkillType.Jump))
+                //Jotunn.Logger.LogMessage("Jump exp just increased by " + expGained + " thanks to fall damage");
+                if (ConfigManager.IsSkillActive(Skills.SkillType.Jump) && expGained > 0)
                 {
                     expGained *= ConfigManager.GetJumpXPMod();
                     RaiseSkill(Skills.SkillType.Jump, expGained);

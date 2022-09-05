@@ -43,5 +43,24 @@ namespace kingskills.Patches
                 //Jotunn.Logger.LogMessage($"Increased range to {__instance.m_attackRange}");
             }
         }
+
+
+        [HarmonyPatch(typeof(Character))]
+        [HarmonyPatch(nameof(Character.RPC_Damage))]
+        [HarmonyPrefix]
+        public static void DamageArmorWatch(Character __instance, HitData hit)
+        {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.Polearms)) return;
+            if (!__instance.IsPlayer()) return;
+            if (__instance.IsBlocking() && hit.m_blockable) return;
+
+            HitData sampleHit = hit.Clone();
+            sampleHit.ApplyArmor(__instance.GetBodyArmor());
+            float damageBlocked = hit.GetTotalDamage() - sampleHit.GetTotalDamage();
+
+            Jotunn.Logger.LogMessage($"Just blocked {damageBlocked} damage with armor.");
+            __instance.RaiseSkill(Skills.SkillType.Polearms,
+                damageBlocked * ConfigManager.WeaponBXPPolearmDamageMod.Value);
+        }
     }
 }

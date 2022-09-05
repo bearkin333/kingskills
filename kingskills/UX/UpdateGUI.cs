@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Jotunn.Managers;
+using kingskills.Patches;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -204,10 +205,10 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Axes);
 
-            float axeDamage = ToPercent(ConfigManager.GetAxeDamageMult(skill));
-            float axeStaminaRedux = ToPercent(ConfigManager.GetAxeStaminaRedux(skill));
+            float axeDamage = MultToPer(ConfigManager.GetAxeDamageMult(skill));
+            float axeStaminaRedux = MultToPer(ConfigManager.GetAxeStaminaRedux(skill));
             float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
-            float axeChopBonus = ToPercent(1f + ConfigManager.GetAxeChopDamageMod(skill));
+            float axeChopBonus = MultToPer(1f + ConfigManager.GetAxeChopDamageMod(skill));
             float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
 
             //Jotunn.Logger.LogMessage($"I'm changing the axe values in now");
@@ -240,11 +241,11 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Blocking);
 
-            float staminaRedux = ToPercent(ConfigManager.GetBlockStaminaRedux(skill));
+            float staminaRedux = MultToPer(ConfigManager.GetBlockStaminaRedux(skill));
             float baseBlockPower = ConfigManager.GetBlockPowerFlat(skill);
-            float blockPerArmor = ToPercent(ConfigManager.GetBlockPowerMult(skill));
+            float blockPerArmor = MultToPer(ConfigManager.GetBlockPowerMult(skill));
             float blockHealth = ConfigManager.GetBlockHealth(skill);
-            float parryExpMod = ToPercent(ConfigManager.GetBlockParryExpMult());
+            float parryExpMod = MultToPer(ConfigManager.GetBlockParryExpMult());
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage you block is turned into experience.";
@@ -269,11 +270,11 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Bows);
 
-            float bowDamage = ToPercent(ConfigManager.GetBowDamageMult(skill));
-            float bowStaminaRedux = ToPercent(ConfigManager.GetBowStaminaRedux(skill));
-            float bowVelocity = ToPercent(ConfigManager.GetBowVelocityMult(skill));
+            float bowDamage = MultToPer(ConfigManager.GetBowDamageMult(skill));
+            float bowStaminaRedux = MultToPer(ConfigManager.GetBowStaminaRedux(skill));
+            float bowVelocity = MultToPer(ConfigManager.GetBowVelocityMult(skill));
             float bowDrawSpeed = ConfigManager.GetBowDrawSpeed(skill);
-            float bowDropRate = ToPercent(ConfigManager.GetBowDropRateMod(skill));
+            float bowDropRate = MultToPer(ConfigManager.GetBowDropRateMod(skill)+1f);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -304,11 +305,11 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Clubs);
 
-            float clubDamage = ToPercent(ConfigManager.GetClubDamageMult(skill));
-            float clubStaminaRedux = ToPercent(ConfigManager.GetClubStaminaRedux(skill));
-            float clubBlunt = ToPercent(ConfigManager.GetClubBluntMult(skill));
-            float clubKnockback = ToPercent(ConfigManager.GetClubKnockbackMult(skill));
-            float clubStagger = ToPercent(ConfigManager.GetClubStaggerMult(skill));
+            float clubDamage = MultToPer(ConfigManager.GetClubDamageMult(skill));
+            float clubStaminaRedux = MultToPer(ConfigManager.GetClubStaminaRedux(skill));
+            float clubBlunt = MultToPer(ConfigManager.GetClubBluntMult(skill));
+            float clubKnockback = MultToPer(ConfigManager.GetClubKnockbackMult(skill));
+            float clubStagger = MultToPer(ConfigManager.GetClubStaggerMult(skill));
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -339,11 +340,11 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Unarmed);
 
-            float fistDamage = ToPercent(ConfigManager.GetFistDamageMult(skill));
-            float fistStaminaRedux = ToPercent(ConfigManager.GetFistStaminaRedux(skill));
+            float fistDamage = MultToPer(ConfigManager.GetFistDamageMult(skill));
+            float fistStaminaRedux = MultToPer(ConfigManager.GetFistStaminaRedux(skill));
             float fistFlatDamage = ConfigManager.GetFistDamageFlat(skill);
             float fistBlock = ConfigManager.GetFistBlockArmor(skill);
-            float fistMovespeed = ToPercent(1f + ConfigManager.GetFistMovespeedMod(skill));
+            float fistMovespeed = MultToPer(1f + ConfigManager.GetFistMovespeedMod(skill));
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -376,13 +377,13 @@ namespace kingskills.UX
             StatsPatch.JumpForceUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Jump);
 
-            float bonusJumpForce = ToPercent(ConfigManager.GetJumpForceMult(skill));
-            float bonusJumpForwardForce = ToPercent(ConfigManager.GetJumpForwardForceMult(skill));
-            float staminaRedux = ToPercent(ConfigManager.GetJumpStaminaRedux(skill));
-            float tired = ToPercent(ConfigManager.GetJumpTiredMod(skill));
+            float bonusJumpForce = MultToPer(ConfigManager.GetJumpForceMult(skill));
+            float bonusJumpForwardForce = MultToPer(ConfigManager.GetJumpForwardForceMult(skill));
+            float staminaRedux = MultToPer(ConfigManager.GetJumpStaminaRedux(skill));
+            float tired = MultToPer(ConfigManager.GetJumpTiredMod(skill) + ConfigManager.BaseJumpTiredFactor);
 
             float fallDamageThreshhold = ConfigManager.GetFallDamageThreshold(skill);
-            float fallDamageRedux = ToPercent(ConfigManager.GetFallDamageRedux(skill));
+            float fallDamageRedux = MultToPer(ConfigManager.GetFallDamageRedux(skill));
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "Every time you jump, you gain a small, flat amount of experience.";
@@ -401,7 +402,7 @@ namespace kingskills.UX
                 staminaRedux.ToString("F1") + "% less stamina cost to jump ";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                tired.ToString("F0") + "% jump force modifier when tired ";
+                tired.ToString("F0") + "% jump force modifier when tired";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 fallDamageThreshhold.ToString("F1") + "m minimum fall damage height ";
@@ -413,11 +414,11 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Knives);
 
-            float knifeDamage = ToPercent(ConfigManager.GetKnifeDamageMult(skill));
-            float knifeStaminaRedux = ToPercent(ConfigManager.GetKnifeStaminaRedux(skill));
-            float knifeBackstab = ToPercent(ConfigManager.GetKnifeBackstabMult(skill));
-            float knifeMovespeed = ToPercent(1f + ConfigManager.GetKnifeMovespeedMod(skill));
-            float knifePierce = ToPercent(ConfigManager.GetKnifePierceMult(skill));
+            float knifeDamage = MultToPer(ConfigManager.GetKnifeDamageMult(skill));
+            float knifeStaminaRedux = MultToPer(ConfigManager.GetKnifeStaminaRedux(skill));
+            float knifeBackstab = MultToPer(ConfigManager.GetKnifeBackstabMult(skill));
+            float knifeMovespeed = MultToPer(1f + ConfigManager.GetKnifeMovespeedMod(skill));
+            float knifePierce = MultToPer(ConfigManager.GetKnifePierceMult(skill));
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -448,8 +449,8 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Polearms);
 
-            float polearmDamage = ToPercent(ConfigManager.GetPolearmDamageMult(skill));
-            float polearmStaminaRedux = ToPercent(ConfigManager.GetPolearmStaminaRedux(skill));
+            float polearmDamage = MultToPer(ConfigManager.GetPolearmDamageMult(skill));
+            float polearmStaminaRedux = MultToPer(ConfigManager.GetPolearmStaminaRedux(skill));
             float polearmRange = ConfigManager.GetPolearmRange(skill);
             float polearmArmor = ConfigManager.GetPolearmArmor(skill);
             float polearmBlock = ConfigManager.GetPolearmBlock(skill);
@@ -462,7 +463,8 @@ namespace kingskills.UX
             SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
                 "Holding a polearm gains you experience at a very slow rate.";
             SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
-                "Bonus experience for the polearm is not currently implemented. It's already broken anyway.";
+                "Bonus experience for polearms is gained when you reduce damage taken with armor. " +
+                "In other words, wear heavy armor, get hit!";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
                 polearmDamage.ToString("F1") + "% extra damage with polearms ";
@@ -485,19 +487,19 @@ namespace kingskills.UX
             StatsPatch.RunSpeedUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Run);
 
-            float runSpeedBonus = ToPercent(ConfigManager.GetRunSpeedMult(skill));
-            float equipmentMalusRedux = ToPercent(ConfigManager.GetEquipmentRedux(skill));
-            float encumberanceRedux = ToPercent(ConfigManager.GetEncumberanceRedux(skill));
-            float staminaDrainRedux = ToPercent(ConfigManager.GetRunStaminaRedux(skill));
+            float runSpeedBonus = MultToPer(ConfigManager.GetRunSpeedMult(skill));
+            float equipmentMalusRedux = MultToPer(ConfigManager.GetEquipmentRedux(skill));
+            float encumberanceRedux = MultToPer(ConfigManager.GetEncumberanceRedux(skill));
+            float staminaDrainRedux = MultToPer(ConfigManager.GetRunStaminaRedux(skill));
             float baseStaminaGain = ConfigManager.GetRunStamina(skill);
 
 
-            float encumberanceFactor = ToPercent(MovePatch.GetEncumberanceMult(player));
-            float equipmentFactor = ToPercent(MovePatch.GetEquipmentMult(player));
+            float encumberanceFactor = MultToPer(MovePatch.GetEncumberanceMult(player));
+            float equipmentFactor = MultToPer(MovePatch.GetEquipmentMult(player));
 
-            float absWeightExp = ToPercent(MovePatch.absoluteWeightBonus(player));
-            float relWeightExp = ToPercent(MovePatch.relativeWeightBonus(player));
-            float runSpeedExp = ToPercent(MovePatch.runSpeedExpBonus(player));
+            float absWeightExp = MultToPer(MovePatch.absoluteWeightBonus(player));
+            float relWeightExp = MultToPer(MovePatch.relativeWeightBonus(player));
+            float runSpeedExp = MultToPer(MovePatch.runSpeedExpBonus(player));
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "The faster you are moving, the more experience you get.";
@@ -535,10 +537,10 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Spears);
 
-            float spearDamage = ToPercent(ConfigManager.GetSpearDamageMult(skill));
-            float spearStaminaRedux = ToPercent(ConfigManager.GetSpearStaminaRedux(skill));
-            float spearVelocity = ToPercent(ConfigManager.GetSpearVelocityMult(skill));
-            float spearThrowDamage = ToPercent(ConfigManager.GetSpearProjectileDamageMult(skill));
+            float spearDamage = MultToPer(ConfigManager.GetSpearDamageMult(skill));
+            float spearStaminaRedux = MultToPer(ConfigManager.GetSpearStaminaRedux(skill));
+            float spearVelocity = MultToPer(ConfigManager.GetSpearVelocityMult(skill));
+            float spearThrowDamage = MultToPer(ConfigManager.GetSpearProjectileDamageMult(skill));
             float spearBlock = ConfigManager.GetSpearBlockArmor(skill);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -571,10 +573,12 @@ namespace kingskills.UX
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Sneak);
             StatsPatch.SneakUpdate(Player.m_localPlayer);
 
-            float sneakSpeed = ToPercent(ConfigManager.GetSneakSpeedMult(skill));
+            float sneakSpeed = MultToPer(ConfigManager.GetSneakSpeedMult(skill));
             float sneakStaminaCost = ConfigManager.GetSneakStaminaDrain(skill);
-            float sneakLightFactor = ToPercent(ConfigManager.GetSneakFactor(skill, 2f));
-            float sneakDarkFactor = ToPercent(ConfigManager.GetSneakFactor(skill, 0f));
+            float sneakLightFactor = MultToPer(ConfigManager.GetSneakFactor(skill, 2f));
+            float sneakDarkFactor = MultToPer(ConfigManager.GetSneakFactor(skill, 0f));
+
+            float sneakDangerXPMod = MultToPer(SneakPatch.GetDangerEXPMult(Player.m_localPlayer));
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "While you are actively avoiding detection of a nearby enemy, " +
@@ -582,7 +586,9 @@ namespace kingskills.UX
             SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
                 "If you aren't nearby an enemy while sneaking, you gain 10% experience.";
             SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
-                "You get bonus experience based on how dangerous the biggest enemy you're sneaing past is.";
+                "You get bonus experience based on how dangerous the biggest enemy you're sneaing past is.\n" +
+                "Current bonus from spotted enemy: " +
+                sneakDangerXPMod.ToString("F1") + "%";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
                 sneakSpeed.ToString("F1") + "% increased speed while crouching";
@@ -600,16 +606,16 @@ namespace kingskills.UX
         {
             Player player = Player.m_localPlayer;
             StatsPatch.SwimSpeedUpdate(player);
-            float skill = player.GetSkillFactor(Skills.SkillType.Run);
+            float skill = player.GetSkillFactor(Skills.SkillType.Swim);
 
-            float swimSpeed = ToPercent(ConfigManager.GetSwimSpeedMult(skill));
-            float swimAccel = ToPercent(ConfigManager.GetSwimAccelMult(skill));
-            float swimTurn = ToPercent(ConfigManager.GetSwimTurnMult(skill));
+            float swimSpeed = MultToPer(ConfigManager.GetSwimSpeedMult(skill));
+            float swimAccel = MultToPer(ConfigManager.GetSwimAccelMult(skill));
+            float swimTurn = MultToPer(ConfigManager.GetSwimTurnMult(skill));
             float swimStaminaCost = ConfigManager.GetSwimStaminaPerSec(skill);
 
-            float absWeightExp = ToPercent(MovePatch.absoluteWeightBonus(player));
-            float relWeightExp = ToPercent(MovePatch.relativeWeightBonus(player));
-            float swimSpeedExp = ToPercent(MovePatch.swimSpeedExpBonus(player));
+            float absWeightExp = MultToPer(MovePatch.absoluteWeightBonus(player));
+            float relWeightExp = MultToPer(MovePatch.relativeWeightBonus(player));
+            float swimSpeedExp = MultToPer(MovePatch.swimSpeedExpBonus(player));
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -642,11 +648,11 @@ namespace kingskills.UX
             StatsPatch.SwordUpdate(Player.m_localPlayer);
 
 
-            float swordDamage = ToPercent(ConfigManager.GetSwordDamageMult(skill));
-            float swordStaminaRedux = ToPercent(ConfigManager.GetSwordStaminaRedux(skill));
-            float swordParry = ToPercent(ConfigManager.GetSwordParryMult(skill));
-            float swordSlash = ToPercent(ConfigManager.GetSwordSlashMult(skill));
-            float swordDodgeStaminaRedux = ToPercent(ConfigManager.GetSwordDodgeStaminaRedux(skill));
+            float swordDamage = MultToPer(ConfigManager.GetSwordDamageMult(skill));
+            float swordStaminaRedux = MultToPer(ConfigManager.GetSwordStaminaRedux(skill));
+            float swordParry = MultToPer(ConfigManager.GetSwordParryMult(skill));
+            float swordSlash = MultToPer(ConfigManager.GetSwordSlashMult(skill));
+            float swordDodgeStaminaRedux = MultToPer(ConfigManager.GetSwordDodgeStaminaRedux(skill));
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -677,10 +683,11 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.WoodCutting);
 
-            float woodDamage = ToPercent(1 + ConfigManager.GetWoodcuttingDamageMod(skill));
-            float woodDrop = ToPercent(ConfigManager.GetWoodDropMod(skill));
+            float woodDamage = MultToPer(1 + ConfigManager.GetWoodcuttingDamageMod(skill));
+            float woodDrop = MultToPer(ConfigManager.GetWoodDropMod(skill)+1f);
             float woodRebate = ConfigManager.GetWoodcuttingStaminaRebate(skill);
-            float woodSomething = ToPercent(0f);
+            float woodRegen = ConfigManager.GetWoodcuttingRegenLessTime(skill);
+            float woodCarry = ConfigManager.GetWoodcuttingCarryCapacity(skill);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt to trees is turned into experience.";
@@ -699,16 +706,20 @@ namespace kingskills.UX
                 woodRebate.ToString("F0") + " stamina rebate on axe swings that hit a tree";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                woodSomething.ToString("F0") + " something else!";
+                woodRegen.ToString("F0") + " fewer seconds before stamina regeneration";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
+                woodCarry.ToString("F0") + " extra carrying capacity";
         }
         public static void OpenMiningPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Pickaxes);
 
-            float mineDamage = ToPercent(ConfigManager.GetMiningDamageMult(skill));
-            float mineDrop = ToPercent(ConfigManager.GetMiningDropMod(skill));
+            float mineDamage = MultToPer(ConfigManager.GetMiningDamageMult(skill));
+            float mineDrop = MultToPer(ConfigManager.GetMiningDropMod(skill)+1f);
             float mineRebate = ConfigManager.GetMiningStaminaRebate(skill);
-            float mineSomething = ToPercent(0f);
+            float mineRegen = ConfigManager.GetMiningRegenLessTime(skill);
+            float mineCarry = ConfigManager.GetMiningCarryCapacity(skill);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt to rocks or ore is turned into experience.";
@@ -729,10 +740,13 @@ namespace kingskills.UX
                 mineRebate.ToString("F0") + " stamina rebate on pick swings that hit a rock";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                mineSomething.ToString("F0") + " something else!";
+                mineRegen.ToString("F0") + " fewer seconds between health regeneration ticks";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
+                mineCarry.ToString("F0") + " extra carrying capacity";
         }
 
-        public static float ToPercent(float number)
+        public static float MultToPer(float number)
         {
             return (number - 1) * 100;
         }

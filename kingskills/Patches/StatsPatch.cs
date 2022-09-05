@@ -20,6 +20,7 @@ namespace kingskills
                 JumpForceUpdate(player);
                 SwordUpdate(player);
                 SneakUpdate(player);
+                WoodcuttingUpdate(player);
                 CheckMaxLevel(player);
             }
             else if (skill != Skills.SkillType.None)
@@ -40,6 +41,9 @@ namespace kingskills
                         break;
                     case Skills.SkillType.Sneak:
                         SneakUpdate(player);
+                        break;
+                    case Skills.SkillType.WoodCutting:
+                        WoodcuttingUpdate(player);
                         break;
                 }
             }
@@ -136,6 +140,13 @@ namespace kingskills
             player.m_crouchSpeed = ConfigManager.BaseCrouchSpeed *
                 ConfigManager.GetSneakSpeedMult(player.GetSkillFactor(Skills.SkillType.Sneak));
         }
+        public static void WoodcuttingUpdate(Player player)
+        {
+            if (!ConfigManager.IsSkillActive(Skills.SkillType.WoodCutting)) return;
+
+            player.m_staminaRegenDelay = ConfigManager.BaseStaminaRegenTimer -
+                ConfigManager.GetWoodcuttingRegenLessTime(player.GetSkillFactor(Skills.SkillType.WoodCutting));
+        }
         public static void CheckMaxLevel(Player player)
         {
             Dictionary<Skills.SkillType, bool> temp = new Dictionary<Skills.SkillType, bool>(Perks.skillAscendedFlags);
@@ -159,9 +170,12 @@ namespace kingskills
         [HarmonyPostfix]
         public static void GetMyMaxCarryWeight(Player __instance, ref float __result)
         {
-            if (!ConfigManager.IsSkillActive(Skills.SkillType.Axes)) return;
-
-            __result += ConfigManager.GetAxeCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Axes));
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Axes))
+                __result += ConfigManager.GetAxeCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Axes));
+            if (ConfigManager.IsSkillActive(Skills.SkillType.WoodCutting))
+                __result += ConfigManager.GetWoodcuttingCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.WoodCutting));
+            if (ConfigManager.IsSkillActive(Skills.SkillType.Pickaxes))
+                __result += ConfigManager.GetMiningCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Pickaxes));
         }
 
         [HarmonyPatch(nameof(Player.SetMaxStamina))]
@@ -178,7 +192,18 @@ namespace kingskills
             //Jotunn.Logger.LogMessage($"Setting max stamina to {stamina} instead!");
         }
 
-        [HarmonyPatch(typeof(Character))]
+        [HarmonyPatch(nameof(Player.UpdateFood))]
+        [HarmonyPrefix]
+        public static void HealthRegenPatch(Player __instance, ref float ___m_foodRegenTimer)
+        {
+            if (___m_foodRegenTimer == 0)
+            {
+                ___m_foodRegenTimer = ConfigManager.BaseFoodHealTimer -
+                    ConfigManager.GetMiningRegenLessTime(__instance.GetSkillFactor(Skills.SkillType.Pickaxes));
+            }
+        }
+
+            [HarmonyPatch(typeof(Character))]
         [HarmonyPatch(nameof(Character.SetMaxHealth))]
         [HarmonyPrefix]
         public static void SetMyMaxHealth(Character __instance, ref float health)
@@ -190,5 +215,7 @@ namespace kingskills
             health += ConfigManager.GetBlockHealth(__instance.GetSkillFactor(Skills.SkillType.Blocking));
             //Jotunn.Logger.LogMessage($"Setting max health to {health} instead!");
         }
+
+
     }
 }

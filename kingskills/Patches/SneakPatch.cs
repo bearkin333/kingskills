@@ -9,7 +9,7 @@ using UnityEngine;
 namespace kingskills.Patches
 {
     [HarmonyPatch(typeof(Player))]
-    class SneakPatch
+    public static class SneakPatch
 	{
 		[HarmonyPatch(nameof(Player.OnSneaking))]
 		[HarmonyPrefix]
@@ -33,8 +33,7 @@ namespace kingskills.Patches
 				__instance.m_sneakSkillImproveTimer = 0f;
 				if (BaseAI.InStealthRange(__instance))
 				{
-					float sneakExpMod = GetStrongestEnemyInSight(__instance).GetLevel() *
-							ConfigManager.GetSneakXPMult();
+					float sneakExpMod = GetDangerEXPMult(__instance);
 
 					__instance.RaiseSkill(Skills.SkillType.Sneak, sneakExpMod);
 				}
@@ -46,6 +45,20 @@ namespace kingskills.Patches
 
 			return false;
 		}
+
+		public static float GetDangerEXPMult(Player player)
+        {
+			float mult = 1;
+			Character strongest = GetStrongestEnemyInSight(player);
+			if (strongest != null)
+            {
+				mult = GetStrongestEnemyInSight(player).m_health *
+					ConfigManager.GetSneakXPMult();
+			}
+
+			return mult;
+		}
+
 
 		[HarmonyPatch(nameof(Player.OnSneaking))]
 		[HarmonyPrefix]
@@ -99,14 +112,17 @@ namespace kingskills.Patches
                     }
                     else
                     {
-						if (allInstance.m_character.GetLevel() > strongest.GetLevel())
+						if (allInstance.m_character.m_health > strongest.m_health)
                         {
 							strongest = allInstance.m_character;
 						}
                     }
                 }
             }
-			Jotunn.Logger.LogMessage($"Strongest enemy in sight was {strongest.m_name}");
+			if (strongest != null)
+			{
+				Jotunn.Logger.LogMessage($"Strongest enemy in sight was {strongest.m_name}");
+			}
 			return strongest;
         }
     }

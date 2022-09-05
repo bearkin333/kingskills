@@ -120,6 +120,7 @@
     <None Include="Package\manifest.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\goldtint.png" />
     <Content Include="Assets\graytint.png" />
     <Content Include="Assets\Icons\aerodynamic.png" />
     <Content Include="Assets\Icons\alwaysprepared.png" />

@@ -39,7 +39,7 @@ namespace kingskills
                 if (__instance.m_owner.IsPlayer() && __instance.m_owner.GetZDOID() == playerRef.GetZDOID())
                 {
                     projectileList.Add(__instance.gameObject.GetInstanceID(), __instance.transform.position);
-                    //Jotunn.Logger.LogMessage($"Added projectile {__instance.gameObject.GetInstanceID()}");
+                    Jotunn.Logger.LogMessage($"Added projectile {__instance.gameObject.GetInstanceID()}");
 
                     //Jotunn.Logger.LogMessage($"The skill is {__instance.m_skill} and the current velocity is {__instance.m_vel}");
                     if (ConfigManager.IsSkillActive(Skills.SkillType.Bows) &&
@@ -93,7 +93,7 @@ namespace kingskills
         [HarmonyPostfix]
         public static void RemoveProjectile(Projectile __instance)
         {
-            //Jotunn.Logger.LogMessage($"{__instance.gameObject.GetInstanceID()} destroyed");
+            Jotunn.Logger.LogMessage($"{__instance.gameObject.GetInstanceID()} destroyed");
             projectileList.Remove(__instance.gameObject.GetInstanceID());
         }
 

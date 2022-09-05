@@ -56,6 +56,7 @@ namespace kingskills
         public static ConfigEntry<float> WeaponBXPAxeTreeAmount;
         public static ConfigEntry<float> WeaponBXPSpearThrown;
         public static ConfigEntry<float> WeaponBXPBowDistancePercent;
+        public static ConfigEntry<float> WeaponBXPPolearmDamageMod;
 
         public static ConfigEntry<float> ToolBXPWoodStubReward;
 
@@ -183,6 +184,10 @@ namespace kingskills
         public static ConfigEntry<float> MiningStaminaRebateMax;
         public static ConfigEntry<float> MiningDropPercentMin;
         public static ConfigEntry<float> MiningDropPercentMax;
+        public static ConfigEntry<float> MiningRegenHealthMin;
+        public static ConfigEntry<float> MiningRegenHealthMax;
+        public static ConfigEntry<float> MiningCarryCapacityMin;
+        public static ConfigEntry<float> MiningCarryCapacityMax;
 
         public static ConfigEntry<float> PolearmDamagePercentMin;
         public static ConfigEntry<float> PolearmDamagePercentMax;
@@ -229,6 +234,10 @@ namespace kingskills
         public static ConfigEntry<float> WoodcuttingStaminaRebateMax;
         public static ConfigEntry<float> WoodcuttingDropPercentMin;
         public static ConfigEntry<float> WoodcuttingDropPercentMax;
+        public static ConfigEntry<float> WoodcuttingRegenStaminaMin;
+        public static ConfigEntry<float> WoodcuttingRegenStaminaMax;
+        public static ConfigEntry<float> WoodcuttingCarryCapacityMin;
+        public static ConfigEntry<float> WoodcuttingCarryCapacityMax;
 
         public static ConfigEntry<bool> ActiveSkillAxe;
         public static ConfigEntry<bool> ActiveSkillBlock;
@@ -284,6 +293,8 @@ namespace kingskills
         public const float BaseBowDrawSpeedMax = .8f;
         public const float BaseDodgeStaminaUsage = 10f;
         public const float BaseCrouchSpeed = 2f;
+        public const float BaseFoodHealTimer = 10;
+        public const float BaseStaminaRegenTimer = 1;
 
         /* flavor curve numbers
         const float TotalXp = 20553.6f;
@@ -336,6 +347,8 @@ namespace kingskills
              */
 
 
+
+        //
             PerkExplorationOn = cfg.Bind("Perks", "Perk Exploration", true,
                     "Whether or not locked perks are hidden from view");
             PerkOneLVLThreshold = cfg.Bind("Perks", "First Threshold", .5f,
@@ -449,10 +462,12 @@ namespace kingskills
                 "Flat BXP gained every time you hit with a thrown spear");
             WeaponBXPBowDistancePercent = cfg.Bind("Weapon.BonusExperience", "Bow Distance Percent", 50f,
                 "% of distance that becomes bow experience on hit.");
-            
+            WeaponBXPPolearmDamageMod = cfg.Bind("Weapon.BonusExperience", "Polearm Damage Mod", .5f,
+                "amount of bonus experience to get for each damage blocked by armor.");
 
-            //Tool experience
-            ToolXPStrikeDamagePercent = cfg.Bind("Experience.Tools", "Tool Damage", 25f,
+
+        //Tool experience
+        ToolXPStrikeDamagePercent = cfg.Bind("Experience.Tools", "Tool Damage", 25f,
                 "% of damage done to resources that becomes experience for gathering skills " +
                 "(Woodcutting, Mining)");
             ToolXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .24f,
@@ -517,7 +532,7 @@ namespace kingskills
 
 
             //Swim Experience
-            SwimXPSpeedPercent = cfg.Bind("Swim.Experience", "XP", 60f,
+            SwimXPSpeedPercent = cfg.Bind("Swim.Experience", "XP", 10f,
                 "% of swim speed that becomes bonus experience gain");
             
             //Swim effects
@@ -578,7 +593,7 @@ namespace kingskills
             
 
             //Run Experience
-            RunXPSpeedPercent = cfg.Bind("Run.Experience", "XP", 25f,
+            RunXPSpeedPercent = cfg.Bind("Run.Experience", "XP", 5f,
                 "% of extra experience gained from run speed");
             
 
@@ -741,6 +756,14 @@ namespace kingskills
                 "% increase to ore drops at level 0");
             MiningDropPercentMax = cfg.Bind("Mining.Effect", "Drop rate Max", 100f,
                 "% increase to ore drops at level 100");
+            MiningRegenHealthMin = cfg.Bind("Mining.Effect", "Regen Timer Reduction Min", 0f,
+                "How many seconds to reduce the health regeneration timer at level 0");
+            MiningRegenHealthMax = cfg.Bind("Mining.Effect", "Regen Timer Reduction Max", 3f,
+                "How many seconds to reduce the health regeneration timer at level 100");
+            MiningCarryCapacityMin = cfg.Bind("Mining.Effect", "Carry Capacity Min", 0f,
+                "How much extra carrying capacity you get at level 0");
+            MiningCarryCapacityMax = cfg.Bind("Mining.Effect", "Carry Capacity Max", 50f,
+                "How much extra carrying capacity you get at level 100");
 
 
             //Polearms
@@ -767,7 +790,7 @@ namespace kingskills
 
 
             //Sneak
-            SneakXPThreatPercent = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 120f,
+            SneakXPThreatPercent = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 24f,
                     "Determines how much each 'point of danger' is worth in sneak exp");
             SneakStaminaDrainMin = cfg.Bind("Sneak.Effect", "Stamina Drain Min", 10f,
                     "Amount of stamina drain per second while sneaking at level 0");
@@ -838,6 +861,14 @@ namespace kingskills
                 "% increase to wood drops at level 0");
             WoodcuttingDropPercentMax = cfg.Bind("Wood.Effect", "Drop rate max", 150f,
                 "% increase to wood drops at level 100");
+            WoodcuttingRegenStaminaMin = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", -.1f,
+                    "Amount of seconds to take off the stamina regeneration timer at level 0. Base value in vanilla is 1s");
+            WoodcuttingRegenStaminaMax = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", .5f,
+                    "Amount of seconds to take off the stamina regeneration timer at level 100");
+            WoodcuttingCarryCapacityMin = cfg.Bind("Wood.Effect", "Carry Capacity Min", 0f,
+                "How much extra carrying capacity you get at level 0");
+            WoodcuttingCarryCapacityMax = cfg.Bind("Wood.Effect", "Carry Capacity Max", 50f,
+                "How much extra carrying capacity you get at level 100");
         }
 
 
@@ -1301,6 +1332,16 @@ namespace kingskills
             return Mathf.Lerp(WoodcuttingStaminaRebateMin.Value, 
                 WoodcuttingStaminaRebateMax.Value, skillFactor);
         }
+        public static float GetWoodcuttingRegenLessTime(float skillFactor)
+        {
+            return Mathf.Lerp(WoodcuttingRegenStaminaMin.Value,
+                WoodcuttingRegenStaminaMax.Value, skillFactor);
+        }
+        public static float GetWoodcuttingCarryCapacity(float skillFactor)
+        {
+            return Mathf.Lerp(WoodcuttingCarryCapacityMin.Value,
+                WoodcuttingCarryCapacityMax.Value, skillFactor);
+        }
         public static float GetMiningDamageMult(float skillFactor)
         {
             return Mathf.Lerp(PerToMult(MiningPickDamagePercentMin), 
@@ -1314,6 +1355,16 @@ namespace kingskills
         public static float GetMiningStaminaRebate(float skillFactor)
         {
             return Mathf.Lerp(MiningStaminaRebateMin.Value, MiningStaminaRebateMax.Value, skillFactor);
+        }
+        public static float GetMiningRegenLessTime(float skillFactor)
+        {
+            return Mathf.Lerp(MiningRegenHealthMin.Value,
+                MiningRegenHealthMax.Value, skillFactor);
+        }
+        public static float GetMiningCarryCapacity(float skillFactor)
+        {
+            return Mathf.Lerp(MiningCarryCapacityMin.Value,
+                MiningCarryCapacityMax.Value, skillFactor);
         }
         public static float GetDropItemThreshold()
         {
