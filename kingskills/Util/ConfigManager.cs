@@ -260,6 +260,12 @@ namespace kingskills
         public static Dictionary<string, float> MiningDropTable = new Dictionary<string, float>();
         public static Dictionary<string, float> BowDropTable = new Dictionary<string, float>();
 
+        public static Color ColorBonusBlue;
+        public static Color ColorAscendedGreen;
+        public static Color ColorExperienceYellow;
+        public static Color ColorTitle;
+        public static Color ColorWhite;
+        public static Color ColorKingSkills;
 
         //These are the base stats already in valheim
         public const float BaseSwimSpeed = 2f;
@@ -315,6 +321,12 @@ namespace kingskills
             BowDropTable.Add("WitheredBone", 0);
             BowDropTable.Add("BoneFragments", 0);
 
+            ColorBonusBlue = new Color(0.20f, 0.88f, 0.93f);
+            ColorAscendedGreen = new Color(0.45f, 0.92f, 0.32f);
+            ColorExperienceYellow = new Color(0.98f, 0.96f, 0.23f);
+            ColorTitle = new Color(0.98f, 0.96f, 0.43f);
+            ColorWhite = new Color(1f, 1f, 1f);
+            ColorKingSkills = new Color(0.77f, 0.23f, 0.99f);
 
             /* Template
             x = cfg.Bind("g", "t", 0f, 

@@ -88,6 +88,7 @@ namespace kingskills.UX
 
             string skillName = SkillGUI.dd.options[SkillGUI.dd.value].text;
             StatsPatch.UpdateStats(player);
+            ResetText();
 
             switch (skillName)
             {
@@ -167,13 +168,6 @@ namespace kingskills.UX
                     OpenPerks.OpenWoodcuttingPerkBoxes();
                     break;
             }
-            if (!ConfigManager.IsSkillActive(skill))
-            {
-                SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                    "Not currently active";
-                SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                    "Not currently active";
-            }
 
             Skills.Skill skillRef = player.GetSkills().GetSkill(skill);
             //Jotunn.Logger.LogMessage($"The skill the player seems to want is {skillRef.m_info}");
@@ -187,9 +181,9 @@ namespace kingskills.UX
 
             if (!ConfigManager.IsSkillActive(skill))
             {
-                SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
+                SkillGUI.LeftPanelTexts["experience"].GetComponent<Text>().text =
                     "Not currently active";
-                SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
+                SkillGUI.LeftPanelTexts["effects"].GetComponent<Text>().text =
                     "Not currently active";
                 return;
             }
@@ -209,7 +203,6 @@ namespace kingskills.UX
         public static void OpenAxePanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Axes);
-            bool ascended = Perks.IsSkillAscended(Skills.SkillType.Axes);
 
             float axeDamage = ToPercent(ConfigManager.GetAxeDamageMult(skill));
             float axeStaminaRedux = ToPercent(ConfigManager.GetAxeStaminaRedux(skill));
@@ -218,17 +211,29 @@ namespace kingskills.UX
             float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
 
             //Jotunn.Logger.LogMessage($"I'm changing the axe values in now");
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all axe damage dealt is turned into experience. \n" +
-                "The exp gain rate is much higher versus living targets. \n" +
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
-                "Holding an axe gains you experience at a very slow rate. \n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt is turned into experience, " +
+                "but the rate is higher when the damage is dealt to living cretures.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "Holding an axe gains you experience at a very slow rate.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "Bonus experience for the axe is gained every time you break a log. ";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                axeDamage.ToString("F1") + "% extra damage with axes\n" +
-                axeStaminaRedux.ToString("F1") + "% stamina usage with axes\n" +
-                axeStaminaGain.ToString("F0") + " higher base stamina \n" +
-                axeChopBonus.ToString("F1") + "% extra chop damage \n" +
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                axeDamage.ToString("F1") + "% extra damage with axes";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                axeStaminaRedux.ToString("F1") + "% stamina usage with axes";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                axeStaminaGain.ToString("F0") + " higher base stamina";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                axeChopBonus.ToString("F1") + "% extra chop damage";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 axeCarryCapacity.ToString("F0") + " extra carry capacity";
         }
         public static void OpenBlockPanels()
@@ -241,14 +246,23 @@ namespace kingskills.UX
             float blockHealth = ConfigManager.GetBlockHealth(skill);
             float parryExpMod = ToPercent(ConfigManager.GetBlockParryExpMult());
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all damage you block is turned into experience. \n" +
-                "This number is unaffected by resistances. \n" +
-                "You get " + parryExpMod.ToString("F0") + "% experience for parrying an attack.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                staminaRedux.ToString("F1") + "% stamina cost for blocks\n" +
-                baseBlockPower.ToString("F0") + " extra flat block armor\n" +
-                blockPerArmor.ToString("F1") + "% extra block armor\n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage you block is turned into experience.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "This number is unaffected by resistances.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "You get " + parryExpMod.ToString("F0") + "% bonus experience for parrying an attack.";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                staminaRedux.ToString("F1") + "% stamina cost for blocks";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                baseBlockPower.ToString("F0") + " extra flat block armor";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                blockPerArmor.ToString("F1") + "% extra block armor";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
                 blockHealth.ToString("F0") + " extra max health";
         }
         public static void OpenBowPanels()
@@ -261,17 +275,29 @@ namespace kingskills.UX
             float bowDrawSpeed = ConfigManager.GetBowDrawSpeed(skill);
             float bowDropRate = ToPercent(ConfigManager.GetBowDropRateMult(skill));
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all bow damage dealt is turned into experience. \n" +
-                "The exp gain rate is much higher versus living targets. \n" +
-                "Every time you shoot, a small amount of experience is gained, whether you hit anything or not. \n" +
-                "Holding a bow gains you experience at a very slow rate. \n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt is turned into experience, " +
+                "but the rate is higher when the damage is dealt to living cretures.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "Every time you shoot, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "Holding a bow gains you experience at a very slow rate.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "Bonus experience is gained based on the length and difficulty of successful shots with a bow.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                bowDamage.ToString("F1") + "% extra damage with bows\n" +
-                bowStaminaRedux.ToString("F1") + "% stamina usage with bows\n" +
-                bowVelocity.ToString("F1") + "% extra arrow velocity\n" +
-                bowDrawSpeed.ToString("F1") + "% draw speed\n" +
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                bowDamage.ToString("F1") + "% extra damage with bows";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                bowStaminaRedux.ToString("F1") + "% stamina usage with bows";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                bowVelocity.ToString("F1") + "% extra arrow velocity";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                bowDrawSpeed.ToString("F1") + "% draw speed";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 bowDropRate.ToString("F1") + "% extra loot drops from creatures";
         }
         public static void OpenClubPanels()
@@ -284,17 +310,29 @@ namespace kingskills.UX
             float clubKnockback = ToPercent(ConfigManager.GetClubKnockbackMult(skill));
             float clubStagger = ToPercent(ConfigManager.GetClubStaggerMult(skill));
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all club damage dealt is turned into experience. \n" +
-                "The exp gain rate is much higher versus living targets. \n" +
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
-                "Holding a club gains you experience at a very slow rate. \n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt is turned into experience, " +
+                "but the rate is higher when the damage is dealt to living cretures.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "Holding a club gains you experience at a very slow rate.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "Bonus experience every time you stagger an enemy with damage with a club.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                clubDamage.ToString("F1") + "% extra damage with clubs\n" +
-                clubStaminaRedux.ToString("F1") + "% stamina usage with clubs\n" +
-                clubBlunt.ToString("F1") + "% extra bonus to ALL blunt damage\n" +
-                clubKnockback.ToString("F1") + "% knockback bonus to ALL weapons\n" +
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                clubDamage.ToString("F1") + "% extra damage with clubs";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                clubStaminaRedux.ToString("F1") + "% stamina usage with clubs";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                clubBlunt.ToString("F1") + "% extra bonus to ALL blunt damage";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                clubKnockback.ToString("F1") + "% knockback bonus to ALL weapons";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 clubStagger.ToString("F1") + "% extra stagger damage to ALL weapons";
         }
         public static void OpenFistPanels()
@@ -307,17 +345,29 @@ namespace kingskills.UX
             float fistBlock = ConfigManager.GetFistBlockArmor(skill);
             float fistMovespeed = ToPercent(1f + ConfigManager.GetFistMovespeedMod(skill));
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all unarmed damage dealt is turned into experience. \n" +
-                "The exp gain rate is much higher versus living targets. \n" +
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
-                "Holding no weapon gains you experience at a very slow rate. \n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt is turned into experience, " +
+                "but the rate is higher when the damage is dealt to living cretures.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "Holding nothing gains you experience at a very slow rate - although slower than other weapons.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "Bonus experence for fists is gained every time you perform an unarmed block.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                fistDamage.ToString("F1") + "% extra damage with fists\n" +
-                fistStaminaRedux.ToString("F1") + "% stamina usage with fists\n" +
-                fistFlatDamage.ToString("F0") + " extra flat damage\n" +
-                fistBlock.ToString("F0") + " extra unarmed block armor\n" +
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                fistDamage.ToString("F1") + "% extra damage with fists";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                fistStaminaRedux.ToString("F1") + "% stamina usage with fists";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                fistFlatDamage.ToString("F0") + " extra flat damage";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                fistBlock.ToString("F0") + " extra unarmed block armor";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 fistMovespeed.ToString("F1") + "% extra move speed";
         }
         public static void OpenJumpPanels()
@@ -334,16 +384,29 @@ namespace kingskills.UX
             float fallDamageThreshhold = ConfigManager.GetFallDamageThreshold(skill);
             float fallDamageRedux = ToPercent(ConfigManager.GetFallDamageRedux(skill));
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "Every time you jump, you gain a small amount of experience. \n" +
-                "Every time you land, you gain an amount of experience based on " +
-                "how far you fell and how much damage you'd take.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                bonusJumpForce.ToString("F1") + "% extra vertical jump force \n" +
-                bonusJumpForwardForce.ToString("F1") + "% extra horizontal jump force \n" +
-                staminaRedux.ToString("F1") + "% less stamina cost to jump \n" +
-                tired.ToString("F0") + "% jump force modifier when tired \n" +
-                fallDamageThreshhold.ToString("F1") + "m minimum fall damage height \n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "Every time you jump, you gain a small, flat amount of experience.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "Every time you land, you gain bonus experience based on " +
+                "how far you fell and how much damage you would've normally taken without " +
+                "fall damage resistance.";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                bonusJumpForce.ToString("F1") + "% extra vertical jump force ";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                bonusJumpForwardForce.ToString("F1") + "% extra horizontal jump force ";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                staminaRedux.ToString("F1") + "% less stamina cost to jump ";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                tired.ToString("F0") + "% jump force modifier when tired ";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
+                fallDamageThreshhold.ToString("F1") + "m minimum fall damage height ";
+
+            SkillGUI.LeftPanelTexts["f6"].GetComponent<Text>().text =
                 fallDamageRedux.ToString("F1") + "% less fall damage";
         }
         public static void OpenKnifePanels()
@@ -356,17 +419,29 @@ namespace kingskills.UX
             float knifeMovespeed = ToPercent(1f + ConfigManager.GetKnifeMovespeedMod(skill));
             float knifePierce = ToPercent(ConfigManager.GetKnifePierceMult(skill));
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all knife damage dealt is turned into experience. \n" +
-                "The exp gain rate is much higher versus living targets. \n" +
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
-                "Holding a knife gains you experience at a very slow rate. \n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt is turned into experience, " +
+                "but the rate is higher when the damage is dealt to living cretures.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "Holding a knife gains you experience at a very slow rate.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "Bonus experience is gained every time you perform a sneak attack with a knife.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                knifeDamage.ToString("F1") + "% extra damage with knives \n" +
-                knifeStaminaRedux.ToString("F1") + "% stamina usage with knives \n" +
-                knifeBackstab.ToString("F0") + "% sneak attack bonus damage \n" +
-                knifeMovespeed.ToString("F1") + "% extra move speed \n" +
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                knifeDamage.ToString("F1") + "% extra damage with knives ";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                knifeStaminaRedux.ToString("F1") + "% stamina usage with knives ";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                knifeBackstab.ToString("F0") + "% sneak attack bonus damage ";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                knifeMovespeed.ToString("F1") + "% extra move speed ";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 knifePierce.ToString("F1") + "% extra to ALL pierce damage";
         }
         public static void OpenPolearmPanels()
@@ -379,17 +454,29 @@ namespace kingskills.UX
             float polearmArmor = ConfigManager.GetPolearmArmor(skill);
             float polearmBlock = ConfigManager.GetPolearmBlock(skill);
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all polearm damage dealt is turned into experience. \n" +
-                "The exp gain rate is much higher versus living targets. \n" +
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
-                "Holding a polearm gains you experience at a very slow rate. \n" +
-                "Bonus experience for the polearm is gained everytime you hit multiple targets in a single swing.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                polearmDamage.ToString("F1") + "% extra damage with polearms \n" +
-                polearmStaminaRedux.ToString("F1") + "% stamina usage with polearms\n" +
-                polearmRange.ToString("F0") + " increased units of range with all weapons\n" +
-                polearmArmor.ToString("F0") + " increased armor\n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt is turned into experience, " +
+                "but the rate is higher when the damage is dealt to living cretures.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "Holding a polearm gains you experience at a very slow rate.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "Bonus experience for the polearm is not currently implemented. It's already broken anyway.";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                polearmDamage.ToString("F1") + "% extra damage with polearms ";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                polearmStaminaRedux.ToString("F1") + "% stamina usage with polearms";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                polearmRange.ToString("F0") + " increased units of range with all weapons";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                polearmArmor.ToString("F0") + " increased armor";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 polearmBlock.ToString("F0") + " extra block power with polearms";
         }
         public static void OpenRunPanels()
@@ -412,21 +499,36 @@ namespace kingskills.UX
             float relWeightExp = ToPercent(MovePatch.relativeWeightBonus(player));
             float runSpeedExp = ToPercent(MovePatch.runSpeedExpBonus(player));
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "The faster you are moving, the more experience you get.\n" +
-                "The closer you are to fully encumbered, the less movespeed you have.\n" +
-                "You also gain experience based on how encumbered you are. \n" +
-                runSpeedExp.ToString("F1") + "% experience bonus from current run speed \n" +
-                absWeightExp.ToString("F1") + "% experience bonus from absolute weight carried \n" +
-                relWeightExp.ToString("F1") + "% experience bonus from fullness of inventory";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                runSpeedBonus.ToString("F1") + "% extra run speed\n" +
-                equipmentMalusRedux.ToString("F1") + "% to equipment penalty\n" +
-                encumberanceRedux.ToString("F1") + "% to encumberance penalty\n" +
-                staminaDrainRedux.ToString("F1") + "% less stamina cost to run\n" +
-                baseStaminaGain.ToString("F1") + " extra base stamina\n" +
-                "\nCurrent effects from outside factors: \n" +
-                encumberanceFactor.ToString("F1") + "% speed from encumberance\n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "The faster you are moving, the more experience you get.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "The closer you are to fully encumbered, the less movespeed you have.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "You also gain experience based on how encumbered you are.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "Current bonuses to experience are: \n" +
+                runSpeedExp.ToString("F1") + "% from current run speed \n" +
+                absWeightExp.ToString("F1") + "% from absolute weight carried \n" +
+                relWeightExp.ToString("F1") + "% from fullness of inventory";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                runSpeedBonus.ToString("F1") + "% extra run speed";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                equipmentMalusRedux.ToString("F1") + "% to equipment penalty";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                encumberanceRedux.ToString("F1") + "% to encumberance penalty";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                staminaDrainRedux.ToString("F1") + "% less stamina cost to run";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
+                baseStaminaGain.ToString("F1") + " extra base stamina";
+
+            SkillGUI.LeftPanelTexts["f6"].GetComponent<Text>().text =
+                "Current effects from outside factors: \n" +
+                encumberanceFactor.ToString("F1") + "% speed from encumberance\n " +
                 equipmentFactor.ToString("F1") + "% speed from equipment";
         }
         public static void OpenSpearPanels()
@@ -439,17 +541,29 @@ namespace kingskills.UX
             float spearThrowDamage = ToPercent(ConfigManager.GetSpearProjectileDamageMult(skill));
             float spearBlock = ConfigManager.GetSpearBlockArmor(skill);
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all spear damage dealt is turned into experience. \n" +
-                "The exp gain rate is much higher versus living targets. \n" +
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
-                "Holding a spear gains you experience at a very slow rate. \n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt is turned into experience, " +
+                "but the rate is higher when the damage is dealt to living cretures.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "Holding a spear gains you experience at a very slow rate.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "Bonus experience anytime you hit an enemy with a thrown weapon.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                spearDamage.ToString("F1") + "% extra damage with spears \n" +
-                spearStaminaRedux.ToString("F1") + "% stamina usage with spears\n" +
-                spearVelocity.ToString("F1") + "% increased velocity with all thrown weapons\n" +
-                spearThrowDamage.ToString("F1") + "% increased damage with all thrown weapons\n" +
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                spearDamage.ToString("F1") + "% extra damage with spears ";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                spearStaminaRedux.ToString("F1") + "% stamina usage with spears";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                spearVelocity.ToString("F1") + "% increased velocity with all thrown weapons";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                spearThrowDamage.ToString("F1") + "% increased damage with all thrown weapons";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 spearBlock.ToString("F0") + " higher flat block armor";
         }
         public static void OpenSneakPanels()
@@ -462,17 +576,24 @@ namespace kingskills.UX
             float sneakLightFactor = ToPercent(ConfigManager.GetSneakFactor(skill, 2f));
             float sneakDarkFactor = ToPercent(ConfigManager.GetSneakFactor(skill, 0f));
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "While you are inside the vision angle of an enemy " +
-                "but outside its vision range, you gain a flat amount of sneak " +
-                "experience every second. \n This value is reduced to 10% while" +
-                "you aren't being observed. \n" +
-                "You get an additional experience bonus based on how dangerous the " +
-                "creature you're sneaking around is.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                sneakSpeed.ToString("F1") + "% increased speed while crouching\n" +
-                sneakStaminaCost.ToString("F1") + " stamina per second while crouching\n" +
-                sneakLightFactor.ToString("F0") + "% increased sneakiness in the light \n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "While you are actively avoiding detection of a nearby enemy, " +
+                "you gain experience every second.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "If you aren't nearby an enemy while sneaking, you gain 10% experience.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "You get bonus experience based on how dangerous the biggest enemy you're sneaing past is.";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                sneakSpeed.ToString("F1") + "% increased speed while crouching";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                sneakStaminaCost.ToString("F1") + " stamina per second while crouching";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                sneakLightFactor.ToString("F0") + "% increased sneakiness in the light ";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
                 sneakDarkFactor.ToString("F0") + "% increased sneakiness in the dark";
         }
         public static void OpenSwimPanels()
@@ -491,16 +612,28 @@ namespace kingskills.UX
             float swimSpeedExp = ToPercent(MovePatch.swimSpeedExpBonus(player));
 
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "The faster you are moving, the more experience you get.\n" +
-                "You also gain experience based on how encumbered you are. \n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "The faster you are moving, the more experience you get.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "The closer you are to fully encumbered, the less movespeed you have.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "You also gain experience based on how encumbered you are. \n";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "Current bonuses to experience are: \n" +
                 swimSpeedExp.ToString("F1") + "% experience bonus from current swimming speed \n" +
                 absWeightExp.ToString("F1") + "% experience bonus from absolute weight carried \n" +
                 relWeightExp.ToString("F1") + "% experience bonus from fullness of inventory";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                swimSpeed.ToString("F1") + "% extra swim speed\n" +
-                swimAccel.ToString("F1") + "% extra acceleration in water\n" +
-                swimTurn.ToString("F1") + "% extra turn speed in water\n" +
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                swimSpeed.ToString("F1") + "% extra swim speed";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                swimAccel.ToString("F1") + "% extra acceleration in water";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                swimTurn.ToString("F1") + "% extra turn speed in water";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
                 swimStaminaCost.ToString("F2") + " stamina per second while swimming";
         }
         public static void OpenSwordPanels()
@@ -515,17 +648,29 @@ namespace kingskills.UX
             float swordSlash = ToPercent(ConfigManager.GetSwordSlashMult(skill));
             float swordDodgeStaminaRedux = ToPercent(ConfigManager.GetSwordDodgeStaminaRedux(skill));
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all sword damage dealt is turned into experience. \n" +
-                "The exp gain rate is much higher versus living targets. \n" +
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
-                "Holding a sword gains you experience at a very slow rate. \n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt is turned into experience, " +
+                "but the rate is higher when the damage is dealt to living cretures.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "Holding a sword gains you experience at a very slow rate.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "Bonus experience is gained every time you deal damage to a staggered enemy with a sword.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                swordDamage.ToString("F1") + "% extra damage with swords \n" +
-                swordStaminaRedux.ToString("F1") + "% stamina usage with swords\n" +
-                swordParry.ToString("F0") + "% higher parry bonus with ALL weapons \n" +
-                swordSlash.ToString("F1") + "% increased slash damage with ALL weapons \n" +
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                swordDamage.ToString("F1") + "% extra damage with swords ";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                swordStaminaRedux.ToString("F1") + "% stamina usage with swords";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                swordParry.ToString("F0") + "% higher parry bonus with ALL weapons ";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                swordSlash.ToString("F1") + "% increased slash damage with ALL weapons ";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 swordDodgeStaminaRedux.ToString("F1") + "% stamina cost to dodge";
         }
         public static void OpenWoodcuttingPanels()
@@ -537,14 +682,23 @@ namespace kingskills.UX
             float woodRebate = ConfigManager.GetWoodcuttingStaminaRebate(skill);
             float woodSomething = ToPercent(0f);
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all chop damage dealt is turned into experience. \n" +
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
-                "Bonus experience for the axe is gained based on the tier of the tool used.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                woodDamage.ToString("F1") + "% extra damage to trees\n" +
-                woodDrop.ToString("F2") + "% increased wood drop rates from trees\n" +
-                woodRebate.ToString("F0") + " stamina rebate on axe swings that hit a tree\n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt to trees is turned into experience.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text = 
+                "Bonus experience for the axe is gained when you destroy tree stumps.";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                woodDamage.ToString("F1") + "% extra damage to trees";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                woodDrop.ToString("F2") + "% increased wood drop rates from trees";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                woodRebate.ToString("F0") + " stamina rebate on axe swings that hit a tree";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
                 woodSomething.ToString("F0") + " something else!";
         }
         public static void OpenMiningPanels()
@@ -556,15 +710,25 @@ namespace kingskills.UX
             float mineRebate = ConfigManager.GetMiningStaminaRebate(skill);
             float mineSomething = ToPercent(0f);
 
-            SkillGUI.LeftPanelExperienceText.GetComponent<Text>().text =
-                "A percentage of all pick damage dealt to ground turned into experience. \n" +
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not. \n" +
-                "Bonus experience for the pick is gained based on the tier of the tool used.\n" +
-                "You also gain experience, if reduced, for mining ground without ore.";
-            SkillGUI.LeftPanelEffectsText.GetComponent<Text>().text =
-                mineDamage.ToString("F1") + "% extra damage to rocks\n" +
-                mineDrop.ToString("F2") + "% increased ore drop rates\n" +
-                mineRebate.ToString("F0") + " stamina rebate on pick swings that hit a rock\n" +
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt to rocks or ore is turned into experience.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "You still gain experience for hitting the ground, but at a reduced pace.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "Bonus experience for the pick is gained based on the tier of the tool used.";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                mineDamage.ToString("F1") + "% extra damage to rocks";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                mineDrop.ToString("F2") + "% increased ore drop rates";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                mineRebate.ToString("F0") + " stamina rebate on pick swings that hit a rock";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
                 mineSomething.ToString("F0") + " something else!";
         }
 
@@ -573,9 +737,21 @@ namespace kingskills.UX
             return (number - 1) * 100;
         }
 
-        public static void PerkLevelCheck(Skills.SkillType skill, float skillFactor)
-        {
 
+        public static void ResetText()
+        {
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text = "";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text = "";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text = "";
+            //SkillGUI.LeftPanelTexts["x4"].GetComponent<Text>().text = "";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text = "";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text = "";
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text = "";
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text = "";
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text = "";
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text = "";
+            SkillGUI.LeftPanelTexts["f6"].GetComponent<Text>().text = "";
         }
     }
 }

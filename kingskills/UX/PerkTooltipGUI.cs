@@ -43,7 +43,7 @@ namespace kingskills.UX
             init = true;
             Jotunn.Logger.LogMessage("Init the perk tooltip window");
             PerkTooltipWindow = GUIManager.Instance.CreateWoodpanel(
-                    parent: SkillGUI.RightPanelPerks.transform,
+                    parent: SkillGUI.RightPanel.transform,
                     anchorMin: new Vector2(.5f, .5f),
                     anchorMax: new Vector2(.5f, .5f),
                     position: new Vector2(0f, 20),

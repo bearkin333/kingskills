@@ -103,7 +103,7 @@
     <Compile Include="UX\PerkTooltipGUI.cs" />
     <Compile Include="UX\UpdateGUI.cs" />
     <Compile Include="UX\LearnConfirmationGUI.cs" />
-    <Compile Include="UX\OpenPerks.cs" />
+    <Compile Include="Perks\OpenPerks.cs" />
     <Compile Include="UX\SkillGUI.cs" />
     <Compile Include="Patches\WeaponExperience.cs" />
     <Compile Include="Patches\MovePatch.cs" />

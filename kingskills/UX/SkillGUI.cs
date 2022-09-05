@@ -27,14 +27,11 @@ namespace kingskills.UX
         public static GameObject scroll;
         public static Dropdown dd;
 
-        public static GameObject LeftPanelEffects;
-        public static GameObject LeftPanelExperienceText;
-        public static GameObject LeftPanelEffectsText;
-        public static GameObject LeftPanelExperienceTitle;
-        public static GameObject LeftPanelEffectsTitle;
+        public static GameObject LeftPanel;
+        public static Dictionary<string, GameObject> LeftPanelTexts;
 
 
-        public static GameObject RightPanelPerks;
+        public static GameObject RightPanel;
 
         public static GameObject RightPanelAscendedText;
 
@@ -82,10 +79,10 @@ namespace kingskills.UX
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(0f, -75f),
+                position: new Vector2(0f, -60f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 50,
-                color: GUIManager.Instance.ValheimOrange,
+                color: ConfigManager.ColorTitle,
                 outline: true,
                 outlineColor: Color.black,
                 width: 400f,
@@ -116,7 +113,7 @@ namespace kingskills.UX
                 position: new Vector2(-200f, -125f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 25,
-                color: GUIManager.Instance.ValheimOrange,
+                color: ConfigManager.ColorExperienceYellow,
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
@@ -134,7 +131,7 @@ namespace kingskills.UX
                 position: new Vector2(200f, -125f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 25,
-                color: GUIManager.Instance.ValheimOrange,
+                color: ConfigManager.ColorExperienceYellow,
                 outline: true,
                 outlineColor: Color.black,
                 width: 400f,
@@ -223,7 +220,7 @@ namespace kingskills.UX
                 position: new Vector2(-100f, 50f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 20,
-                color: GUIManager.Instance.ValheimOrange,
+                color: ConfigManager.ColorKingSkills,
                 outline: true,
                 outlineColor: Color.black,
                 width: 120f,
@@ -232,7 +229,7 @@ namespace kingskills.UX
 
 
             //Create the left panel
-            LeftPanelEffects =
+            LeftPanel =
             GUIManager.Instance.CreateWoodpanel(
                     parent: SkillGUIWindow.transform,
                     anchorMin: new Vector2(0.5f, 0.5f),
@@ -241,13 +238,13 @@ namespace kingskills.UX
                     width: 350,
                     height: 500,
                     draggable: false);
-            LeftPanelEffects.AddComponent<Mask>();
-            LeftPanelEffects.GetComponent<Mask>().enabled = true;
+            LeftPanel.AddComponent<Mask>();
+            LeftPanel.GetComponent<Mask>().enabled = true;
 
 
             scroll =
             GUIManager.Instance.CreateScrollView(
-                parent: LeftPanelEffects.transform,
+                parent: LeftPanel.transform,
                 showHorizontalScrollbar: false,
                 showVerticalScrollbar: true,
                 handleSize: 10f,
@@ -288,11 +285,12 @@ namespace kingskills.UX
 
             scrollSet.content = rect;
             scrollSet.verticalNormalizedPosition = 1;
+
+            LeftPanelTexts = new Dictionary<string, GameObject>();
             
 
             //Create the Experience Title in the left panel
-            LeftPanelExperienceTitle =
-            GUIManager.Instance.CreateText(
+            LeftPanelTexts.Add("experience", GUIManager.Instance.CreateText(
                 text: "Experience",
                 parent: scrollVert.transform,
                 anchorMin: new Vector2(0f, 1f),
@@ -300,19 +298,19 @@ namespace kingskills.UX
                 position: new Vector2(40f, 0f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 30,
-                color: GUIManager.Instance.ValheimOrange,
+                color: ConfigManager.ColorTitle,
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
                 height: 70f,
-                addContentSizeFitter: false);
-            LeftPanelExperienceTitle.GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
-            LeftPanelExperienceTitle.GetComponent<Text>().alignment = TextAnchor.UpperCenter;
+                addContentSizeFitter: false));
+            text = LeftPanelTexts["experience"].GetComponent<Text>();
+            text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.alignment = TextAnchor.UpperCenter;
 
             //Create the variable Experience text in the left panel
-            LeftPanelExperienceText =
-            GUIManager.Instance.CreateText(
-                text: "This text is the experience explainer",
+            LeftPanelTexts.Add("x1", GUIManager.Instance.CreateText(
+                text: "x1",
                 parent: scrollVert.transform,
                 anchorMin: new Vector2(1f, 1f),
                 anchorMax: new Vector2(1f, 1f),
@@ -324,36 +322,49 @@ namespace kingskills.UX
                 outlineColor: Color.black,
                 width: 300f,
                 height: 30f,
-                addContentSizeFitter: false);
-            LeftPanelExperienceText.GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
-            LeftPanelExperienceText.GetComponent<Text>().alignment = TextAnchor.UpperLeft;
+                addContentSizeFitter: false));
+            text = LeftPanelTexts["x1"].GetComponent<Text>();
+            text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.alignment = TextAnchor.UpperLeft;
+
+            LeftPanelTexts.Add("x2", UnityEngine.Object.Instantiate(LeftPanelTexts["x1"]));
+            LeftPanelTexts["x2"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+
+            LeftPanelTexts.Add("x3", UnityEngine.Object.Instantiate(LeftPanelTexts["x1"]));
+            LeftPanelTexts["x3"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+
+            //LeftPanelTexts.Add("x4", UnityEngine.Object.Instantiate(LeftPanelTexts["x1"]));
+            //LeftPanelTexts["x4"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+
+            LeftPanelTexts.Add("bonus", UnityEngine.Object.Instantiate(LeftPanelTexts["x1"]));
+            LeftPanelTexts["bonus"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+            LeftPanelTexts["bonus"].GetComponent<Text>().color = ConfigManager.ColorBonusBlue;
 
             //Create the Effects Title in the left panel
-            LeftPanelEffectsTitle =
-            GUIManager.Instance.CreateText(
-                text: "Current Effects",
+            LeftPanelTexts.Add("effects", GUIManager.Instance.CreateText(
+                text: "Effects",
                 parent: scrollVert.transform,
-                anchorMin: new Vector2(1f, 0f),
-                anchorMax: new Vector2(1f, 0f),
+                anchorMin: new Vector2(0f, 1f),
+                anchorMax: new Vector2(0f, 1f),
                 position: new Vector2(40f, 0f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 30,
-                color: GUIManager.Instance.ValheimOrange,
+                color: ConfigManager.ColorTitle,
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
                 height: 70f,
-                addContentSizeFitter: false);
-            LeftPanelEffectsTitle.GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
-            LeftPanelEffectsTitle.GetComponent<Text>().alignment = TextAnchor.UpperCenter;
+                addContentSizeFitter: false));
+            text = LeftPanelTexts["effects"].GetComponent<Text>();
+            text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.alignment = TextAnchor.UpperCenter;
 
-            //Create the variable Effects text in the left panel
-            LeftPanelEffectsText =
-            GUIManager.Instance.CreateText(
-                text: "This text is the effects",
+            //create all the effects lines
+            LeftPanelTexts.Add("f1", GUIManager.Instance.CreateText(
+                text: "f1",
                 parent: scrollVert.transform,
-                anchorMin: new Vector2(0f, 0f),
-                anchorMax: new Vector2(0f, 0f),
+                anchorMin: new Vector2(1f, 1f),
+                anchorMax: new Vector2(1f, 1f),
                 position: new Vector2(0f, 0f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 16,
@@ -362,13 +373,29 @@ namespace kingskills.UX
                 outlineColor: Color.black,
                 width: 300f,
                 height: 30f,
-                addContentSizeFitter: false);
-            LeftPanelEffectsText.GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
-            LeftPanelEffectsText.GetComponent<Text>().alignment = TextAnchor.UpperLeft;
+                addContentSizeFitter: false));
+            text = LeftPanelTexts["f1"].GetComponent<Text>();
+            text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.alignment = TextAnchor.UpperLeft;
+
+            LeftPanelTexts.Add("f2", UnityEngine.Object.Instantiate(LeftPanelTexts["f1"]));
+            LeftPanelTexts["f2"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+
+            LeftPanelTexts.Add("f3", UnityEngine.Object.Instantiate(LeftPanelTexts["f1"]));
+            LeftPanelTexts["f3"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+
+            LeftPanelTexts.Add("f4", UnityEngine.Object.Instantiate(LeftPanelTexts["f1"]));
+            LeftPanelTexts["f4"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+
+            LeftPanelTexts.Add("f5", UnityEngine.Object.Instantiate(LeftPanelTexts["f1"]));
+            LeftPanelTexts["f5"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+
+            LeftPanelTexts.Add("f6", UnityEngine.Object.Instantiate(LeftPanelTexts["f1"]));
+            LeftPanelTexts["f6"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
 
 
             //Create the right panel
-            RightPanelPerks =
+            RightPanel =
             GUIManager.Instance.CreateWoodpanel(
                     parent: SkillGUIWindow.transform,
                     anchorMin: new Vector2(0.5f, 0.5f),
@@ -381,13 +408,13 @@ namespace kingskills.UX
             // Create Perk title
             obj = GUIManager.Instance.CreateText(
                 text: "Perks",
-                parent: RightPanelPerks.transform,
+                parent: RightPanel.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
                 position: new Vector2(0f, -50f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 32,
-                color: GUIManager.Instance.ValheimOrange,
+                color: ConfigManager.ColorTitle,
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
@@ -399,13 +426,13 @@ namespace kingskills.UX
             RightPanelAscendedText =
             GUIManager.Instance.CreateText(
                 text: "",
-                parent: RightPanelPerks.transform,
+                parent: RightPanel.transform,
                 anchorMin: new Vector2(0.5f, 0f),
                 anchorMax: new Vector2(0.5f, 0f),
                 position: new Vector2(0f, 50f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 26,
-                color: new Color(.45f, .92f, .32f),
+                color: ConfigManager.ColorAscendedGreen,
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
@@ -417,13 +444,13 @@ namespace kingskills.UX
             RightPanelPerkOneLevel =
             GUIManager.Instance.CreateText(
                 text: "",
-                parent: RightPanelPerks.transform,
+                parent: RightPanel.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
                 position: new Vector2(0f, -140f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 20,
-                color: GUIManager.Instance.ValheimOrange,
+                color: ConfigManager.ColorWhite,
                 outline: true,
                 outlineColor: Color.black,
                 width: 200f,
@@ -438,13 +465,13 @@ namespace kingskills.UX
             RightPanelPerkTwoLevel =
             GUIManager.Instance.CreateText(
                 text: "",
-                parent: RightPanelPerks.transform,
+                parent: RightPanel.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
                 position: new Vector2(0f, -310f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 20,
-                color: GUIManager.Instance.ValheimOrange,
+                color: ConfigManager.ColorWhite,
                 outline: true,
                 outlineColor: Color.black,
                 width: 200f,
@@ -463,7 +490,7 @@ namespace kingskills.UX
             image = RightPanelPerkBoxes["1a"].AddComponent<Image>();
             image.sprite = Assets.AssetLoader.perkBoxSprites["perkbox"];
             rect = RightPanelPerkBoxes["1a"].GetComponent<RectTransform>();
-            rect.SetParent(RightPanelPerks.transform);
+            rect.SetParent(RightPanel.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
             rect.anchoredPosition = new Vector2(-100f, -140f);
@@ -498,7 +525,7 @@ namespace kingskills.UX
             image = RightPanelPerkBoxes["1b"].AddComponent<Image>();
             image.sprite = Assets.AssetLoader.perkBoxSprites["perkbox"];
             rect = RightPanelPerkBoxes["1b"].GetComponent<RectTransform>();
-            rect.SetParent(RightPanelPerks.transform);
+            rect.SetParent(RightPanel.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
             rect.anchoredPosition = new Vector2(100f, -140f);
@@ -532,7 +559,7 @@ namespace kingskills.UX
             image = RightPanelPerkBoxes["2a"].AddComponent<Image>();
             image.sprite = Assets.AssetLoader.perkBoxSprites["perkbox"];
             rect = RightPanelPerkBoxes["2a"].GetComponent<RectTransform>();
-            rect.SetParent(RightPanelPerks.transform);
+            rect.SetParent(RightPanel.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
             rect.anchoredPosition = new Vector2(-100f, -310f);
@@ -566,7 +593,7 @@ namespace kingskills.UX
             image = RightPanelPerkBoxes["2b"].AddComponent<Image>();
             image.sprite = Assets.AssetLoader.perkBoxSprites["perkbox"];
             rect = RightPanelPerkBoxes["2b"].GetComponent<RectTransform>();
-            rect.SetParent(RightPanelPerks.transform);
+            rect.SetParent(RightPanel.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
             rect.anchoredPosition = new Vector2(100f, -310f);
