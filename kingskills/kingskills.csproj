@@ -82,7 +82,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AssetLoader.cs" />
-    <Compile Include="New Skills\SkillMan.cs" />
+    <Compile Include="Skills\Agriculture.cs" />
+    <Compile Include="Skills\Building.cs" />
+    <Compile Include="Skills\Cooking.cs" />
+    <Compile Include="Skills\Sailing.cs" />
+    <Compile Include="Skills\SkillMan.cs" />
     <Compile Include="Patches\BlockPatch.cs" />
     <Compile Include="Patches\LevelUpPatches.cs" />
     <Compile Include="Patches\LootDropPatch.cs" />

@@ -1,26 +1,22 @@
 [
   {
     "Identifier": "bearking.kingskills.cooking",
-    "Name": "$Cooking",
-    "Description": "$When two armies of equal size go to war, it is the army with the better chef who wins.",
-    "IconPath": "Assets/SkillIcons/Cooking.png"
+    "Name": "Cooking",
+    "Description": "When two armies of equal size go to war, it is the army with the better chef who wins.",
   },
   {
     "Identifier": "bearking.kingskills.sailing",
-    "Name": "$Sailing",
-    "Description": "$The high seas await a capable seafarer.",
-    "IconPath": "Assets/SkillIcons/Sailing.png"
+    "Name": "Sailing",
+    "Description": "The high seas await a capable seafarer.",
   },
   {
     "Identifier": "bearking.kingskills.building",
-    "Name": "$Building",
-    "Description": "$With the power of a hammer in your hand, the world is yours to create.",
-    "IconPath": "Assets/SkillIcons/Building.png"
+    "Name": "Building",
+    "Description": "With the power of a hammer in your hand, the world is yours to create.",
   },
   {
     "Identifier": "bearking.kingskills.agriculture",
-    "Name": "$Agriculture",
-    "Description": "$Gathering and farming.",
-    "IconPath": "Assets/SkillIcons/Agriculture.png"
+    "Name": "Agriculture",
+    "Description": "Gathering and farming.",
   }
 ]
