@@ -225,36 +225,36 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Agriculture);
 
-            float axeDamage = MultToPer(ConfigManager.GetAxeDamageMult(skill));
-            float axeStaminaRedux = MultToPer(ConfigManager.GetAxeStaminaRedux(skill));
-            float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
-            float axeChopBonus = MultToPer(1f + ConfigManager.GetAxeChopDamageMod(skill));
-            float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
+            float plantXPReward = 0f;
+
+            float botYield = MultToPer(ConfigManager.GetAgricultureYieldMult(skill));
+            float botGrowRedux = MultToPer(ConfigManager.GetAgricultureGrowTimeRedux(skill));
+            float botFoodQuality = MultToPer(ConfigManager.GetAgricultureFoodQualityMult(skill));
+            float botHealthGain = ConfigManager.GetAgricultureHealthRegain(skill);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
-                "";
+                "Every item you harvest gives you experience, whether in the wild or in your planted garden.";
             SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
-                "";
+                "Different plants give you different rewards. As a rule, items you've " +
+                "planted tend to give you more experience.";
             SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
-                "";
+                "Trees you plant will give you experience as soon as they mature.";
             SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
-                "";
+                "Experience bounty from hovered plant: " + plantXPReward.ToString("F1");
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                axeDamage.ToString("F1") + "% ";
+                botYield.ToString("F2") + "% extra yield from plants";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                axeStaminaRedux.ToString("F1") + "% ";
+                botGrowRedux.ToString("F0") + "% less time to grow plants";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                axeStaminaGain.ToString("F0") + " ";
+                botFoodQuality.ToString("F0") + "% increased food quality for food you harvest";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                axeChopBonus.ToString("F1") + "% ";
+                botHealthGain.ToString("F1") + " health regained every time you harvest a plant";
 
-            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                axeCarryCapacity.ToString("F0") + " ";
         }
         public static void OpenAxePanels()
         {
@@ -360,36 +360,40 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Building);
 
-            float axeDamage = MultToPer(ConfigManager.GetAxeDamageMult(skill));
-            float axeStaminaRedux = MultToPer(ConfigManager.GetAxeStaminaRedux(skill));
-            float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
-            float axeChopBonus = MultToPer(1f + ConfigManager.GetAxeChopDamageMod(skill));
-            float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
+            float buildHealth = MultToPer(ConfigManager.GetBuildingHealthMult(skill));
+            float buildStability = MultToPer(ConfigManager.GetBuildingStabilityMult(skill));
+            float buildDamage = MultToPer(ConfigManager.GetBuildingDamageMult(skill));
+            float buildWNT = MultToPer(ConfigManager.GetBuildingWNTRedux(skill));
+            float buildFreeChance = MultToPer(1f + ConfigManager.GetBuildingFreeMod(skill));
+            float buildStaminaRedux = MultToPer(ConfigManager.GetBuildingStaminaRedux(skill));
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
-                "";
+                "Placing a building gives you a flat amount of experience..";
             SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
-                "";
+                "Repairing a building earns you experience based on how much health you repaired.";
             SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
-                "";
+                "Creatures damaging your buildings also provide damage-based experience.";
             SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
-                "";
+                "Bonus experience for building is earned when your buildings damage creatures, based on damage dealt.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                axeDamage.ToString("F1") + "% ";
+                buildHealth.ToString("F1") + "% extra health to your buildings";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                axeStaminaRedux.ToString("F1") + "% ";
+                buildStability.ToString("F1") + "% extra structural stability to your buildings";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                axeStaminaGain.ToString("F0") + " ";
+                buildDamage.ToString("F0") + "% extra damage dealt by your buildings ";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                axeChopBonus.ToString("F1") + "% ";
+                buildWNT.ToString("F0") + "% reduced weather damage taken by your buildings";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                axeCarryCapacity.ToString("F0") + " ";
+                buildFreeChance.ToString("F0") + "% chance to place a free building";
+
+            SkillGUI.LeftPanelTexts["f6"].GetComponent<Text>().text =
+                buildStaminaRedux.ToString("F0") + "% reduced stamina cost for placing buildings and repairing";
         }
         public static void OpenClubPanels()
         {
@@ -430,36 +434,41 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Cooking);
 
-            float axeDamage = MultToPer(ConfigManager.GetAxeDamageMult(skill));
-            float axeStaminaRedux = MultToPer(ConfigManager.GetAxeStaminaRedux(skill));
-            float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
-            float axeChopBonus = MultToPer(1f + ConfigManager.GetAxeChopDamageMod(skill));
-            float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
+            float cookAvgFQ = MultToPer(ConfigManager.GetCookingAverageFoodQualityMod(skill));
+            float cookFQRange = MultToPer(ConfigManager.GetCookingFoodQualityRangeMod(skill));
+            float cookTimeRedux = MultToPer(ConfigManager.GetCookingTimeRedux(skill));
+            float cookFermentTimeRedux = MultToPer(ConfigManager.GetCookingFermentTimeRedux(skill));
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
-                "";
+                "Adding food to a cooking station will give you a small amount of experience, based " +
+                "on the tier of the cooking station.";
             SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
-                "";
-            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
-                "";
+                "Successfully retrieving cooked food from a cooking station will reward you with twice " +
+                "as much. You get no experience if you let the food burn.";
+
             SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
-                "";
+                "Bonus experience for cooking is gained whenever someone else eats your cooking, based on how " +
+                "much stamina and health it gives.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                axeDamage.ToString("F1") + "% ";
+                cookAvgFQ.ToString("F1") + "% average food quality of cooked items";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                axeStaminaRedux.ToString("F1") + "% ";
+                cookFQRange.ToString("F1") + "% range in possible food qualities";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                axeStaminaGain.ToString("F0") + " ";
+                cookTimeRedux.ToString("F1") + "% reduced cooking time";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                axeChopBonus.ToString("F1") + "% ";
+                cookFermentTimeRedux.ToString("F0") + "% reduced fermentation time";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                axeCarryCapacity.ToString("F0") + " ";
+                "[Food Quality]: \nFood quality is a king's skills specific property. Any item " +
+                "you cook gets a random food quality, which directly affects it's health, stamina, and " +
+                "duration. FQ is based primarily on your skill level, but your timing has an affect on the " +
+                "overall quality as well.";
+
         }
         public static void OpenFistPanels()
         {
@@ -696,36 +705,48 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Sailing);
 
-            float axeDamage = MultToPer(ConfigManager.GetAxeDamageMult(skill));
-            float axeStaminaRedux = MultToPer(ConfigManager.GetAxeStaminaRedux(skill));
-            float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
-            float axeChopBonus = MultToPer(1f + ConfigManager.GetAxeChopDamageMod(skill));
-            float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
+            float sailXPRate = 0f;//ConfigManager.GetSailXPRate();
+            float sailCaptainBonus = 0f;//MultToPer(ConfigManager.GetSailCaptainBonus());
+            float sailVeselBonus = 0f;//MultToPer(ConfigManager.GetSailVesselBonus());
+            float sailCrewBonus = 0f;//MultToPer(ConfigManager.GetSailCrewBonus());
+
+            float sailSpeed = MultToPer(ConfigManager.GetSailSpeedMult(skill));
+            float sailWindNudge = MultToPer(ConfigManager.GetSailWindNudgeMod(skill));
+            float sailExploreRange = ConfigManager.GetSailExploreRange(skill);
+            float sailPaddleSpeed = MultToPer(ConfigManager.GetSailPaddleSpeedMult(skill));
+            float sailShipDamageRedux = MultToPer(ConfigManager.GetSailDamageRedux(skill));
+
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
-                "";
+                "Swimming or standing on a ship will grant you a small amount of experience.";
             SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
-                "";
+                "If you're captaining a vessel, you have a higher base experience rate and " +
+                "it's increased by how fully the wind is caught and how fast the ship is moving.";
             SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
-                "";
+                "All crew get more experience based on the tier of the vessel.";
             SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
-                "";
+                "Bonus experience is earned for all crewmates for each additional person there is onboard. \n" +
+                "Current Bonuses: \n" +
+                sailXPRate.ToString("F0") + " per second base rate\n" +
+                sailCaptainBonus.ToString("F1") + "% from Captain bonuses\n" +
+                sailVeselBonus.ToString("F0") + "% from vessel tier\n" +
+                sailCrewBonus.ToString("F0") + "% from number of crewmates";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                axeDamage.ToString("F1") + "% ";
+                sailSpeed.ToString("F1") + "% extra faster ship sailing speed";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                axeStaminaRedux.ToString("F1") + "% ";
+                sailWindNudge.ToString("F1") + "% nudge towards favorable winds";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                axeStaminaGain.ToString("F0") + " ";
+                sailExploreRange.ToString("F0") + "% increased exploration range while on board ";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                axeChopBonus.ToString("F1") + "% ";
+                sailPaddleSpeed.ToString("F1") + "% increased paddle speed";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                axeCarryCapacity.ToString("F0") + " ";
+                sailShipDamageRedux.ToString("F0") + "% less ship damage taken";
         }
         public static void OpenSpearPanels()
         {

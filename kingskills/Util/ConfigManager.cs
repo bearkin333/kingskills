@@ -10,10 +10,6 @@ namespace kingskills
 {
     class ConfigManager
     {
-        /* Template
-        public static ConfigEntry<float> ;
-         */
-
         /*
          * Generalized language:
          * 
@@ -22,7 +18,7 @@ namespace kingskills
          * Ex: A per of 50% implies the final number will have a final value of 150%
          * 
          * Redux (or Reduction) refers to a percent that will be subtracted from 
-         * the whole.
+         * the whole. NO REDUX SHOULD BE OVER 100!
          * Ex: A redux of 50% implies the final number will have a final value of 50%
          * 
          * Mod (or modifier) is a version of a percentage that multiplies something to
@@ -40,235 +36,7 @@ namespace kingskills
          * 
          */
 
-        public static ConfigEntry<float> WeaponXPSwing;
-        public static ConfigEntry<float> WeaponXPHoldPerTick;
-        public static ConfigEntry<float> WeaponXPHoldTickLength;
-        public static ConfigEntry<float> WeaponXPHoldUnarmedPercent;
-        public static ConfigEntry<float> WeaponXPStrikeDamagePercent;
-        public static ConfigEntry<float> WeaponXPStrikeDamageFactor;
-        public static ConfigEntry<float> WeaponXPStrikeDestructiblePercent;
-
-        public static ConfigEntry<float> WeaponBXPUnarmedBlock;
-        public static ConfigEntry<float> WeaponBXPClubStagger;
-        public static ConfigEntry<float> WeaponBXPSwordStagger;
-        public static ConfigEntry<float> WeaponBXPKnifeBackstab;
-        public static ConfigEntry<float> WeaponBXPAxeRange;
-        public static ConfigEntry<float> WeaponBXPAxeTreeAmount;
-        public static ConfigEntry<float> WeaponBXPSpearThrown;
-        public static ConfigEntry<float> WeaponBXPBowDistancePercent;
-        public static ConfigEntry<float> WeaponBXPPolearmDamageMod;
-
-        public static ConfigEntry<float> ToolBXPWoodStubReward;
-
-        public static ConfigEntry<float> ToolXPStrikeDamagePercent;
-        public static ConfigEntry<float> ToolXPStrikeDamageFactor;
-
-        public static ConfigEntry<float> AxeDamagePercentMin;
-        public static ConfigEntry<float> AxeDamagePercentMax;
-        public static ConfigEntry<float> AxeStaminaReduxMin;
-        public static ConfigEntry<float> AxeStaminaReduxMax;
-        public static ConfigEntry<float> AxeStaminaPerLevel;
-        public static ConfigEntry<float> AxeChopDamagePercentMin;
-        public static ConfigEntry<float> AxeChopDamagePercentMax;
-        public static ConfigEntry<float> AxeCarryCapacityMin;
-        public static ConfigEntry<float> AxeCarryCapacityMax;
-
-        public static ConfigEntry<float> BowDamagePercentMin;
-        public static ConfigEntry<float> BowDamagePercentMax;
-        public static ConfigEntry<float> BowStaminaReduxMin;
-        public static ConfigEntry<float> BowStaminaReduxMax;
-        public static ConfigEntry<float> BowVelocityPercentMin;
-        public static ConfigEntry<float> BowVelocityPercentMax;
-        public static ConfigEntry<float> BowDropPercentMin;
-        public static ConfigEntry<float> BowDropPercentMax;
-
-        public static ConfigEntry<float> BlockXPPercent;
-        public static ConfigEntry<float> BlockXPParryPercent;
-        public static ConfigEntry<float> BlockFlatPowerMin;
-        public static ConfigEntry<float> BlockFlatPowerMax;
-        public static ConfigEntry<float> BlockPowerPercentMin;
-        public static ConfigEntry<float> BlockPowerPercentMax;
-        public static ConfigEntry<float> BlockStaminaReduxMin;
-        public static ConfigEntry<float> BlockStaminaReduxMax;
-        public static ConfigEntry<float> BlockHealthPerLevel;
-
-        public static ConfigEntry<float> ClubDamagePercentMin;
-        public static ConfigEntry<float> ClubDamagePercentMax;
-        public static ConfigEntry<float> ClubStaminaReduxMin;
-        public static ConfigEntry<float> ClubStaminaReduxMax;
-        public static ConfigEntry<float> ClubBluntPercentMin;
-        public static ConfigEntry<float> ClubBluntPercentMax;
-        public static ConfigEntry<float> ClubKnockbackPercentMin;
-        public static ConfigEntry<float> ClubKnockbackPercentMax;
-        public static ConfigEntry<float> ClubStaggerPercentMin;
-        public static ConfigEntry<float> ClubStaggerPercentMax;
-
-        public static ConfigEntry<float> FistDamagePercentMin;
-        public static ConfigEntry<float> FistDamagePercentMax;
-        public static ConfigEntry<float> FistStaminaReduxMin;
-        public static ConfigEntry<float> FistStaminaReduxMax;
-        public static ConfigEntry<float> FistDamageFlatMin;
-        public static ConfigEntry<float> FistDamageFlatMax;
-        public static ConfigEntry<float> FistBlockArmorMin;
-        public static ConfigEntry<float> FistBlockArmorMax;
-        public static ConfigEntry<float> FistMovespeedPercentMin;
-        public static ConfigEntry<float> FistMovespeedPercentMax;
-
-        public static ConfigEntry<float> JumpFallDamageThresholdMin;
-        public static ConfigEntry<float> JumpFallDamageThresholdMax;
-        public static ConfigEntry<float> JumpFallDamageReduxMin;
-        public static ConfigEntry<float> JumpFallDamageReduxMax;
-        public static ConfigEntry<float> JumpForcePercentMin;
-        public static ConfigEntry<float> JumpForcePercentMax;
-        public static ConfigEntry<float> JumpStaminaReduxMin;
-        public static ConfigEntry<float> JumpStaminaReduxMax;
-        public static ConfigEntry<float> JumpForwardForcePercentMin;
-        public static ConfigEntry<float> JumpForwardForcePercentMax;
-        public static ConfigEntry<float> JumpTiredModMin;
-        public static ConfigEntry<float> JumpTiredModMax;
-        public static ConfigEntry<float> JumpXPPercent;
-
-        public static ConfigEntry<float> SwimXPSpeedPercent;
-        public static ConfigEntry<float> SwimSpeedPercentMin;
-        public static ConfigEntry<float> SwimSpeedPercentMax;
-        public static ConfigEntry<float> SwimAccelPercentMin;
-        public static ConfigEntry<float> SwimAccelPercentMax;
-        public static ConfigEntry<float> SwimTurnPercentMin;
-        public static ConfigEntry<float> SwimTurnPercentMax;
-        public static ConfigEntry<float> SwimStaminaPerSecMin;
-        public static ConfigEntry<float> SwimStaminaPerSecMax;
-
-        public static ConfigEntry<float> RunAbsoluteWeightMinWeight;
-        public static ConfigEntry<float> RunAbsoluteWeightMaxWeight;
-        public static ConfigEntry<float> RunAbsoluteWeightFactor;
-        public static ConfigEntry<float> RunXPAbsoluteWeightPercent;
-        public static ConfigEntry<float> RunRelativeWeightLight;
-        public static ConfigEntry<float> RunRelativeWeightLightPercent;
-        public static ConfigEntry<float> RunRelativeWeightMed;
-        public static ConfigEntry<float> RunRelativeWeightMedPercent;
-        public static ConfigEntry<float> RunRelativeWeightHighMed;
-        public static ConfigEntry<float> RunRelativeWeightHighMedPercent;
-        public static ConfigEntry<float> RunRelativeWeightHeavy;
-        public static ConfigEntry<float> RunRelativeWeightHeavyPercent;
-        public static ConfigEntry<float> RunRelativeWeightFull;
-        public static ConfigEntry<float> RunRelativeWeightFullPercent;
-        public static ConfigEntry<float> RunRelativeWeightOverPercent;
-        public static ConfigEntry<float> RunXPRelativeWeightPercent;
-        public static ConfigEntry<float> RunXPSpeedPercent;
-        public static ConfigEntry<float> RunSpeedPercentMin;
-        public static ConfigEntry<float> RunSpeedPercentMax;
-        public static ConfigEntry<float> RunEquipmentReduxMin;
-        public static ConfigEntry<float> RunEquipmentReduxMax;
-        public static ConfigEntry<float> RunEncumberancePercentMin;
-        public static ConfigEntry<float> RunEncumberancePercentMax;
-        public static ConfigEntry<float> RunEncumberanceReduxMin;
-        public static ConfigEntry<float> RunEncumberanceReduxMax;
-        public static ConfigEntry<float> RunStaminaReduxMin;
-        public static ConfigEntry<float> RunStaminaReduxMax;
-        public static ConfigEntry<float> RunStaminaPerLevel;
-
-        public static ConfigEntry<float> KnifeDamagePercentMin;
-        public static ConfigEntry<float> KnifeDamagePercentMax;
-        public static ConfigEntry<float> KnifeStaminaReduxMin;
-        public static ConfigEntry<float> KnifeStaminaReduxMax;
-        public static ConfigEntry<float> KnifeBackstabPercentMin;
-        public static ConfigEntry<float> KnifeBackstabPercentMax;
-        public static ConfigEntry<float> KnifeMovespeedPercentMin;
-        public static ConfigEntry<float> KnifeMovespeedPercentMax;
-        public static ConfigEntry<float> KnifePiercePercentMin;
-        public static ConfigEntry<float> KnifePiercePercentMax;
-
-        public static ConfigEntry<float> MiningPickDamagePercentMin;
-        public static ConfigEntry<float> MiningPickDamagePercentMax;
-        public static ConfigEntry<float> MiningStaminaRebateMin;
-        public static ConfigEntry<float> MiningStaminaRebateMax;
-        public static ConfigEntry<float> MiningDropPercentMin;
-        public static ConfigEntry<float> MiningDropPercentMax;
-        public static ConfigEntry<float> MiningRegenHealthMin;
-        public static ConfigEntry<float> MiningRegenHealthMax;
-        public static ConfigEntry<float> MiningCarryCapacityMin;
-        public static ConfigEntry<float> MiningCarryCapacityMax;
-
-        public static ConfigEntry<float> PolearmDamagePercentMin;
-        public static ConfigEntry<float> PolearmDamagePercentMax;
-        public static ConfigEntry<float> PolearmStaminaReduxMin;
-        public static ConfigEntry<float> PolearmStaminaReduxMax;
-        public static ConfigEntry<float> PolearmRangeMax;
-        public static ConfigEntry<float> PolearmRangeMin;
-        public static ConfigEntry<float> PolearmArmorMax;
-        public static ConfigEntry<float> PolearmArmorMin;
-        public static ConfigEntry<float> PolearmBlockMax;
-        public static ConfigEntry<float> PolearmBlockMin;
-
-        public static ConfigEntry<float> SneakXPThreatPercent;
-        public static ConfigEntry<float> SneakStaminaDrainMin;
-        public static ConfigEntry<float> SneakStaminaDrainMax;
-        public static ConfigEntry<float> SneakSpeedPercentMin;
-        public static ConfigEntry<float> SneakSpeedPercentMax;
-
-        public static ConfigEntry<float> SpearDamagePercentMin;
-        public static ConfigEntry<float> SpearDamagePercentMax;
-        public static ConfigEntry<float> SpearStaminaReduxMin;
-        public static ConfigEntry<float> SpearStaminaReduxMax;
-        public static ConfigEntry<float> SpearVelocityPercentMax;
-        public static ConfigEntry<float> SpearVelocityPercentMin;
-        public static ConfigEntry<float> SpearProjectilePercentMax;
-        public static ConfigEntry<float> SpearProjectileDamagePercentMin;
-        public static ConfigEntry<float> SpearBlockArmorMax;
-        public static ConfigEntry<float> SpearBlockArmorMin;
-
-        public static ConfigEntry<float> SwordDamagePercentMin;
-        public static ConfigEntry<float> SwordDamagePercentMax;
-        public static ConfigEntry<float> SwordStaminaReduxMin;
-        public static ConfigEntry<float> SwordStaminaReduxMax;
-        public static ConfigEntry<float> SwordParryPercentMin;
-        public static ConfigEntry<float> SwordParryPercentMax;
-        public static ConfigEntry<float> SwordSlashPercentMin;
-        public static ConfigEntry<float> SwordSlashPercentMax;
-        public static ConfigEntry<float> SwordDodgeStaminaReduxMin;
-        public static ConfigEntry<float> SwordDodgeStaminaReduxMax;
-
-        public static ConfigEntry<float> WoodcuttingChopDamagePercentMin;
-        public static ConfigEntry<float> WoodcuttingChopDamagePercentMax;
-        public static ConfigEntry<float> WoodcuttingStaminaRebateMin;
-        public static ConfigEntry<float> WoodcuttingStaminaRebateMax;
-        public static ConfigEntry<float> WoodcuttingDropPercentMin;
-        public static ConfigEntry<float> WoodcuttingDropPercentMax;
-        public static ConfigEntry<float> WoodcuttingRegenStaminaMin;
-        public static ConfigEntry<float> WoodcuttingRegenStaminaMax;
-        public static ConfigEntry<float> WoodcuttingCarryCapacityMin;
-        public static ConfigEntry<float> WoodcuttingCarryCapacityMax;
-
-        public static ConfigEntry<bool> ActiveSkillAgriculture;
-        public static ConfigEntry<bool> ActiveSkillAxe;
-        public static ConfigEntry<bool> ActiveSkillBlock;
-        public static ConfigEntry<bool> ActiveSkillBow;
-        public static ConfigEntry<bool> ActiveSkillBuilding;
-        public static ConfigEntry<bool> ActiveSkillClub;
-        public static ConfigEntry<bool> ActiveSkillCooking;
-        public static ConfigEntry<bool> ActiveSkillFist;
-        public static ConfigEntry<bool> ActiveSkillJump;
-        public static ConfigEntry<bool> ActiveSkillKnife;
-        public static ConfigEntry<bool> ActiveSkillMine;
-        public static ConfigEntry<bool> ActiveSkillPolearm;
-        public static ConfigEntry<bool> ActiveSkillRun;
-        public static ConfigEntry<bool> ActiveSkillSailing;
-        public static ConfigEntry<bool> ActiveSkillSpear;
-        public static ConfigEntry<bool> ActiveSkillSneak;
-        public static ConfigEntry<bool> ActiveSkillSwim;
-        public static ConfigEntry<bool> ActiveSkillSword;
-        public static ConfigEntry<bool> ActiveSkillWood;
-
-        public static ConfigEntry<float> DropNewItemThreshold;
-        public static ConfigEntry<float> MaxSkillLevel;
-        public static ConfigEntry<float> DisplayExperienceThreshold;
-
-        public static ConfigEntry<bool> PerkExplorationOn;
-        public static ConfigEntry<float> PerkOneLVLThreshold;
-        public static ConfigEntry<float> PerkTwoLVLThreshold;
-        public static ConfigEntry<float> PerkThreeLVLThreshold;
-        public static ConfigEntry<float> PerkFourLVLThreshold;
-
+        #region globalvariables
         //Variables and constants for use that aren't configurable
         public static Dictionary<Skills.SkillType, bool> SkillActive = new Dictionary<Skills.SkillType, bool>();
         public static Dictionary<string, float> WoodcuttingDropTable = new Dictionary<string, float>();
@@ -305,26 +73,247 @@ namespace kingskills
         const float MasteryTime = 5f * 60 * 60;  // seconds
         const float XpPerSec = TotalXp / MasteryTime; // xp/s needed to master skill in target_mastery_time
         */
+        #endregion globalvariables
 
         public static void Init(ConfigFile cfg)
         {
-            //List of all object names that count as woodcutting drops
-            WoodcuttingDropTable.Add("BeechSeeds", 0);
-            WoodcuttingDropTable.Add("ElderBark", 0);
-            WoodcuttingDropTable.Add("FineWood", 0);
-            WoodcuttingDropTable.Add("FirCone", 0);
-            WoodcuttingDropTable.Add("PineCone", 0);
-            WoodcuttingDropTable.Add("RoundLog", 0);
-            WoodcuttingDropTable.Add("Wood", 0);
+            //Read the config settings for all the generic stuff
+            InitGenericConfigs(cfg);
+            InitPerkConfig(cfg);
+            InitWeaponEXPConfig(cfg);
 
-            //List of all object names that count as mining drops
-            MiningDropTable.Add("CopperOre", 0);
-            MiningDropTable.Add("IronScrap", 0);
-            MiningDropTable.Add("Obsidian", 0);
-            MiningDropTable.Add("SilverOre", 0);
-            MiningDropTable.Add("TinOre", 0);
-            MiningDropTable.Add("Stone", 0);
-            MiningDropTable.Add("Chitin", 0);
+            //Read the config settings for all the skills
+            InitBotanyConfig(cfg);
+            InitAxeConfigs(cfg);
+            InitBlockConfigs(cfg);
+            InitBowConfigs(cfg);
+            InitBuildConfig(cfg);
+            InitClubConfigs(cfg);
+            InitCookConfig(cfg);
+            InitFistConfigs(cfg);
+            InitJumpConfigs(cfg);
+            InitKnifeConfigs(cfg);
+            InitMineConfigs(cfg);
+            InitPolearmConfigs(cfg);
+            InitRunConfigs(cfg);
+            InitSailConfig(cfg);
+            InitSneakConfigs(cfg);
+            InitSpearConfigs(cfg);
+            InitSwimConfigs(cfg);
+            InitSwordConfigs(cfg);
+            InitWoodConfigs(cfg);
+        }
+
+
+        public static void InitGenericConfigs(ConfigFile cfg)
+        {
+            ColorBonusBlue = new Color(0.20f, 0.88f, 0.93f);
+            ColorAscendedGreen = new Color(0.45f, 0.92f, 0.32f);
+            ColorExperienceYellow = new Color(0.98f, 0.96f, 0.23f);
+            ColorTitle = new Color(0.98f, 0.96f, 0.43f);
+            ColorWhite = new Color(1f, 1f, 1f);
+            ColorKingSkills = new Color(0.77f, 0.23f, 0.99f);
+
+            MaxSkillLevel = cfg.Bind("Generic", "Max Skill Level", 100f,
+                    "This is the level that all king skills can go up to.");
+            DisplayExperienceThreshold = cfg.Bind("Generic", "Experience Display Threshold", .2f,
+                    "Threshold under which experience earned will not display as a message.");
+            DropNewItemThreshold = cfg.Bind("Generic", "Drop New Item Threshold", 50f,
+                    "% of 1 item needed to generate before you round up to a full item.");
+        }
+
+        public static void InitSkillActiveDict()
+        {
+            SkillActive.Add(SkillMan.Agriculture, ActiveSkillBotany.Value);
+            SkillActive.Add(Skills.SkillType.Axes, ActiveSkillAxe.Value);
+            SkillActive.Add(Skills.SkillType.Blocking, ActiveSkillBlock.Value);
+            SkillActive.Add(Skills.SkillType.Bows, ActiveSkillBow.Value);
+            SkillActive.Add(SkillMan.Building, ActiveSkillBuild.Value);
+            SkillActive.Add(Skills.SkillType.Clubs, ActiveSkillClub.Value);
+            SkillActive.Add(SkillMan.Cooking, ActiveSkillCook.Value);
+            SkillActive.Add(Skills.SkillType.Unarmed, ActiveSkillFist.Value);
+            SkillActive.Add(Skills.SkillType.Jump, ActiveSkillJump.Value);
+            SkillActive.Add(Skills.SkillType.Knives, ActiveSkillKnife.Value);
+            SkillActive.Add(Skills.SkillType.Pickaxes, ActiveSkillMine.Value);
+            SkillActive.Add(Skills.SkillType.Polearms, ActiveSkillPolearm.Value);
+            SkillActive.Add(Skills.SkillType.Run, ActiveSkillRun.Value);
+            SkillActive.Add(SkillMan.Sailing, ActiveSkillSail.Value);
+            SkillActive.Add(Skills.SkillType.Spears, ActiveSkillSpear.Value);
+            SkillActive.Add(Skills.SkillType.Sneak, ActiveSkillSneak.Value);
+            SkillActive.Add(Skills.SkillType.Swim, ActiveSkillSwim.Value);
+            SkillActive.Add(Skills.SkillType.Swords, ActiveSkillSword.Value);
+            SkillActive.Add(Skills.SkillType.WoodCutting, ActiveSkillWood.Value);
+        }
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Generic Functions
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region genericfunc
+        #region configdef
+        public static ConfigEntry<float> DropNewItemThreshold;
+        public static ConfigEntry<float> MaxSkillLevel;
+        public static ConfigEntry<float> DisplayExperienceThreshold;
+        #endregion configdef
+
+        public static bool IsSkillActive(Skills.SkillType skill)
+        {
+            return SkillActive[skill];
+        }
+
+        public static float GetDropItemThreshold()
+        {
+            return PerToMod(DropNewItemThreshold);
+        }
+
+        private static float PerToMult(ConfigEntry<float> config, bool redux = false)
+        {
+            float mult = config.Value;
+            mult /= 100;
+            if (redux)
+                mult = 1 - mult;
+            else
+                mult++;
+            //Jotunn.Logger.LogMessage($"Reading out {config.Definition.Key} as {mult}");
+            return mult;
+        }
+
+        private static float PerToMod(ConfigEntry<float> config, bool redux = false)
+        {
+            float mod = config.Value;
+            mod /= 100;
+            if (redux)
+                mod = 1 - mod;
+
+            // Jotunn.Logger.LogMessage($"Reading out {config.Definition.Key} as {mod}");
+            return mod;
+        }
+
+        //Written by fritz to create a quick and dirty sin curve.
+        //Pass in a number between 0 and 1 and get a curved number between 0 and 1 back
+        public static float ShapeFactorSin(float x)
+        {
+            x = Mathf.Clamp01(x);
+            if (x <= 0.5)
+            {
+                return x;
+            }
+            //Jotunn.Logger.LogMessage($"{x} is being sin curved into {Mathf.Sin(Mathf.Lerp(0f, Mathf.PI / 2, x))}");
+            return Mathf.Sin(Mathf.Lerp(0f, Mathf.PI / 2, x));
+        }
+
+        #endregion genericfunc
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                    Weapons
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region weapons
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             WEAPONS
+        ///              
+        ///                             Axes
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region axe
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillAxe;
+        public static ConfigEntry<float> WeaponBXPAxeRange;
+        public static ConfigEntry<float> WeaponBXPAxeTreeAmount;
+        public static ConfigEntry<float> AxeDamagePercentMin;
+        public static ConfigEntry<float> AxeDamagePercentMax;
+        public static ConfigEntry<float> AxeStaminaReduxMin;
+        public static ConfigEntry<float> AxeStaminaReduxMax;
+        public static ConfigEntry<float> AxeStaminaPerLevel;
+        public static ConfigEntry<float> AxeChopDamagePercentMin;
+        public static ConfigEntry<float> AxeChopDamagePercentMax;
+        public static ConfigEntry<float> AxeCarryCapacityMin;
+        public static ConfigEntry<float> AxeCarryCapacityMax;
+        #endregion configdef
+
+        private static void InitAxeConfigs(ConfigFile cfg)
+        {
+            ActiveSkillAxe = cfg.Bind("Generic.Active", "Axes", true,
+                    "Whether or not to activate king's skills version of the axes skill");
+
+            AxeDamagePercentMin = cfg.Bind("Axe.Effect", "Damage Min", 0f,
+                "% extra damage done with axes at level 0");
+            AxeDamagePercentMax = cfg.Bind("Axe.Effect", "Damage Max", 200f,
+                "% extra damage done with axes at level 100");
+            AxeStaminaReduxMin = cfg.Bind("Axe.Effect", "Stamina Reduction Min", 0f,
+                "% less stamina usage for axes at level 0");
+            AxeStaminaReduxMax = cfg.Bind("Axe.Effect", "Stamina Reduction Max", 60f,
+                "% less stamina usage for axes at level 100");
+            AxeStaminaPerLevel = cfg.Bind("Axe.Effect", "Base Stamina Gain per Level", .44f,
+                "Flat amount of base stamina gained per level in axe");
+            AxeChopDamagePercentMin = cfg.Bind("Axe.Effect", "Woodcutting Damage Min", 0f,
+                "% extra woodcutting damage done at level 0");
+            AxeChopDamagePercentMax = cfg.Bind("Axe.Effect", "Woodcutting Damage Max", 50f,
+                "% extra woodcutting damage done at level 100");
+            AxeCarryCapacityMin = cfg.Bind("Axe.Effect", "Carry Capacity Min", 0f,
+                "Flat extra carrying capacity at level 0");
+            AxeCarryCapacityMax = cfg.Bind("Axe.Effect", "Carry Capacity Max", 250f,
+                "Flat extra carrying capacity at level 100");
+
+            WeaponBXPAxeTreeAmount = cfg.Bind("Weapon.BonusExperience", "Axe Log", 5f,
+                "Flat BXP gained every time you break down a log");
+            WeaponBXPAxeRange = cfg.Bind("Weapon.BonusExperience", "Axe Felling Range", 100f,
+                "Distance to check for axe BXP gain");
+        }
+
+
+        public static float GetAxeDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(AxeDamagePercentMin),
+                PerToMult(AxeDamagePercentMax), skillFactor);
+        }
+        public static float GetAxeStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(AxeStaminaReduxMin, true),
+                PerToMult(AxeStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetAxeChopDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(AxeChopDamagePercentMin),
+                PerToMod(AxeChopDamagePercentMax), skillFactor);
+        }
+        public static float GetAxeStamina(float skillFactor)
+        {
+            return AxeStaminaPerLevel.Value * skillFactor * ConfigManager.MaxSkillLevel.Value;
+        }
+        public static float GetAxeCarryCapacity(float skillFactor)
+        {
+            return Mathf.Lerp(AxeCarryCapacityMin.Value, AxeCarryCapacityMax.Value, skillFactor);
+        }
+
+
+        #endregion axe
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             WEAPONS
+        ///              
+        ///                             Bows
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region bow
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillBow;
+        public static ConfigEntry<float> WeaponBXPBowDistancePercent;
+        public static ConfigEntry<float> BowDamagePercentMin;
+        public static ConfigEntry<float> BowDamagePercentMax;
+        public static ConfigEntry<float> BowStaminaReduxMin;
+        public static ConfigEntry<float> BowStaminaReduxMax;
+        public static ConfigEntry<float> BowVelocityPercentMin;
+        public static ConfigEntry<float> BowVelocityPercentMax;
+        public static ConfigEntry<float> BowDropPercentMin;
+        public static ConfigEntry<float> BowDropPercentMax;
+        #endregion configdef
+
+        public static void InitBowConfigs(ConfigFile cfg)
+        {
+            ActiveSkillBow = cfg.Bind("Generic.Active", "Bows", true,
+                    "Whether or not to activate king's skills version of the bows skill"); ;
 
             //List of all object names that count as bow drops
             BowDropTable.Add("LeatherScraps", 0);
@@ -338,147 +327,686 @@ namespace kingskills
             BowDropTable.Add("WitheredBone", 0);
             BowDropTable.Add("BoneFragments", 0);
 
-            ColorBonusBlue = new Color(0.20f, 0.88f, 0.93f);
-            ColorAscendedGreen = new Color(0.45f, 0.92f, 0.32f);
-            ColorExperienceYellow = new Color(0.98f, 0.96f, 0.23f);
-            ColorTitle = new Color(0.98f, 0.96f, 0.43f);
-            ColorWhite = new Color(1f, 1f, 1f);
-            ColorKingSkills = new Color(0.77f, 0.23f, 0.99f);
-
-            /* Template
-            x = cfg.Bind("g", "t", 0f, 
-                "d");
-             */
-
-
-
-        //
-            PerkExplorationOn = cfg.Bind("Perks", "Perk Exploration", true,
-                    "Whether or not locked perks are hidden from view");
-            PerkOneLVLThreshold = cfg.Bind("Perks", "First Threshold", .5f,
-                    "mod of max level before you unlock the first set of perks");
-            PerkTwoLVLThreshold = cfg.Bind("Perks", "Second Threshold", 1f,
-                    "mod of max level before you unlock the second set of perks");
-            PerkThreeLVLThreshold = cfg.Bind("Perks", "ThirdThreshold", 10f,
-                    "mod of max level before you unlock the third set of perks - NOT IMPLEMENTED");
-            PerkFourLVLThreshold = cfg.Bind("Perks", "FourthThreshold", 10f,
-                    "mod of max level before you unlock the fourth set of perks - NOT IMPLEMENTED");
-
-
-            //Overall Changes
-            MaxSkillLevel = cfg.Bind("Generic", "Max Skill Level", 100f,
-                    "This is the level that all king skills can go up to.");
-            DisplayExperienceThreshold = cfg.Bind("Generic", "Experience Display Threshold", .2f,
-                    "Threshold under which experience earned will not display as a message.");
-            DropNewItemThreshold = cfg.Bind("Generic", "Drop New Item Threshold", 50f,
-                    "% of 1 item needed to generate before you round up to a full item.");
-
-
-
-            //Active skills
-            ActiveSkillAgriculture = cfg.Bind("Generic.Active", "Agriculture", true,
-                    "Whether or not to allow King's agriculture");
-            ActiveSkillAxe = cfg.Bind("Generic.Active", "Axes", true,
-                    "Whether or not to activate king's skills version of the axes skill");
-            ActiveSkillBlock = cfg.Bind("Generic.Active", "Blocking", true,
-                    "Whether or not to activate king's skills version of the blocking skill"); ;
-            ActiveSkillBow = cfg.Bind("Generic.Active", "Bows", true,
-                    "Whether or not to activate king's skills version of the bows skill"); ;
-            ActiveSkillBuilding = cfg.Bind("Generic.Active", "Building", true,
-                    "Whether or not to allow King's building");
-            ActiveSkillClub = cfg.Bind("Generic.Active", "Clubs", true,
-                    "Whether or not to activate king's skills version of the clubs skill"); ;
-            ActiveSkillCooking = cfg.Bind("Generic.Active", "Cooking", true,
-                    "Whether or not to allow King's cooking");
-            ActiveSkillFist = cfg.Bind("Generic.Active", "Fists", true,
-                    "Whether or not to activate king's skills version of the unarmed skill"); ;
-            ActiveSkillJump = cfg.Bind("Generic.Active", "Jump", true,
-                    "Whether or not to activate king's skills version of the jump skill"); ;
-            ActiveSkillKnife = cfg.Bind("Generic.Active", "Knives", true,
-                    "Whether or not to activate king's skills version of the knives skill"); ;
-            ActiveSkillMine = cfg.Bind("Generic.Active", "Mining", true,
-                    "Whether or not to activate king's skills version of the mining skill"); ;
-            ActiveSkillPolearm = cfg.Bind("Generic.Active", "Polearms", true,
-                    "Whether or not to activate king's skills version of the polearms skill"); ;
-            ActiveSkillRun = cfg.Bind("Generic.Active", "Run", true,
-                    "Whether or not to activate king's skills version of the run skill"); ;
-            ActiveSkillSailing = cfg.Bind("Generic.Active", "Sailing", true,
-                    "Whether or not to allow King's sailing");
-            ActiveSkillSpear = cfg.Bind("Generic.Active", "Spear", true,
-                    "Whether or not to activate king's skills version of the spear skill"); ;
-            ActiveSkillSneak = cfg.Bind("Generic.Active", "Sneak", true,
-                    "Whether or not to activate king's skills version of the sneak skill"); ;
-            ActiveSkillSwim = cfg.Bind("Generic.Active", "Swim", true,
-                    "Whether or not to activate king's skills version of the swim skill"); ;
-            ActiveSkillSword = cfg.Bind("Generic.Active", "Swords", true,
-                    "Whether or not to activate king's skills version of the swords skill"); ;
-            ActiveSkillWood = cfg.Bind("Generic.Active", "Woodcutting", true,
-                    "Whether or not to activate king's skills version of the woodcutting skill"); ;
-
-
-
-            //Weapon Swing Experence
-            WeaponXPSwing = cfg.Bind("Experience.Weapons.Swing", "XP Flat", .25f,
-                "Flat experience to be gained on each swing, regardless of hit.");
-
-
-            //Weapon Hold Experience
-            WeaponXPHoldPerTick = cfg.Bind("Experience.Weapons.Hold", "XP/s", .04f,
-                "Flat experience to be gained every second holding any weapon.");
-            WeaponXPHoldTickLength = cfg.Bind("Experience.Weapons.Hold", "Timer", 1.0f,
-                "Seconds between ticks of hold experience.");
-            WeaponXPHoldUnarmedPercent = cfg.Bind("Experience.Weapons.Hold", "Unarmed", 25f,
-                "% of normal hold experience to unarmed when holding nothing. Should be lower than 100% " +
-                "to account for how often a regular player is holding nothing.");
-            
-
-            //Weapon Strike Experience
-            WeaponXPStrikeDamagePercent = cfg.Bind("Experience.Weapons", "XP", 20f,
-                "% modifier to overall experience gained from damage.");
-            WeaponXPStrikeDamageFactor = cfg.Bind("Experience.Weapons", "XP Factor", .24f,
-                "Factor to define the slope of the damage to xp curve.");
-            WeaponXPStrikeDestructiblePercent = cfg.Bind("Experience.Weapons", "Destructible", 15f,
-                "% of experience gained when hit target is non living. Should be lover than 100%");
-            
-
-            //Weapon Bonus experience (BXP)
-            WeaponBXPUnarmedBlock = cfg.Bind("Weapon.BonusExperience", "Unarmed Block", 3f,
-                "Flat BXP gained every time you perform an unarmed block");
-            WeaponBXPClubStagger = cfg.Bind("Weapon.BonusExperience", "Club Stagger", 5f,
-                "Flat BXP gained every time you stagger an enemy with clubs");
-            WeaponBXPSwordStagger = cfg.Bind("Weapon.BonusExperience", "Sword Parry Hit", 3f,
-                "Flat BXP gained every time you hit a staggered enemy with a sword");
-            WeaponBXPKnifeBackstab = cfg.Bind("Weapon.BonusExperience", "Knife Backstab", 10f,
-                "Flat BXP gained every time you get a sneak attack using the knife.");
-            WeaponBXPAxeTreeAmount = cfg.Bind("Weapon.BonusExperience", "Axe Log", 5f,
-                "Flat BXP gained every time you break down a log");
-            WeaponBXPAxeRange = cfg.Bind("Weapon.BonusExperience", "Axe Felling Range", 100f,
-                "Distance to check for axe BXP gain");
-            WeaponBXPSpearThrown = cfg.Bind("Weapon.BonusExperience", "Spear Throw", 10f,
-                "Flat BXP gained every time you hit with a thrown spear");
+            //exp
             WeaponBXPBowDistancePercent = cfg.Bind("Weapon.BonusExperience", "Bow Distance Percent", 50f,
                 "% of distance that becomes bow experience on hit.");
+
+            //effects
+            BowDamagePercentMin = cfg.Bind("Bow.Effect", "Damage Min", 0f,
+                "% extra damage done with bows at level 0");
+            BowDamagePercentMax = cfg.Bind("Bow.Effect", "Damage Max", 150f,
+                "% extra damage done with bows at level 100");
+            BowStaminaReduxMin = cfg.Bind("Bow.Effect", "Stamina Reduction Min", 0f,
+                "% less stamina usage for bows at level 0");
+            BowStaminaReduxMax = cfg.Bind("Bow.Effect", "Stamina Reduction Max", 75f,
+                "% less stamina usage for bows at level 100");
+            BowVelocityPercentMin = cfg.Bind("Bow.Effect", "Velocity Min", 0f,
+                "% extra velocity to fired arrows at level 0");
+            BowVelocityPercentMax = cfg.Bind("Bow.Effect", "Velocity Max", 250f,
+                "% extra velocity to fired arrows at level 100");
+            //BowDrawSpeedModMin = cfg.Bind("Bow.Effect", "Draw Speed Min", 0f, 
+            //    "% extra bow draw speed at level 0");
+            //BowDrawSpeedModMax = cfg.Bind("Bow.Effect", "Draw Speed Max", 0f, 
+            //    "% extra bow draw speed at level 100");
+            BowDropPercentMin = cfg.Bind("Bow.Effect", "Drop rate min", 0f,
+                "% to increase creature drops at level 0");
+            BowDropPercentMax = cfg.Bind("Bow.Effect", "Drop rate max", 100f,
+                "% to increase creature drops at level 100");
+
+        }
+
+        public static float GetWeaponBXPBowDistanceMult()
+        {
+            return PerToMult(WeaponBXPBowDistancePercent);
+        }
+        public static float GetBowDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BowDamagePercentMin),
+                PerToMult(BowDamagePercentMax), skillFactor);
+        }
+        public static float GetBowStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BowStaminaReduxMin, true),
+                PerToMult(BowStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetBowVelocityMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BowVelocityPercentMin),
+                PerToMult(BowVelocityPercentMax), skillFactor);
+        }
+        public static float GetBowDrawSpeed(float skillFactor)
+        {
+            return Mathf.Lerp(BaseBowDrawSpeedMin,
+                BaseBowDrawSpeedMax, skillFactor);
+        }
+        public static float GetBowDropRateMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(BowDropPercentMin),
+                PerToMod(BowDropPercentMax), skillFactor);
+        }
+
+        #endregion bow
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             WEAPONS
+        ///              
+        ///                              Clubs
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region club
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillClub;
+        public static ConfigEntry<float> WeaponBXPClubStagger;
+        public static ConfigEntry<float> ClubDamagePercentMin;
+        public static ConfigEntry<float> ClubDamagePercentMax;
+        public static ConfigEntry<float> ClubStaminaReduxMin;
+        public static ConfigEntry<float> ClubStaminaReduxMax;
+        public static ConfigEntry<float> ClubBluntPercentMin;
+        public static ConfigEntry<float> ClubBluntPercentMax;
+        public static ConfigEntry<float> ClubKnockbackPercentMin;
+        public static ConfigEntry<float> ClubKnockbackPercentMax;
+        public static ConfigEntry<float> ClubStaggerPercentMin;
+        public static ConfigEntry<float> ClubStaggerPercentMax;
+        #endregion configdef
+
+        public static void InitClubConfigs(ConfigFile cfg)
+        {
+
+            ActiveSkillClub = cfg.Bind("Generic.Active", "Clubs", true,
+                    "Whether or not to activate king's skills version of the clubs skill"); ;
+
+            //exp
+            WeaponBXPClubStagger = cfg.Bind("Weapon.BonusExperience", "Club Stagger", 5f,
+                "Flat BXP gained every time you stagger an enemy with clubs");
+
+            //effects
+            ClubDamagePercentMin = cfg.Bind("Club.Effect", "Damage Min", 0f,
+                "% extra damage done with clubs at level 0");
+            ClubDamagePercentMax = cfg.Bind("Club.Effect", "Damage Max", 200f,
+                "% extra damage done with clubs at level 100");
+            ClubStaminaReduxMin = cfg.Bind("Club.Effect", "Stamina Reduction Min", 0f,
+                "% less stamina usage for clubs at level 0");
+            ClubStaminaReduxMax = cfg.Bind("Club.Effect", "Stamina Reduction Max", 50f,
+                "% less stamina usage for clubs at level 100");
+            ClubBluntPercentMin = cfg.Bind("Club.Effect", "Generic Blunt Min", 0f,
+                "% extra blunt damage to ALL weapons at level 0");
+            ClubBluntPercentMax = cfg.Bind("Club.Effect", "Generic Blunt Max", 40f,
+                "% extra blunt damage to ALL weapons at level 100");
+            ClubKnockbackPercentMin = cfg.Bind("Club.Effect", "Generic Knockback Min", 0f,
+                "% extra knockback to ALL weapons at level 0");
+            ClubKnockbackPercentMax = cfg.Bind("Club.Effect", "Generic Knockback Max", 250f,
+                "% extra knockback to ALL weapons at level 100");
+            ClubStaggerPercentMin = cfg.Bind("Club.Effect", "Generic Stagger Min", 0f,
+                "% extra stagger damage to ALL ATTACKS at level 0");
+            ClubStaggerPercentMax = cfg.Bind("Club.Effect", "Generic Stagger Max", 100f,
+                "% extra stagger damage to ALL ATTACKS at level 100");
+
+        }
+
+        public static float GetClubDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(ClubDamagePercentMin),
+                PerToMult(ClubDamagePercentMax), skillFactor);
+        }
+        public static float GetClubStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(ClubStaminaReduxMin, true),
+                PerToMult(ClubStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetClubBluntMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(ClubBluntPercentMin),
+                PerToMult(ClubBluntPercentMax), skillFactor);
+        }
+        public static float GetClubKnockbackMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(ClubKnockbackPercentMin),
+                PerToMult(ClubKnockbackPercentMax), skillFactor);
+        }
+        public static float GetClubStaggerMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(ClubStaggerPercentMin),
+                PerToMult(ClubStaggerPercentMax), skillFactor);
+        }
+
+
+        #endregion club
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             WEAPONS
+        ///              
+        ///                             Fists
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region fist
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillFist;
+        public static ConfigEntry<float> WeaponBXPUnarmedBlock;
+        public static ConfigEntry<float> FistDamagePercentMin;
+        public static ConfigEntry<float> FistDamagePercentMax;
+        public static ConfigEntry<float> FistStaminaReduxMin;
+        public static ConfigEntry<float> FistStaminaReduxMax;
+        public static ConfigEntry<float> FistDamageFlatMin;
+        public static ConfigEntry<float> FistDamageFlatMax;
+        public static ConfigEntry<float> FistBlockArmorMin;
+        public static ConfigEntry<float> FistBlockArmorMax;
+        public static ConfigEntry<float> FistMovespeedPercentMin;
+        public static ConfigEntry<float> FistMovespeedPercentMax;
+        #endregion configdef
+
+        public static void InitFistConfigs(ConfigFile cfg)
+        {
+
+            ActiveSkillFist = cfg.Bind("Generic.Active", "Fists", true,
+                    "Whether or not to activate king's skills version of the unarmed skill"); ;
+
+            //exp
+            WeaponBXPUnarmedBlock = cfg.Bind("Weapon.BonusExperience", "Unarmed Block", 3f,
+                "Flat BXP gained every time you perform an unarmed block");
+
+            //effects
+            FistDamagePercentMin = cfg.Bind("Fist.Effect", "Damage Min", -10f,
+                "% extra damage done with bare fists at level 0");
+            FistDamagePercentMax = cfg.Bind("Fist.Effect", "Damage Max", 120f,
+                "% extra damage done with bare fists at level 100");
+            FistStaminaReduxMin = cfg.Bind("Fist.Effect", "Stamina Reduction Min", 0f,
+                "% less stamina usage for fists at level 0");
+            FistStaminaReduxMax = cfg.Bind("Fist.Effect", "Stamina Reduction Max", 80f,
+                "% less stamina usage for fists at level 100");
+            FistDamageFlatMin = cfg.Bind("Fist.Effect", "Flat Damage Min", -5f,
+                "Flat extra damage at level 0");
+            FistDamageFlatMax = cfg.Bind("Fist.Effect", "Flat Damage Max", 62f,
+                "Flat extra damage at level 100");
+            FistBlockArmorMin = cfg.Bind("Fist.Effect", "Unarmed Block Armor Flat Min", -5f,
+                "Flat extra unarmed block armor at level 0");
+            FistBlockArmorMax = cfg.Bind("Fist.Effect", "Unarmed Block Armor Flat Max", 50f,
+                "Flat extra unarmed block armor at level 100");
+            FistMovespeedPercentMin = cfg.Bind("Fist.Effect", "Movespeed Min", 0f,
+                "% movespeed increase at level 0");
+            FistMovespeedPercentMax = cfg.Bind("Fist.Effect", "Movespeed Max", 50f,
+                "% movespeed increase at level 100");
+        }
+
+        public static float GetFistDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(FistDamagePercentMin),
+                PerToMult(FistDamagePercentMax), skillFactor);
+        }
+        public static float GetFistStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(FistStaminaReduxMin, true),
+                PerToMult(FistStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetFistDamageFlat(float skillFactor)
+        {
+            return Mathf.Lerp(FistDamageFlatMin.Value, FistDamageFlatMax.Value, skillFactor);
+        }
+        public static float GetFistBlockArmor(float skillFactor)
+        {
+            return Mathf.Lerp(FistBlockArmorMin.Value, FistBlockArmorMax.Value, skillFactor);
+        }
+        public static float GetFistMovespeedMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(FistMovespeedPercentMin),
+                PerToMod(FistMovespeedPercentMax), skillFactor);
+        }
+
+
+        #endregion fist
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             WEAPONS
+        ///              
+        ///                             Knives
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region knife
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillKnife;
+        public static ConfigEntry<float> WeaponBXPKnifeBackstab;
+        public static ConfigEntry<float> KnifeDamagePercentMin;
+        public static ConfigEntry<float> KnifeDamagePercentMax;
+        public static ConfigEntry<float> KnifeStaminaReduxMin;
+        public static ConfigEntry<float> KnifeStaminaReduxMax;
+        public static ConfigEntry<float> KnifeBackstabPercentMin;
+        public static ConfigEntry<float> KnifeBackstabPercentMax;
+        public static ConfigEntry<float> KnifeMovespeedPercentMin;
+        public static ConfigEntry<float> KnifeMovespeedPercentMax;
+        public static ConfigEntry<float> KnifePiercePercentMin;
+        public static ConfigEntry<float> KnifePiercePercentMax;
+        #endregion configdef
+
+        public static void InitKnifeConfigs(ConfigFile cfg)
+        {
+            ActiveSkillKnife = cfg.Bind("Generic.Active", "Knives", true,
+                    "Whether or not to activate king's skills version of the knives skill"); ;
+
+            //exp
+            WeaponBXPKnifeBackstab = cfg.Bind("Weapon.BonusExperience", "Knife Backstab", 10f,
+                "Flat BXP gained every time you get a sneak attack using the knife.");
+
+            //Knives
+            KnifeDamagePercentMin = cfg.Bind("Knife.Effect", "Damage Min", 0f,
+                "% extra damage done with knives at level 0");
+            KnifeDamagePercentMax = cfg.Bind("Knife.Effect", "Damage Max", 200f,
+                "% extra damage done with knives at level 100");
+            KnifeStaminaReduxMin = cfg.Bind("Knife.Effect", "Stamina Reduction Min", 0f,
+                "% less stamina usage for knives at level 0");
+            KnifeStaminaReduxMax = cfg.Bind("Knife.Effect", "Stamina Reduction Max", 65f,
+                "% less stamina usage for knives at level 100");
+            KnifeBackstabPercentMin = cfg.Bind("Knife.Effect", "Backstab Min", 0f,
+                "% extra sneak attack damage with ALL weapons at level 0");
+            KnifeBackstabPercentMax = cfg.Bind("Knife.Effect", "Backstab Max", 150f,
+                "% extra sneak attack damage with ALL weapons at level 100");
+            KnifeMovespeedPercentMin = cfg.Bind("Knife.Effect", "Movementspeed Min", 0f,
+                "% movespeed increase at level 0");
+            KnifeMovespeedPercentMax = cfg.Bind("Knife.Effect", "Movementspeed Max", 80f,
+                "% movespeed increase at level 100");
+            KnifePiercePercentMin = cfg.Bind("Knife.Effect", "Generic Pierce Min", 0f,
+                "% extra pierce damage with ALL weapons at level 0");
+            KnifePiercePercentMax = cfg.Bind("Knife.Effect", "Generic Pierce Max", 50f,
+                "% extra pierce damage with ALL weapons at level 0");
+        }
+
+
+        public static float GetKnifeDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(KnifeDamagePercentMin),
+                PerToMult(KnifeDamagePercentMax), skillFactor);
+        }
+        public static float GetKnifeStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(KnifeStaminaReduxMin, true),
+                PerToMult(KnifeStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetKnifeBackstabMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(KnifeBackstabPercentMin),
+                PerToMult(KnifeBackstabPercentMax), skillFactor);
+        }
+        public static float GetKnifeMovespeedMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(KnifeMovespeedPercentMin),
+                PerToMod(KnifeMovespeedPercentMax), skillFactor);
+        }
+        public static float GetKnifePierceMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(KnifePiercePercentMin),
+                PerToMult(KnifePiercePercentMax), skillFactor);
+        }
+
+        #endregion knife
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             WEAPONS
+        ///              
+        ///                             Polearms
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region polearm
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillPolearm;
+        public static ConfigEntry<float> WeaponBXPPolearmDamageMod;
+        public static ConfigEntry<float> PolearmDamagePercentMin;
+        public static ConfigEntry<float> PolearmDamagePercentMax;
+        public static ConfigEntry<float> PolearmStaminaReduxMin;
+        public static ConfigEntry<float> PolearmStaminaReduxMax;
+        public static ConfigEntry<float> PolearmRangeMax;
+        public static ConfigEntry<float> PolearmRangeMin;
+        public static ConfigEntry<float> PolearmArmorMax;
+        public static ConfigEntry<float> PolearmArmorMin;
+        public static ConfigEntry<float> PolearmBlockMax;
+        public static ConfigEntry<float> PolearmBlockMin;
+        #endregion configdef
+
+        public static void InitPolearmConfigs(ConfigFile cfg)
+        {
+            ActiveSkillPolearm = cfg.Bind("Generic.Active", "Polearms", true,
+                    "Whether or not to activate king's skills version of the polearms skill"); ;
+
+            //exp
             WeaponBXPPolearmDamageMod = cfg.Bind("Weapon.BonusExperience", "Polearm Damage Mod", .5f,
                 "amount of bonus experience to get for each damage blocked by armor.");
 
+            //effects
+            PolearmDamagePercentMin = cfg.Bind("Polearm.Effect", "Damage Min", 0f,
+                "% extra damage done with polearms at level 0");
+            PolearmDamagePercentMax = cfg.Bind("Polearm.Effect", "Damage Max", 150f,
+                "% extra damage done with polearms at level 100");
+            PolearmStaminaReduxMin = cfg.Bind("Polearm.Effect", "Stamina Reduction Min", 0f,
+                "% less stamina usage for polearms at level 0");
+            PolearmStaminaReduxMax = cfg.Bind("Polearm.Effect", "Stamina Reduction Max", 70f,
+                "% less stamina usage for polearms at level 100");
+            PolearmRangeMin = cfg.Bind("Polearm.Effect", "Generic Range Min", 0f,
+                "Added units of range to all weapon attacks at level 0");
+            PolearmRangeMax = cfg.Bind("Polearm.Effect", "Generic Range Max", .8f,
+                "Added units of range to all weapon attacks at level 100");
+            PolearmArmorMin = cfg.Bind("Polearm.Effect", "Block Flat Min", 0f,
+                "Flat armor added to character at level 0");
+            PolearmArmorMax = cfg.Bind("Polearm.Effect", "Block Flat Max", 25f,
+                "Flat armor added to character at level 100");
+            PolearmBlockMin = cfg.Bind("Polearm.Effect", "Block Min", 0f,
+                "Flat block armor added to polearms at level 0");
+            PolearmBlockMax = cfg.Bind("Polearm.Effect", "Block Max", 43f,
+                "Flat block armor added to polearms at level 100");
 
-        //Tool experience
-        ToolXPStrikeDamagePercent = cfg.Bind("Experience.Tools", "Tool Damage", 25f,
-                "% of damage done to resources that becomes experience for gathering skills " +
-                "(Woodcutting, Mining)");
-            ToolXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .24f,
-                "Factor to define the slope of the damage to xp curve");
-            ToolBXPWoodStubReward = cfg.Bind("Experience.Tools", "Woodcutting BXP for Stump", 20f,
-                "The amount of experience you get for breaking a stump");
+        }
+
+        public static float GetPolearmDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(PolearmDamagePercentMin),
+                PerToMult(PolearmDamagePercentMax), skillFactor);
+        }
+        public static float GetPolearmStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(PolearmStaminaReduxMin, true),
+                PerToMult(PolearmStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetPolearmRange(float skillFactor)
+        {
+            return Mathf.Lerp(PolearmRangeMin.Value, PolearmRangeMax.Value, skillFactor);
+        }
+        public static float GetPolearmArmor(float skillFactor)
+        {
+            return Mathf.Lerp(PolearmArmorMin.Value, PolearmArmorMax.Value, skillFactor);
+        }
+        public static float GetPolearmBlock(float skillFactor)
+        {
+            return Mathf.Lerp(PolearmBlockMin.Value, PolearmBlockMax.Value, skillFactor);
+        }
 
 
-            //Block experience
+        #endregion polearm
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             WEAPONS
+        ///              
+        ///                             Spears
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region spear
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillSpear;
+        public static ConfigEntry<float> WeaponBXPSpearThrown;
+        public static ConfigEntry<float> SpearDamagePercentMin;
+        public static ConfigEntry<float> SpearDamagePercentMax;
+        public static ConfigEntry<float> SpearStaminaReduxMin;
+        public static ConfigEntry<float> SpearStaminaReduxMax;
+        public static ConfigEntry<float> SpearVelocityPercentMax;
+        public static ConfigEntry<float> SpearVelocityPercentMin;
+        public static ConfigEntry<float> SpearProjectilePercentMax;
+        public static ConfigEntry<float> SpearProjectileDamagePercentMin;
+        public static ConfigEntry<float> SpearBlockArmorMax;
+        public static ConfigEntry<float> SpearBlockArmorMin;
+        #endregion configdef
+
+        public static void InitSpearConfigs(ConfigFile cfg)
+        {
+
+            ActiveSkillSpear = cfg.Bind("Generic.Active", "Spear", true,
+                    "Whether or not to activate king's skills version of the spear skill"); ;
+
+            //exp
+            WeaponBXPSpearThrown = cfg.Bind("Weapon.BonusExperience", "Spear Throw", 10f,
+                "Flat BXP gained every time you hit with a thrown spear");
+
+            //effect
+            SpearDamagePercentMin = cfg.Bind("Spear.Effect", "Damage Min", 0f,
+                "% extra damage done with spears at level 0");
+            SpearDamagePercentMax = cfg.Bind("Spear.Effect", "Damage Max", 200f,
+                "% extra damage done with spears at level 100");
+            SpearStaminaReduxMin = cfg.Bind("Spear.Effect", "Stamina Reduction Min", 0f,
+                "% less stamina usage for spears at level 0");
+            SpearStaminaReduxMax = cfg.Bind("Spear.Effect", "Stamina Reduction Max", 70f,
+                "% less stamina usage for spears at level 100");
+            SpearVelocityPercentMin = cfg.Bind("Spear.Effect", "Thrown Velocity Min", 0f,
+                "% extra velocity on thrown weapons at level 0");
+            SpearVelocityPercentMax = cfg.Bind("Spear.Effect", "Thrown Velocity Max", 300f,
+                "% extra velocity on thrown weapons at level 100");
+            SpearProjectileDamagePercentMin = cfg.Bind("Spear.Effect", "Thrown Damage Percent Min", 0f,
+                "% extra damage done with thrown weapons at level 0");
+            SpearProjectilePercentMax = cfg.Bind("Spear.Effect", "Thrown Damage Percent Max", 200f,
+                "% extra damage done with thrown weapons at level 100");
+            SpearBlockArmorMin = cfg.Bind("Spear.Effect", "Generic Block Armor Min", 0f,
+                "Flat block armor always applied at level 0");
+            SpearBlockArmorMax = cfg.Bind("Spear.Effect", "Generic Block Armor Max", 25f,
+                "Flat block armor always applied at level 100");
+        }
+
+        public static float GetSpearDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SpearDamagePercentMin),
+                PerToMult(SpearDamagePercentMax), skillFactor);
+        }
+        public static float GetSpearStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SpearStaminaReduxMin, true),
+                PerToMult(SpearStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetSpearVelocityMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SpearVelocityPercentMin),
+                PerToMult(SpearVelocityPercentMax), skillFactor);
+        }
+        public static float GetSpearProjectileDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SpearProjectileDamagePercentMin),
+                PerToMult(SpearProjectilePercentMax), skillFactor);
+        }
+        public static float GetSpearBlockArmor(float skillFactor)
+        {
+            return Mathf.Lerp(SpearBlockArmorMin.Value, SpearBlockArmorMax.Value, skillFactor);
+        }
+
+        #endregion spear
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             WEAPONS
+        ///              
+        ///                             Swords
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region sword
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillSword;
+        public static ConfigEntry<float> WeaponBXPSwordStagger;
+        public static ConfigEntry<float> SwordDamagePercentMin;
+        public static ConfigEntry<float> SwordDamagePercentMax;
+        public static ConfigEntry<float> SwordStaminaReduxMin;
+        public static ConfigEntry<float> SwordStaminaReduxMax;
+        public static ConfigEntry<float> SwordParryPercentMin;
+        public static ConfigEntry<float> SwordParryPercentMax;
+        public static ConfigEntry<float> SwordSlashPercentMin;
+        public static ConfigEntry<float> SwordSlashPercentMax;
+        public static ConfigEntry<float> SwordDodgeStaminaReduxMin;
+        public static ConfigEntry<float> SwordDodgeStaminaReduxMax;
+        #endregion configdef
+
+        public static void InitSwordConfigs(ConfigFile cfg)
+        {
+
+            ActiveSkillSword = cfg.Bind("Generic.Active", "Swords", true,
+                    "Whether or not to activate king's skills version of the swords skill"); ;
+            //exp
+            WeaponBXPSwordStagger = cfg.Bind("Weapon.BonusExperience", "Sword Parry Hit", 3f,
+                "Flat BXP gained every time you hit a staggered enemy with a sword");
+
+
+            //effects
+            SwordDamagePercentMin = cfg.Bind("Sword.Effect", "Damage Min", 0f,
+                "% extra damage done with swords at level 0");
+            SwordDamagePercentMax = cfg.Bind("Sword.Effect", "Damage Max", 200f,
+                "% extra damage done with swords at level 100");
+            SwordStaminaReduxMin = cfg.Bind("Sword.Effect", "Stamina Reduction Min", 0f,
+                "% less stamina usage for swords at level 0");
+            SwordStaminaReduxMax = cfg.Bind("Sword.Effect", "Stamina Reduction Max", 60f,
+                "% less stamina usage for swords at level 100");
+            SwordParryPercentMin = cfg.Bind("Sword.Effect", "Generic Parry Min", 0f,
+                "% extra parry bonus for ALL weapons at level 0");
+            SwordParryPercentMax = cfg.Bind("Sword.Effect", "Generic Parry Max", 80f,
+                "% extra parry bonus for ALL weapons at level 100");
+            SwordSlashPercentMin = cfg.Bind("Sword.Effect", "Generic Slash Min", 0f,
+                "% extra slash damage for ALL weapons at level 0");
+            SwordSlashPercentMax = cfg.Bind("Sword.Effect", "Generic Slash Max", 50f,
+                "% extra slash damage for ALL weapons at level 100");
+            SwordDodgeStaminaReduxMin = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 0f,
+                "% less stamina cost to dodge roll at level 0");
+            SwordDodgeStaminaReduxMax = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Max", 40f,
+                "% less stamina cost to dodge roll at level 0");
+        }
+
+
+        public static float GetSwordDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SwordDamagePercentMin),
+                PerToMult(SwordDamagePercentMax), skillFactor);
+        }
+        public static float GetSwordStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SwordDodgeStaminaReduxMin, true),
+                PerToMult(SwordDodgeStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetSwordParryMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SwordParryPercentMin),
+                PerToMult(SwordParryPercentMax), skillFactor);
+        }
+        public static float GetSwordSlashMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SwordSlashPercentMin),
+                PerToMult(SwordSlashPercentMax), skillFactor);
+        }
+        public static float GetSwordDodgeStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SwordDodgeStaminaReduxMin, true),
+                PerToMult(SwordDodgeStaminaReduxMax, true), skillFactor);
+        }
+
+        #endregion sword
+
+        #endregion weapons
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                    Skills
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region skills
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             SKILLS
+        ///              
+        ///                             Agriculture
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region botany
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillBotany;
+        public static ConfigEntry<float> AgricultureYieldMin;
+        public static ConfigEntry<float> AgricultureYieldMax;
+        public static ConfigEntry<float> AgricultureGrowReduxMin;
+        public static ConfigEntry<float> AgricultureGrowReduxMax;
+        public static ConfigEntry<float> AgricultureFQMin;
+        public static ConfigEntry<float> AgricultureFQMax;
+        public static ConfigEntry<float> AgricultureHealthRegainMin;
+        public static ConfigEntry<float> AgricultureHealthRegainMax;
+        #endregion configdef
+
+        private static void InitBotanyConfig(ConfigFile cfg)
+        {
+            ActiveSkillBotany = cfg.Bind("Generic.Active", "Agriculture", true,
+                    "Whether or not to allow King's agriculture");
+
+            //list of plant experience bounties here
+            //
+
+
+            //effects
+            AgricultureYieldMin = cfg.Bind("Agriculture.Effect", "Yield Min", 0f,
+            "% increase to yield of plants at level 0");
+            AgricultureYieldMax = cfg.Bind("Agriculture.Effect", "Yield Max", 250f,
+            "% increase to yield of plants at level 100");
+            AgricultureGrowReduxMin = cfg.Bind("Agriculture.Effect", "Grow Time Reduction Min", -10f,
+            "% less time on plant grow timers after you pick or plant at level 0");
+            AgricultureGrowReduxMax = cfg.Bind("Agriculture.Effect", "Grow Time Reduction Max", 75f,
+            "% less time on plant grow timers after you pick or plant at level 100");
+            AgricultureFQMin = cfg.Bind("Agriculture.Effect", "Food Quality Min", -10f,
+            "% average food quality of harvested plants at level 0");
+            AgricultureFQMax = cfg.Bind("Agriculture.Effect", "Food Quality Min", 35f,
+            "% average food quality of harvested plants at level 100");
+            AgricultureHealthRegainMin = cfg.Bind("Agriculture.Effect", "Health Regain Min", 0f,
+            "Amount of health regained each time you harvest a plant at level 0");
+            AgricultureHealthRegainMax = cfg.Bind("Agriculture.Effect", "Health Regain Max", 10f,
+            "Amount of health regained each time you harvest a plant at levle 100");
+
+        }
+
+
+        public static float GetAgricultureYieldMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(AgricultureYieldMin), 
+                PerToMult(AgricultureYieldMax), skillFactor);
+        }
+        public static float GetAgricultureGrowTimeRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(AgricultureGrowReduxMin, true), 
+                PerToMult(AgricultureGrowReduxMax, true), skillFactor);
+        }
+        public static float GetAgricultureFoodQualityMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(AgricultureFQMin), 
+                PerToMult(AgricultureFQMax), skillFactor);
+        }
+        public static float GetAgricultureHealthRegain(float skillFactor)
+        {
+            return Mathf.Lerp(AgricultureHealthRegainMin.Value, 
+                AgricultureHealthRegainMax.Value, skillFactor);
+        }
+        //public static float Get(float skillFactor)
+        //{
+        //    return Mathf.Lerp(PerToMult(), PerToMult(), skillFactor);
+        //}
+
+        #endregion botany
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             Skills
+        ///              
+        ///                             Blocking
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region block
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillBlock;
+        public static ConfigEntry<float> BlockXPPercent;
+        public static ConfigEntry<float> BlockXPParryPercent;
+        public static ConfigEntry<float> BlockFlatPowerMin;
+        public static ConfigEntry<float> BlockFlatPowerMax;
+        public static ConfigEntry<float> BlockPowerPercentMin;
+        public static ConfigEntry<float> BlockPowerPercentMax;
+        public static ConfigEntry<float> BlockStaminaReduxMin;
+        public static ConfigEntry<float> BlockStaminaReduxMax;
+        public static ConfigEntry<float> BlockHealthPerLevel;
+        #endregion configdef
+
+        public static void InitBlockConfigs(ConfigFile cfg)
+        {
+            ActiveSkillBlock = cfg.Bind("Generic.Active", "Blocking", true,
+                    "Whether or not to activate king's skills version of the blocking skill"); ;
+
+            //experience
             BlockXPPercent = cfg.Bind("Block.Experience", "XP", 15f,
                 "% of damage blocked that turns into experience");
             BlockXPParryPercent = cfg.Bind("Block.Experience", "Parry", 200f,
                 "% extra experience earned when parrying an attack");
 
-            //Block effects
+            //effects
             BlockFlatPowerMin = cfg.Bind("Block.Effect", "Block Armor Flat Min", 0f,
                 "This flat value is added to block armor at level 0");
             BlockFlatPowerMax = cfg.Bind("Block.Effect", "Block Armor Flat Max", 50f,
@@ -491,9 +1019,307 @@ namespace kingskills
                 "% less stamina to block at level 0");
             BlockStaminaReduxMax = cfg.Bind("Block.Effect", "Stamina Reduction Max", 50f,
                 "% less stamina to block at level 100");
-            BlockHealthPerLevel= cfg.Bind("Block.Effect", "Health", .5f,
+            BlockHealthPerLevel = cfg.Bind("Block.Effect", "Health", .5f,
                 "flat increase to max health per level of block");
+        }
 
+
+        public static float GetVanillaBlockMult(float skillFactor)
+        {
+            return 1f + skillFactor * .5f;
+        }
+        public static float GetBlockExpMult()
+        {
+            return PerToMult(BlockXPPercent);
+        }
+        public static float GetBlockParryExpMult()
+        {
+            return PerToMult(BlockXPParryPercent);
+        }
+        public static float GetBlockStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BlockStaminaReduxMin, true),
+                PerToMult(BlockStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetBlockPowerFlat(float skillFactor)
+        {
+            return Mathf.Lerp(BlockFlatPowerMin.Value,
+                BlockFlatPowerMax.Value, skillFactor);
+        }
+        public static float GetBlockPowerMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BlockPowerPercentMin),
+                PerToMult(BlockPowerPercentMax), skillFactor);
+        }
+        public static float GetBlockHealth(float skillFactor)
+        {
+            return BlockHealthPerLevel.Value * MaxSkillLevel.Value * skillFactor;
+        }
+
+        #endregion block
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             SKILLS
+        ///              
+        ///                             Building
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region build
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillBuild;
+        public static ConfigEntry<float> BuildXPPerPiece;
+        public static ConfigEntry<float> BuildXPRepairMod;
+        public static ConfigEntry<float> BuildXPDamageReceivedMod;
+        public static ConfigEntry<float> BuildXPDamageDoneMod;
+        public static ConfigEntry<float> BuildHealthMin;
+        public static ConfigEntry<float> BuildHealthMax;
+        public static ConfigEntry<float> BuildStabilityMin;
+        public static ConfigEntry<float> BuildStabilityMax;
+        public static ConfigEntry<float> BuildDamageMin;
+        public static ConfigEntry<float> BuildDamageMax;
+        public static ConfigEntry<float> BuildWNTReduxMin;
+        public static ConfigEntry<float> BuildWNTReduxMax;
+        public static ConfigEntry<float> BuildFreeChanceMin;
+        public static ConfigEntry<float> BuildFreeChanceMax;
+        public static ConfigEntry<float> BuildFreeChanceMinLevel;
+        public static ConfigEntry<float> BuildFreeChanceFactor;
+        public static ConfigEntry<float> BuildStaminaReduxMin;
+        public static ConfigEntry<float> BuildStaminaReduxMax;
+        #endregion configdef
+
+        private static void InitBuildConfig(ConfigFile cfg)
+        {
+            ActiveSkillBuild = cfg.Bind("Generic.Active", "Building", true,
+                    "Whether or not to allow King's building");
+
+            BuildXPPerPiece = cfg.Bind("Build.Experience", "Per Piece", .8f,
+                    "How much experience for placed build piece");
+            BuildXPRepairMod = cfg.Bind("Build.Experience", "Repair Mod", .5f,
+                    "Amount of experience for each point of repaired damage");
+            BuildXPDamageReceivedMod = cfg.Bind("Build.Experience", "Damage Taken Mod", .2f,
+                    "Amount of experience for each point of damage taken by buildings");
+            BuildXPDamageDoneMod = cfg.Bind("Build.Experience", "Damage Done Mod", .9f,
+                    "Amount of experience for each point of damage done by buildings");
+
+            BuildHealthMin = cfg.Bind("Build.Effect", "Health Min", 0f,
+                    "% increase to building health at level 0");
+            BuildHealthMax = cfg.Bind("Build.Effect", "Health Max", 150f,
+                    "% increase to building health at level 100");
+            BuildStabilityMin = cfg.Bind("Build.Effect", "Stability Min", -15f,
+                    "% increase to building stability at level 0");
+            BuildStabilityMax = cfg.Bind("Build.Effect", "Stability Max", 100f,
+                    "% increase to building stability at level 100");
+            BuildDamageMin = cfg.Bind("Build.Effect", "Damage Min", 0f,
+                    "% increase to building damage at level 0");
+            BuildDamageMax = cfg.Bind("Build.Effect", "Damage Max", 300f,
+                    "% increase to building damage at level 0");
+            BuildWNTReduxMin = cfg.Bind("Build.Effect", "WNT Redux Min", 0f,
+                    "% less damage taken by buildings from wear and tear at level 0");
+            BuildWNTReduxMax = cfg.Bind("Build.Effect", "WNT Redux Max", 65f,
+                    "% less damage taken by buildings from wear and tear at level 100");
+            BuildFreeChanceMin = cfg.Bind("Build.Effect", "Free Chance Min", 0f,
+                    "% chance to build a piece for free at minimum level");
+            BuildFreeChanceMax = cfg.Bind("Build.Effect", "Free Chance Max", 35f,
+                    "% chance to build a piece for free at level 100");
+            BuildFreeChanceFactor = cfg.Bind("Build.Effect", "Free Chance Factor", .24f,
+                    "Factor for defining the slope of the free chance curve. Like most factors, should be below .8f");
+            BuildFreeChanceMinLevel = cfg.Bind("Build.Effect", "Free Chance Level", 20f,
+                    "Smallest level at which free chance curve begins");
+            BuildStaminaReduxMin = cfg.Bind("Build.Effect", "Stamina Redux Min", 0f,
+                    "% reduction in stamina costs at level 0");
+            BuildStaminaReduxMax = cfg.Bind("Build.Effect", "Stamina Redux Max", 82f,
+                    "% reduction in stamina costs at level 100");
+        }
+
+
+
+        public static float GetBuildingHealthMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BuildHealthMin), 
+                PerToMult(BuildHealthMax), skillFactor);
+        }
+        public static float GetBuildingStabilityMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BuildStabilityMin), 
+                PerToMult(BuildStabilityMax), skillFactor);
+        }
+        public static float GetBuildingDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BuildDamageMin), 
+                PerToMult(BuildDamageMax), skillFactor);
+        }
+        public static float GetBuildingWNTRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BuildWNTReduxMin, true), 
+                PerToMult(BuildWNTReduxMax, true), skillFactor);
+        }
+        public static float GetFCMinLevelAsMod()
+        {
+            return BuildFreeChanceMinLevel.Value / MaxSkillLevel.Value;
+        }
+        public static float GetBuildingFreeMod(float skillFactor)
+        {
+            //This gets an exponential curve that doesn't start until the minimum level
+            return Mathf.Lerp(PerToMod(BuildFreeChanceMin), PerToMod(BuildFreeChanceMax), 
+                Mathf.Pow(skillFactor - GetFCMinLevelAsMod(), BuildFreeChanceFactor.Value));
+        }
+        public static float GetBuildingStaminaRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BuildStaminaReduxMin, true), 
+                PerToMult(BuildStaminaReduxMax, true), skillFactor);
+        }
+        /*
+        public static float Get(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(), PerToMult(), skillFactor);
+        }
+        public static float Get(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(), PerToMult(), skillFactor);
+        }
+        */
+
+        #endregion build
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             SKILLS
+        ///              
+        ///                             Cooking
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region cook
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillCook;
+        public static ConfigEntry<float> CookingXPStart;
+        public static ConfigEntry<float> CookingXPFinish;
+        public static ConfigEntry<float> CookingXPTierBonus;
+        public static ConfigEntry<float> CookingXPStatMod;
+        public static ConfigEntry<float> CookingAverageFQMin;
+        public static ConfigEntry<float> CookingAverageFQMax;
+        public static ConfigEntry<float> CookingFQRangeMin;
+        public static ConfigEntry<float> CookingFQRangeMax;
+        public static ConfigEntry<float> CookingFQRangeTimingPercent;
+        public static ConfigEntry<float> CookingTimeReduxMin;
+        public static ConfigEntry<float> CookingTimeReduxMax;
+        public static ConfigEntry<float> CookingFermentTimeReduxMin;
+        public static ConfigEntry<float> CookingFermentTimeReduxMax;
+        #endregion configdef
+
+        private static void InitCookConfig(ConfigFile cfg)
+        {
+            ActiveSkillCook = cfg.Bind("Generic.Active", "Cooking", true,
+                    "Whether or not to allow King's cooking");
+
+
+            CookingXPStart = cfg.Bind("Cooking.Experience", "Start", .4f,
+                    "How much experience for a started project");
+            CookingXPFinish = cfg.Bind("Cooking.Experience", "Finish", .8f,
+                    "How much experience for successfully cooking a project");
+            CookingXPTierBonus = cfg.Bind("Cooking.Experience", "t", 25f,
+                    "% increase in exp gained per tier level of cooking machine");
+            CookingXPStatMod = cfg.Bind("Cooking.Experience", "t", .3f,
+                    "Amount of experience gained per health and stamina of eaten food.");
+
+            CookingAverageFQMin = cfg.Bind("Cooking.Effect", "Average FQ Min", 0f,
+                    "% of average food quality at level 0");
+            CookingAverageFQMax = cfg.Bind("Cooking.Effect", "Average FQ Max", 100f,
+                    "% of average food quality at level 100");
+            CookingFQRangeMin = cfg.Bind("Cooking.Effect", "FQ Range Min", 60f,
+                    "% range of possible food quality values at level 0");
+            CookingFQRangeMax = cfg.Bind("Cooking.Effect", "FQ Range Max", 10f,
+                    "% range of possible food quality values at level 100");
+            CookingFQRangeTimingPercent = cfg.Bind("Cooking.Effect", "FQ Range From Timing", 30f,
+                    "% of the range that can be controlled with timing. the rest is random based on skill level");
+            CookingTimeReduxMin = cfg.Bind("Cooking.Effect", "Time Redux Min", -20f,
+                    "% reduction in cooking times at level 0");
+            CookingTimeReduxMax = cfg.Bind("Cooking.Effect", "Time Redux Max", 60f,
+                    "% reduction in cooking times at level 100");
+            CookingFermentTimeReduxMin = cfg.Bind("Cooking.Effect", "Fermentation Redux Min", 0f,
+                    "% reduction in fermentation times at level 0");
+            CookingFermentTimeReduxMax = cfg.Bind("Cooking.Effect", "Fermentation Redux Min", 75f,
+                    "% reduction in fermentation times at level 100");
+
+        }
+
+
+        public static float GetCookingXP(float kitchenTier = 0f, bool start = true)
+        {
+            float XP = CookingXPFinish.Value;
+            if (start)
+                XP = CookingXPStart.Value;
+
+            return XP * (kitchenTier * PerToMod(CookingXPTierBonus));
+        }
+        public static float GetCookingAverageFoodQualityMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(CookingAverageFQMin), 
+                PerToMod(CookingAverageFQMax), skillFactor);
+        }
+        public static float GetCookingFoodQualityRangeMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(CookingFQRangeMin), 
+                PerToMod(CookingFQRangeMax), skillFactor);
+        }
+        //Timing should be a number between 0 and 1 that reflects how close to perfect
+        //the timing was, 1 being right on the money
+        public static float GetCookingRandomFQ(float skillFactor, float timing)
+        {
+            float baseQ = GetCookingAverageFoodQualityMod(skillFactor);
+            float range = GetCookingFoodQualityRangeMod(skillFactor)/2;
+            float timingMod = PerToMod(CookingFQRangeTimingPercent);
+            float randomFactor = UnityEngine.Random.Range(0, 1);
+
+            //the change to the overall quality is based (timingPercent)% on the timing,
+            //and the rest on random chance. 
+            float qualityChange = Mathf.Lerp(-range, range, (timing * timingMod) +
+                randomFactor * (1f - timingMod));
+
+            return baseQ + qualityChange;
+        }
+        public static float GetCookingTimeRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(CookingTimeReduxMin, true), 
+                PerToMult(CookingTimeReduxMax, true), skillFactor);
+        }
+        public static float GetCookingFermentTimeRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(CookingFermentTimeReduxMin, true), 
+                PerToMult(CookingFermentTimeReduxMin, true), skillFactor);
+        }
+
+        #endregion cook
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             SKILLS
+        ///              
+        ///                             Jumping
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region jump
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillJump;
+        public static ConfigEntry<float> JumpFallDamageThresholdMin;
+        public static ConfigEntry<float> JumpFallDamageThresholdMax;
+        public static ConfigEntry<float> JumpFallDamageReduxMin;
+        public static ConfigEntry<float> JumpFallDamageReduxMax;
+        public static ConfigEntry<float> JumpForcePercentMin;
+        public static ConfigEntry<float> JumpForcePercentMax;
+        public static ConfigEntry<float> JumpStaminaReduxMin;
+        public static ConfigEntry<float> JumpStaminaReduxMax;
+        public static ConfigEntry<float> JumpForwardForcePercentMin;
+        public static ConfigEntry<float> JumpForwardForcePercentMax;
+        public static ConfigEntry<float> JumpTiredModMin;
+        public static ConfigEntry<float> JumpTiredModMax;
+        public static ConfigEntry<float> JumpXPPercent;
+        #endregion configdef
+
+        public static void InitJumpConfigs(ConfigFile cfg)
+        {
+            ActiveSkillJump = cfg.Bind("Generic.Active", "Jump", true,
+                    "Whether or not to activate king's skills version of the jump skill"); ;
 
             //Jump Experience
             JumpXPPercent = cfg.Bind("Jump.Experience", "Jump Experience Mod", 53f,
@@ -522,32 +1348,194 @@ namespace kingskills
             JumpStaminaReduxMax = cfg.Bind("Jump.Effect", "Stamina Cost Max", 60f,
                 "% less stamina cost to jump at level 100");
             JumpTiredModMin = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Min", 0f,
-                "% jump force added to the base game's tired factor, which reduces your jump force when out of stamina, at level 0");
+                "% jump force added to the base game's tired factor, which " +
+                "reduces your jump force when out of stamina, at level 0");
             JumpTiredModMax = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Max", 20f,
-                "% jump force added to the base game's tired factor, which reduces your jump force when out of stamina, at level 100");
+                "% jump force added to the base game's tired factor, which " +
+                "reduces your jump force when out of stamina, at level 100");
+
+        }
+
+        public static float GetFallDamageThreshold(float skillFactor)
+        {
+            return Mathf.Lerp(JumpFallDamageThresholdMin.Value,
+                JumpFallDamageThresholdMax.Value, skillFactor);
+        }
+        public static float GetFallDamageRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(JumpFallDamageReduxMin, true),
+                PerToMult(JumpFallDamageReduxMax, true), skillFactor);
+        }
+
+        public static float GetJumpForceMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(JumpForcePercentMin),
+                PerToMult(JumpForcePercentMax), skillFactor);
+        }
+        public static float GetJumpForwardForceMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(JumpForwardForcePercentMin),
+                PerToMult(JumpForwardForcePercentMax), skillFactor);
+        }
+        public static float GetJumpStaminaRedux(float skillFactor)
+        {
+            /*
+            Jotunn.Logger.LogMessage($"Jump stamina reduction. Reading level as" +
+                $"{skillFactor}. The two possible clamps are {JumpStaminaReduxMin.Value}" +
+                $"and {JumpStaminaReduxMax.Value}. Using PerToMult on both gives me" +
+                $"{PerToMult(JumpStaminaReduxMin, true)} to {PerToMult(JumpStaminaReduxMax, true)}." +
+                $"Based on that, my LERP is returning this number as " +
+                $"{Mathf.Lerp(PerToMult(JumpStaminaReduxMin, true),PerToMult(JumpStaminaReduxMax, true), skillFactor)}");
+            */
+            return Mathf.Lerp(PerToMult(JumpStaminaReduxMin, true),
+                PerToMult(JumpStaminaReduxMax, true), skillFactor);
+        }
+        public static float GetJumpTiredMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(JumpTiredModMin),
+                PerToMod(JumpTiredModMax), skillFactor);
+        }
+        public static float GetJumpXPMod()
+        {
+            return PerToMod(JumpXPPercent);
+        }
+
+        #endregion jump
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             SKILLS
+        ///              
+        ///                             Mining
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region mine
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillMine;
+        public static ConfigEntry<float> MiningPickDamagePercentMin;
+        public static ConfigEntry<float> MiningPickDamagePercentMax;
+        public static ConfigEntry<float> MiningStaminaRebateMin;
+        public static ConfigEntry<float> MiningStaminaRebateMax;
+        public static ConfigEntry<float> MiningDropPercentMin;
+        public static ConfigEntry<float> MiningDropPercentMax;
+        public static ConfigEntry<float> MiningRegenHealthMin;
+        public static ConfigEntry<float> MiningRegenHealthMax;
+        public static ConfigEntry<float> MiningCarryCapacityMin;
+        public static ConfigEntry<float> MiningCarryCapacityMax;
+        #endregion configdef
+
+        public static void InitMineConfigs(ConfigFile cfg)
+        {
+            ActiveSkillMine = cfg.Bind("Generic.Active", "Mining", true,
+                    "Whether or not to activate king's skills version of the mining skill"); ;
+
+            //List of all object names that count as mining drops
+            MiningDropTable.Add("CopperOre", 0);
+            MiningDropTable.Add("IronScrap", 0);
+            MiningDropTable.Add("Obsidian", 0);
+            MiningDropTable.Add("SilverOre", 0);
+            MiningDropTable.Add("TinOre", 0);
+            MiningDropTable.Add("Stone", 0);
+            MiningDropTable.Add("Chitin", 0);
+
+            //exp
+            //EAT ROOOOOOCKS
+
+            //effects
+            MiningPickDamagePercentMin = cfg.Bind("Mining.Effect", "Pick Damage Min", 0f,
+                "% increase to pick damage at level 0");
+            MiningPickDamagePercentMax = cfg.Bind("Mining.Effect", "Pick Damage Max", 200f,
+                "% increase to pick damage at level 100");
+            MiningStaminaRebateMin = cfg.Bind("Mining.Effect", "Stamina Rebate Min", 0f,
+                "Flat stamina rebate on each hit of a rock at level 0");
+            MiningStaminaRebateMax = cfg.Bind("Mining.Effect", "Stamina Rebate Max", 7f,
+                "Flat stamina rebate on each hit of a rock at level 100");
+            MiningDropPercentMin = cfg.Bind("Mining.Effect", "Drop rate Min", 0f,
+                "% increase to ore drops at level 0");
+            MiningDropPercentMax = cfg.Bind("Mining.Effect", "Drop rate Max", 100f,
+                "% increase to ore drops at level 100");
+            MiningRegenHealthMin = cfg.Bind("Mining.Effect", "Regen Timer Reduction Min", 0f,
+                "How many seconds to reduce the health regeneration timer at level 0");
+            MiningRegenHealthMax = cfg.Bind("Mining.Effect", "Regen Timer Reduction Max", 3f,
+                "How many seconds to reduce the health regeneration timer at level 100");
+            MiningCarryCapacityMin = cfg.Bind("Mining.Effect", "Carry Capacity Min", 0f,
+                "How much extra carrying capacity you get at level 0");
+            MiningCarryCapacityMax = cfg.Bind("Mining.Effect", "Carry Capacity Max", 50f,
+                "How much extra carrying capacity you get at level 100");
+        }
+
+        public static float GetMiningDamageMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(MiningPickDamagePercentMin),
+                PerToMult(MiningPickDamagePercentMax), skillFactor);
+        }
+        public static float GetMiningDropMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(MiningDropPercentMin),
+                PerToMod(MiningDropPercentMax), skillFactor);
+        }
+        public static float GetMiningStaminaRebate(float skillFactor)
+        {
+            return Mathf.Lerp(MiningStaminaRebateMin.Value, MiningStaminaRebateMax.Value, skillFactor);
+        }
+        public static float GetMiningRegenLessTime(float skillFactor)
+        {
+            return Mathf.Lerp(MiningRegenHealthMin.Value,
+                MiningRegenHealthMax.Value, skillFactor);
+        }
+        public static float GetMiningCarryCapacity(float skillFactor)
+        {
+            return Mathf.Lerp(MiningCarryCapacityMin.Value,
+                MiningCarryCapacityMax.Value, skillFactor);
+        }
 
 
-            //Swim Experience
-            SwimXPSpeedPercent = cfg.Bind("Swim.Experience", "XP", 10f,
-                "% of swim speed that becomes bonus experience gain");
-            
-            //Swim effects
-            SwimSpeedPercentMin = cfg.Bind("Swim.Effect", "Speed Min", 0f,
-                "% to increase swim speed at level 0");
-            SwimSpeedPercentMax = cfg.Bind("Swim.Effect", "Speed Max", 250f,
-                "% to increase swim speed at level 100");
-            SwimAccelPercentMin = cfg.Bind("Swim.Effect", "Acceleration Min", 0f,
-                "% to increase swim acceleration at level 0");
-            SwimAccelPercentMax = cfg.Bind("Swim.Effect", "Acceleration Max", 250f,
-                "% to increase swim acceleration at level 100");
-            SwimTurnPercentMin = cfg.Bind("Swim.Effect", "Turn Speed Min", 0f,
-                "% to increase swim turn speed at level 0");
-            SwimTurnPercentMax = cfg.Bind("Swim.Effect", "Turn Speed Max", 500f,
-                "% to increase swim turn speed at level 100");
-            SwimStaminaPerSecMin = cfg.Bind("Swim.Effect", "Stamina cost min", 5f,
-                "How much stamina swimming will take per second at level 0");
-            SwimStaminaPerSecMax = cfg.Bind("Swim.Effect", "Stamina cost max", .5f,
-                "How much stamina swimming will take per second at level 100");
+        #endregion mine
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             SKILLS
+        ///              
+        ///                             Running
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region run
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillRun;
+        public static ConfigEntry<float> RunAbsoluteWeightMinWeight;
+        public static ConfigEntry<float> RunAbsoluteWeightMaxWeight;
+        public static ConfigEntry<float> RunAbsoluteWeightFactor;
+        public static ConfigEntry<float> RunXPAbsoluteWeightPercent;
+        public static ConfigEntry<float> RunRelativeWeightLight;
+        public static ConfigEntry<float> RunRelativeWeightLightPercent;
+        public static ConfigEntry<float> RunRelativeWeightMed;
+        public static ConfigEntry<float> RunRelativeWeightMedPercent;
+        public static ConfigEntry<float> RunRelativeWeightHighMed;
+        public static ConfigEntry<float> RunRelativeWeightHighMedPercent;
+        public static ConfigEntry<float> RunRelativeWeightHeavy;
+        public static ConfigEntry<float> RunRelativeWeightHeavyPercent;
+        public static ConfigEntry<float> RunRelativeWeightFull;
+        public static ConfigEntry<float> RunRelativeWeightFullPercent;
+        public static ConfigEntry<float> RunRelativeWeightOverPercent;
+        public static ConfigEntry<float> RunXPRelativeWeightPercent;
+        public static ConfigEntry<float> RunXPSpeedPercent;
+        public static ConfigEntry<float> RunSpeedPercentMin;
+        public static ConfigEntry<float> RunSpeedPercentMax;
+        public static ConfigEntry<float> RunEquipmentReduxMin;
+        public static ConfigEntry<float> RunEquipmentReduxMax;
+        public static ConfigEntry<float> RunEncumberancePercentMin;
+        public static ConfigEntry<float> RunEncumberancePercentMax;
+        public static ConfigEntry<float> RunEncumberanceReduxMin;
+        public static ConfigEntry<float> RunEncumberanceReduxMax;
+        public static ConfigEntry<float> RunStaminaReduxMin;
+        public static ConfigEntry<float> RunStaminaReduxMax;
+        public static ConfigEntry<float> RunStaminaPerLevel;
+        #endregion configdef
+
+        public static void InitRunConfigs(ConfigFile cfg)
+        {
+            ActiveSkillRun = cfg.Bind("Generic.Active", "Run", true,
+                    "Whether or not to activate king's skills version of the run skill"); ;
 
 
             //Run Absolute Weight Experience
@@ -557,9 +1545,9 @@ namespace kingskills
                 "The heighest weight you will get an experience bonus for carrying");
             RunAbsoluteWeightFactor = cfg.Bind("Run.Experience.AbsoluteWeight", "Factor", .6f,
                 "Factor to define the slope of the absolute weight curve");
-            RunXPAbsoluteWeightPercent = cfg.Bind("Run.Experience.AbsoluteWeight", "XP", 400f, 
+            RunXPAbsoluteWeightPercent = cfg.Bind("Run.Experience.AbsoluteWeight", "XP", 400f,
                 "% modifier for how much experience you get from absolute weight");
-            
+
 
             //Run Relative Weight Experience
             RunRelativeWeightLight = cfg.Bind("Run.Experience.RelativeWeight", "Light Threshold", 33f,
@@ -586,12 +1574,12 @@ namespace kingskills
                 "Experience Bonus for being overencumbered");
             RunXPRelativeWeightPercent = cfg.Bind("Run.Experience.RelativeWeight", "Overall XP", 100f,
                 "% modifier for how much experience you get from relative weight");
-            
+
 
             //Run Experience
             RunXPSpeedPercent = cfg.Bind("Run.Experience", "XP", 5f,
                 "% of extra experience gained from run speed");
-            
+
 
             //Run Effects
             RunSpeedPercentMin = cfg.Bind("Run.Effect", "Speed Min", 0f,
@@ -608,7 +1596,7 @@ namespace kingskills
                 "% less run speed when your inventory is full");
             RunEncumberanceReduxMin = cfg.Bind("Run.Effect", "Encumberance Reduction Min", -15f,
                 "% less effect from encumberance at level 0");
-            RunEncumberanceReduxMax = cfg.Bind("Run.Effect", "Encumberance Reduction Max", 75f, 
+            RunEncumberanceReduxMax = cfg.Bind("Run.Effect", "Encumberance Reduction Max", 75f,
                 "% less effect from encumberance at level 100");
             RunStaminaReduxMin = cfg.Bind("Run.Effect", "Stamina Reduction Min", -25f,
                 "% less stamina cost to run at level 100");
@@ -616,377 +1604,11 @@ namespace kingskills
                 "% less stamina cost to run at level 100");
             RunStaminaPerLevel = cfg.Bind("Run.Effect", "Stamina Flat", .25f,
                 "How much base stamina is added per level of run");
-
-
-            //
-            //
-            //   Weapon changes
-            //
-            //
-            //
-
-
-            //Axes
-            AxeDamagePercentMin = cfg.Bind("Axe.Effect", "Damage Min", 0f,
-                "% extra damage done with axes at level 0");
-            AxeDamagePercentMax = cfg.Bind("Axe.Effect", "Damage Max", 200f,
-                "% extra damage done with axes at level 100");
-            AxeStaminaReduxMin = cfg.Bind("Axe.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for axes at level 0");
-            AxeStaminaReduxMax = cfg.Bind("Axe.Effect", "Stamina Reduction Max", 60f,
-                "% less stamina usage for axes at level 100");
-            AxeStaminaPerLevel = cfg.Bind("Axe.Effect", "Base Stamina Gain per Level", .44f,
-                "Flat amount of base stamina gained per level in axe");
-            AxeChopDamagePercentMin = cfg.Bind("Axe.Effect", "Woodcutting Damage Min", 0f,
-                "% extra woodcutting damage done at level 0");
-            AxeChopDamagePercentMax = cfg.Bind("Axe.Effect", "Woodcutting Damage Max", 50f,
-                "% extra woodcutting damage done at level 100");
-            AxeCarryCapacityMin = cfg.Bind("Axe.Effect", "Carry Capacity Min", 0f,
-                "Flat extra carrying capacity at level 0");
-            AxeCarryCapacityMax = cfg.Bind("Axe.Effect", "Carry Capacity Max", 250f,
-                "Flat extra carrying capacity at level 100");
-
-
-            //Bows
-            BowDamagePercentMin = cfg.Bind("Bow.Effect", "Damage Min", 0f,
-                "% extra damage done with bows at level 0");
-            BowDamagePercentMax = cfg.Bind("Bow.Effect", "Damage Max", 150f,
-                "% extra damage done with bows at level 100");
-            BowStaminaReduxMin = cfg.Bind("Bow.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for bows at level 0");
-            BowStaminaReduxMax = cfg.Bind("Bow.Effect", "Stamina Reduction Max", 75f,
-                "% less stamina usage for bows at level 100");
-            BowVelocityPercentMin = cfg.Bind("Bow.Effect", "Velocity Min", 0f, 
-                "% extra velocity to fired arrows at level 0");
-            BowVelocityPercentMax = cfg.Bind("Bow.Effect", "Velocity Max", 250f, 
-                "% extra velocity to fired arrows at level 100");
-            //BowDrawSpeedModMin = cfg.Bind("Bow.Effect", "Draw Speed Min", 0f, 
-            //    "% extra bow draw speed at level 0");
-            //BowDrawSpeedModMax = cfg.Bind("Bow.Effect", "Draw Speed Max", 0f, 
-            //    "% extra bow draw speed at level 100");
-            BowDropPercentMin = cfg.Bind("Bow.Effect", "Drop rate min", 0f,
-                "% to increase creature drops at level 0");
-            BowDropPercentMax = cfg.Bind("Bow.Effect", "Drop rate max", 100f,
-                "% to increase creature drops at level 100");
-
-
-            //Clubs
-            ClubDamagePercentMin = cfg.Bind("Club.Effect", "Damage Min", 0f,
-                "% extra damage done with clubs at level 0");
-            ClubDamagePercentMax = cfg.Bind("Club.Effect", "Damage Max", 200f,
-                "% extra damage done with clubs at level 100");
-            ClubStaminaReduxMin = cfg.Bind("Club.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for clubs at level 0");
-            ClubStaminaReduxMax = cfg.Bind("Club.Effect", "Stamina Reduction Max", 50f,
-                "% less stamina usage for clubs at level 100");
-            ClubBluntPercentMin = cfg.Bind("Club.Effect", "Generic Blunt Min", 0f, 
-                "% extra blunt damage to ALL weapons at level 0");
-            ClubBluntPercentMax = cfg.Bind("Club.Effect", "Generic Blunt Max", 40f,
-                "% extra blunt damage to ALL weapons at level 100");
-            ClubKnockbackPercentMin = cfg.Bind("Club.Effect", "Generic Knockback Min", 0f,
-                "% extra knockback to ALL weapons at level 0");
-            ClubKnockbackPercentMax = cfg.Bind("Club.Effect", "Generic Knockback Max", 250f,
-                "% extra knockback to ALL weapons at level 100");
-            ClubStaggerPercentMin = cfg.Bind("Club.Effect", "Generic Stagger Min", 0f, 
-                "% extra stagger damage to ALL ATTACKS at level 0");
-            ClubStaggerPercentMax = cfg.Bind("Club.Effect", "Generic Stagger Max", 100f,
-                "% extra stagger damage to ALL ATTACKS at level 100");
-
-
-            //Unarmed
-            FistDamagePercentMin = cfg.Bind("Fist.Effect", "Damage Min", -10f,
-                "% extra damage done with bare fists at level 0");
-            FistDamagePercentMax = cfg.Bind("Fist.Effect", "Damage Max", 120f,
-                "% extra damage done with bare fists at level 100");
-            FistStaminaReduxMin = cfg.Bind("Fist.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for fists at level 0");
-            FistStaminaReduxMax = cfg.Bind("Fist.Effect", "Stamina Reduction Max", 80f,
-                "% less stamina usage for fists at level 100");
-            FistDamageFlatMin = cfg.Bind("Fist.Effect", "Flat Damage Min", -5f, 
-                "Flat extra damage at level 0");
-            FistDamageFlatMax = cfg.Bind("Fist.Effect", "Flat Damage Max", 62f, 
-                "Flat extra damage at level 100");
-            FistBlockArmorMin = cfg.Bind("Fist.Effect", "Unarmed Block Armor Flat Min", -5f, 
-                "Flat extra unarmed block armor at level 0");
-            FistBlockArmorMax = cfg.Bind("Fist.Effect", "Unarmed Block Armor Flat Max", 50f, 
-                "Flat extra unarmed block armor at level 100");
-            FistMovespeedPercentMin = cfg.Bind("Fist.Effect", "Movespeed Min", 0f, 
-                "% movespeed increase at level 0");
-            FistMovespeedPercentMax = cfg.Bind("Fist.Effect", "Movespeed Max", 50f,
-                "% movespeed increase at level 100");
-
-
-            //Knives
-            KnifeDamagePercentMin = cfg.Bind("Knife.Effect", "Damage Min", 0f, 
-                "% extra damage done with knives at level 0");
-            KnifeDamagePercentMax = cfg.Bind("Knife.Effect", "Damage Max", 200f,
-                "% extra damage done with knives at level 100");
-            KnifeStaminaReduxMin = cfg.Bind("Knife.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for knives at level 0");
-            KnifeStaminaReduxMax = cfg.Bind("Knife.Effect", "Stamina Reduction Max", 65f,
-                "% less stamina usage for knives at level 100");
-            KnifeBackstabPercentMin = cfg.Bind("Knife.Effect", "Backstab Min", 0f,
-                "% extra sneak attack damage with ALL weapons at level 0");
-            KnifeBackstabPercentMax = cfg.Bind("Knife.Effect", "Backstab Max", 150f,
-                "% extra sneak attack damage with ALL weapons at level 100");
-            KnifeMovespeedPercentMin = cfg.Bind("Knife.Effect", "Movementspeed Min", 0f,
-                "% movespeed increase at level 0");
-            KnifeMovespeedPercentMax = cfg.Bind("Knife.Effect", "Movementspeed Max", 80f,
-                "% movespeed increase at level 100");
-            KnifePiercePercentMin = cfg.Bind("Knife.Effect", "Generic Pierce Min", 0f,
-                "% extra pierce damage with ALL weapons at level 0");
-            KnifePiercePercentMax = cfg.Bind("Knife.Effect", "Generic Pierce Max", 50f,
-                "% extra pierce damage with ALL weapons at level 0");
-
-
-            //Mining
-            MiningPickDamagePercentMin = cfg.Bind("Mining.Effect", "Pick Damage Min", 0f,
-                "% increase to pick damage at level 0");
-            MiningPickDamagePercentMax = cfg.Bind("Mining.Effect", "Pick Damage Max", 200f,
-                "% increase to pick damage at level 100");
-            MiningStaminaRebateMin = cfg.Bind("Mining.Effect", "Stamina Rebate Min", 0f,
-                "Flat stamina rebate on each hit of a rock at level 0");
-            MiningStaminaRebateMax = cfg.Bind("Mining.Effect", "Stamina Rebate Max", 7f,
-                "Flat stamina rebate on each hit of a rock at level 100");
-            MiningDropPercentMin = cfg.Bind("Mining.Effect", "Drop rate Min", 0f,
-                "% increase to ore drops at level 0");
-            MiningDropPercentMax = cfg.Bind("Mining.Effect", "Drop rate Max", 100f,
-                "% increase to ore drops at level 100");
-            MiningRegenHealthMin = cfg.Bind("Mining.Effect", "Regen Timer Reduction Min", 0f,
-                "How many seconds to reduce the health regeneration timer at level 0");
-            MiningRegenHealthMax = cfg.Bind("Mining.Effect", "Regen Timer Reduction Max", 3f,
-                "How many seconds to reduce the health regeneration timer at level 100");
-            MiningCarryCapacityMin = cfg.Bind("Mining.Effect", "Carry Capacity Min", 0f,
-                "How much extra carrying capacity you get at level 0");
-            MiningCarryCapacityMax = cfg.Bind("Mining.Effect", "Carry Capacity Max", 50f,
-                "How much extra carrying capacity you get at level 100");
-
-
-            //Polearms
-            PolearmDamagePercentMin = cfg.Bind("Polearm.Effect", "Damage Min", 0f,
-                "% extra damage done with polearms at level 0");
-            PolearmDamagePercentMax = cfg.Bind("Polearm.Effect", "Damage Max", 150f,
-                "% extra damage done with polearms at level 100");
-            PolearmStaminaReduxMin = cfg.Bind("Polearm.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for polearms at level 0");
-            PolearmStaminaReduxMax = cfg.Bind("Polearm.Effect", "Stamina Reduction Max", 70f,
-                "% less stamina usage for polearms at level 100");
-            PolearmRangeMin = cfg.Bind("Polearm.Effect", "Generic Range Min", 0f,
-                "Added units of range to all weapon attacks at level 0");
-            PolearmRangeMax = cfg.Bind("Polearm.Effect", "Generic Range Max", .8f,
-                "Added units of range to all weapon attacks at level 100");
-            PolearmArmorMin = cfg.Bind("Polearm.Effect", "Block Flat Min", 0f,
-                "Flat armor added to character at level 0");
-            PolearmArmorMax = cfg.Bind("Polearm.Effect", "Block Flat Max", 25f,
-                "Flat armor added to character at level 100");
-            PolearmBlockMin = cfg.Bind("Polearm.Effect", "Block Min", 0f,
-                "Flat block armor added to polearms at level 0");
-            PolearmBlockMax = cfg.Bind("Polearm.Effect", "Block Max", 43f,
-                "Flat block armor added to polearms at level 100");
-
-
-            //Sneak
-            SneakXPThreatPercent = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 24f,
-                    "Determines how much each 'point of danger' is worth in sneak exp");
-            SneakStaminaDrainMin = cfg.Bind("Sneak.Effect", "Stamina Drain Min", 10f,
-                    "Amount of stamina drain per second while sneaking at level 0");
-            SneakStaminaDrainMax = cfg.Bind("Sneak.Effect", "Stamina Drain Max", 1.5f,
-                    "Amount of stamina drain per second while sneaking at level 100");
-            SneakSpeedPercentMin = cfg.Bind("Sneak.Effect", "Speed Min", 0f,
-                    "% speed increase while sneaking at level 0");
-            SneakSpeedPercentMax = cfg.Bind("Sneak.Effect", "Speed Max", 250f,
-                    "% speed increase while sneaking at level 100");
-
-
-            //Spears
-            SpearDamagePercentMin = cfg.Bind("Spear.Effect", "Damage Min", 0f,
-                "% extra damage done with spears at level 0");
-            SpearDamagePercentMax = cfg.Bind("Spear.Effect", "Damage Max", 200f,
-                "% extra damage done with spears at level 100");
-            SpearStaminaReduxMin = cfg.Bind("Spear.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for spears at level 0");
-            SpearStaminaReduxMax = cfg.Bind("Spear.Effect", "Stamina Reduction Max", 70f,
-                "% less stamina usage for spears at level 100");
-            SpearVelocityPercentMin = cfg.Bind("Spear.Effect", "Thrown Velocity Min", 0f,
-                "% extra velocity on thrown weapons at level 0");
-            SpearVelocityPercentMax = cfg.Bind("Spear.Effect", "Thrown Velocity Max", 300f,
-                "% extra velocity on thrown weapons at level 100");
-            SpearProjectileDamagePercentMin = cfg.Bind("Spear.Effect", "Thrown Damage Percent Min", 0f,
-                "% extra damage done with thrown weapons at level 0");
-            SpearProjectilePercentMax = cfg.Bind("Spear.Effect", "Thrown Damage Percent Max", 200f,
-                "% extra damage done with thrown weapons at level 100");
-            SpearBlockArmorMin = cfg.Bind("Spear.Effect", "Generic Block Armor Min", 0f, 
-                "Flat block armor always applied at level 0");
-            SpearBlockArmorMax = cfg.Bind("Spear.Effect", "Generic Block Armor Max", 25f,
-                "Flat block armor always applied at level 100");
-
-
-            //Swords
-            SwordDamagePercentMin = cfg.Bind("Sword.Effect", "Damage Min", 0f,
-                "% extra damage done with swords at level 0");
-            SwordDamagePercentMax = cfg.Bind("Sword.Effect", "Damage Max", 200f,
-                "% extra damage done with swords at level 100");
-            SwordStaminaReduxMin = cfg.Bind("Sword.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for swords at level 0");
-            SwordStaminaReduxMax = cfg.Bind("Sword.Effect", "Stamina Reduction Max", 60f,
-                "% less stamina usage for swords at level 100");
-            SwordParryPercentMin = cfg.Bind("Sword.Effect", "Generic Parry Min", 0f,
-                "% extra parry bonus for ALL weapons at level 0"); 
-            SwordParryPercentMax = cfg.Bind("Sword.Effect", "Generic Parry Max", 80f,
-                "% extra parry bonus for ALL weapons at level 100");
-            SwordSlashPercentMin = cfg.Bind("Sword.Effect", "Generic Slash Min", 0f, 
-                "% extra slash damage for ALL weapons at level 0");
-            SwordSlashPercentMax = cfg.Bind("Sword.Effect", "Generic Slash Max", 50f,
-                "% extra slash damage for ALL weapons at level 100"); 
-            SwordDodgeStaminaReduxMin = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 0f, 
-                "% less stamina cost to dodge roll at level 0");
-            SwordDodgeStaminaReduxMax = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Max", 40f,
-                "% less stamina cost to dodge roll at level 0");
-            
-
-            //Woodcutting
-            WoodcuttingChopDamagePercentMin = cfg.Bind("Wood.Effect", "Chop Damage Min", 0f,
-                "% increase to chop damage at level 0");
-            WoodcuttingChopDamagePercentMax = cfg.Bind("Wood.Effect", "Chop Damage Max", 200f,
-                "% increase to chop damage at level 100");
-            WoodcuttingStaminaRebateMin = cfg.Bind("Wood.Effect", "Stamina Rebate Min", 0f,
-                "Flat stamina rebate on each hit of a tree at level 0");
-            WoodcuttingStaminaRebateMax = cfg.Bind("Wood.Effect", "Stamina Rebate Max", 9f,
-                "Flat stamina rebate on each hit of a tree at level 100");
-            WoodcuttingDropPercentMin = cfg.Bind("Wood.Effect", "Drop rate min", 0f,
-                "% increase to wood drops at level 0");
-            WoodcuttingDropPercentMax = cfg.Bind("Wood.Effect", "Drop rate max", 150f,
-                "% increase to wood drops at level 100");
-            WoodcuttingRegenStaminaMin = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", -.1f,
-                    "Amount of seconds to take off the stamina regeneration timer at level 0. Base value in vanilla is 1s");
-            WoodcuttingRegenStaminaMax = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", .5f,
-                    "Amount of seconds to take off the stamina regeneration timer at level 100");
-            WoodcuttingCarryCapacityMin = cfg.Bind("Wood.Effect", "Carry Capacity Min", 0f,
-                "How much extra carrying capacity you get at level 0");
-            WoodcuttingCarryCapacityMax = cfg.Bind("Wood.Effect", "Carry Capacity Max", 50f,
-                "How much extra carrying capacity you get at level 100");
         }
 
-        public static void InitSkillActiveDict()
-        {
-            SkillActive.Add(SkillMan.Agriculture, ActiveSkillAgriculture.Value);
-            SkillActive.Add(Skills.SkillType.Axes, ActiveSkillAxe.Value);
-            SkillActive.Add(Skills.SkillType.Blocking, ActiveSkillBlock.Value);
-            SkillActive.Add(Skills.SkillType.Bows, ActiveSkillBow.Value);
-            SkillActive.Add(SkillMan.Building, ActiveSkillBuilding.Value);
-            SkillActive.Add(Skills.SkillType.Clubs, ActiveSkillClub.Value);
-            SkillActive.Add(SkillMan.Cooking, ActiveSkillCooking.Value);
-            SkillActive.Add(Skills.SkillType.Unarmed, ActiveSkillFist.Value);
-            SkillActive.Add(Skills.SkillType.Jump, ActiveSkillJump.Value);
-            SkillActive.Add(Skills.SkillType.Knives, ActiveSkillKnife.Value);
-            SkillActive.Add(Skills.SkillType.Pickaxes, ActiveSkillMine.Value);
-            SkillActive.Add(Skills.SkillType.Polearms, ActiveSkillPolearm.Value);
-            SkillActive.Add(Skills.SkillType.Run, ActiveSkillRun.Value);
-            SkillActive.Add(SkillMan.Sailing, ActiveSkillSailing.Value);
-            SkillActive.Add(Skills.SkillType.Spears, ActiveSkillSpear.Value);
-            SkillActive.Add(Skills.SkillType.Sneak, ActiveSkillSneak.Value);
-            SkillActive.Add(Skills.SkillType.Swim, ActiveSkillSwim.Value);
-            SkillActive.Add(Skills.SkillType.Swords, ActiveSkillSword.Value);
-            SkillActive.Add(Skills.SkillType.WoodCutting, ActiveSkillWood.Value);
-        }
-
-
-        private static float PerToMult(ConfigEntry<float> config, bool redux = false)
-        {
-            float mult = config.Value;
-            mult /= 100;
-            if (redux)
-                mult = 1 - mult;
-            else
-                mult++;
-            //Jotunn.Logger.LogMessage($"Reading out {config.Definition.Key} as {mult}");
-            return mult;
-        }
-
-        private static float PerToMod(ConfigEntry<float> config, bool redux = false)
-        {
-            float mod = config.Value;
-            mod /= 100;
-            if (redux)
-                mod = 1 - mod;
-
-           // Jotunn.Logger.LogMessage($"Reading out {config.Definition.Key} as {mod}");
-            return mod;
-        }
-
-
-        //Written by fritz to create a quick and dirty sin curve.
-        //Pass in a number between 0 and 1 and get a curved number between 0 and 1 back
-        public static float ShapeFactorSin(float x)
-        {
-            x = Mathf.Clamp01(x);
-            if (x <= 0.5)
-            {
-                return x;
-            }
-            //Jotunn.Logger.LogMessage($"{x} is being sin curved into {Mathf.Sin(Mathf.Lerp(0f, Mathf.PI / 2, x))}");
-            return Mathf.Sin(Mathf.Lerp(0f, Mathf.PI / 2, x));
-        }
-
-
-
-        /*
-         * 
-         * Here be the Get functions
-         * 
-         */
-        public static bool IsSkillActive(Skills.SkillType skill)
-        {
-            return SkillActive[skill];
-        }
-        public static float GetWeaponEXPStrikeDestructibleMod()
-        {
-            return PerToMod(WeaponXPStrikeDestructiblePercent);
-        }
-        public static float GetWeaponEXPHoldUnarmedMod()
-        {
-            return PerToMod(WeaponXPHoldUnarmedPercent);
-        }
-        public static float GetBlockExpMult()
-        {
-            return PerToMult(BlockXPPercent);
-        }
-        public static float GetBlockParryExpMult()
-        {
-            return PerToMult(BlockXPParryPercent);
-        }
-        public static float GetBlockStaminaRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(BlockStaminaReduxMin, true), 
-                PerToMult(BlockStaminaReduxMax, true), skillFactor);
-        }
-        public static float GetBlockPowerFlat(float skillFactor)
-        {
-            return Mathf.Lerp(BlockFlatPowerMin.Value, 
-                BlockFlatPowerMax.Value, skillFactor);
-        }
-        public static float GetBlockPowerMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(BlockPowerPercentMin), 
-                PerToMult(BlockPowerPercentMax), skillFactor);
-        }
-        public static float GetBlockHealth(float skillFactor)
-        {
-            return BlockHealthPerLevel.Value * MaxSkillLevel.Value * skillFactor;
-        }
-        public static float GetFallDamageThreshold(float skillFactor)
-        {
-            return Mathf.Lerp(JumpFallDamageThresholdMin.Value, 
-                JumpFallDamageThresholdMax.Value, skillFactor);
-        }
-        public static float GetFallDamageRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(JumpFallDamageReduxMin, true), 
-                PerToMult(JumpFallDamageReduxMax, true), skillFactor);
-        }
         public static float GetRunSpeedMult(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(RunSpeedPercentMin), 
+            return Mathf.Lerp(PerToMult(RunSpeedPercentMin),
                 PerToMult(RunSpeedPercentMax), skillFactor);
         }
         public static float GetEncumberanceCurveMult(float encumberanceMod)
@@ -1015,19 +1637,19 @@ namespace kingskills
         }
         public static float GetEquipmentRedux(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(RunEquipmentReduxMin, true), 
+            return Mathf.Lerp(PerToMult(RunEquipmentReduxMin, true),
                 PerToMult(RunEquipmentReduxMax, true), skillFactor);
         }
         public static float GetAbsoluteWeightMod(float weight)
         {
-            return Mathf.Clamp01((weight - RunAbsoluteWeightMinWeight.Value) / 
+            return Mathf.Clamp01((weight - RunAbsoluteWeightMinWeight.Value) /
                 (RunAbsoluteWeightMaxWeight.Value - RunAbsoluteWeightMinWeight.Value));
         }
         public static float GetAbsoluteWeightCurveMult(float weightMod)
         {
             float minBonus = 0f;
             float maxBonus = PerToMod(RunXPAbsoluteWeightPercent);
-            return 1f + Mathf.Lerp(minBonus, maxBonus, 
+            return 1f + Mathf.Lerp(minBonus, maxBonus,
                 Mathf.Pow(weightMod, RunAbsoluteWeightFactor.Value));
             /*
             Jotunn.Logger.LogMessage($"Absolute weight exp mod: I was given {weightPercent} as weight percent\n" +
@@ -1064,7 +1686,7 @@ namespace kingskills
         }
         public static float GetRunStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(RunStaminaReduxMin, true), 
+            return Mathf.Lerp(PerToMult(RunStaminaReduxMin, true),
                 PerToMult(RunStaminaReduxMax, true), skillFactor);
         }
         public static float GetRunEXPSpeedMult()
@@ -1075,327 +1697,155 @@ namespace kingskills
         {
             return RunStaminaPerLevel.Value * MaxSkillLevel.Value * skillFactor;
         }
-        public static float GetSwimXPSpeedMult()
+
+
+        #endregion run
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             SKILLS
+        ///              
+        ///                             Sailing
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region sail
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillSail;
+        public static ConfigEntry<float> SailXPFlat;
+        public static ConfigEntry<float> SailXPCaptainFlat;
+        public static ConfigEntry<float> SailXPWindMin;
+        public static ConfigEntry<float> SailXPWindMax;
+        public static ConfigEntry<float> SailXPSpeedBonus;
+        public static ConfigEntry<float> SailXPTierBonus;
+        public static ConfigEntry<float> SailXPCrewBonus;
+
+        public static ConfigEntry<float> SailSpeedMin;
+        public static ConfigEntry<float> SailSpeedMax;
+        public static ConfigEntry<float> SailWindNudgeMin;
+        public static ConfigEntry<float> SailWindNudgeMax;
+        public static ConfigEntry<float> SailExploreRangeMin;
+        public static ConfigEntry<float> SailExploreRangeMax;
+        public static ConfigEntry<float> SailPaddleSpeedMin;
+        public static ConfigEntry<float> SailPaddleSpeedMax;
+        public static ConfigEntry<float> SailDamageReduxMin;
+        public static ConfigEntry<float> SailDamageReduxMax;
+        #endregion configdef
+
+        private static void InitSailConfig(ConfigFile cfg)
         {
-            return PerToMult(SwimXPSpeedPercent);
+            ActiveSkillSail = cfg.Bind("Generic.Active", "Sailing", true,
+                    "Whether or not to allow King's sailing");
+
+
+            SailXPFlat = cfg.Bind("Sailing.Experience", "Flat", .15f,
+                    "Base rate while swimming or standing on board.");
+            SailXPCaptainFlat = cfg.Bind("Sailing.Experience", "Captain Flat", .4f,
+                    "Base rate while captaining a ship.");
+            SailXPWindMin = cfg.Bind("Sailing.Experience", "Wind Min", 0f,
+                    "% experience bonus when wind is totally against you");
+            SailXPWindMax = cfg.Bind("Sailing.Experience", "Wind Max", 60f,
+                    "% experience bonus when wind is totally in the sails");
+            SailXPSpeedBonus = cfg.Bind("Sailing.Experience", "Speed", .45f,
+                    "Amount of experience each speed unit is worth");
+            SailXPTierBonus = cfg.Bind("Sailing.Experience", "Ship Tier", 50f,
+                    "% of extra experience for each tier of ship after the first");
+            SailXPCrewBonus = cfg.Bind("Sailing.Experience", "Crew", 25f,
+                    "% extra experience for each crew member on board past the first");
+
+            SailSpeedMin = cfg.Bind("Sailing.Effect", "Speed Min", 0f,
+                    "% of extra sailing speed at level 0");
+            SailSpeedMax = cfg.Bind("Sailing.Effect", "Speed Max", 200f,
+                    "% of extra sailing speed at level 100");
+            SailWindNudgeMin = cfg.Bind("Sailing.Effect", "Wind Nudge Min", -15f,
+                    "% of nudge towards favorable winds at level 0");
+            SailWindNudgeMax = cfg.Bind("Sailing.Effect", "Wind Nudge Max", 30f,
+                    "% of nudge towards favorable winds at level 100");
+            SailExploreRangeMin = cfg.Bind("Sailing.Effect", "Explore Range Min", 0f,
+                    "extra units of explore range at level 0");
+            SailExploreRangeMax = cfg.Bind("Sailing.Effect", "Explore Range Max", 25f,
+                    "extra units of explore range at level 100");
+            SailPaddleSpeedMin = cfg.Bind("Sailing.Effect", "Paddle Speed Min", -25f,
+                    "% extra paddling speed at level 0");
+            SailPaddleSpeedMax = cfg.Bind("Sailing.Effect", "Paddle Speed Max", 100f,
+                    "% extra paddling speed at level 100");
+            SailDamageReduxMin = cfg.Bind("Sailing.Effect", "Damage Redux Min", -20f,
+                    "% less damage taken by the boat at level 0");
+            SailDamageReduxMax = cfg.Bind("Sailing.Effect", "Damage Redux Max", 60f,
+                    "% less damage taken by the boat at level 0");
         }
-        public static float GetSwimSpeedMult(float skillFactor)
+
+
+        public static float GetSailSpeedMult(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(SwimSpeedPercentMin), 
-                PerToMult(SwimSpeedPercentMax), skillFactor);
+            return Mathf.Lerp(PerToMult(SailSpeedMin), 
+                PerToMult(SailSpeedMax), skillFactor);
         }
-        public static float GetSwimAccelMult(float skillFactor)
+        public static float GetSailWindNudgeMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(SwimAccelPercentMin), 
-                PerToMult(SwimAccelPercentMax), skillFactor);
+            return Mathf.Lerp(PerToMod(SailWindNudgeMin), 
+                PerToMult(SailWindNudgeMax), skillFactor);
         }
-        public static float GetSwimTurnMult(float skillFactor)
+        public static float GetSailExploreRange(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(SwimTurnPercentMin), 
-                PerToMult(SwimTurnPercentMax), skillFactor);
+            return Mathf.Lerp(SailExploreRangeMin.Value, 
+                SailExploreRangeMax.Value, skillFactor);
         }
-        public static float GetJumpForceMult(float skillFactor)
+        public static float GetSailPaddleSpeedMult(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(JumpForcePercentMin), 
-                PerToMult(JumpForcePercentMax), skillFactor);
+            return Mathf.Lerp(PerToMult(SailPaddleSpeedMin), 
+                PerToMult(SailPaddleSpeedMax), skillFactor);
         }
-        public static float GetJumpForwardForceMult(float skillFactor)
+        public static float GetSailDamageRedux(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(JumpForwardForcePercentMin), 
-                PerToMult(JumpForwardForcePercentMax), skillFactor);
+            return Mathf.Lerp(PerToMult(SailDamageReduxMin, true), 
+                PerToMult(SailDamageReduxMax, true), skillFactor);
         }
-        public static float GetJumpStaminaRedux(float skillFactor)
+
+        #endregion sail
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             SKILLS
+        ///              
+        ///                             Sneaking
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region sneak
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillSneak;
+        public static ConfigEntry<float> SneakXPThreatPercent;
+        public static ConfigEntry<float> SneakStaminaDrainMin;
+        public static ConfigEntry<float> SneakStaminaDrainMax;
+        public static ConfigEntry<float> SneakSpeedPercentMin;
+        public static ConfigEntry<float> SneakSpeedPercentMax;
+        #endregion configdef
+
+        public static void InitSneakConfigs(ConfigFile cfg)
         {
-            /*
-            Jotunn.Logger.LogMessage($"Jump stamina reduction. Reading level as" +
-                $"{skillFactor}. The two possible clamps are {JumpStaminaReduxMin.Value}" +
-                $"and {JumpStaminaReduxMax.Value}. Using PerToMult on both gives me" +
-                $"{PerToMult(JumpStaminaReduxMin, true)} to {PerToMult(JumpStaminaReduxMax, true)}." +
-                $"Based on that, my LERP is returning this number as " +
-                $"{Mathf.Lerp(PerToMult(JumpStaminaReduxMin, true),PerToMult(JumpStaminaReduxMax, true), skillFactor)}");
-            */
-            return Mathf.Lerp(PerToMult(JumpStaminaReduxMin, true), 
-                PerToMult(JumpStaminaReduxMax, true), skillFactor);
+
+            ActiveSkillSneak = cfg.Bind("Generic.Active", "Sneak", true,
+                    "Whether or not to activate king's skills version of the sneak skill"); ;
+
+            //effects
+            SneakXPThreatPercent = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 24f,
+                    "Determines how much each 'point of danger' is worth in sneak exp");
+            SneakStaminaDrainMin = cfg.Bind("Sneak.Effect", "Stamina Drain Min", 10f,
+                    "Amount of stamina drain per second while sneaking at level 0");
+            SneakStaminaDrainMax = cfg.Bind("Sneak.Effect", "Stamina Drain Max", 1.5f,
+                    "Amount of stamina drain per second while sneaking at level 100");
+            SneakSpeedPercentMin = cfg.Bind("Sneak.Effect", "Speed Min", 0f,
+                    "% speed increase while sneaking at level 0");
+            SneakSpeedPercentMax = cfg.Bind("Sneak.Effect", "Speed Max", 250f,
+                    "% speed increase while sneaking at level 100");
         }
-        public static float GetJumpTiredMod(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMod(JumpTiredModMin), 
-                PerToMod(JumpTiredModMax), skillFactor);
-        }
-        public static float GetJumpXPMod()
-        {
-            return PerToMod(JumpXPPercent);
-        }
-        public static float GetWeaponDamageToExperience(float damage)
-        {
-            return PerToMod(WeaponXPStrikeDamagePercent) * 
-                Mathf.Pow(damage, WeaponXPStrikeDamageFactor.Value);
-        }
-        public static float GetToolDamageToExperience(float damage)
-        {
-            return PerToMod(ToolXPStrikeDamagePercent) * 
-                Mathf.Pow(damage, ToolXPStrikeDamageFactor.Value);
-        }
-        public static float GetSwimStaminaPerSec(float skillFactor)
-        {
-            return Mathf.Lerp(SwimStaminaPerSecMin.Value, SwimStaminaPerSecMax.Value, skillFactor);
-        }
-        public static float GetAxeDamageMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(AxeDamagePercentMin), 
-                PerToMult(AxeDamagePercentMax), skillFactor);
-        }
-        public static float GetAxeStaminaRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(AxeStaminaReduxMin, true), 
-                PerToMult(AxeStaminaReduxMax, true), skillFactor);
-        }
-        public static float GetAxeChopDamageMod(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMod(AxeChopDamagePercentMin), 
-                PerToMod(AxeChopDamagePercentMax), skillFactor);
-        }
-        public static float GetAxeStamina(float skillFactor)
-        { 
-            return AxeStaminaPerLevel.Value * skillFactor * ConfigManager.MaxSkillLevel.Value;
-        }
-        public static float GetAxeCarryCapacity(float skillFactor)
-        {
-            return Mathf.Lerp(AxeCarryCapacityMin.Value, AxeCarryCapacityMax.Value, skillFactor);
-        }
-        public static float GetWeaponBXPBowDistanceMult()
-        {
-            return PerToMult(WeaponBXPBowDistancePercent);
-        }
-        public static float GetBowDamageMult(float skillFactor)
-        { 
-            return Mathf.Lerp(PerToMult(BowDamagePercentMin), 
-                PerToMult(BowDamagePercentMax), skillFactor);
-        }
-        public static float GetBowStaminaRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(BowStaminaReduxMin, true), 
-                PerToMult(BowStaminaReduxMax, true), skillFactor);
-        }
-        public static float GetBowVelocityMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(BowVelocityPercentMin), 
-                PerToMult(BowVelocityPercentMax), skillFactor);
-        }
-        public static float GetBowDrawSpeed(float skillFactor)
-        {
-            return Mathf.Lerp(BaseBowDrawSpeedMin, 
-                BaseBowDrawSpeedMax, skillFactor);
-        }
-        public static float GetBowDropRateMod(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMod(BowDropPercentMin), 
-                PerToMod(BowDropPercentMax), skillFactor);
-        }
-        public static float GetClubDamageMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(ClubDamagePercentMin), 
-                PerToMult(ClubDamagePercentMax), skillFactor);
-        }
-        public static float GetClubStaminaRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(ClubStaminaReduxMin, true), 
-                PerToMult(ClubStaminaReduxMax, true), skillFactor);
-        }
-        public static float GetClubBluntMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(ClubBluntPercentMin), 
-                PerToMult(ClubBluntPercentMax), skillFactor);
-        }
-        public static float GetClubKnockbackMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(ClubKnockbackPercentMin), 
-                PerToMult(ClubKnockbackPercentMax), skillFactor);
-        }
-        public static float GetClubStaggerMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(ClubStaggerPercentMin), 
-                PerToMult(ClubStaggerPercentMax), skillFactor);
-        }
-        public static float GetFistDamageMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(FistDamagePercentMin), 
-                PerToMult(FistDamagePercentMax), skillFactor);
-        }
-        public static float GetFistStaminaRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(FistStaminaReduxMin, true), 
-                PerToMult(FistStaminaReduxMax, true), skillFactor);
-        }
-        public static float GetFistDamageFlat(float skillFactor)
-        {
-            return Mathf.Lerp(FistDamageFlatMin.Value, FistDamageFlatMax.Value, skillFactor);
-        }
-        public static float GetFistBlockArmor(float skillFactor)
-        {
-            return Mathf.Lerp(FistBlockArmorMin.Value, FistBlockArmorMax.Value, skillFactor);
-        }
-        public static float GetFistMovespeedMod(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMod(FistMovespeedPercentMin), 
-                PerToMod(FistMovespeedPercentMax), skillFactor);
-        }
-        public static float GetKnifeDamageMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(KnifeDamagePercentMin),
-                PerToMult(KnifeDamagePercentMax), skillFactor);
-        }
-        public static float GetKnifeStaminaRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(KnifeStaminaReduxMin, true), 
-                PerToMult(KnifeStaminaReduxMax, true), skillFactor);
-        }
-        public static float GetKnifeBackstabMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(KnifeBackstabPercentMin), 
-                PerToMult(KnifeBackstabPercentMax), skillFactor);
-        }
-        public static float GetKnifeMovespeedMod(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMod(KnifeMovespeedPercentMin), 
-                PerToMod(KnifeMovespeedPercentMax), skillFactor);
-        }
-        public static float GetKnifePierceMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(KnifePiercePercentMin), 
-                PerToMult(KnifePiercePercentMax), skillFactor);
-        }
-        public static float GetPolearmDamageMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(PolearmDamagePercentMin), 
-                PerToMult(PolearmDamagePercentMax), skillFactor);
-        }
-        public static float GetPolearmStaminaRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(PolearmStaminaReduxMin, true), 
-                PerToMult(PolearmStaminaReduxMax, true), skillFactor);
-        }
-        public static float GetPolearmRange(float skillFactor)
-        {
-            return Mathf.Lerp(PolearmRangeMin.Value, PolearmRangeMax.Value, skillFactor);
-        }
-        public static float GetPolearmArmor(float skillFactor)
-        {
-            return Mathf.Lerp(PolearmArmorMin.Value, PolearmArmorMax.Value, skillFactor);
-        }
-        public static float GetPolearmBlock(float skillFactor)
-        {
-            return Mathf.Lerp(PolearmBlockMin.Value, PolearmBlockMax.Value, skillFactor);
-        }
-        public static float GetSpearDamageMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(SpearDamagePercentMin), 
-                PerToMult(SpearDamagePercentMax), skillFactor);
-        }
-        public static float GetSpearStaminaRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(SpearStaminaReduxMin, true), 
-                PerToMult(SpearStaminaReduxMax, true), skillFactor);
-        }
-        public static float GetSpearVelocityMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(SpearVelocityPercentMin), 
-                PerToMult(SpearVelocityPercentMax), skillFactor);
-        }
-        public static float GetSpearProjectileDamageMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(SpearProjectileDamagePercentMin), 
-                PerToMult(SpearProjectilePercentMax), skillFactor);
-        }
-        public static float GetSpearBlockArmor(float skillFactor)
-        {
-            return Mathf.Lerp(SpearBlockArmorMin.Value, SpearBlockArmorMax.Value, skillFactor);
-        }
-        public static float GetSwordDamageMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(SwordDamagePercentMin), 
-                PerToMult(SwordDamagePercentMax), skillFactor);
-        }
-        public static float GetSwordStaminaRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(SwordDodgeStaminaReduxMin, true), 
-                PerToMult(SwordDodgeStaminaReduxMax, true), skillFactor);
-        }
-        public static float GetSwordParryMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(SwordParryPercentMin), 
-                PerToMult(SwordParryPercentMax), skillFactor);
-        }
-        public static float GetSwordSlashMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(SwordSlashPercentMin), 
-                PerToMult(SwordSlashPercentMax), skillFactor);
-        }
-        public static float GetSwordDodgeStaminaRedux(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(SwordDodgeStaminaReduxMin, true), 
-                PerToMult(SwordDodgeStaminaReduxMax, true), skillFactor);
-        }
-        public static float GetWoodcuttingDamageMod(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMod(WoodcuttingChopDamagePercentMin), 
-                PerToMod(WoodcuttingChopDamagePercentMax), skillFactor);
-        }
-        public static float GetWoodDropMod(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMod(WoodcuttingDropPercentMin), 
-                PerToMod(WoodcuttingDropPercentMax), skillFactor);
-        }
-        public static float GetWoodcuttingStaminaRebate(float skillFactor)
-        {
-            return Mathf.Lerp(WoodcuttingStaminaRebateMin.Value, 
-                WoodcuttingStaminaRebateMax.Value, skillFactor);
-        }
-        public static float GetWoodcuttingRegenLessTime(float skillFactor)
-        {
-            return Mathf.Lerp(WoodcuttingRegenStaminaMin.Value,
-                WoodcuttingRegenStaminaMax.Value, skillFactor);
-        }
-        public static float GetWoodcuttingCarryCapacity(float skillFactor)
-        {
-            return Mathf.Lerp(WoodcuttingCarryCapacityMin.Value,
-                WoodcuttingCarryCapacityMax.Value, skillFactor);
-        }
-        public static float GetMiningDamageMult(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(MiningPickDamagePercentMin), 
-                PerToMult(MiningPickDamagePercentMax), skillFactor);
-        }
-        public static float GetMiningDropMod(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMod(MiningDropPercentMin), 
-                PerToMod(MiningDropPercentMax), skillFactor);
-        }
-        public static float GetMiningStaminaRebate(float skillFactor)
-        {
-            return Mathf.Lerp(MiningStaminaRebateMin.Value, MiningStaminaRebateMax.Value, skillFactor);
-        }
-        public static float GetMiningRegenLessTime(float skillFactor)
-        {
-            return Mathf.Lerp(MiningRegenHealthMin.Value,
-                MiningRegenHealthMax.Value, skillFactor);
-        }
-        public static float GetMiningCarryCapacity(float skillFactor)
-        {
-            return Mathf.Lerp(MiningCarryCapacityMin.Value,
-                MiningCarryCapacityMax.Value, skillFactor);
-        }
-        public static float GetDropItemThreshold()
-        {
-            return PerToMod(DropNewItemThreshold);
-        }
+
         public static float GetSneakXPMult()
         {
             return PerToMult(SneakXPThreatPercent);
         }
         public static float GetSneakStaminaDrain(float skillFactor)
         {
-            return Mathf.Lerp(SneakStaminaDrainMin.Value,SneakStaminaDrainMax.Value, skillFactor);
+            return Mathf.Lerp(SneakStaminaDrainMin.Value, SneakStaminaDrainMax.Value, skillFactor);
         }
         public static float GetSneakSpeedMult(float skillFactor)
         {
@@ -1409,19 +1859,337 @@ namespace kingskills
                 PerToMult(), skillFactor);
             */
         }
-        public static float GetVanillaBlockMult(float skillFactor)
+
+
+        #endregion sneak
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             SKILLS
+        ///              
+        ///                             Swimming
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region swim
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillSwim;
+        public static ConfigEntry<float> SwimXPSpeedPercent;
+        public static ConfigEntry<float> SwimSpeedPercentMin;
+        public static ConfigEntry<float> SwimSpeedPercentMax;
+        public static ConfigEntry<float> SwimAccelPercentMin;
+        public static ConfigEntry<float> SwimAccelPercentMax;
+        public static ConfigEntry<float> SwimTurnPercentMin;
+        public static ConfigEntry<float> SwimTurnPercentMax;
+        public static ConfigEntry<float> SwimStaminaPerSecMin;
+        public static ConfigEntry<float> SwimStaminaPerSecMax;
+        #endregion configdef
+
+        public static void InitSwimConfigs(ConfigFile cfg)
         {
-            return 1f + skillFactor * .5f;
+            ActiveSkillSwim = cfg.Bind("Generic.Active", "Swim", true,
+                    "Whether or not to activate king's skills version of the swim skill"); ;
+
+            //Swim Experience
+            SwimXPSpeedPercent = cfg.Bind("Swim.Experience", "XP", 10f,
+                "% of swim speed that becomes bonus experience gain");
+
+            //Swim effects
+            SwimSpeedPercentMin = cfg.Bind("Swim.Effect", "Speed Min", 0f,
+                "% to increase swim speed at level 0");
+            SwimSpeedPercentMax = cfg.Bind("Swim.Effect", "Speed Max", 250f,
+                "% to increase swim speed at level 100");
+            SwimAccelPercentMin = cfg.Bind("Swim.Effect", "Acceleration Min", 0f,
+                "% to increase swim acceleration at level 0");
+            SwimAccelPercentMax = cfg.Bind("Swim.Effect", "Acceleration Max", 250f,
+                "% to increase swim acceleration at level 100");
+            SwimTurnPercentMin = cfg.Bind("Swim.Effect", "Turn Speed Min", 0f,
+                "% to increase swim turn speed at level 0");
+            SwimTurnPercentMax = cfg.Bind("Swim.Effect", "Turn Speed Max", 500f,
+                "% to increase swim turn speed at level 100");
+            SwimStaminaPerSecMin = cfg.Bind("Swim.Effect", "Stamina cost min", 5f,
+                "How much stamina swimming will take per second at level 0");
+            SwimStaminaPerSecMax = cfg.Bind("Swim.Effect", "Stamina cost max", .5f,
+                "How much stamina swimming will take per second at level 100");
         }
 
+
+        public static float GetSwimXPSpeedMult()
+        {
+            return PerToMult(SwimXPSpeedPercent);
+        }
+        public static float GetSwimSpeedMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SwimSpeedPercentMin),
+                PerToMult(SwimSpeedPercentMax), skillFactor);
+        }
+        public static float GetSwimAccelMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SwimAccelPercentMin),
+                PerToMult(SwimAccelPercentMax), skillFactor);
+        }
+        public static float GetSwimTurnMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SwimTurnPercentMin),
+                PerToMult(SwimTurnPercentMax), skillFactor);
+        }
+        public static float GetSwimStaminaPerSec(float skillFactor)
+        {
+            return Mathf.Lerp(SwimStaminaPerSecMin.Value, SwimStaminaPerSecMax.Value, skillFactor);
+        }
+
+
+        #endregion swim
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                             SKILLS
+        ///              
+        ///                             Woodcutting
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region wood
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillWood;
+        public static ConfigEntry<float> ToolBXPWoodStubReward;
+        public static ConfigEntry<float> WoodcuttingChopDamagePercentMin;
+        public static ConfigEntry<float> WoodcuttingChopDamagePercentMax;
+        public static ConfigEntry<float> WoodcuttingStaminaRebateMin;
+        public static ConfigEntry<float> WoodcuttingStaminaRebateMax;
+        public static ConfigEntry<float> WoodcuttingDropPercentMin;
+        public static ConfigEntry<float> WoodcuttingDropPercentMax;
+        public static ConfigEntry<float> WoodcuttingRegenStaminaMin;
+        public static ConfigEntry<float> WoodcuttingRegenStaminaMax;
+        public static ConfigEntry<float> WoodcuttingCarryCapacityMin;
+        public static ConfigEntry<float> WoodcuttingCarryCapacityMax;
+        #endregion configdef
+
+        public static void InitWoodConfigs(ConfigFile cfg)
+        {
+            ActiveSkillWood = cfg.Bind("Generic.Active", "Woodcutting", true,
+                    "Whether or not to activate king's skills version of the woodcutting skill"); ;
+
+            //List of all object names that count as woodcutting drops
+            WoodcuttingDropTable.Add("BeechSeeds", 0);
+            WoodcuttingDropTable.Add("ElderBark", 0);
+            WoodcuttingDropTable.Add("FineWood", 0);
+            WoodcuttingDropTable.Add("FirCone", 0);
+            WoodcuttingDropTable.Add("PineCone", 0);
+            WoodcuttingDropTable.Add("RoundLog", 0);
+            WoodcuttingDropTable.Add("Wood", 0);
+
+
+            ToolBXPWoodStubReward = cfg.Bind("Experience.Tools", "Woodcutting BXP for Stump", 20f,
+                "The amount of experience you get for breaking a stump");
+
+            //effects
+            WoodcuttingChopDamagePercentMin = cfg.Bind("Wood.Effect", "Chop Damage Min", 0f,
+                "% increase to chop damage at level 0");
+            WoodcuttingChopDamagePercentMax = cfg.Bind("Wood.Effect", "Chop Damage Max", 200f,
+                "% increase to chop damage at level 100");
+            WoodcuttingStaminaRebateMin = cfg.Bind("Wood.Effect", "Stamina Rebate Min", 0f,
+                "Flat stamina rebate on each hit of a tree at level 0");
+            WoodcuttingStaminaRebateMax = cfg.Bind("Wood.Effect", "Stamina Rebate Max", 9f,
+                "Flat stamina rebate on each hit of a tree at level 100");
+            WoodcuttingDropPercentMin = cfg.Bind("Wood.Effect", "Drop rate min", 0f,
+                "% increase to wood drops at level 0");
+            WoodcuttingDropPercentMax = cfg.Bind("Wood.Effect", "Drop rate max", 150f,
+                "% increase to wood drops at level 100");
+            WoodcuttingRegenStaminaMin = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", -.1f,
+                    "Amount of seconds to take off the stamina regeneration timer at level 0. Base value in vanilla is 1s");
+            WoodcuttingRegenStaminaMax = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", .5f,
+                    "Amount of seconds to take off the stamina regeneration timer at level 100");
+            WoodcuttingCarryCapacityMin = cfg.Bind("Wood.Effect", "Carry Capacity Min", 0f,
+                "How much extra carrying capacity you get at level 0");
+            WoodcuttingCarryCapacityMax = cfg.Bind("Wood.Effect", "Carry Capacity Max", 50f,
+                "How much extra carrying capacity you get at level 100");
+        }
+
+        public static float GetWoodcuttingDamageMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(WoodcuttingChopDamagePercentMin),
+                PerToMod(WoodcuttingChopDamagePercentMax), skillFactor);
+        }
+        public static float GetWoodDropMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(WoodcuttingDropPercentMin),
+                PerToMod(WoodcuttingDropPercentMax), skillFactor);
+        }
+        public static float GetWoodcuttingStaminaRebate(float skillFactor)
+        {
+            return Mathf.Lerp(WoodcuttingStaminaRebateMin.Value,
+                WoodcuttingStaminaRebateMax.Value, skillFactor);
+        }
+        public static float GetWoodcuttingRegenLessTime(float skillFactor)
+        {
+            return Mathf.Lerp(WoodcuttingRegenStaminaMin.Value,
+                WoodcuttingRegenStaminaMax.Value, skillFactor);
+        }
+        public static float GetWoodcuttingCarryCapacity(float skillFactor)
+        {
+            return Mathf.Lerp(WoodcuttingCarryCapacityMin.Value,
+                WoodcuttingCarryCapacityMax.Value, skillFactor);
+        }
+
+
+        #endregion wood
+
+        #endregion skills
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                    Perks
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region perks
+        #region configdef
+        public static ConfigEntry<bool> PerkExplorationOn;
+        public static ConfigEntry<float> PerkOneLVLThreshold;
+        public static ConfigEntry<float> PerkTwoLVLThreshold;
+        public static ConfigEntry<float> PerkThreeLVLThreshold;
+        public static ConfigEntry<float> PerkFourLVLThreshold;
+        #endregion configdef
+
+        public static void InitPerkConfig(ConfigFile cfg)
+        {
+            PerkExplorationOn = cfg.Bind("Perks", "Perk Exploration", true,
+                    "Whether or not locked perks are hidden from view");
+
+            PerkOneLVLThreshold = cfg.Bind("Perks", "First Threshold", .5f,
+                    "mod of max level before you unlock the first set of perks");
+            PerkTwoLVLThreshold = cfg.Bind("Perks", "Second Threshold", 1f,
+                    "mod of max level before you unlock the second set of perks");
+            PerkThreeLVLThreshold = cfg.Bind("Perks", "ThirdThreshold", 10f,
+                    "mod of max level before you unlock the third set of perks - NOT IMPLEMENTED");
+            PerkFourLVLThreshold = cfg.Bind("Perks", "FourthThreshold", 10f,
+                    "mod of max level before you unlock the fourth set of perks - NOT IMPLEMENTED");
+        }
+
+
+
+        #endregion perks
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                      Generic Weapon->Damage Experience
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region exp
+        #region configdef
+        public static ConfigEntry<float> WeaponXPSwing;
+        public static ConfigEntry<float> WeaponXPHoldPerTick;
+        public static ConfigEntry<float> WeaponXPHoldTickLength;
+        public static ConfigEntry<float> WeaponXPHoldUnarmedPercent;
+        public static ConfigEntry<float> WeaponXPStrikeDamagePercent;
+        public static ConfigEntry<float> WeaponXPStrikeDamageFactor;
+        public static ConfigEntry<float> WeaponXPStrikeDestructiblePercent;
+
+        public static ConfigEntry<float> ToolXPStrikeDamagePercent;
+        public static ConfigEntry<float> ToolXPStrikeDamageFactor;
+        #endregion configdef
+
+        public static void InitWeaponEXPConfig(ConfigFile cfg)
+        {
+            //Weapon Swing Experence
+            WeaponXPSwing = cfg.Bind("Experience.Weapons.Swing", "XP Flat", .25f,
+                "Flat experience to be gained on each swing, regardless of hit.");
+
+
+            //Weapon Hold Experience
+            WeaponXPHoldPerTick = cfg.Bind("Experience.Weapons.Hold", "XP/s", .04f,
+                "Flat experience to be gained every second holding any weapon.");
+            WeaponXPHoldTickLength = cfg.Bind("Experience.Weapons.Hold", "Timer", 1.0f,
+                "Seconds between ticks of hold experience.");
+            WeaponXPHoldUnarmedPercent = cfg.Bind("Experience.Weapons.Hold", "Unarmed", 25f,
+                "% of normal hold experience to unarmed when holding nothing. Should be lower than 100% " +
+                "to account for how often a regular player is holding nothing.");
+
+
+            //Weapon Strike Experience
+            WeaponXPStrikeDamagePercent = cfg.Bind("Experience.Weapons", "XP", 20f,
+                "% modifier to overall experience gained from damage.");
+            WeaponXPStrikeDamageFactor = cfg.Bind("Experience.Weapons", "XP Factor", .24f,
+                "Factor to define the slope of the damage to xp curve.");
+            WeaponXPStrikeDestructiblePercent = cfg.Bind("Experience.Weapons", "Destructible", 15f,
+                "% of experience gained when hit target is non living. Should be lover than 100%");
+
+
+
+            //Tool experience
+            ToolXPStrikeDamagePercent = cfg.Bind("Experience.Tools", "Tool Damage", 25f,
+                "% of damage done to resources that becomes experience for gathering skills " +
+                "(Woodcutting, Mining)");
+            ToolXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .24f,
+                "Factor to define the slope of the damage to xp curve");
+        }
+
+        
+
+        public static float GetWeaponEXPStrikeDestructibleMod()
+        {
+            return PerToMod(WeaponXPStrikeDestructiblePercent);
+        }
+        public static float GetWeaponEXPHoldUnarmedMod()
+        {
+            return PerToMod(WeaponXPHoldUnarmedPercent);
+        }
+        public static float GetWeaponDamageToExperience(float damage)
+        {
+            return PerToMod(WeaponXPStrikeDamagePercent) *
+                Mathf.Pow(damage, WeaponXPStrikeDamageFactor.Value);
+        }
+        public static float GetToolDamageToExperience(float damage)
+        {
+            return PerToMod(ToolXPStrikeDamagePercent) *
+                Mathf.Pow(damage, ToolXPStrikeDamageFactor.Value);
+        }
+
+        #endregion exp
+
+
+
+        #region templates
         /*
-         * template
+         
+        /////////////////////////// config entry
+
+        public static ConfigEntry<bool> ActiveSkillSail;
+
+
+
+
+        /////////////////////////// get function
+
         public static float Get(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(), 
-                PerToMult(), skillFactor);
+            return Mathf.Lerp(PerToMult(), PerToMult(), skillFactor);
         }
-         */
 
+        
+
+        //////////////////////////// config setting
+
+        x = cfg.Bind("g", "t", 0f, 
+                    "d");
+
+
+        /////////////////////////// new section
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        /// 
+        ///                           template section
+        ///              
+        ///                              template
+        /// 
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region a
+        #region configdef
+        #endregion configdef
+
+        public static void InitConfigs(ConfigFile cfg)
+        {
+        }
+
+
+        #endregion a
+
+        */
+        #endregion templates
     }
 }

@@ -235,10 +235,10 @@ namespace kingskills.UX
         public static void OpenAgriculturePerkBoxes()
         {
             OpenPerksByType(SkillMan.Agriculture,
-                Perks.PerkType.Decapitation,
-                Perks.PerkType.Berserkr,
-                Perks.PerkType.Highlander,
-                Perks.PerkType.Throwback);
+                Perks.PerkType.SoilWorking,
+                Perks.PerkType.Botany,
+                Perks.PerkType.Harvester,
+                Perks.PerkType.Seeding);
         }
         public static void OpenAxePerkBoxes()
         {
@@ -267,10 +267,10 @@ namespace kingskills.UX
         public static void OpenBuildingPerkBoxes()
         {
             OpenPerksByType(SkillMan.Building,
-                Perks.PerkType.Decapitation,
-                Perks.PerkType.Berserkr,
-                Perks.PerkType.Highlander,
-                Perks.PerkType.Throwback);
+                Perks.PerkType.Engineer,
+                Perks.PerkType.Nailgun,
+                Perks.PerkType.Trapmaster,
+                Perks.PerkType.Warehousing);
         }
         public static void OpenClubPerkBoxes()
         {
@@ -283,10 +283,10 @@ namespace kingskills.UX
         public static void OpenCookingPerkBoxes()
         {
             OpenPerksByType(SkillMan.Cooking,
-                Perks.PerkType.Decapitation,
-                Perks.PerkType.Berserkr,
-                Perks.PerkType.Highlander,
-                Perks.PerkType.Throwback);
+                Perks.PerkType.SpicySweet,
+                Perks.PerkType.Nutrition,
+                Perks.PerkType.FiveStarChef,
+                Perks.PerkType.SpiceMaster);
         }
         public static void OpenFistPerkBoxes()
         {
