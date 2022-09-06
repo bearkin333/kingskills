@@ -32,7 +32,7 @@ perks:
 	very good buffs (exp gain or damage)
     */
 
-    class CookingSkill
+    class Cooking
     {
     }
 }

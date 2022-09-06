@@ -200,7 +200,7 @@ namespace kingskills.UX
             //scroll.GetComponent<ScrollRect>().Rebuild(UnityEngine.UI.CanvasUpdate.PreRender);
 
 
-            if (!ConfigManager.IsSkillActive(skill))
+            if (!ConfigMan.IsSkillActive(skill))
             {
                 SkillGUI.LeftPanelTexts["experience"].GetComponent<Text>().text =
                     "Not currently active";
@@ -225,16 +225,22 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Agriculture);
 
-            float plantXPReward = 0f;
+            float plantXPReward = ConfigMan.GetAgriculturePlantReward(Player.m_localPlayer.m_hovering);
 
-            float botYield = MultToPer(ConfigManager.GetAgricultureYieldMult(skill));
-            float botGrowRedux = MultToPer(ConfigManager.GetAgricultureGrowTimeRedux(skill));
-            float botFoodQuality = MultToPer(ConfigManager.GetAgricultureFoodQualityMult(skill));
-            float botHealthGain = ConfigManager.GetAgricultureHealthRegain(skill);
+            float botYield = MultToPer(ConfigMan.GetAgricultureYieldMult(skill));
+            float botGrowRedux = MultToPer(ConfigMan.GetAgricultureGrowTimeRedux(skill), true);
+            float botFoodQuality = MultToPer(ConfigMan.GetAgricultureFoodQualityMult(skill));
+            float botHealthGain = ConfigMan.GetAgricultureHealthRegain(skill);
+
+            string botYieldS = PrettyText.Prettify(botYield, 2, PrettyText.TextType.Percent);
+            string botGrowReduxS = PrettyText.Prettify(botGrowRedux, 0, PrettyText.TextType.PercentRedux);
+            string botFoodQualityS = PrettyText.Prettify(botFoodQuality, 0, PrettyText.TextType.Percent);
+            string botHealthGainS = PrettyText.Prettify(botHealthGain, 1, PrettyText.TextType.Flat);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
-                "Every item you harvest gives you experience, whether in the wild or in your planted garden.";
+                "Every item you harvest gives you experience, whether in the wild or in your planted garden. " +
+                "You also get a small amount for each plant planted.";
             SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
                 "Different plants give you different rewards. As a rule, items you've " +
                 "planted tend to give you more experience.";
@@ -244,27 +250,33 @@ namespace kingskills.UX
                 "Experience bounty from hovered plant: " + plantXPReward.ToString("F1");
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                botYield.ToString("F2") + "% extra yield from plants";
+                botYieldS + " yield from plants";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                botGrowRedux.ToString("F0") + "% less time to grow plants";
+                botGrowReduxS + " time to grow plants";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                botFoodQuality.ToString("F0") + "% increased food quality for food you harvest";
+                botFoodQualityS + " food quality for food you harvest";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                botHealthGain.ToString("F1") + " health regained every time you harvest a plant";
+                botHealthGainS + " health regained every time you harvest a plant";
 
         }
         public static void OpenAxePanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Axes);
 
-            float axeDamage = MultToPer(ConfigManager.GetAxeDamageMult(skill));
-            float axeStaminaRedux = MultToPer(ConfigManager.GetAxeStaminaRedux(skill));
-            float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
-            float axeChopBonus = MultToPer(1f + ConfigManager.GetAxeChopDamageMod(skill));
-            float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
+            float axeDamage = MultToPer(ConfigMan.GetAxeDamageMult(skill));
+            float axeStaminaRedux = MultToPer(ConfigMan.GetAxeStaminaRedux(skill), true);
+            float axeStaminaGain = ConfigMan.GetAxeStamina(skill);
+            float axeChopBonus = MultToPer(1f + ConfigMan.GetAxeChopDamageMod(skill));
+            float axeCarryCapacity = ConfigMan.GetAxeCarryCapacity(skill);
+
+            string axeDamageS = PrettyText.Prettify(axeDamage, 1, PrettyText.TextType.Percent);
+            string axeStaminaReduxS = PrettyText.Prettify(axeStaminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string axeStaminaGainS = PrettyText.Prettify(axeStaminaGain, 0, PrettyText.TextType.Flat);
+            string axeChopBonusS = PrettyText.Prettify(axeChopBonus, 1, PrettyText.TextType.Percent);
+            string axeCarryCapacityS = PrettyText.Prettify(axeCarryCapacity, 0, PrettyText.TextType.Flat);
 
             //Jotunn.Logger.LogMessage($"I'm changing the axe values in now");
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -278,29 +290,34 @@ namespace kingskills.UX
                 "Bonus experience for the axe is gained every time you break a log. ";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                axeDamage.ToString("F1") + "% extra damage with axes";
+                axeDamageS + " damage with axes";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                axeStaminaRedux.ToString("F1") + "% stamina usage with axes";
+                axeStaminaReduxS + " stamina usage with axes";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                axeStaminaGain.ToString("F0") + " higher base stamina";
+                axeStaminaGainS + " higher base stamina";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                axeChopBonus.ToString("F1") + "% extra chop damage";
+                axeChopBonusS + " chop damage";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                axeCarryCapacity.ToString("F0") + " extra carry capacity";
+                axeCarryCapacityS + " extra carry capacity";
         }
         public static void OpenBlockPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Blocking);
 
-            float staminaRedux = MultToPer(ConfigManager.GetBlockStaminaRedux(skill));
-            float baseBlockPower = ConfigManager.GetBlockPowerFlat(skill);
-            float blockPerArmor = MultToPer(ConfigManager.GetBlockPowerMult(skill));
-            float blockHealth = ConfigManager.GetBlockHealth(skill);
-            float parryExpMod = MultToPer(ConfigManager.GetBlockParryExpMult());
+            float staminaRedux = MultToPer(ConfigMan.GetBlockStaminaRedux(skill), true);
+            float baseBlockPower = ConfigMan.GetBlockPowerFlat(skill);
+            float blockPerArmor = MultToPer(ConfigMan.GetBlockPowerMult(skill));
+            float blockHealth = ConfigMan.GetBlockHealth(skill);
+            float parryExpMod = MultToPer(ConfigMan.GetBlockParryExpMult());
+
+            string staminaReduxS = PrettyText.Prettify(staminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string baseBlockPowerS = PrettyText.Prettify(baseBlockPower, 0, PrettyText.TextType.Percent);
+            string blockPerArmorS = PrettyText.Prettify(blockPerArmor, 1, PrettyText.TextType.Percent);
+            string blockHealthS = PrettyText.Prettify(blockHealth, 0, PrettyText.TextType.Percent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage you block is turned into experience.";
@@ -310,26 +327,32 @@ namespace kingskills.UX
                 "You get " + parryExpMod.ToString("F0") + "% bonus experience for parrying an attack.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                staminaRedux.ToString("F1") + "% stamina cost for blocks";
+                staminaReduxS + " stamina cost for blocks";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                baseBlockPower.ToString("F0") + " extra flat block armor";
+                baseBlockPowerS + " flat block armor";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                blockPerArmor.ToString("F1") + "% extra block armor";
+                blockPerArmorS + " block armor";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                blockHealth.ToString("F0") + " extra max health";
+                blockHealthS + " max health";
         }
         public static void OpenBowPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Bows);
 
-            float bowDamage = MultToPer(ConfigManager.GetBowDamageMult(skill));
-            float bowStaminaRedux = MultToPer(ConfigManager.GetBowStaminaRedux(skill));
-            float bowVelocity = MultToPer(ConfigManager.GetBowVelocityMult(skill));
-            float bowDrawSpeed = ConfigManager.GetBowDrawSpeed(skill);
-            float bowDropRate = MultToPer(ConfigManager.GetBowDropRateMod(skill)+1f);
+            float bowDamage = MultToPer(ConfigMan.GetBowDamageMult(skill));
+            float bowStaminaRedux = MultToPer(ConfigMan.GetBowStaminaRedux(skill), true);
+            float bowVelocity = MultToPer(ConfigMan.GetBowVelocityMult(skill));
+            float bowDrawSpeed = ConfigMan.GetBowDrawSpeed(skill);
+            float bowDropRate = MultToPer(ConfigMan.GetBowDropRateMod(skill)+1f);
+
+            string bowDamageS = PrettyText.Prettify(bowDamage, 1, PrettyText.TextType.Percent);
+            string bowStaminaReduxS = PrettyText.Prettify(bowStaminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string bowVelocityS = PrettyText.Prettify(bowVelocity, 1, PrettyText.TextType.Percent);
+            string bowDrawSpeedS = PrettyText.Prettify(bowDrawSpeed, 1, PrettyText.TextType.Straight);
+            string bowDropRateS = PrettyText.Prettify(bowDropRate, 1, PrettyText.TextType.Percent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -342,34 +365,41 @@ namespace kingskills.UX
                 "Bonus experience is gained based on the length and difficulty of successful shots with a bow.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                bowDamage.ToString("F1") + "% extra damage with bows";
+                bowDamageS + " damage with bows";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                bowStaminaRedux.ToString("F1") + "% stamina usage with bows";
+                bowStaminaReduxS + " stamina usage with bows";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                bowVelocity.ToString("F1") + "% extra arrow velocity";
+                bowVelocityS + " arrow velocity";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                bowDrawSpeed.ToString("F1") + "% draw speed";
+                bowDrawSpeedS + " draw speed";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                bowDropRate.ToString("F1") + "% extra loot drops from creatures";
+                bowDropRateS + " loot drops from creatures";
         }
         public static void OpenBuildingPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Building);
 
-            float buildHealth = MultToPer(ConfigManager.GetBuildingHealthMult(skill));
-            float buildStability = MultToPer(ConfigManager.GetBuildingStabilityMult(skill));
-            float buildDamage = MultToPer(ConfigManager.GetBuildingDamageMult(skill));
-            float buildWNT = MultToPer(ConfigManager.GetBuildingWNTRedux(skill));
-            float buildFreeChance = MultToPer(1f + ConfigManager.GetBuildingFreeMod(skill));
-            float buildStaminaRedux = MultToPer(ConfigManager.GetBuildingStaminaRedux(skill));
+            float buildHealth = MultToPer(ConfigMan.GetBuildingHealthMult(skill));
+            float buildStability = MultToPer(ConfigMan.GetBuildingStabilityMult(skill));
+            float buildDamage = MultToPer(ConfigMan.GetBuildingDamageMult(skill));
+            float buildWNT = MultToPer(ConfigMan.GetBuildingWNTRedux(skill), true);
+            float buildFreeChance = MultToPer(1f + ConfigMan.GetBuildingFreeMod(skill));
+            float buildStaminaRedux = MultToPer(ConfigMan.GetBuildingStaminaRedux(skill), true);
+
+            string buildHealthS = PrettyText.Prettify(buildHealth, 1, PrettyText.TextType.Percent);
+            string buildStabilityS = PrettyText.Prettify(buildStability, 1, PrettyText.TextType.Percent);
+            string buildDamageS = PrettyText.Prettify(buildDamage, 0, PrettyText.TextType.Percent);
+            string buildWNTS = PrettyText.Prettify(buildWNT, 0, PrettyText.TextType.PercentRedux);
+            string buildFreeChanceS = PrettyText.Prettify(buildFreeChance, 0, PrettyText.TextType.ColorlessPercent);
+            string buildStaminaReduxS = PrettyText.Prettify(buildStaminaRedux, 0, PrettyText.TextType.PercentRedux);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
-                "Placing a building gives you a flat amount of experience..";
+                "Placing a building gives you a flat amount of experience.";
             SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
                 "Repairing a building earns you experience based on how much health you repaired.";
             SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
@@ -378,32 +408,38 @@ namespace kingskills.UX
                 "Bonus experience for building is earned when your buildings damage creatures, based on damage dealt.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                buildHealth.ToString("F1") + "% extra health to your buildings";
+                buildHealthS + " building health";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                buildStability.ToString("F1") + "% extra structural stability to your buildings";
+                buildStabilityS + " building structural stability ";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                buildDamage.ToString("F0") + "% extra damage dealt by your buildings ";
+                buildDamageS + " damage dealt by buildings";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                buildWNT.ToString("F0") + "% reduced weather damage taken by your buildings";
+                buildWNTS + " wear and tear on buildings";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                buildFreeChance.ToString("F0") + "% chance to place a free building";
+                buildFreeChanceS + " chance to place a free building";
 
             SkillGUI.LeftPanelTexts["f6"].GetComponent<Text>().text =
-                buildStaminaRedux.ToString("F0") + "% reduced stamina cost for placing buildings and repairing";
+                buildStaminaReduxS + " stamina cost for construction and repair";
         }
         public static void OpenClubPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Clubs);
 
-            float clubDamage = MultToPer(ConfigManager.GetClubDamageMult(skill));
-            float clubStaminaRedux = MultToPer(ConfigManager.GetClubStaminaRedux(skill));
-            float clubBlunt = MultToPer(ConfigManager.GetClubBluntMult(skill));
-            float clubKnockback = MultToPer(ConfigManager.GetClubKnockbackMult(skill));
-            float clubStagger = MultToPer(ConfigManager.GetClubStaggerMult(skill));
+            float clubDamage = MultToPer(ConfigMan.GetClubDamageMult(skill));
+            float clubStaminaRedux = MultToPer(ConfigMan.GetClubStaminaRedux(skill), true);
+            float clubBlunt = MultToPer(ConfigMan.GetClubBluntMult(skill));
+            float clubKnockback = MultToPer(ConfigMan.GetClubKnockbackMult(skill));
+            float clubStagger = MultToPer(ConfigMan.GetClubStaggerMult(skill));
+
+            string clubDamageS = PrettyText.Prettify(clubDamage, 1, PrettyText.TextType.Percent);
+            string clubStaminaReduxS = PrettyText.Prettify(clubStaminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string clubBluntS = PrettyText.Prettify(clubBlunt, 1, PrettyText.TextType.Percent);
+            string clubKnockbackS = PrettyText.Prettify(clubKnockback, 1, PrettyText.TextType.TextlessPercent);
+            string clubStaggerS = PrettyText.Prettify(clubStagger, 1, PrettyText.TextType.Percent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -416,28 +452,33 @@ namespace kingskills.UX
                 "Bonus experience every time you stagger an enemy with damage with a club.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                clubDamage.ToString("F1") + "% extra damage with clubs";
+                clubDamageS + " damage with clubs";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                clubStaminaRedux.ToString("F1") + "% stamina usage with clubs";
+                clubStaminaReduxS + " stamina usage with clubs";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                clubBlunt.ToString("F1") + "% extra bonus to ALL blunt damage";
+                clubBluntS + " bonus to ALL blunt damage";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                clubKnockback.ToString("F1") + "% knockback bonus to ALL weapons";
+                clubKnockbackS + " knockback bonus to ALL weapons";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                clubStagger.ToString("F1") + "% extra stagger damage to ALL weapons";
+                clubStaggerS + " stagger damage to ALL weapons";
         }
         public static void OpenCookingPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Cooking);
 
-            float cookAvgFQ = MultToPer(ConfigManager.GetCookingAverageFoodQualityMod(skill));
-            float cookFQRange = MultToPer(ConfigManager.GetCookingFoodQualityRangeMod(skill));
-            float cookTimeRedux = MultToPer(ConfigManager.GetCookingTimeRedux(skill));
-            float cookFermentTimeRedux = MultToPer(ConfigManager.GetCookingFermentTimeRedux(skill));
+            float cookAvgFQ = MultToPer(1f + ConfigMan.GetCookingAverageFoodQualityMod(skill));
+            float cookFQRange = MultToPer(1f + ConfigMan.GetCookingFoodQualityRangeMod(skill));
+            float cookTimeRedux = MultToPer(ConfigMan.GetCookingTimeRedux(skill), true);
+            float cookFermentTimeRedux = MultToPer(ConfigMan.GetCookingFermentTimeRedux(skill), true);
+
+            string cookAvgFQS = PrettyText.Prettify(cookAvgFQ, 1, PrettyText.TextType.TextlessPercent);
+            string cookFQRangeS = PrettyText.Prettify(cookFQRange, 1, PrettyText.TextType.TextlessPercent);
+            string cookTimeReduxS = PrettyText.Prettify(cookTimeRedux, 1, PrettyText.TextType.PercentRedux);
+            string cookFermentTimeReduxS = PrettyText.Prettify(cookFermentTimeRedux, 1, PrettyText.TextType.PercentRedux);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -452,21 +493,21 @@ namespace kingskills.UX
                 "much stamina and health it gives.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                cookAvgFQ.ToString("F1") + "% average food quality of cooked items";
+                cookAvgFQS + " average food quality of cooked items";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                cookFQRange.ToString("F1") + "% range in possible food qualities";
+                cookFQRangeS + " range in possible food qualities";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                cookTimeRedux.ToString("F1") + "% reduced cooking time";
+                cookTimeReduxS + " cooking time";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                cookFermentTimeRedux.ToString("F0") + "% reduced fermentation time";
+                cookFermentTimeReduxS + " fermentation time";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                "[Food Quality]: \nFood quality is a king's skills specific property. Any item " +
+                "\n[Food Quality]: \nFood quality is a king's skills specific property. Any item " +
                 "you cook gets a random food quality, which directly affects it's health, stamina, and " +
-                "duration. FQ is based primarily on your skill level, but your timing has an affect on the " +
+                "duration. \nFQ is based primarily on your skill level, but your timing has an affect on the " +
                 "overall quality as well.";
 
         }
@@ -474,11 +515,17 @@ namespace kingskills.UX
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Unarmed);
 
-            float fistDamage = MultToPer(ConfigManager.GetFistDamageMult(skill));
-            float fistStaminaRedux = MultToPer(ConfigManager.GetFistStaminaRedux(skill));
-            float fistFlatDamage = ConfigManager.GetFistDamageFlat(skill);
-            float fistBlock = ConfigManager.GetFistBlockArmor(skill);
-            float fistMovespeed = MultToPer(1f + ConfigManager.GetFistMovespeedMod(skill));
+            float fistDamage = MultToPer(ConfigMan.GetFistDamageMult(skill));
+            float fistStaminaRedux = MultToPer(ConfigMan.GetFistStaminaRedux(skill));
+            float fistFlatDamage = ConfigMan.GetFistDamageFlat(skill);
+            float fistBlock = ConfigMan.GetFistBlockArmor(skill);
+            float fistMovespeed = MultToPer(1f + ConfigMan.GetFistMovespeedMod(skill));
+
+            string fistDamageS = PrettyText.Prettify(fistDamage, 1, PrettyText.TextType.Percent);
+            string fistStaminaReduxS = PrettyText.Prettify(fistStaminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string fistFlatDamageS = PrettyText.Prettify(fistFlatDamage, 0, PrettyText.TextType.Flat);
+            string fistBlockS = PrettyText.Prettify(fistBlock, 0, PrettyText.TextType.Flat);
+            string fistMovespeedS = PrettyText.Prettify(fistMovespeed, 1, PrettyText.TextType.Percent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -491,19 +538,19 @@ namespace kingskills.UX
                 "Bonus experence for fists is gained every time you perform an unarmed block.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                fistDamage.ToString("F1") + "% extra damage with fists";
+                fistDamageS + " damage with fists";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                fistStaminaRedux.ToString("F1") + "% stamina usage with fists";
+                fistStaminaReduxS + " stamina usage with fists";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                fistFlatDamage.ToString("F0") + " extra flat damage";
+                fistFlatDamageS + " flat damage";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                fistBlock.ToString("F0") + " extra unarmed block armor";
+                fistBlockS + " unarmed block armor";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                fistMovespeed.ToString("F1") + "% extra move speed";
+                fistMovespeedS + " move speed";
         }
         public static void OpenJumpPanels()
         {
@@ -511,13 +558,21 @@ namespace kingskills.UX
             StatsPatch.JumpForceUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Jump);
 
-            float bonusJumpForce = MultToPer(ConfigManager.GetJumpForceMult(skill));
-            float bonusJumpForwardForce = MultToPer(ConfigManager.GetJumpForwardForceMult(skill));
-            float staminaRedux = MultToPer(ConfigManager.GetJumpStaminaRedux(skill));
-            float tired = MultToPer(ConfigManager.GetJumpTiredMod(skill) + ConfigManager.BaseJumpTiredFactor);
+            float bonusJumpForce = MultToPer(ConfigMan.GetJumpForceMult(skill));
+            float bonusJumpForwardForce = MultToPer(ConfigMan.GetJumpForwardForceMult(skill));
+            float staminaRedux = MultToPer(ConfigMan.GetJumpStaminaRedux(skill), true);
+            float tired = (ConfigMan.GetJumpTiredMod(skill) + ConfigMan.BaseJumpTiredFactor)*100f;
 
-            float fallDamageThreshhold = ConfigManager.GetFallDamageThreshold(skill);
-            float fallDamageRedux = MultToPer(ConfigManager.GetFallDamageRedux(skill));
+            float fallDamageThreshhold = ConfigMan.GetFallDamageThreshold(skill);
+            float fallDamageRedux = MultToPer(ConfigMan.GetFallDamageRedux(skill), true);
+
+            string bonusJumpForceS = PrettyText.Prettify(bonusJumpForce, 1, PrettyText.TextType.Percent);
+            string bonusJumpForwardForceS = PrettyText.Prettify(bonusJumpForwardForce, 1, PrettyText.TextType.Percent);
+            string staminaReduxS = PrettyText.Prettify(staminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string tiredS = PrettyText.Prettify(tired, 0, PrettyText.TextType.ColorlessPercent);
+            string fallDamageThreshholdS = PrettyText.Prettify(fallDamageThreshhold, 0, PrettyText.TextType.Flat);
+            string fallDamageReduxS = PrettyText.Prettify(fallDamageRedux, 1, PrettyText.TextType.PercentRedux);
+
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "Every time you jump, you gain a small, flat amount of experience.";
@@ -527,32 +582,38 @@ namespace kingskills.UX
                 "fall damage resistance.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                bonusJumpForce.ToString("F1") + "% extra vertical jump force ";
+                bonusJumpForceS + " vertical jump force ";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                bonusJumpForwardForce.ToString("F1") + "% extra horizontal jump force ";
+                bonusJumpForwardForceS + " horizontal jump force ";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                staminaRedux.ToString("F1") + "% less stamina cost to jump ";
+                staminaReduxS + " stamina cost to jump ";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                tired.ToString("F0") + "% jump force modifier when tired";
+                tiredS + " jump force modifier when tired";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                fallDamageThreshhold.ToString("F1") + "m minimum fall damage height ";
+                fallDamageThreshholdS + "m minimum fall damage height ";
 
             SkillGUI.LeftPanelTexts["f6"].GetComponent<Text>().text =
-                fallDamageRedux.ToString("F1") + "% less fall damage";
+                fallDamageReduxS + " fall damage";
         }
         public static void OpenKnifePanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Knives);
 
-            float knifeDamage = MultToPer(ConfigManager.GetKnifeDamageMult(skill));
-            float knifeStaminaRedux = MultToPer(ConfigManager.GetKnifeStaminaRedux(skill));
-            float knifeBackstab = MultToPer(ConfigManager.GetKnifeBackstabMult(skill));
-            float knifeMovespeed = MultToPer(1f + ConfigManager.GetKnifeMovespeedMod(skill));
-            float knifePierce = MultToPer(ConfigManager.GetKnifePierceMult(skill));
+            float knifeDamage = MultToPer(ConfigMan.GetKnifeDamageMult(skill));
+            float knifeStaminaRedux = MultToPer(ConfigMan.GetKnifeStaminaRedux(skill), true);
+            float knifeBackstab = MultToPer(ConfigMan.GetKnifeBackstabMult(skill));
+            float knifeMovespeed = MultToPer(1f + ConfigMan.GetKnifeMovespeedMod(skill));
+            float knifePierce = MultToPer(ConfigMan.GetKnifePierceMult(skill));
+
+            string knifeDamageS = PrettyText.Prettify(knifeDamage, 1, PrettyText.TextType.Percent);
+            string knifeStaminaReduxS = PrettyText.Prettify(knifeStaminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string knifeBackstabS = PrettyText.Prettify(knifeBackstab, 0, PrettyText.TextType.Percent);
+            string knifeMovespeedS = PrettyText.Prettify(knifeMovespeed, 1, PrettyText.TextType.Percent);
+            string knifePierceS = PrettyText.Prettify(knifePierce, 1, PrettyText.TextType.Percent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -565,29 +626,36 @@ namespace kingskills.UX
                 "Bonus experience is gained every time you perform a sneak attack with a knife.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                knifeDamage.ToString("F1") + "% extra damage with knives ";
+                knifeDamageS + " damage with knives ";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                knifeStaminaRedux.ToString("F1") + "% stamina usage with knives ";
+                knifeStaminaReduxS + " stamina usage with knives ";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                knifeBackstab.ToString("F0") + "% sneak attack bonus damage ";
+                knifeBackstabS + " sneak attack damage ";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                knifeMovespeed.ToString("F1") + "% extra move speed ";
+                knifeMovespeedS + " move speed ";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                knifePierce.ToString("F1") + "% extra to ALL pierce damage";
+                knifePierceS + " to ALL pierce damage";
         }
         public static void OpenMiningPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Pickaxes);
 
-            float mineDamage = MultToPer(ConfigManager.GetMiningDamageMult(skill));
-            float mineDrop = MultToPer(ConfigManager.GetMiningDropMod(skill) + 1f);
-            float mineRebate = ConfigManager.GetMiningStaminaRebate(skill);
-            float mineRegen = ConfigManager.GetMiningRegenLessTime(skill);
-            float mineCarry = ConfigManager.GetMiningCarryCapacity(skill);
+            float mineDamage = MultToPer(ConfigMan.GetMiningDamageMult(skill));
+            float mineDrop = MultToPer(ConfigMan.GetMiningDropMod(skill) + 1f);
+            float mineRebate = ConfigMan.GetMiningStaminaRebate(skill);
+            float mineRegen = ConfigMan.GetMiningRegenLessTime(skill);
+            float mineCarry = ConfigMan.GetMiningCarryCapacity(skill);
+
+
+            string mineDamageS = PrettyText.Prettify(mineDamage, 1, PrettyText.TextType.Percent);
+            string mineDropS = PrettyText.Prettify(mineDrop, 2, PrettyText.TextType.Percent);
+            string mineRebateS = PrettyText.Prettify(mineRebate, 0, PrettyText.TextType.Flat);
+            string mineRegenS = PrettyText.Prettify(mineRegen, 1, PrettyText.TextType.Straight);
+            string mineCarryS = PrettyText.Prettify(mineCarry, 0, PrettyText.TextType.Flat);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt to rocks or ore is turned into experience.";
@@ -599,29 +667,35 @@ namespace kingskills.UX
                 "Bonus experience for the pick is gained based on the tier of the tool used.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                mineDamage.ToString("F1") + "% extra damage to rocks";
+                mineDamageS + " mining damage";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                mineDrop.ToString("F2") + "% increased ore drop rates";
+                mineDropS + " ore drop rates";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                mineRebate.ToString("F0") + " stamina rebate on pick swings that hit a rock";
+                mineRebateS + " stamina rebate on mining swings";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                mineRegen.ToString("F0") + " fewer seconds between health regeneration ticks";
+                mineRegenS + " fewer seconds between health regeneration ticks";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                mineCarry.ToString("F0") + " extra carrying capacity";
+                mineCarryS + " carrying capacity";
         }
         public static void OpenPolearmPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Polearms);
 
-            float polearmDamage = MultToPer(ConfigManager.GetPolearmDamageMult(skill));
-            float polearmStaminaRedux = MultToPer(ConfigManager.GetPolearmStaminaRedux(skill));
-            float polearmRange = ConfigManager.GetPolearmRange(skill);
-            float polearmArmor = ConfigManager.GetPolearmArmor(skill);
-            float polearmBlock = ConfigManager.GetPolearmBlock(skill);
+            float polearmDamage = MultToPer(ConfigMan.GetPolearmDamageMult(skill));
+            float polearmStaminaRedux = MultToPer(ConfigMan.GetPolearmStaminaRedux(skill), true);
+            float polearmRange = ConfigMan.GetPolearmRange(skill);
+            float polearmArmor = ConfigMan.GetPolearmArmor(skill);
+            float polearmBlock = ConfigMan.GetPolearmBlock(skill);
+
+            string polearmDamageS = PrettyText.Prettify(polearmDamage, 1, PrettyText.TextType.Percent);
+            string polearmStaminaReduxS = PrettyText.Prettify(polearmStaminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string polearmRangeS = PrettyText.Prettify(polearmRange, 0, PrettyText.TextType.Flat);
+            string polearmArmorS = PrettyText.Prettify(polearmArmor, 0, PrettyText.TextType.Flat);
+            string polearmBlockS = PrettyText.Prettify(polearmBlock, 0, PrettyText.TextType.Flat);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -635,19 +709,19 @@ namespace kingskills.UX
                 "In other words, wear heavy armor, get hit!";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                polearmDamage.ToString("F1") + "% extra damage with polearms ";
+                polearmDamageS + " damage with polearms ";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                polearmStaminaRedux.ToString("F1") + "% stamina usage with polearms";
+                polearmStaminaReduxS + " stamina usage with polearms";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                polearmRange.ToString("F0") + " increased units of range with all weapons";
+                polearmRangeS + " units of range with all weapons";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                polearmArmor.ToString("F0") + " increased armor";
+                polearmArmorS + " armor";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                polearmBlock.ToString("F0") + " extra block power with polearms";
+                polearmBlockS + " block power with polearms";
         }
         public static void OpenRunPanels()
         {
@@ -655,19 +729,33 @@ namespace kingskills.UX
             StatsPatch.RunSpeedUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Run);
 
-            float runSpeedBonus = MultToPer(ConfigManager.GetRunSpeedMult(skill));
-            float equipmentMalusRedux = MultToPer(ConfigManager.GetEquipmentRedux(skill));
-            float encumberanceRedux = MultToPer(ConfigManager.GetEncumberanceRedux(skill));
-            float staminaDrainRedux = MultToPer(ConfigManager.GetRunStaminaRedux(skill));
-            float baseStaminaGain = ConfigManager.GetRunStamina(skill);
+            float runSpeedBonus = MultToPer(ConfigMan.GetRunSpeedMult(skill));
+            float equipmentMalusRedux = MultToPer(ConfigMan.GetEquipmentRedux(skill), true);
+            float encumberanceRedux = MultToPer(ConfigMan.GetEncumberanceRedux(skill), true);
+            float staminaDrainRedux = MultToPer(ConfigMan.GetRunStaminaRedux(skill), true);
+            float baseStaminaGain = ConfigMan.GetRunStamina(skill);
 
-
-            float encumberanceFactor = MultToPer(MovePatch.GetEncumberanceMult(player));
+            float encumberanceFactor = MultToPer(MovePatch.GetEncumberanceRedux(player), true);
             float equipmentFactor = MultToPer(MovePatch.GetEquipmentMult(player));
 
             float absWeightExp = MultToPer(MovePatch.absoluteWeightBonus(player));
             float relWeightExp = MultToPer(MovePatch.relativeWeightBonus(player));
             float runSpeedExp = MultToPer(MovePatch.runSpeedExpBonus(player));
+
+
+            string runSpeedBonusS = PrettyText.Prettify(runSpeedBonus, 1, PrettyText.TextType.Percent);
+            string equipmentMalusReduxS = PrettyText.Prettify(equipmentMalusRedux, 1, PrettyText.TextType.PercentRedux);
+            string encumberanceReduxS = PrettyText.Prettify(encumberanceRedux, 1, PrettyText.TextType.PercentRedux);
+            string staminaDrainReduxS = PrettyText.Prettify(staminaDrainRedux, 1, PrettyText.TextType.PercentRedux);
+            string baseStaminaGainS = PrettyText.Prettify(baseStaminaGain, 0, PrettyText.TextType.Flat);
+
+            string encumberanceFactorS = PrettyText.Prettify(encumberanceFactor, 1, PrettyText.TextType.PercentRedux);
+            string equipmentFactorS = PrettyText.Prettify(equipmentFactor, 1, PrettyText.TextType.PercentRedux);
+
+            string absWeightExpS = PrettyText.Prettify(absWeightExp, 1, PrettyText.TextType.ColorlessPercent);
+            string relWeightExpS = PrettyText.Prettify(relWeightExp, 1, PrettyText.TextType.ColorlessPercent);
+            string runSpeedExpS = PrettyText.Prettify(runSpeedExp, 1, PrettyText.TextType.ColorlessPercent);
+
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "The faster you are moving, the more experience you get.";
@@ -677,29 +765,29 @@ namespace kingskills.UX
                 "You also gain experience based on how encumbered you are.";
             SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "Current bonuses to experience are: \n" +
-                runSpeedExp.ToString("F1") + "% from current run speed \n" +
-                absWeightExp.ToString("F1") + "% from absolute weight carried \n" +
-                relWeightExp.ToString("F1") + "% from fullness of inventory";
+                runSpeedExpS + " from current run speed \n" +
+                absWeightExpS + " from absolute weight carried \n" +
+                relWeightExpS + " from fullness of inventory";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                runSpeedBonus.ToString("F1") + "% extra run speed";
+                runSpeedBonusS + " run speed";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                equipmentMalusRedux.ToString("F1") + "% to equipment penalty";
+                equipmentMalusReduxS + " penalty from equipment";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                encumberanceRedux.ToString("F1") + "% to encumberance penalty";
+                encumberanceReduxS + " penalty from encumberance";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                staminaDrainRedux.ToString("F1") + "% to stamina cost to run";
+                staminaDrainReduxS + " run stamina cost";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                baseStaminaGain.ToString("F1") + " extra base stamina";
+                baseStaminaGainS + " base stamina";
 
             SkillGUI.LeftPanelTexts["f6"].GetComponent<Text>().text =
                 "Current effects from outside factors: \n" +
-                encumberanceFactor.ToString("F1") + "% speed from encumberance\n " +
-                equipmentFactor.ToString("F1") + "% speed from equipment";
+                encumberanceFactorS + " speed from encumberance\n " +
+                equipmentFactorS + " speed from equipment";
         }
         public static void OpenSailingPanels()
         {
@@ -710,11 +798,18 @@ namespace kingskills.UX
             float sailVeselBonus = 0f;//MultToPer(ConfigManager.GetSailVesselBonus());
             float sailCrewBonus = 0f;//MultToPer(ConfigManager.GetSailCrewBonus());
 
-            float sailSpeed = MultToPer(ConfigManager.GetSailSpeedMult(skill));
-            float sailWindNudge = MultToPer(ConfigManager.GetSailWindNudgeMod(skill));
-            float sailExploreRange = ConfigManager.GetSailExploreRange(skill);
-            float sailPaddleSpeed = MultToPer(ConfigManager.GetSailPaddleSpeedMult(skill));
-            float sailShipDamageRedux = MultToPer(ConfigManager.GetSailDamageRedux(skill));
+            float sailSpeed = MultToPer(ConfigMan.GetSailSpeedMult(skill));
+            float sailWindNudge = MultToPer(1f + ConfigMan.GetSailWindNudgeMod(skill));
+            float sailExploreRange = ConfigMan.GetSailExploreRange(skill);
+            float sailPaddleSpeed = MultToPer(ConfigMan.GetSailPaddleSpeedMult(skill));
+            float sailShipDamageRedux = MultToPer(ConfigMan.GetSailDamageRedux(skill), true);
+
+
+            string sailSpeedS = PrettyText.Prettify(sailSpeed, 1, PrettyText.TextType.Percent);
+            string sailWindNudgeS = PrettyText.Prettify(sailWindNudge, 1, PrettyText.TextType.Percent);
+            string sailExploreRangeS = PrettyText.Prettify(sailExploreRange, 0, PrettyText.TextType.Flat);
+            string sailPaddleSpeedS = PrettyText.Prettify(sailPaddleSpeed, 1, PrettyText.TextType.Percent);
+            string sailShipDamageReduxS = PrettyText.Prettify(sailShipDamageRedux, 0, PrettyText.TextType.PercentRedux);
 
 
 
@@ -734,29 +829,36 @@ namespace kingskills.UX
                 sailCrewBonus.ToString("F0") + "% from number of crewmates";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                sailSpeed.ToString("F1") + "% extra faster ship sailing speed";
+                sailSpeedS + " ship sailing speed";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                sailWindNudge.ToString("F1") + "% nudge towards favorable winds";
+                sailWindNudgeS + " nudge towards favorable winds";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                sailExploreRange.ToString("F0") + "% increased exploration range while on board ";
+                sailExploreRangeS + "m exploration range while on board ";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                sailPaddleSpeed.ToString("F1") + "% increased paddle speed";
+                sailPaddleSpeedS + " paddle speed";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                sailShipDamageRedux.ToString("F0") + "% less ship damage taken";
+                sailShipDamageReduxS + " ship damage taken";
         }
         public static void OpenSpearPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Spears);
 
-            float spearDamage = MultToPer(ConfigManager.GetSpearDamageMult(skill));
-            float spearStaminaRedux = MultToPer(ConfigManager.GetSpearStaminaRedux(skill));
-            float spearVelocity = MultToPer(ConfigManager.GetSpearVelocityMult(skill));
-            float spearThrowDamage = MultToPer(ConfigManager.GetSpearProjectileDamageMult(skill));
-            float spearBlock = ConfigManager.GetSpearBlockArmor(skill);
+            float spearDamage = MultToPer(ConfigMan.GetSpearDamageMult(skill));
+            float spearStaminaRedux = MultToPer(ConfigMan.GetSpearStaminaRedux(skill), true);
+            float spearVelocity = MultToPer(ConfigMan.GetSpearVelocityMult(skill));
+            float spearThrowDamage = MultToPer(ConfigMan.GetSpearProjectileDamageMult(skill));
+            float spearBlock = ConfigMan.GetSpearBlockArmor(skill);
+
+            string spearDamageS = PrettyText.Prettify(spearDamage, 1, PrettyText.TextType.Percent);
+            string spearStaminaReduxS = PrettyText.Prettify(spearStaminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string spearVelocityS = PrettyText.Prettify(spearVelocity, 1, PrettyText.TextType.Percent);
+            string spearThrowDamageS = PrettyText.Prettify(spearThrowDamage, 1, PrettyText.TextType.Percent);
+            string spearBlockS = PrettyText.Prettify(spearBlock, 0, PrettyText.TextType.Flat);
+
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -769,31 +871,38 @@ namespace kingskills.UX
                 "Bonus experience anytime you hit an enemy with a thrown weapon.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                spearDamage.ToString("F1") + "% extra damage with spears ";
+                spearDamageS + " damage with spears ";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                spearStaminaRedux.ToString("F1") + "% stamina usage with spears";
+                spearStaminaReduxS + " stamina usage with spears";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                spearVelocity.ToString("F1") + "% increased velocity with all thrown weapons";
+                spearVelocityS + " velocity with all thrown weapons";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                spearThrowDamage.ToString("F1") + "% increased damage with all thrown weapons";
+                spearThrowDamageS + " damage with all thrown weapons";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                spearBlock.ToString("F0") + " higher flat block armor";
+                spearBlockS + " block armor";
         }
         public static void OpenSneakPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Sneak);
             StatsPatch.SneakUpdate(Player.m_localPlayer);
 
-            float sneakSpeed = MultToPer(ConfigManager.GetSneakSpeedMult(skill));
-            float sneakStaminaCost = ConfigManager.GetSneakStaminaDrain(skill);
-            float sneakLightFactor = MultToPer(ConfigManager.GetSneakFactor(skill, 2f));
-            float sneakDarkFactor = MultToPer(ConfigManager.GetSneakFactor(skill, 0f));
+            float sneakSpeed = MultToPer(ConfigMan.GetSneakSpeedMult(skill));
+            float sneakStaminaCost = ConfigMan.GetSneakStaminaDrain(skill);
+            float sneakLightFactor = MultToPer(ConfigMan.GetSneakFactor(skill, 2f));
+            float sneakDarkFactor = MultToPer(ConfigMan.GetSneakFactor(skill, 0f));
 
-            float sneakDangerXPMod = MultToPer(SneakPatch.GetDangerEXPMult(Player.m_localPlayer));
+            float sneakDangerXPMod = MultToPer(KSSneak.GetDangerEXPMult(Player.m_localPlayer));
+
+            string sneakSpeedS = PrettyText.Prettify(sneakSpeed, 1, PrettyText.TextType.Percent);
+            string sneakStaminaCostS = PrettyText.Prettify(sneakStaminaCost, 1, PrettyText.TextType.Straight);
+            string sneakLightFactorS = PrettyText.Prettify(sneakLightFactor, 0, PrettyText.TextType.Percent);
+            string sneakDarkFactorS = PrettyText.Prettify(sneakDarkFactor, 0, PrettyText.TextType.Percent);
+
+            string sneakDangerXPModS = PrettyText.Prettify(sneakDangerXPMod, 1, PrettyText.TextType.ColorlessPercent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "While you are actively avoiding detection of a nearby enemy, " +
@@ -802,20 +911,19 @@ namespace kingskills.UX
                 "If you aren't nearby an enemy while sneaking, you gain 10% experience.";
             SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "You get bonus experience based on how dangerous the biggest enemy you're sneaing past is.\n" +
-                "Current bonus from spotted enemy: " +
-                sneakDangerXPMod.ToString("F1") + "%";
+                "Current bonus from spotted enemy: " + sneakDangerXPModS;
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                sneakSpeed.ToString("F1") + "% increased speed while crouching";
+                sneakSpeedS + " sneak speed";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                sneakStaminaCost.ToString("F1") + " stamina per second while crouching";
+                sneakStaminaCostS + " stamina per second while sneaking";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                sneakLightFactor.ToString("F0") + "% increased sneakiness in the light ";
+                sneakLightFactorS + " ---";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                sneakDarkFactor.ToString("F0") + "% increased sneakiness in the dark";
+                sneakDarkFactorS + " ---";
         }
         public static void OpenSwimPanels()
         {
@@ -823,14 +931,23 @@ namespace kingskills.UX
             StatsPatch.SwimSpeedUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Swim);
 
-            float swimSpeed = MultToPer(ConfigManager.GetSwimSpeedMult(skill));
-            float swimAccel = MultToPer(ConfigManager.GetSwimAccelMult(skill));
-            float swimTurn = MultToPer(ConfigManager.GetSwimTurnMult(skill));
-            float swimStaminaCost = ConfigManager.GetSwimStaminaPerSec(skill);
+            float swimSpeed = MultToPer(ConfigMan.GetSwimSpeedMult(skill));
+            float swimAccel = MultToPer(ConfigMan.GetSwimAccelMult(skill));
+            float swimTurn = MultToPer(ConfigMan.GetSwimTurnMult(skill));
+            float swimStaminaCost = ConfigMan.GetSwimStaminaPerSec(skill);
 
             float absWeightExp = MultToPer(MovePatch.absoluteWeightBonus(player));
             float relWeightExp = MultToPer(MovePatch.relativeWeightBonus(player));
             float swimSpeedExp = MultToPer(MovePatch.swimSpeedExpBonus(player));
+
+            string swimSpeedS = PrettyText.Prettify(swimSpeed, 1, PrettyText.TextType.Percent);
+            string swimAccelS = PrettyText.Prettify(swimAccel, 1, PrettyText.TextType.Percent);
+            string swimTurnS = PrettyText.Prettify(swimTurn, 1, PrettyText.TextType.Percent);
+            string swimStaminaCostS = PrettyText.Prettify(swimStaminaCost, 2, PrettyText.TextType.Straight);
+
+            string absWeightExpS = PrettyText.Prettify(absWeightExp, 1, PrettyText.TextType.ColorlessPercent);
+            string relWeightExpS = PrettyText.Prettify(relWeightExp, 1, PrettyText.TextType.ColorlessPercent);
+            string swimSpeedExpS = PrettyText.Prettify(swimSpeedExp, 1, PrettyText.TextType.ColorlessPercent);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -841,21 +958,21 @@ namespace kingskills.UX
                 "You also gain experience based on how encumbered you are. \n";
             SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "Current bonuses to experience are: \n" +
-                swimSpeedExp.ToString("F1") + "% experience bonus from current swimming speed \n" +
-                absWeightExp.ToString("F1") + "% experience bonus from absolute weight carried \n" +
-                relWeightExp.ToString("F1") + "% experience bonus from fullness of inventory";
+                swimSpeedExpS + " from current swimming speed \n" +
+                absWeightExpS + " from absolute weight carried \n" +
+                relWeightExpS + " from fullness of inventory";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                swimSpeed.ToString("F1") + "% extra swim speed";
+                swimSpeedS + " swim speed";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                swimAccel.ToString("F1") + "% extra acceleration in water";
+                swimAccelS + " acceleration in water";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                swimTurn.ToString("F1") + "% extra turn speed in water";
+                swimTurnS + " turn speed in water";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                swimStaminaCost.ToString("F2") + " stamina per second while swimming";
+                swimStaminaCostS + " stamina per second swim cost";
         }
         public static void OpenSwordPanels()
         {
@@ -863,11 +980,17 @@ namespace kingskills.UX
             StatsPatch.SwordUpdate(Player.m_localPlayer);
 
 
-            float swordDamage = MultToPer(ConfigManager.GetSwordDamageMult(skill));
-            float swordStaminaRedux = MultToPer(ConfigManager.GetSwordStaminaRedux(skill));
-            float swordParry = MultToPer(ConfigManager.GetSwordParryMult(skill));
-            float swordSlash = MultToPer(ConfigManager.GetSwordSlashMult(skill));
-            float swordDodgeStaminaRedux = MultToPer(ConfigManager.GetSwordDodgeStaminaRedux(skill));
+            float swordDamage = MultToPer(ConfigMan.GetSwordDamageMult(skill));
+            float swordStaminaRedux = MultToPer(ConfigMan.GetSwordStaminaRedux(skill), true);
+            float swordParry = MultToPer(ConfigMan.GetSwordParryMult(skill));
+            float swordSlash = MultToPer(ConfigMan.GetSwordSlashMult(skill));
+            float swordDodgeStaminaRedux = MultToPer(ConfigMan.GetSwordDodgeStaminaRedux(skill), true);
+
+            string swordDamageS = PrettyText.Prettify(swordDamage, 1, PrettyText.TextType.Percent);
+            string swordStaminaReduxS = PrettyText.Prettify(swordStaminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string swordParryS = PrettyText.Prettify(swordParry, 0, PrettyText.TextType.Percent);
+            string swordSlashS = PrettyText.Prettify(swordSlash, 1, PrettyText.TextType.Percent);
+            string swordDodgeStaminaReduxS = PrettyText.Prettify(swordDodgeStaminaRedux, 1, PrettyText.TextType.PercentRedux);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -880,29 +1003,35 @@ namespace kingskills.UX
                 "Bonus experience is gained every time you deal damage to a staggered enemy with a sword.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                swordDamage.ToString("F1") + "% extra damage with swords ";
+                swordDamageS + " damage with swords ";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                swordStaminaRedux.ToString("F1") + "% stamina usage with swords";
+                swordStaminaReduxS + " stamina usage with swords";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                swordParry.ToString("F0") + "% higher parry bonus with ALL weapons ";
+                swordParryS + " parry bonus with ALL weapons ";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                swordSlash.ToString("F1") + "% increased slash damage with ALL weapons ";
+                swordSlashS + " slash damage with ALL weapons ";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                swordDodgeStaminaRedux.ToString("F1") + "% stamina cost to dodge";
+                swordDodgeStaminaReduxS + " stamina cost to dodge";
         }
         public static void OpenWoodcuttingPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.WoodCutting);
 
-            float woodDamage = MultToPer(1 + ConfigManager.GetWoodcuttingDamageMod(skill));
-            float woodDrop = MultToPer(ConfigManager.GetWoodDropMod(skill)+1f);
-            float woodRebate = ConfigManager.GetWoodcuttingStaminaRebate(skill);
-            float woodRegen = ConfigManager.GetWoodcuttingRegenLessTime(skill);
-            float woodCarry = ConfigManager.GetWoodcuttingCarryCapacity(skill);
+            float woodDamage = MultToPer(1 + ConfigMan.GetWoodcuttingDamageMod(skill));
+            float woodDrop = MultToPer(ConfigMan.GetWoodDropMod(skill)+1f);
+            float woodRebate = ConfigMan.GetWoodcuttingStaminaRebate(skill);
+            float woodRegen = ConfigMan.GetWoodcuttingRegenLessTime(skill);
+            float woodCarry = ConfigMan.GetWoodcuttingCarryCapacity(skill);
+
+            string woodDamageS = PrettyText.Prettify(woodDamage, 1, PrettyText.TextType.Percent);
+            string woodDropS = PrettyText.Prettify(woodDrop, 2, PrettyText.TextType.Percent);
+            string woodRebateS = PrettyText.Prettify(woodRebate, 0, PrettyText.TextType.Flat);
+            string woodRegenS = PrettyText.Prettify(woodRegen, 0, PrettyText.TextType.Straight);
+            string woodCarryS = PrettyText.Prettify(woodCarry, 0, PrettyText.TextType.Flat);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt to trees is turned into experience.";
@@ -912,25 +1041,27 @@ namespace kingskills.UX
                 "Bonus experience for the axe is gained when you destroy tree stumps.";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                woodDamage.ToString("F1") + "% extra damage to trees";
+                woodDamageS + " woodcutting damage";
 
             SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                woodDrop.ToString("F2") + "% increased wood drop rates from trees";
+                woodDropS + " drop rates from trees";
 
             SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                woodRebate.ToString("F0") + " stamina rebate on axe swings that hit a tree";
+                woodRebateS + " stamina rebate on woodcutting swings";
 
             SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                woodRegen.ToString("F0") + " fewer seconds before stamina regeneration";
+                woodRegenS + " fewer seconds before stamina regeneration";
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                woodCarry.ToString("F0") + " extra carrying capacity";
+                woodCarryS + " carrying capacity";
         }
 
-        public static float MultToPer(float number)
+        public static float MultToPer(float number, bool redux = false)
         {
+            if (redux) return (1 - number) * 100; 
             return (number - 1) * 100;
         }
+
 
 
         public static void ResetText()
@@ -949,4 +1080,6 @@ namespace kingskills.UX
             SkillGUI.LeftPanelTexts["f6"].GetComponent<Text>().text = "";
         }
     }
+
+
 }

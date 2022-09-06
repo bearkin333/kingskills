@@ -23,7 +23,7 @@ namespace kingskills.Patches
             if (Perks.IsSkillAscended(skill))
                 __result = 1f;
             else
-                __result = Mathf.Clamp01(__instance.GetSkills().GetSkillLevel(skill) / ConfigManager.MaxSkillLevel.Value);
+                __result = Mathf.Clamp01(__instance.GetSkills().GetSkillLevel(skill) / ConfigMan.MaxSkillLevel.Value);
 
             return false;
         }
@@ -51,13 +51,13 @@ namespace kingskills.Patches
             __instance.m_seman.ModifyRaiseSkill(skill, ref value);
 
 
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Run) && skill == Skills.SkillType.Run)
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Run) && skill == Skills.SkillType.Run)
             {
                 value *= MovePatch.absoluteWeightBonus(__instance);
                 value *= MovePatch.relativeWeightBonus(__instance);
                 value *= MovePatch.runSpeedExpBonus(__instance);
             }
-            else if (ConfigManager.IsSkillActive(Skills.SkillType.Swim) && skill == Skills.SkillType.Swim)
+            else if (ConfigMan.IsSkillActive(Skills.SkillType.Swim) && skill == Skills.SkillType.Swim)
             {
                 value *= MovePatch.absoluteWeightBonus(__instance);
                 value *= MovePatch.relativeWeightBonus(__instance);
@@ -75,21 +75,21 @@ namespace kingskills.Patches
 
         public static bool SkillRaise(Skills.Skill skill, Player player, float factor)
         {
-            if (skill.m_level >= ConfigManager.MaxSkillLevel.Value)
+            if (skill.m_level >= ConfigMan.MaxSkillLevel.Value)
                 return false;
 
             float num = skill.m_info.m_increseStep * factor;
             skill.m_accumulator += num;
             Skills.SkillType skillT = skill.m_info.m_skill;
-            float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / ConfigManager.MaxSkillLevel.Value);
+            float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / ConfigMan.MaxSkillLevel.Value);
 
-            if (factor >= ConfigManager.DisplayExperienceThreshold.Value)
+            if (factor >= ConfigMan.DisplayExperienceThreshold.Value)
             {
                 string expMsg = "+" + factor.ToString("F1") + " experience - Level " + 
                     skill.m_level.ToString("F0") + " " + skillT
                     + " (" + percent.ToString("F0") + "%)";
 
-                CustomWorldTextManager.AddCustomWorldText(ConfigManager.ColorExperienceYellow, 
+                CustomWorldTextManager.AddCustomWorldText(ConfigMan.ColorExperienceYellow, 
                     CustomWorldTextManager.GetAboveCharacter(player) + CustomWorldTextManager.GetRandomPosOffset(), 
                     22, expMsg);
                 /*
@@ -101,11 +101,11 @@ namespace kingskills.Patches
             while (skill.m_accumulator >= nextLevelRequirement)
             {
                 skill.m_level += 1f;
-                skill.m_level = Mathf.Clamp(skill.m_level, 0f, ConfigManager.MaxSkillLevel.Value);
+                skill.m_level = Mathf.Clamp(skill.m_level, 0f, ConfigMan.MaxSkillLevel.Value);
                 LevelUpPing(player, skill);
 
                 skill.m_accumulator -= nextLevelRequirement;
-                if (skill.m_level >= ConfigManager.MaxSkillLevel.Value)
+                if (skill.m_level >= ConfigMan.MaxSkillLevel.Value)
                 {
                     OnMaxLevel(skillT);
                     return false;

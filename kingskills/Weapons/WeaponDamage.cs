@@ -43,43 +43,43 @@ namespace kingskills
                 //Their solution was more elegant, but unfortunately, if we want to have any
                 //attack bonus be different from another one, we're gonna have to iterate through all
                 //of them.
-                if (ConfigManager.IsSkillActive(hit.m_skill))
+                if (ConfigMan.IsSkillActive(hit.m_skill))
                 {
                     switch (hit.m_skill)
                     {
                         case Skills.SkillType.Swords:
                             hit.m_damage.Modify(
-                                ConfigManager.GetSwordDamageMult(player.GetSkillFactor(Skills.SkillType.Swords)));
+                                ConfigMan.GetSwordDamageMult(player.GetSkillFactor(Skills.SkillType.Swords)));
                             break;
                         case Skills.SkillType.Axes:
                             hit.m_damage.Modify(
-                                ConfigManager.GetAxeDamageMult(player.GetSkillFactor(Skills.SkillType.Axes)));
+                                ConfigMan.GetAxeDamageMult(player.GetSkillFactor(Skills.SkillType.Axes)));
                             break;
                         case Skills.SkillType.Bows:
                             hit.m_damage.Modify(
-                                ConfigManager.GetBowDamageMult(player.GetSkillFactor(Skills.SkillType.Bows)));
+                                ConfigMan.GetBowDamageMult(player.GetSkillFactor(Skills.SkillType.Bows)));
                             break;
                         case Skills.SkillType.Clubs:
                             hit.m_damage.Modify(
-                                ConfigManager.GetClubDamageMult(player.GetSkillFactor(Skills.SkillType.Clubs)));
+                                ConfigMan.GetClubDamageMult(player.GetSkillFactor(Skills.SkillType.Clubs)));
                             break;
                         case Skills.SkillType.Unarmed: //Unarmed also gets a flat damage bonus
                             hit.m_damage.m_blunt +=
-                                ConfigManager.GetFistDamageFlat(player.GetSkillFactor(Skills.SkillType.Unarmed));
+                                ConfigMan.GetFistDamageFlat(player.GetSkillFactor(Skills.SkillType.Unarmed));
                             hit.m_damage.Modify(
-                                ConfigManager.GetFistDamageMult(player.GetSkillFactor(Skills.SkillType.Unarmed)));
+                                ConfigMan.GetFistDamageMult(player.GetSkillFactor(Skills.SkillType.Unarmed)));
                             break;
                         case Skills.SkillType.Knives:
                             hit.m_damage.Modify(
-                                ConfigManager.GetKnifeDamageMult(player.GetSkillFactor(Skills.SkillType.Knives)));
+                                ConfigMan.GetKnifeDamageMult(player.GetSkillFactor(Skills.SkillType.Knives)));
                             break;
                         case Skills.SkillType.Polearms:
                             hit.m_damage.Modify(
-                                ConfigManager.GetPolearmDamageMult(player.GetSkillFactor(Skills.SkillType.Polearms)));
+                                ConfigMan.GetPolearmDamageMult(player.GetSkillFactor(Skills.SkillType.Polearms)));
                             break;
                         case Skills.SkillType.Spears:
                             hit.m_damage.Modify(
-                                ConfigManager.GetSpearDamageMult(player.GetSkillFactor(Skills.SkillType.Spears)));
+                                ConfigMan.GetSpearDamageMult(player.GetSkillFactor(Skills.SkillType.Spears)));
                             break;
                     }
                 }
@@ -88,33 +88,33 @@ namespace kingskills
 
                 //Jotunn.Logger.LogMessage($"Sneak attack bonus was {hit.m_backstabBonus}");
                 //Increase sneak attack damage for knife skill
-                if (ConfigManager.IsSkillActive(Skills.SkillType.Knives)) 
+                if (ConfigMan.IsSkillActive(Skills.SkillType.Knives)) 
                 { 
                     hit.m_backstabBonus *=
-                        ConfigManager.GetKnifeBackstabMult(player.GetSkillFactor(Skills.SkillType.Knives));
+                        ConfigMan.GetKnifeBackstabMult(player.GetSkillFactor(Skills.SkillType.Knives));
                     hit.m_damage.m_pierce *=
-                        ConfigManager.GetKnifeDamageMult(player.GetSkillFactor(Skills.SkillType.Knives));
+                        ConfigMan.GetKnifeDamageMult(player.GetSkillFactor(Skills.SkillType.Knives));
                 }
 
                 //Jotunn.Logger.LogMessage($"Now it's {hit.m_backstabBonus}");
 
                 //The generic bonuses from your various skill levels
-                if (ConfigManager.IsSkillActive(Skills.SkillType.Swords))
+                if (ConfigMan.IsSkillActive(Skills.SkillType.Swords))
                     hit.m_damage.m_slash *=
-                        ConfigManager.GetSwordSlashMult(player.GetSkillFactor(Skills.SkillType.Swords));
+                        ConfigMan.GetSwordSlashMult(player.GetSkillFactor(Skills.SkillType.Swords));
 
                 //Jotunn.Logger.LogMessage($"Now, thanks to the b/p/s bonuses, the damage is {hit.m_damage.GetTotalDamage()}");
 
                 //Jotunn.Logger.LogMessage($"Pushforce and stagger damage go from {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
                 //The knockback and stagger bonuses from club levels
-                if (ConfigManager.IsSkillActive(Skills.SkillType.Clubs))
+                if (ConfigMan.IsSkillActive(Skills.SkillType.Clubs))
                 {
                     hit.m_damage.m_blunt *=
-                           ConfigManager.GetClubBluntMult(player.GetSkillFactor(Skills.SkillType.Clubs));
+                           ConfigMan.GetClubBluntMult(player.GetSkillFactor(Skills.SkillType.Clubs));
                     hit.m_pushForce *=
-                        ConfigManager.GetClubKnockbackMult(player.GetSkillFactor(Skills.SkillType.Clubs));
+                        ConfigMan.GetClubKnockbackMult(player.GetSkillFactor(Skills.SkillType.Clubs));
                     hit.m_staggerMultiplier *=
-                        ConfigManager.GetClubStaggerMult(player.GetSkillFactor(Skills.SkillType.Clubs));
+                        ConfigMan.GetClubStaggerMult(player.GetSkillFactor(Skills.SkillType.Clubs));
                 }
 
                 //Jotunn.Logger.LogMessage($"To {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
@@ -171,27 +171,27 @@ namespace kingskills
                     //Jotunn.Logger.LogMessage($"Chop damage was {hit.m_damage.m_chop}");
                     float chopMod = 1f;
 
-                    if (ConfigManager.IsSkillActive(Skills.SkillType.WoodCutting))
-                        chopMod += ConfigManager.GetWoodcuttingDamageMod(player.GetSkillFactor(Skills.SkillType.WoodCutting));
-                    if (ConfigManager.IsSkillActive(Skills.SkillType.Axes))
-                        chopMod += ConfigManager.GetAxeChopDamageMod(player.GetSkillFactor(Skills.SkillType.Axes));
+                    if (ConfigMan.IsSkillActive(Skills.SkillType.WoodCutting))
+                        chopMod += ConfigMan.GetWoodcuttingDamageMod(player.GetSkillFactor(Skills.SkillType.WoodCutting));
+                    if (ConfigMan.IsSkillActive(Skills.SkillType.Axes))
+                        chopMod += ConfigMan.GetAxeChopDamageMod(player.GetSkillFactor(Skills.SkillType.Axes));
 
                     hit.m_damage.m_chop *= chopMod;
 
-                    if (ConfigManager.IsSkillActive(Skills.SkillType.WoodCutting))
-                        player.AddStamina(ConfigManager.GetWoodcuttingStaminaRebate(player.GetSkillFactor(Skills.SkillType.WoodCutting)));
+                    if (ConfigMan.IsSkillActive(Skills.SkillType.WoodCutting))
+                        player.AddStamina(ConfigMan.GetWoodcuttingStaminaRebate(player.GetSkillFactor(Skills.SkillType.WoodCutting)));
 
                    //Jotunn.Logger.LogMessage($"Now it's {hit.m_damage.m_chop}! I also added some stamina");
                 }
-                else if (ConfigManager.IsSkillActive(Skills.SkillType.Pickaxes) &&
+                else if (ConfigMan.IsSkillActive(Skills.SkillType.Pickaxes) &&
                     hit.m_skill == Skills.SkillType.Pickaxes)
                 {
                     //Jotunn.Logger.LogMessage($"Pick damage was {hit.m_damage.m_pickaxe}");
 
                     hit.m_damage.m_pickaxe *=
-                        ConfigManager.GetMiningDamageMult(player.GetSkillFactor(Skills.SkillType.Pickaxes));
+                        ConfigMan.GetMiningDamageMult(player.GetSkillFactor(Skills.SkillType.Pickaxes));
 
-                    player.AddStamina(ConfigManager.GetMiningStaminaRebate(player.GetSkillFactor(Skills.SkillType.Pickaxes)));
+                    player.AddStamina(ConfigMan.GetMiningStaminaRebate(player.GetSkillFactor(Skills.SkillType.Pickaxes)));
 
                     //Jotunn.Logger.LogMessage($"Now it's {hit.m_damage.m_pickaxe}! I also added some stamina");
                 }

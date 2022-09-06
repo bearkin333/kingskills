@@ -6,7 +6,7 @@ using Jotunn.Entities;
 using Jotunn.Managers;
 using kingskills;
 
-namespace kingskills.Commands
+namespace kingskills
 {
     public class TestSkillCommand : ConsoleCommand
     {

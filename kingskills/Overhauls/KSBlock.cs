@@ -12,9 +12,8 @@ namespace kingskills
 {
 
     [HarmonyPatch(typeof(Humanoid), "BlockAttack")]
-    class BlockPatch : Humanoid
+    class KSBlock : Humanoid
     {
-
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             bool sawBlockPower = false;
@@ -41,7 +40,7 @@ namespace kingskills
                         yield return new CodeInstruction(OpCodes.Ldarg_0); // Humanoid this (blocker)
                         yield return new CodeInstruction(OpCodes.Ldarg_1); // HitData hit
                         yield return new CodeInstruction(OpCodes.Ldarg_2); // Character attacker
-                        yield return new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(BlockPatch), "FixBlockPower"));
+                        yield return new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(KSBlock), "FixBlockPower"));
                         yield return storeBlockPower; // store result (block power)
                         yield return instruction;
                         storeBlockPower = null;
@@ -55,7 +54,7 @@ namespace kingskills
                 }
                 else if (instruction.Calls(AccessTools.DeclaredMethod(typeof(Character), nameof(Character.UseStamina))))
                 {
-                    instruction.operand = AccessTools.DeclaredMethod(typeof(BlockPatch), nameof(BlockPatch.UseBlockStamina));
+                    instruction.operand = AccessTools.DeclaredMethod(typeof(KSBlock), nameof(KSBlock.UseBlockStamina));
                     yield return instruction;
                 }
                 else if (instruction.Calls(AccessTools.DeclaredMethod(typeof(HitData), nameof(HitData.BlockDamage))))
@@ -63,7 +62,7 @@ namespace kingskills
                     yield return new CodeInstruction(OpCodes.Ldarg_0);
                     yield return loadParryFlag;
                     loadParryFlag = null;
-                    instruction.operand = AccessTools.DeclaredMethod(typeof(BlockPatch), nameof(BlockPatch.BlockDamageExpPatch));
+                    instruction.operand = AccessTools.DeclaredMethod(typeof(KSBlock), nameof(KSBlock.BlockDamageExpPatch));
                     yield return instruction;
                 }
                 else if (instruction.Calls(AccessTools.DeclaredMethod(typeof(Character), "RaiseSkill")))
@@ -83,11 +82,11 @@ namespace kingskills
 
         private static void UseBlockStamina(Humanoid __instance, float stamina)
         {
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Blocking))
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Blocking))
             {
                 float skillFactor = __instance.GetSkillFactor(Skills.SkillType.Blocking);
                 //Jotunn.Logger.LogMessage($"Stamina before redux is {stamina}");
-                stamina *= ConfigManager.GetBlockStaminaRedux(skillFactor);
+                stamina *= ConfigMan.GetBlockStaminaRedux(skillFactor);
                 //Jotunn.Logger.LogMessage($"Stamina after redux is {stamina}");
             }
             __instance.UseStamina(stamina);
@@ -99,28 +98,28 @@ namespace kingskills
             hit.BlockDamage(damage);
             float expValue = 1f;
 
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Blocking)) 
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Blocking)) 
             {
-                expValue *= damage * ConfigManager.GetBlockExpMult();
+                expValue *= damage * ConfigMan.GetBlockExpMult();
 
                 if (isParry)
                 {
-                    expValue *= ConfigManager.GetBlockParryExpMult();
+                    expValue *= ConfigMan.GetBlockParryExpMult();
                     //Jotunn.Logger.LogMessage($"Parried! Exp Value doubled!");
                 }
             }
 
             __instance.RaiseSkill(Skills.SkillType.Blocking, expValue);
 
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Unarmed) &&
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Unarmed) &&
                 __instance.GetCurrentBlocker() == __instance.m_unarmedWeapon.m_itemData)
             {
                 //Bonus exp for unarmed block!
-                __instance.RaiseSkill(Skills.SkillType.Unarmed, ConfigManager.WeaponBXPUnarmedBlock.Value);
+                __instance.RaiseSkill(Skills.SkillType.Unarmed, ConfigMan.WeaponBXPUnarmedBlock.Value);
 
                 CustomWorldTextManager.CreateBXPText(
                     CustomWorldTextManager.GetInFrontOfCharacter(__instance),
-                    ConfigManager.WeaponBXPUnarmedBlock.Value);
+                    ConfigMan.WeaponBXPUnarmedBlock.Value);
             }
             //Jotunn.Logger.LogMessage($"Increased blocking skill by {expValue} due to damage");
         }
@@ -138,42 +137,42 @@ namespace kingskills
             float baseBlockPower = currentBlocker.GetBaseBlockPower();
 
             //The flat block from blocking skill
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Blocking))
-                baseBlockPower += ConfigManager.GetBlockPowerFlat(skillFactor);
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Blocking))
+                baseBlockPower += ConfigMan.GetBlockPowerFlat(skillFactor);
 
             //The flat block armor bonus from spears
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Spears))
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Spears))
                 baseBlockPower +=
-                    ConfigManager.GetSpearBlockArmor(instance.GetSkillFactor(Skills.SkillType.Spears));
+                    ConfigMan.GetSpearBlockArmor(instance.GetSkillFactor(Skills.SkillType.Spears));
 
             //The flat bonus for an unarmed block
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Unarmed) && 
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Unarmed) && 
                 currentBlocker == instance.m_unarmedWeapon.m_itemData)
                 baseBlockPower += 
-                    ConfigManager.GetFistBlockArmor(instance.GetSkillFactor(Skills.SkillType.Unarmed));
+                    ConfigMan.GetFistBlockArmor(instance.GetSkillFactor(Skills.SkillType.Unarmed));
 
             //The flat bonus for a polearm block
-            else if (ConfigManager.IsSkillActive(Skills.SkillType.Polearms) && 
+            else if (ConfigMan.IsSkillActive(Skills.SkillType.Polearms) && 
                 currentBlocker.m_shared.m_skillType == Skills.SkillType.Polearms)
                 baseBlockPower +=
-                    ConfigManager.GetPolearmBlock(instance.GetSkillFactor(Skills.SkillType.Polearms));
+                    ConfigMan.GetPolearmBlock(instance.GetSkillFactor(Skills.SkillType.Polearms));
 
             float blockPower = baseBlockPower;
 
             //Skill bonus for block level
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Blocking))
-                blockPower *= ConfigManager.GetBlockPowerMult(skillFactor);
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Blocking))
+                blockPower *= ConfigMan.GetBlockPowerMult(skillFactor);
             //Otherwise, we have to use base numbers
             else
             {
-                blockPower *= ConfigManager.GetVanillaBlockMult(skillFactor);
+                blockPower *= ConfigMan.GetVanillaBlockMult(skillFactor);
             }
 
             //Here's the additional bonus to sword parry
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Swords) && isParry)
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Swords) && isParry)
             { 
                 blockPower *= 
-                    ConfigManager.GetSwordParryMult(instance.GetSkillFactor(Skills.SkillType.Swords));
+                    ConfigMan.GetSwordParryMult(instance.GetSkillFactor(Skills.SkillType.Swords));
             }
 
             return blockPower;

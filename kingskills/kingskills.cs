@@ -10,7 +10,6 @@ using HarmonyLib;
 using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
-using kingskills.Commands;
 using kingskills.UX;
 using System.IO;
 using UnityEngine;
@@ -63,7 +62,7 @@ namespace kingskills
 
         private void InitConfig()
         {
-            ConfigManager.Init(Config);
+            ConfigMan.Init(Config);
         }
 
         private void AddInputs()

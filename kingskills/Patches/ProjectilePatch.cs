@@ -42,19 +42,19 @@ namespace kingskills
                     Jotunn.Logger.LogMessage($"Added projectile {__instance.gameObject.GetInstanceID()}");
 
                     //Jotunn.Logger.LogMessage($"The skill is {__instance.m_skill} and the current velocity is {__instance.m_vel}");
-                    if (ConfigManager.IsSkillActive(Skills.SkillType.Bows) &&
+                    if (ConfigMan.IsSkillActive(Skills.SkillType.Bows) &&
                         __instance.m_skill == Skills.SkillType.Bows)
                     {
                         __instance.m_vel *=
-                            ConfigManager.GetBowVelocityMult(playerRef.GetSkillFactor(Skills.SkillType.Bows));
+                            ConfigMan.GetBowVelocityMult(playerRef.GetSkillFactor(Skills.SkillType.Bows));
                     }
-                    else if (ConfigManager.IsSkillActive(Skills.SkillType.Spears) &&
+                    else if (ConfigMan.IsSkillActive(Skills.SkillType.Spears) &&
                         __instance.m_skill == Skills.SkillType.Spears)
                     {
                         __instance.m_damage.Modify(
-                            ConfigManager.GetSpearProjectileDamageMult(playerRef.GetSkillFactor(Skills.SkillType.Spears)));
+                            ConfigMan.GetSpearProjectileDamageMult(playerRef.GetSkillFactor(Skills.SkillType.Spears)));
                         __instance.m_vel *=
-                            ConfigManager.GetSpearVelocityMult(playerRef.GetSkillFactor(Skills.SkillType.Spears));
+                            ConfigMan.GetSpearVelocityMult(playerRef.GetSkillFactor(Skills.SkillType.Spears));
                     }
 
                 }
@@ -112,23 +112,23 @@ namespace kingskills
                 Jotunn.Logger.LogError("Projectile not in dictionairy!");
             }
 
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Spears) &&
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Spears) &&
                 skill == Skills.SkillType.Spears)
             {
-                player.RaiseSkill(Skills.SkillType.Spears, ConfigManager.WeaponBXPSpearThrown.Value);
+                player.RaiseSkill(Skills.SkillType.Spears, ConfigMan.WeaponBXPSpearThrown.Value);
 
                 CustomWorldTextManager.CreateBXPText(
                     CustomWorldTextManager.GetInFrontOfCharacter(player),
-                    ConfigManager.WeaponBXPSpearThrown.Value);
+                    ConfigMan.WeaponBXPSpearThrown.Value);
             } 
-            else if (ConfigManager.IsSkillActive(Skills.SkillType.Bows) &&
+            else if (ConfigMan.IsSkillActive(Skills.SkillType.Bows) &&
                 skill == Skills.SkillType.Bows)
             {
-                player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * ConfigManager.GetWeaponBXPBowDistanceMult());
+                player.RaiseSkill(Skills.SkillType.Bows, distanceTravelled * ConfigMan.GetWeaponBXPBowDistanceMult());
 
                 CustomWorldTextManager.CreateBXPText(
                     CustomWorldTextManager.GetInFrontOfCharacter(player),
-                    distanceTravelled * ConfigManager.GetWeaponBXPBowDistanceMult());
+                    distanceTravelled * ConfigMan.GetWeaponBXPBowDistanceMult());
                 //Jotunn.Logger.LogMessage($"Bow bonus exp: {distanceTravelled * BowBXPDistanceMod}");
             }
         }

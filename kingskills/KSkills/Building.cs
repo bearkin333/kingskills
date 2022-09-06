@@ -30,7 +30,7 @@ perks:
 	all chests you build now have extra slots
     */
 
-    class BuildingSkill
+    class Building
     {
     }
 }

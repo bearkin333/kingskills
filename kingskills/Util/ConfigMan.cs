@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace kingskills
 {
-    class ConfigManager
+    class ConfigMan
     {
         /*
          * Generalized language:
@@ -279,7 +279,7 @@ namespace kingskills
         }
         public static float GetAxeStamina(float skillFactor)
         {
-            return AxeStaminaPerLevel.Value * skillFactor * ConfigManager.MaxSkillLevel.Value;
+            return AxeStaminaPerLevel.Value * skillFactor * ConfigMan.MaxSkillLevel.Value;
         }
         public static float GetAxeCarryCapacity(float skillFactor)
         {
@@ -907,6 +907,7 @@ namespace kingskills
         #region botany
         #region configdef
         public static ConfigEntry<bool> ActiveSkillBotany;
+        public static ConfigEntry<float> AgricultureXPPlantFlat;
         public static ConfigEntry<float> AgricultureYieldMin;
         public static ConfigEntry<float> AgricultureYieldMax;
         public static ConfigEntry<float> AgricultureGrowReduxMin;
@@ -915,6 +916,9 @@ namespace kingskills
         public static ConfigEntry<float> AgricultureFQMax;
         public static ConfigEntry<float> AgricultureHealthRegainMin;
         public static ConfigEntry<float> AgricultureHealthRegainMax;
+
+        public static Dictionary<string, float> AgriculturePickableRewards;
+        public static Dictionary<string, float> AgricultureTreeGrowRewards;
         #endregion configdef
 
         private static void InitBotanyConfig(ConfigFile cfg)
@@ -923,8 +927,37 @@ namespace kingskills
                     "Whether or not to allow King's agriculture");
 
             //list of plant experience bounties here
-            //
+            AgriculturePickableRewards = new Dictionary<string, float>();
+            AgricultureTreeGrowRewards = new Dictionary<string, float>();
 
+            AgriculturePickableRewards.Add("Raspberry", 0.3f);
+            AgriculturePickableRewards.Add("Blueberries", 0.8f);
+            AgriculturePickableRewards.Add("Cloudberry", 1.5f);
+            AgriculturePickableRewards.Add("Mushroom", 0.5f);
+            AgriculturePickableRewards.Add("Dandelion", 0.8f);
+            AgriculturePickableRewards.Add("Thistle", 1.0f);
+            AgriculturePickableRewards.Add("CarrotSeeds", 2f);
+            AgriculturePickableRewards.Add("Carrot", 4f);
+            AgriculturePickableRewards.Add("MushroomYellow", 2.5f);
+            AgriculturePickableRewards.Add("TurnipSeeds", 8f);
+            AgriculturePickableRewards.Add("Turnip", 10f);
+            AgriculturePickableRewards.Add("OnionSeeds", 10f);
+            AgriculturePickableRewards.Add("Onion", 12f);
+            AgriculturePickableRewards.Add("FlaxW", 15f);
+            AgriculturePickableRewards.Add("Flax", 20f);
+            AgriculturePickableRewards.Add("BarleyW", 15f);
+            AgriculturePickableRewards.Add("Barley", 20f);
+            AgriculturePickableRewards.Add("MushroomBlue", 200f);
+
+            AgricultureTreeGrowRewards.Add("Fir", 8f);
+            AgricultureTreeGrowRewards.Add("Beech", 12f);
+            AgricultureTreeGrowRewards.Add("Birch", 25f);
+            AgricultureTreeGrowRewards.Add("Pine", 45f);
+            AgricultureTreeGrowRewards.Add("Acorn", 100f);
+
+            //exp
+            AgricultureXPPlantFlat = cfg.Bind("Agriculture.Experience", "Plant", 1f,
+            "Amount of experience gained per plant planted");
 
             //effects
             AgricultureYieldMin = cfg.Bind("Agriculture.Effect", "Yield Min", 0f,
@@ -946,11 +979,28 @@ namespace kingskills
 
         }
 
+        //Returns 0 if object not in list of rewards
+        public static float GetAgriculturePlantReward(GameObject pickableObj)
+        {
+            if (pickableObj == null) return 0f;
+            Pickable pick = pickableObj.GetComponent<Pickable>();
+            if (pick == null) return 0f;
+            
+            string name = pick.m_itemPrefab.name;
+            if (pick.name.Contains("Wild")) name += "W";
+            if (AgriculturePickableRewards.ContainsKey(name))
+                return AgriculturePickableRewards[name];
 
+            return 0f;
+        }
         public static float GetAgricultureYieldMult(float skillFactor)
         {
             return Mathf.Lerp(PerToMult(AgricultureYieldMin), 
                 PerToMult(AgricultureYieldMax), skillFactor);
+        }
+        public static float GetAgricultureRandomYield(float skillFactor)
+        {
+            return GetAgricultureYieldMult(skillFactor) + UnityEngine.Random.Range(-.5f, .5f);
         }
         public static float GetAgricultureGrowTimeRedux(float skillFactor)
         {
@@ -1162,7 +1212,7 @@ namespace kingskills
         {
             //This gets an exponential curve that doesn't start until the minimum level
             return Mathf.Lerp(PerToMod(BuildFreeChanceMin), PerToMod(BuildFreeChanceMax), 
-                Mathf.Pow(skillFactor - GetFCMinLevelAsMod(), BuildFreeChanceFactor.Value));
+                Mathf.Pow(Mathf.Clamp01(skillFactor - GetFCMinLevelAsMod()), BuildFreeChanceFactor.Value));
         }
         public static float GetBuildingStaminaRedux(float skillFactor)
         {
@@ -1611,7 +1661,7 @@ namespace kingskills
             return Mathf.Lerp(PerToMult(RunSpeedPercentMin),
                 PerToMult(RunSpeedPercentMax), skillFactor);
         }
-        public static float GetEncumberanceCurveMult(float encumberanceMod)
+        public static float GetEncumberanceCurveRedux(float encumberanceMod)
         {
             return Mathf.Lerp(PerToMult(RunEncumberancePercentMin, true),
                 PerToMult(RunEncumberancePercentMax, true), ShapeFactorSin(encumberanceMod));

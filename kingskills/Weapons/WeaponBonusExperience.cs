@@ -74,13 +74,13 @@ namespace kingskills
             {
                 //Jotunn.Logger.LogMessage($"Stagger flag redeemed! Turned back off");
 
-                if ( ConfigManager.IsSkillActive(Skills.SkillType.Clubs) && 
+                if ( ConfigMan.IsSkillActive(Skills.SkillType.Clubs) && 
                     Util.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
                 {
-                    playerRef.RaiseSkill(Skills.SkillType.Clubs, ConfigManager.WeaponBXPClubStagger.Value);
+                    playerRef.RaiseSkill(Skills.SkillType.Clubs, ConfigMan.WeaponBXPClubStagger.Value);
                     CustomWorldTextManager.CreateBXPText(
                         CustomWorldTextManager.GetInFrontOfCharacter(playerRef),
-                        ConfigManager.WeaponBXPClubStagger.Value);
+                        ConfigMan.WeaponBXPClubStagger.Value);
                 }
                 staggerFlag = false;
             }
@@ -88,28 +88,28 @@ namespace kingskills
 
         private static void OnStaggerHurt(Player attacker)
         {
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Swords) &&
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Swords) &&
                     Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
             {
-                attacker.RaiseSkill(Skills.SkillType.Swords, ConfigManager.WeaponBXPSwordStagger.Value);
+                attacker.RaiseSkill(Skills.SkillType.Swords, ConfigMan.WeaponBXPSwordStagger.Value);
 
                 CustomWorldTextManager.CreateBXPText(
                     CustomWorldTextManager.GetInFrontOfCharacter(attacker),
-                    ConfigManager.WeaponBXPSwordStagger.Value);
+                    ConfigMan.WeaponBXPSwordStagger.Value);
                 //Jotunn.Logger.LogMessage($"A player just hit us with a sword while we were staggered, so applying bonus exp");
             }
         }
 
         private static void OnBackstab(Player attacker)
         {
-            if (ConfigManager.IsSkillActive(Skills.SkillType.Knives) &&
+            if (ConfigMan.IsSkillActive(Skills.SkillType.Knives) &&
                     Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
             {
-                attacker.RaiseSkill(Skills.SkillType.Swords, ConfigManager.WeaponBXPKnifeBackstab.Value);
+                attacker.RaiseSkill(Skills.SkillType.Swords, ConfigMan.WeaponBXPKnifeBackstab.Value);
 
                 CustomWorldTextManager.CreateBXPText(
                     CustomWorldTextManager.GetInFrontOfCharacter(attacker),
-                    ConfigManager.WeaponBXPKnifeBackstab.Value);
+                    ConfigMan.WeaponBXPKnifeBackstab.Value);
                 //Jotunn.Logger.LogMessage($"A player just backstabbed us with a knife, so +exp");
             }
         }
@@ -122,20 +122,20 @@ namespace kingskills
         [HarmonyPrefix]
         public static void TreeLogDestroyPatch(TreeLog __instance)
         {
-            if (!ConfigManager.IsSkillActive(Skills.SkillType.Axes)) return;
+            if (!ConfigMan.IsSkillActive(Skills.SkillType.Axes)) return;
 
             //Jotunn.Logger.LogMessage($"This log is killed. Closest player's getting the exp");
             Player closestPlayer = Player.GetClosestPlayer(__instance.m_body.transform.position, 
-                ConfigManager.WeaponBXPAxeRange.Value);
+                ConfigMan.WeaponBXPAxeRange.Value);
 
             if (closestPlayer != null)
             {
                 if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
                 {
-                    closestPlayer.RaiseSkill(Skills.SkillType.Axes, ConfigManager.WeaponBXPAxeTreeAmount.Value);
+                    closestPlayer.RaiseSkill(Skills.SkillType.Axes, ConfigMan.WeaponBXPAxeTreeAmount.Value);
                     CustomWorldTextManager.CreateBXPText(
                         CustomWorldTextManager.GetInFrontOfCharacter(closestPlayer), 
-                        ConfigManager.WeaponBXPAxeTreeAmount.Value);
+                        ConfigMan.WeaponBXPAxeTreeAmount.Value);
                 }
 
             }
@@ -145,74 +145,25 @@ namespace kingskills
         [HarmonyPrefix]
         public static void StubDestroyPatch(Destructible __instance)
         {
-            if (!ConfigManager.IsSkillActive(Skills.SkillType.WoodCutting)) return;
+            if (!ConfigMan.IsSkillActive(Skills.SkillType.WoodCutting)) return;
             if (!__instance.gameObject.name.Contains("Stub")) return;
 
             //Jotunn.Logger.LogMessage("Detected stub destroyed?");
 
             Player closestPlayer = Player.GetClosestPlayer(__instance.gameObject.transform.position, 
-                ConfigManager.WeaponBXPAxeRange.Value);
+                ConfigMan.WeaponBXPAxeRange.Value);
 
             if (closestPlayer != null)
             {
                 if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
                 {
-                    closestPlayer.RaiseSkill(Skills.SkillType.WoodCutting, ConfigManager.ToolBXPWoodStubReward.Value);
+                    closestPlayer.RaiseSkill(Skills.SkillType.WoodCutting, ConfigMan.ToolBXPWoodStubReward.Value);
                     CustomWorldTextManager.CreateBXPText(
                         CustomWorldTextManager.GetInFrontOfCharacter(closestPlayer),
-                        ConfigManager.ToolBXPWoodStubReward.Value);
+                        ConfigMan.ToolBXPWoodStubReward.Value);
                 }
 
             }
-        }
-    }
-
-    [HarmonyPatch]
-    class CustomWorldTextManager
-    {
-        public const float InFrontRange = 2f;
-        public const float AboveRange = 3f;
-        public const float RandomRange = 1f;
-
-        public static void CreateBXPText(Vector3 pos, float number)
-        {
-            //Jotunn.Logger.LogMessage("Created Bonus Experience text!");
-            AddCustomWorldText(ConfigManager.ColorBonusBlue, pos, 20, "Bonus experience: " + number.ToString("F1"));
-        }
-
-        public static Vector3 GetInFrontOfCharacter(Character character)
-        {
-            return character.transform.position + character.m_lookDir * InFrontRange;
-        }
-        public static Vector3 GetAboveCharacter(Character character)
-        {
-            return character.transform.position + new Vector3(0f, 1f, 0f) * AboveRange;
-        }
-
-        public static Vector3 GetRandomPosOffset()
-        {
-            float x = UnityEngine.Random.Range(-RandomRange / 2, RandomRange / 2);
-            float y = UnityEngine.Random.Range(-RandomRange / 2, RandomRange / 2);
-            float z = UnityEngine.Random.Range(-RandomRange / 2, RandomRange / 2);
-            return new Vector3(x, y, z);
-        }
-
-        //[HarmonyPatch(typeof(DamageText))]
-        //[HarmonyPatch(nameof(DamageText.UpdateWorldTexts))]
-        //[HarmonyPrefix]
-        public static void AddCustomWorldText(Color msgColor, Vector3 pos, int fontSize, string text)
-        {
-            DamageText.WorldTextInstance worldText = new DamageText.WorldTextInstance();
-            worldText.m_worldPos = pos;
-            worldText.m_gui = UnityEngine.Object.Instantiate<GameObject>
-                (DamageText.instance.m_worldTextBase, DamageText.instance.transform);
-            worldText.m_textField = worldText.m_gui.GetComponent<Text>();
-            DamageText.instance.m_worldTexts.Add(worldText);
-
-            worldText.m_textField.color = msgColor;
-            worldText.m_textField.text = text;
-            worldText.m_textField.fontSize = fontSize;
-            worldText.m_timer = 0f;
         }
     }
 }

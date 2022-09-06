@@ -9,7 +9,7 @@ using UnityEngine;
 namespace kingskills.Patches
 {
     [HarmonyPatch(typeof(Player))]
-    public static class SneakPatch
+    public static class KSSneak
 	{
 		[HarmonyPatch(nameof(Player.OnSneaking))]
 		[HarmonyPrefix]
@@ -17,9 +17,9 @@ namespace kingskills.Patches
         {
 			//This code is pretty much ripped straight from valheim
 			//since I have to replace or transpile it to do most of what I want to do
-			if (!ConfigManager.IsSkillActive(Skills.SkillType.Sneak)) return true;
+			if (!ConfigMan.IsSkillActive(Skills.SkillType.Sneak)) return true;
 
-			float staminaUse = ConfigManager.GetSneakStaminaDrain(__instance.GetSkillFactor(Skills.SkillType.Sneak));
+			float staminaUse = ConfigMan.GetSneakStaminaDrain(__instance.GetSkillFactor(Skills.SkillType.Sneak));
 
 			__instance.UseStamina(dt * staminaUse);
 
@@ -53,7 +53,7 @@ namespace kingskills.Patches
 			if (strongest != null)
             {
 				mult = GetStrongestEnemyInSight(player).m_health *
-					ConfigManager.GetSneakXPMult();
+					ConfigMan.GetSneakXPMult();
 			}
 
 			return mult;
@@ -67,7 +67,7 @@ namespace kingskills.Patches
 			//Again, this function is entirely taken over.
 			//It pretty much seems like the only way.
 			//Aside from a messy transpile that I won't be able to pull off myself.
-			if (!ConfigManager.IsSkillActive(Skills.SkillType.Sneak)) return true;
+			if (!ConfigMan.IsSkillActive(Skills.SkillType.Sneak)) return true;
 
 			__instance.m_stealthFactorUpdateTimer += dt;
 			if (__instance.m_stealthFactorUpdateTimer > 0.5f)
@@ -80,7 +80,7 @@ namespace kingskills.Patches
 					float skillFactor = __instance.GetSkillFactor(Skills.SkillType.Sneak);
 					float lightFactor = StealthSystem.instance.GetLightFactor(__instance.GetCenterPoint());
 					Jotunn.Logger.LogMessage($"Your light factor is currently {lightFactor}");
-					__instance.m_stealthFactorTarget = ConfigManager.GetSneakFactor(skillFactor, lightFactor);
+					__instance.m_stealthFactorTarget = ConfigMan.GetSneakFactor(skillFactor, lightFactor);
 					__instance.m_stealthFactorTarget = Mathf.Clamp01(__instance.m_stealthFactorTarget);
 					__instance.m_seman.ModifyStealth(__instance.m_stealthFactorTarget, ref __instance.m_stealthFactorTarget);
 					__instance.m_stealthFactorTarget = Mathf.Clamp01(__instance.m_stealthFactorTarget);

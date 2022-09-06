@@ -21,6 +21,15 @@ namespace kingskills.UX
         public static List<bool> perkClickable;
         public static float skillLevel;
 
+        public static void Init()
+        {
+            openedPerks = new List<Perk>();
+            perkLocked = new List<bool>();
+            perkClickable = new List<bool>();
+            skillLevel = 0;
+        }
+
+
         public static void UpdateOpenPerks()
         {
             if (openedPerks == null) return;
@@ -47,14 +56,6 @@ namespace kingskills.UX
             }
         }
 
-        public static void Init()
-        {
-            openedPerks = new List<Perk>();
-            perkLocked = new List<bool>();
-            perkClickable = new List<bool>();
-            skillLevel = 0;
-        }
-
 
         public static void LearnPerk(int perk)
         {
@@ -69,6 +70,7 @@ namespace kingskills.UX
             UpdateLearnables();
             UpdateGUI.GUICheck();
         }
+
 
         public static void UpdateLearnables()
         {
@@ -101,6 +103,7 @@ namespace kingskills.UX
 
         }
 
+
         public static int MouseOverPerkBox()
         {
             PointerEventData pointer = new PointerEventData(EventSystem.current);
@@ -126,12 +129,14 @@ namespace kingskills.UX
             return NoPerk;
         }
 
+
         public static int GetPerkKeyFromBox(int boxKey)
         {
             if (perkLocked[boxKey]) return NoPerk;
 
             return boxKey;
         }
+
 
         public static void OpenPerksByType(Skills.SkillType skill,
             Perks.PerkType perk1a, Perks.PerkType perk1b,
@@ -158,13 +163,14 @@ namespace kingskills.UX
             perkLocked.Add(false);
             perkLocked.Add(false);
 
-            SetPerkBox(0, "1a", ConfigManager.PerkOneLVLThreshold.Value);
-            SetPerkBox(1, "1b", ConfigManager.PerkOneLVLThreshold.Value);
-            SetPerkBox(2, "2a", ConfigManager.PerkTwoLVLThreshold.Value);
-            SetPerkBox(3, "2b", ConfigManager.PerkTwoLVLThreshold.Value);
+            SetPerkBox(0, "1a", ConfigMan.PerkOneLVLThreshold.Value);
+            SetPerkBox(1, "1b", ConfigMan.PerkOneLVLThreshold.Value);
+            SetPerkBox(2, "2a", ConfigMan.PerkTwoLVLThreshold.Value);
+            SetPerkBox(3, "2b", ConfigMan.PerkTwoLVLThreshold.Value);
 
             UpdateLearnables();
         }
+
 
         public static void SetPerkBox(int perk, string perkBoxString, float skillThreshold)
         {
@@ -232,6 +238,7 @@ namespace kingskills.UX
         }
 
 
+        #region specificperks
         public static void OpenAgriculturePerkBoxes()
         {
             OpenPerksByType(SkillMan.Agriculture,
@@ -384,6 +391,7 @@ namespace kingskills.UX
                 Perks.PerkType.HeartOfTheMonkey,
                 Perks.PerkType.PandemoniumSwing);
         }
+        #endregion specificperks
 
     }
 }

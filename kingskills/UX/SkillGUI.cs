@@ -81,7 +81,7 @@ namespace kingskills.UX
                 position: new Vector2(0f, -60f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 50,
-                color: ConfigManager.ColorTitle,
+                color: ConfigMan.ColorTitle,
                 outline: true,
                 outlineColor: Color.black,
                 width: 400f,
@@ -123,7 +123,7 @@ namespace kingskills.UX
                 position: new Vector2(-200f, -125f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 25,
-                color: ConfigManager.ColorExperienceYellow,
+                color: ConfigMan.ColorExperienceYellow,
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
@@ -141,7 +141,7 @@ namespace kingskills.UX
                 position: new Vector2(200f, -125f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 25,
-                color: ConfigManager.ColorExperienceYellow,
+                color: ConfigMan.ColorExperienceYellow,
                 outline: true,
                 outlineColor: Color.black,
                 width: 400f,
@@ -229,7 +229,7 @@ namespace kingskills.UX
                 position: new Vector2(-100f, 50f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 20,
-                color: ConfigManager.ColorKingSkills,
+                color: ConfigMan.ColorKingSkills,
                 outline: true,
                 outlineColor: Color.black,
                 width: 120f,
@@ -307,7 +307,7 @@ namespace kingskills.UX
                 position: new Vector2(40f, 0f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 30,
-                color: ConfigManager.ColorTitle,
+                color: ConfigMan.ColorTitle,
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
@@ -347,7 +347,7 @@ namespace kingskills.UX
 
             LeftPanelTexts.Add("bonus", UnityEngine.Object.Instantiate(LeftPanelTexts["x1"]));
             LeftPanelTexts["bonus"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
-            LeftPanelTexts["bonus"].GetComponent<Text>().color = ConfigManager.ColorBonusBlue;
+            LeftPanelTexts["bonus"].GetComponent<Text>().color = ConfigMan.ColorBonusBlue;
 
             //Create the Effects Title in the left panel
             LeftPanelTexts.Add("effects", GUIManager.Instance.CreateText(
@@ -358,7 +358,7 @@ namespace kingskills.UX
                 position: new Vector2(40f, 0f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 30,
-                color: ConfigManager.ColorTitle,
+                color: ConfigMan.ColorTitle,
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
@@ -423,7 +423,7 @@ namespace kingskills.UX
                 position: new Vector2(0f, -50f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 32,
-                color: ConfigManager.ColorTitle,
+                color: ConfigMan.ColorTitle,
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
@@ -441,7 +441,7 @@ namespace kingskills.UX
                 position: new Vector2(0f, 50f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 26,
-                color: ConfigManager.ColorAscendedGreen,
+                color: ConfigMan.ColorAscendedGreen,
                 outline: true,
                 outlineColor: Color.black,
                 width: 300f,
@@ -459,7 +459,7 @@ namespace kingskills.UX
                 position: new Vector2(0f, -140f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 20,
-                color: ConfigManager.ColorWhite,
+                color: ConfigMan.ColorWhite,
                 outline: true,
                 outlineColor: Color.black,
                 width: 200f,
@@ -467,8 +467,8 @@ namespace kingskills.UX
                 addContentSizeFitter: false);
             text = RightPanelPerkOneLevel.GetComponent<Text>();
             text.alignment = TextAnchor.MiddleCenter;
-            text.text = "Level " + (int)(ConfigManager.PerkOneLVLThreshold.Value 
-                * ConfigManager.MaxSkillLevel.Value);
+            text.text = "Level " + (int)(ConfigMan.PerkOneLVLThreshold.Value 
+                * ConfigMan.MaxSkillLevel.Value);
 
             // Create perk 2 level text
             RightPanelPerkTwoLevel =
@@ -480,7 +480,7 @@ namespace kingskills.UX
                 position: new Vector2(0f, -310f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 20,
-                color: ConfigManager.ColorWhite,
+                color: ConfigMan.ColorWhite,
                 outline: true,
                 outlineColor: Color.black,
                 width: 200f,
@@ -488,8 +488,8 @@ namespace kingskills.UX
                 addContentSizeFitter: false);
             text = RightPanelPerkTwoLevel.GetComponent<Text>();
             text.alignment = TextAnchor.MiddleCenter;
-            text.text = "Level " + (int)(ConfigManager.PerkTwoLVLThreshold.Value
-                * ConfigManager.MaxSkillLevel.Value);
+            text.text = "Level " + (int)(ConfigMan.PerkTwoLVLThreshold.Value
+                * ConfigMan.MaxSkillLevel.Value);
 
 
 
