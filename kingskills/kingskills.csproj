@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AssetLoader.cs" />
+    <Compile Include="New Skills\SkillMan.cs" />
     <Compile Include="Patches\BlockPatch.cs" />
     <Compile Include="Patches\LevelUpPatches.cs" />
     <Compile Include="Patches\LootDropPatch.cs" />
@@ -110,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Assets\skills.json" />
     <None Include="packages.config" />
     <None Include="README.md" />
   </ItemGroup>
@@ -184,6 +186,25 @@
     <Content Include="Assets\Icons\waterrunning.png" />
     <Content Include="Assets\perkbox.png" />
     <Content Include="Assets\perkboxLocked.png" />
+    <Content Include="Assets\SkillIcons\Agriculture.png" />
+    <Content Include="Assets\SkillIcons\Axes.png" />
+    <Content Include="Assets\SkillIcons\Blocking.png" />
+    <Content Include="Assets\SkillIcons\Bows.png" />
+    <Content Include="Assets\SkillIcons\Building.png" />
+    <Content Include="Assets\SkillIcons\Clubs.png" />
+    <Content Include="Assets\SkillIcons\Cooking.png" />
+    <Content Include="Assets\SkillIcons\Fists.png" />
+    <Content Include="Assets\SkillIcons\Jump.png" />
+    <Content Include="Assets\SkillIcons\Knives.png" />
+    <Content Include="Assets\SkillIcons\Mining.png" />
+    <Content Include="Assets\SkillIcons\Polearms.png" />
+    <Content Include="Assets\SkillIcons\Run.png" />
+    <Content Include="Assets\SkillIcons\Sailing.png" />
+    <Content Include="Assets\SkillIcons\Sneak.png" />
+    <Content Include="Assets\SkillIcons\Spears.png" />
+    <Content Include="Assets\SkillIcons\Swim.png" />
+    <Content Include="Assets\SkillIcons\Swords.png" />
+    <Content Include="Assets\SkillIcons\Woodcutting.png" />
     <Content Include="Package\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

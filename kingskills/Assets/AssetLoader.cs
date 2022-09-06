@@ -15,18 +15,39 @@ namespace kingskills.Assets
         public static string filePath = "kingskills/Assets/";
 
         public static Dictionary<string, Sprite> perkBoxSprites;
+        public static Dictionary<string, Sprite> skillIconSprites;
         public static AssetBundle assets;
 
 
         public static void InitAssets()
         {
             perkBoxSprites = new Dictionary<string, Sprite>();
+            skillIconSprites = new Dictionary<string, Sprite>();
 
-
+            perkBoxSprites.Add("skillbox", LoadSpriteFromFilename("skillbox.png"));
             perkBoxSprites.Add("perkbox", LoadSpriteFromFilename("perkbox.png"));
             perkBoxSprites.Add("perkboxLocked", LoadSpriteFromFilename("perkboxLocked.png"));
             perkBoxSprites.Add("graytint", LoadSpriteFromFilename("graytint.png"));
             perkBoxSprites.Add("goldtint", LoadSpriteFromFilename("goldtint.png"));
+            skillIconSprites.Add("Agriculture", LoadSpriteFromFilename("SkillIcons/Agriculture.png"));
+            skillIconSprites.Add("Axes", LoadSpriteFromFilename("SkillIcons/Axes.png"));
+            skillIconSprites.Add("Blocking", LoadSpriteFromFilename("SkillIcons/Blocking.png"));
+            skillIconSprites.Add("Bows", LoadSpriteFromFilename("SkillIcons/Bows.png"));
+            skillIconSprites.Add("Building", LoadSpriteFromFilename("SkillIcons/Building.png"));
+            skillIconSprites.Add("Clubs", LoadSpriteFromFilename("SkillIcons/Clubs.png"));
+            skillIconSprites.Add("Cooking", LoadSpriteFromFilename("SkillIcons/Cooking.png"));
+            skillIconSprites.Add("Fists", LoadSpriteFromFilename("SkillIcons/Fists.png"));
+            skillIconSprites.Add("Jump", LoadSpriteFromFilename("SkillIcons/Jump.png"));
+            skillIconSprites.Add("Knives", LoadSpriteFromFilename("SkillIcons/Knives.png"));
+            skillIconSprites.Add("Mining", LoadSpriteFromFilename("SkillIcons/Mining.png"));
+            skillIconSprites.Add("Polearms", LoadSpriteFromFilename("SkillIcons/Polearms.png"));
+            skillIconSprites.Add("Run", LoadSpriteFromFilename("SkillIcons/Run.png"));
+            skillIconSprites.Add("Sailing", LoadSpriteFromFilename("SkillIcons/Sailing.png"));
+            skillIconSprites.Add("Spears", LoadSpriteFromFilename("SkillIcons/Spears.png"));
+            skillIconSprites.Add("Sneak", LoadSpriteFromFilename("SkillIcons/Sneak.png"));
+            skillIconSprites.Add("Swim", LoadSpriteFromFilename("SkillIcons/Swim.png"));
+            skillIconSprites.Add("Swords", LoadSpriteFromFilename("SkillIcons/Swords.png"));
+            skillIconSprites.Add("Woodcutting", LoadSpriteFromFilename("SkillIcons/Woodcutting.png"));
         }
 
 

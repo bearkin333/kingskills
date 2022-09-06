@@ -232,6 +232,14 @@ namespace kingskills.UX
         }
 
 
+        public static void OpenAgriculturePerkBoxes()
+        {
+            OpenPerksByType(SkillMan.Agriculture,
+                Perks.PerkType.Decapitation,
+                Perks.PerkType.Berserkr,
+                Perks.PerkType.Highlander,
+                Perks.PerkType.Throwback);
+        }
         public static void OpenAxePerkBoxes()
         {
             OpenPerksByType(Skills.SkillType.Axes,
@@ -256,6 +264,14 @@ namespace kingskills.UX
                 Perks.PerkType.RunedArrows,
                 Perks.PerkType.OfferToUllr);
         }
+        public static void OpenBuildingPerkBoxes()
+        {
+            OpenPerksByType(SkillMan.Building,
+                Perks.PerkType.Decapitation,
+                Perks.PerkType.Berserkr,
+                Perks.PerkType.Highlander,
+                Perks.PerkType.Throwback);
+        }
         public static void OpenClubPerkBoxes()
         {
             OpenPerksByType(Skills.SkillType.Clubs,
@@ -263,6 +279,14 @@ namespace kingskills.UX
                 Perks.PerkType.ThunderHammer,
                 Perks.PerkType.TrollSmash,
                 Perks.PerkType.PlusUltra);
+        }
+        public static void OpenCookingPerkBoxes()
+        {
+            OpenPerksByType(SkillMan.Cooking,
+                Perks.PerkType.Decapitation,
+                Perks.PerkType.Berserkr,
+                Perks.PerkType.Highlander,
+                Perks.PerkType.Throwback);
         }
         public static void OpenFistPerkBoxes()
         {
@@ -311,6 +335,14 @@ namespace kingskills.UX
                 Perks.PerkType.HermesBoots,
                 Perks.PerkType.WaterRunning,
                 Perks.PerkType.Juggernaut);
+        }
+        public static void OpenSailingPerkBoxes()
+        {
+            OpenPerksByType(SkillMan.Sailing,
+                Perks.PerkType.Decapitation,
+                Perks.PerkType.Berserkr,
+                Perks.PerkType.Highlander,
+                Perks.PerkType.Throwback);
         }
         public static void OpenSpearPerkBoxes()
         {

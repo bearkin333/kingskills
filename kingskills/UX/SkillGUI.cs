@@ -59,7 +59,6 @@ namespace kingskills.UX
             Image image;
             Text text;
             GameObject obj;
-            Assets.AssetLoader.InitAssets();
 
             SkillGUIWindow = GUIManager.Instance.CreateWoodpanel(
                     parent: GUIManager.CustomGUIFront.transform,
@@ -90,6 +89,17 @@ namespace kingskills.UX
                 addContentSizeFitter: false);
             SSkillName.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
 
+            //Create the skill box
+            obj = new GameObject();
+            image = obj.AddComponent<Image>();
+            image.sprite = Assets.AssetLoader.perkBoxSprites["skillbox"];
+            rect = obj.GetComponent<RectTransform>();
+            rect.SetParent(SkillGUIWindow.transform);
+            rect.anchorMin = new Vector2(0f, 1f);
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.anchoredPosition = new Vector2(150f, -60f);
+            rect.sizeDelta = new Vector2(100f, 100f);
+
             //Create skill icon
             SSIcon = new GameObject();
             image = SSIcon.AddComponent<Image>();
@@ -101,7 +111,7 @@ namespace kingskills.UX
             rect.anchoredPosition = new Vector2(150f, -60f);
             //rect.localPosition = new Vector2(-40f, -30f);
             rect.sizeDelta = new Vector2(80f, 80f);
-            SSIcon.SetActive(true);
+
 
             // Create Level text
             SSkillLevel =
@@ -148,7 +158,6 @@ namespace kingskills.UX
                 position: new Vector2(-90f, -35f),
                 width: 120f,
                 height: 45f);
-            closeBtn.SetActive(true);
 
             // Add a listener to the button to close the panel again
             Button button = closeBtn.GetComponent<Button>();
@@ -163,7 +172,6 @@ namespace kingskills.UX
                 position: new Vector2(-90f, -85f),
                 width: 120f,
                 height: 45f);
-            closeBtn.SetActive(true);
 
             // Add a listener to the button to close the panel again
             button = stickBtn.GetComponent<Button>();
@@ -197,8 +205,9 @@ namespace kingskills.UX
                 height: 30f);
             dd = SkillDropDown.GetComponent<Dropdown>();
             dd.AddOptions(new List<string>{
-                "Axes", "Blocking", "Bows", "Clubs", "Fists", "Jump", "Knives", "Mining",
-                "Polearms", "Run", "Spears", "Sneak", "Swim", "Swords", "Woodcutting"
+                "Agriculture", "Axes", "Blocking", "Bows", "Building", "Clubs", "Cooking", 
+                "Fists", "Jump", "Knives", "Mining", "Polearms", "Run", "Sailing", "Spears", 
+                "Sneak", "Swim", "Swords", "Woodcutting"
             });
             dd.onValueChanged.AddListener(
                 delegate {

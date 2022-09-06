@@ -26,7 +26,6 @@ namespace kingskills
         public const string PluginName = "King's Skills";
         public const string PluginVersion = "1.0.0";
 
-        public static Skills.SkillType TestSkillType = 0;
 
         Harmony harmony = new Harmony(PluginGUID);
         private ButtonConfig OpenSkillWindowBtn;
@@ -38,12 +37,13 @@ namespace kingskills
         {
             Jotunn.Logger.LogInfo("King's skills has awakened!");
             InitConfig();
-            CommandManager.Instance.AddConsoleCommand(new BearSkillCommand());
+            CommandManager.Instance.AddConsoleCommand(new TestSkillCommand());
             CommandManager.Instance.AddConsoleCommand(new SkillUpdateCommand());
             CommandManager.Instance.AddConsoleCommand(new TestSkillsCommand());
             CommandManager.Instance.AddConsoleCommand(new ResetPerksCommand());
             CommandManager.Instance.AddConsoleCommand(new ResetAscensionsCommand());
-            AddSkills();
+            SkillMan.AddSkills();
+            Assets.AssetLoader.InitAssets();
             AddInputs();
             harmony.PatchAll();
         }
@@ -64,19 +64,6 @@ namespace kingskills
         private void InitConfig()
         {
             ConfigManager.Init(Config);
-        }
-
-        private void AddSkills()
-        {
-            Jotunn.Configs.SkillConfig skill = new Jotunn.Configs.SkillConfig();
-            skill.Identifier = "bearking.kingskills.bearskill";
-            skill.Name = "Bear";
-            skill.Description = "Become good at bearing";
-            skill.IncreaseStep = 1f;
-
-            TestSkillType = SkillManager.Instance.AddSkill(skill);
-
-            Jotunn.Logger.LogMessage(TestSkillType);
         }
 
         private void AddInputs()

@@ -239,16 +239,20 @@ namespace kingskills
         public static ConfigEntry<float> WoodcuttingCarryCapacityMin;
         public static ConfigEntry<float> WoodcuttingCarryCapacityMax;
 
+        public static ConfigEntry<bool> ActiveSkillAgriculture;
         public static ConfigEntry<bool> ActiveSkillAxe;
         public static ConfigEntry<bool> ActiveSkillBlock;
         public static ConfigEntry<bool> ActiveSkillBow;
+        public static ConfigEntry<bool> ActiveSkillBuilding;
         public static ConfigEntry<bool> ActiveSkillClub;
+        public static ConfigEntry<bool> ActiveSkillCooking;
         public static ConfigEntry<bool> ActiveSkillFist;
         public static ConfigEntry<bool> ActiveSkillJump;
         public static ConfigEntry<bool> ActiveSkillKnife;
         public static ConfigEntry<bool> ActiveSkillMine;
         public static ConfigEntry<bool> ActiveSkillPolearm;
         public static ConfigEntry<bool> ActiveSkillRun;
+        public static ConfigEntry<bool> ActiveSkillSailing;
         public static ConfigEntry<bool> ActiveSkillSpear;
         public static ConfigEntry<bool> ActiveSkillSneak;
         public static ConfigEntry<bool> ActiveSkillSwim;
@@ -372,14 +376,20 @@ namespace kingskills
 
 
             //Active skills
+            ActiveSkillAgriculture = cfg.Bind("Generic.Active", "Agriculture", true,
+                    "Whether or not to allow King's agriculture");
             ActiveSkillAxe = cfg.Bind("Generic.Active", "Axes", true,
                     "Whether or not to activate king's skills version of the axes skill");
             ActiveSkillBlock = cfg.Bind("Generic.Active", "Blocking", true,
                     "Whether or not to activate king's skills version of the blocking skill"); ;
             ActiveSkillBow = cfg.Bind("Generic.Active", "Bows", true,
                     "Whether or not to activate king's skills version of the bows skill"); ;
+            ActiveSkillBuilding = cfg.Bind("Generic.Active", "Building", true,
+                    "Whether or not to allow King's building");
             ActiveSkillClub = cfg.Bind("Generic.Active", "Clubs", true,
                     "Whether or not to activate king's skills version of the clubs skill"); ;
+            ActiveSkillCooking = cfg.Bind("Generic.Active", "Cooking", true,
+                    "Whether or not to allow King's cooking");
             ActiveSkillFist = cfg.Bind("Generic.Active", "Fists", true,
                     "Whether or not to activate king's skills version of the unarmed skill"); ;
             ActiveSkillJump = cfg.Bind("Generic.Active", "Jump", true,
@@ -392,6 +402,8 @@ namespace kingskills
                     "Whether or not to activate king's skills version of the polearms skill"); ;
             ActiveSkillRun = cfg.Bind("Generic.Active", "Run", true,
                     "Whether or not to activate king's skills version of the run skill"); ;
+            ActiveSkillSailing = cfg.Bind("Generic.Active", "Sailing", true,
+                    "Whether or not to allow King's sailing");
             ActiveSkillSpear = cfg.Bind("Generic.Active", "Spear", true,
                     "Whether or not to activate king's skills version of the spear skill"); ;
             ActiveSkillSneak = cfg.Bind("Generic.Active", "Sneak", true,
@@ -403,22 +415,6 @@ namespace kingskills
             ActiveSkillWood = cfg.Bind("Generic.Active", "Woodcutting", true,
                     "Whether or not to activate king's skills version of the woodcutting skill"); ;
 
-            
-            SkillActive.Add(Skills.SkillType.Axes, ActiveSkillAxe.Value);
-            SkillActive.Add(Skills.SkillType.Blocking, ActiveSkillBlock.Value);
-            SkillActive.Add(Skills.SkillType.Bows, ActiveSkillBow.Value);
-            SkillActive.Add(Skills.SkillType.Clubs, ActiveSkillClub.Value);
-            SkillActive.Add(Skills.SkillType.Unarmed, ActiveSkillFist.Value);
-            SkillActive.Add(Skills.SkillType.Jump, ActiveSkillJump.Value);
-            SkillActive.Add(Skills.SkillType.Knives, ActiveSkillKnife.Value);
-            SkillActive.Add(Skills.SkillType.Pickaxes, ActiveSkillMine.Value);
-            SkillActive.Add(Skills.SkillType.Polearms, ActiveSkillPolearm.Value);
-            SkillActive.Add(Skills.SkillType.Run, ActiveSkillRun.Value);
-            SkillActive.Add(Skills.SkillType.Spears, ActiveSkillSpear.Value);
-            SkillActive.Add(Skills.SkillType.Sneak, ActiveSkillSneak.Value);
-            SkillActive.Add(Skills.SkillType.Swim, ActiveSkillSwim.Value);
-            SkillActive.Add(Skills.SkillType.Swords, ActiveSkillSword.Value);
-            SkillActive.Add(Skills.SkillType.WoodCutting, ActiveSkillWood.Value);
 
 
             //Weapon Swing Experence
@@ -869,6 +865,29 @@ namespace kingskills
                 "How much extra carrying capacity you get at level 0");
             WoodcuttingCarryCapacityMax = cfg.Bind("Wood.Effect", "Carry Capacity Max", 50f,
                 "How much extra carrying capacity you get at level 100");
+        }
+
+        public static void InitSkillActiveDict()
+        {
+            SkillActive.Add(SkillMan.Agriculture, ActiveSkillAgriculture.Value);
+            SkillActive.Add(Skills.SkillType.Axes, ActiveSkillAxe.Value);
+            SkillActive.Add(Skills.SkillType.Blocking, ActiveSkillBlock.Value);
+            SkillActive.Add(Skills.SkillType.Bows, ActiveSkillBow.Value);
+            SkillActive.Add(SkillMan.Building, ActiveSkillBuilding.Value);
+            SkillActive.Add(Skills.SkillType.Clubs, ActiveSkillClub.Value);
+            SkillActive.Add(SkillMan.Cooking, ActiveSkillCooking.Value);
+            SkillActive.Add(Skills.SkillType.Unarmed, ActiveSkillFist.Value);
+            SkillActive.Add(Skills.SkillType.Jump, ActiveSkillJump.Value);
+            SkillActive.Add(Skills.SkillType.Knives, ActiveSkillKnife.Value);
+            SkillActive.Add(Skills.SkillType.Pickaxes, ActiveSkillMine.Value);
+            SkillActive.Add(Skills.SkillType.Polearms, ActiveSkillPolearm.Value);
+            SkillActive.Add(Skills.SkillType.Run, ActiveSkillRun.Value);
+            SkillActive.Add(SkillMan.Sailing, ActiveSkillSailing.Value);
+            SkillActive.Add(Skills.SkillType.Spears, ActiveSkillSpear.Value);
+            SkillActive.Add(Skills.SkillType.Sneak, ActiveSkillSneak.Value);
+            SkillActive.Add(Skills.SkillType.Swim, ActiveSkillSwim.Value);
+            SkillActive.Add(Skills.SkillType.Swords, ActiveSkillSword.Value);
+            SkillActive.Add(Skills.SkillType.WoodCutting, ActiveSkillWood.Value);
         }
 
 

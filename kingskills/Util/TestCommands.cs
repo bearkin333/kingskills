@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using BepInEx;
 using Jotunn.Entities;
 using Jotunn.Managers;
+using kingskills;
 
 namespace kingskills.Commands
 {
-    public class BearSkillCommand : ConsoleCommand
+    public class TestSkillCommand : ConsoleCommand
     {
-        public override string Name => "increment_bear_skill";
+        public override string Name => "raiseks";
 
-        public override string Help => "levels up the test ability for bear's skills";
+        public override string Help => "levels up the new skills for kingskills";
 
         public override void Run(string[] args)
         {
@@ -20,8 +21,11 @@ namespace kingskills.Commands
                 return;
             }
             //increment test skill
-            Jotunn.Logger.LogMessage("Bear skill incrementing!");
-            Player.m_localPlayer.RaiseSkill(KingSkills.TestSkillType, 10);
+            Jotunn.Logger.LogMessage("Raising sailing, cooking, building, and agriculture");
+            Player.m_localPlayer.RaiseSkill(SkillMan.Sailing, 10);
+            Player.m_localPlayer.RaiseSkill(SkillMan.Cooking, 10);
+            Player.m_localPlayer.RaiseSkill(SkillMan.Building, 10);
+            Player.m_localPlayer.RaiseSkill(SkillMan.Agriculture, 10);
         }
     }
     public class ResetPerksCommand : ConsoleCommand

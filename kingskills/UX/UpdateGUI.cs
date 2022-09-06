@@ -93,6 +93,11 @@ namespace kingskills.UX
 
             switch (skillName)
             {
+                case "Agriculture":
+                    skill = SkillMan.Agriculture;
+                    OpenAgriculturePanels();
+                    OpenPerks.OpenAgriculturePerkBoxes();
+                    break;
                 case "Axes":
                     skill = Skills.SkillType.Axes;
                     OpenAxePanels();
@@ -108,10 +113,20 @@ namespace kingskills.UX
                     OpenBowPanels();
                     OpenPerks.OpenBowPerkBoxes();
                     break;
+                case "Building":
+                    skill = SkillMan.Building;
+                    OpenBuildingPanels();
+                    OpenPerks.OpenBuildingPerkBoxes();
+                    break;
                 case "Clubs":
                     skill = Skills.SkillType.Clubs;
                     OpenClubPanels();
                     OpenPerks.OpenClubPerkBoxes();
+                    break;
+                case "Cooking":
+                    skill = SkillMan.Cooking;
+                    OpenCookingPanels();
+                    OpenPerks.OpenCookingPerkBoxes();
                     break;
                 case "Fists":
                     skill = Skills.SkillType.Unarmed;
@@ -142,6 +157,11 @@ namespace kingskills.UX
                     skill = Skills.SkillType.Run;
                     OpenRunPanels();
                     OpenPerks.OpenRunPerkBoxes();
+                    break;
+                case "Sailing":
+                    skill = SkillMan.Sailing;
+                    OpenSailingPanels();
+                    OpenPerks.OpenSailingPerkBoxes();
                     break;
                 case "Spears":
                     skill = Skills.SkillType.Spears;
@@ -201,6 +221,41 @@ namespace kingskills.UX
         }
 
 
+        public static void OpenAgriculturePanels()
+        {
+            float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Agriculture);
+
+            float axeDamage = MultToPer(ConfigManager.GetAxeDamageMult(skill));
+            float axeStaminaRedux = MultToPer(ConfigManager.GetAxeStaminaRedux(skill));
+            float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
+            float axeChopBonus = MultToPer(1f + ConfigManager.GetAxeChopDamageMod(skill));
+            float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
+
+
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                axeDamage.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                axeStaminaRedux.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                axeStaminaGain.ToString("F0") + " ";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                axeChopBonus.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
+                axeCarryCapacity.ToString("F0") + " ";
+        }
         public static void OpenAxePanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Axes);
@@ -301,6 +356,41 @@ namespace kingskills.UX
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 bowDropRate.ToString("F1") + "% extra loot drops from creatures";
         }
+        public static void OpenBuildingPanels()
+        {
+            float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Building);
+
+            float axeDamage = MultToPer(ConfigManager.GetAxeDamageMult(skill));
+            float axeStaminaRedux = MultToPer(ConfigManager.GetAxeStaminaRedux(skill));
+            float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
+            float axeChopBonus = MultToPer(1f + ConfigManager.GetAxeChopDamageMod(skill));
+            float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
+
+
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                axeDamage.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                axeStaminaRedux.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                axeStaminaGain.ToString("F0") + " ";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                axeChopBonus.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
+                axeCarryCapacity.ToString("F0") + " ";
+        }
         public static void OpenClubPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Clubs);
@@ -335,6 +425,41 @@ namespace kingskills.UX
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 clubStagger.ToString("F1") + "% extra stagger damage to ALL weapons";
+        }
+        public static void OpenCookingPanels()
+        {
+            float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Cooking);
+
+            float axeDamage = MultToPer(ConfigManager.GetAxeDamageMult(skill));
+            float axeStaminaRedux = MultToPer(ConfigManager.GetAxeStaminaRedux(skill));
+            float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
+            float axeChopBonus = MultToPer(1f + ConfigManager.GetAxeChopDamageMod(skill));
+            float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
+
+
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                axeDamage.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                axeStaminaRedux.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                axeStaminaGain.ToString("F0") + " ";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                axeChopBonus.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
+                axeCarryCapacity.ToString("F0") + " ";
         }
         public static void OpenFistPanels()
         {
@@ -445,6 +570,40 @@ namespace kingskills.UX
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 knifePierce.ToString("F1") + "% extra to ALL pierce damage";
         }
+        public static void OpenMiningPanels()
+        {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Pickaxes);
+
+            float mineDamage = MultToPer(ConfigManager.GetMiningDamageMult(skill));
+            float mineDrop = MultToPer(ConfigManager.GetMiningDropMod(skill) + 1f);
+            float mineRebate = ConfigManager.GetMiningStaminaRebate(skill);
+            float mineRegen = ConfigManager.GetMiningRegenLessTime(skill);
+            float mineCarry = ConfigManager.GetMiningCarryCapacity(skill);
+
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "A percentage of all damage dealt to rocks or ore is turned into experience.";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "You still gain experience for hitting the ground, but at a reduced pace.";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "Bonus experience for the pick is gained based on the tier of the tool used.";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                mineDamage.ToString("F1") + "% extra damage to rocks";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                mineDrop.ToString("F2") + "% increased ore drop rates";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                mineRebate.ToString("F0") + " stamina rebate on pick swings that hit a rock";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                mineRegen.ToString("F0") + " fewer seconds between health regeneration ticks";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
+                mineCarry.ToString("F0") + " extra carrying capacity";
+        }
         public static void OpenPolearmPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Polearms);
@@ -532,6 +691,41 @@ namespace kingskills.UX
                 "Current effects from outside factors: \n" +
                 encumberanceFactor.ToString("F1") + "% speed from encumberance\n " +
                 equipmentFactor.ToString("F1") + "% speed from equipment";
+        }
+        public static void OpenSailingPanels()
+        {
+            float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Sailing);
+
+            float axeDamage = MultToPer(ConfigManager.GetAxeDamageMult(skill));
+            float axeStaminaRedux = MultToPer(ConfigManager.GetAxeStaminaRedux(skill));
+            float axeStaminaGain = ConfigManager.GetAxeStamina(skill);
+            float axeChopBonus = MultToPer(1f + ConfigManager.GetAxeChopDamageMod(skill));
+            float axeCarryCapacity = ConfigManager.GetAxeCarryCapacity(skill);
+
+
+            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
+                "";
+            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
+                "";
+
+            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
+                axeDamage.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
+                axeStaminaRedux.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
+                axeStaminaGain.ToString("F0") + " ";
+
+            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
+                axeChopBonus.ToString("F1") + "% ";
+
+            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
+                axeCarryCapacity.ToString("F0") + " ";
         }
         public static void OpenSpearPanels()
         {
@@ -710,40 +904,6 @@ namespace kingskills.UX
 
             SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
                 woodCarry.ToString("F0") + " extra carrying capacity";
-        }
-        public static void OpenMiningPanels()
-        {
-            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Pickaxes);
-
-            float mineDamage = MultToPer(ConfigManager.GetMiningDamageMult(skill));
-            float mineDrop = MultToPer(ConfigManager.GetMiningDropMod(skill)+1f);
-            float mineRebate = ConfigManager.GetMiningStaminaRebate(skill);
-            float mineRegen = ConfigManager.GetMiningRegenLessTime(skill);
-            float mineCarry = ConfigManager.GetMiningCarryCapacity(skill);
-
-            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
-                "A percentage of all damage dealt to rocks or ore is turned into experience.";
-            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text =
-                "You still gain experience for hitting the ground, but at a reduced pace.";
-            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text =
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
-            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
-                "Bonus experience for the pick is gained based on the tier of the tool used.";
-
-            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
-                mineDamage.ToString("F1") + "% extra damage to rocks";
-
-            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text =
-                mineDrop.ToString("F2") + "% increased ore drop rates";
-
-            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text =
-                mineRebate.ToString("F0") + " stamina rebate on pick swings that hit a rock";
-
-            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text =
-                mineRegen.ToString("F0") + " fewer seconds between health regeneration ticks";
-
-            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text =
-                mineCarry.ToString("F0") + " extra carrying capacity";
         }
 
         public static float MultToPer(float number)

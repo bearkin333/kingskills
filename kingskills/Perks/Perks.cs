@@ -27,15 +27,19 @@ namespace kingskills
         }
         public static void InitSkillAscensions()
         {
+            skillAscendedFlags.Add(SkillMan.Agriculture, false);
             skillAscendedFlags.Add(Skills.SkillType.Axes, false);
             skillAscendedFlags.Add(Skills.SkillType.Blocking, false);
             skillAscendedFlags.Add(Skills.SkillType.Bows, false);
+            skillAscendedFlags.Add(SkillMan.Building, false);
             skillAscendedFlags.Add(Skills.SkillType.Clubs, false);
+            skillAscendedFlags.Add(SkillMan.Cooking, false);
             skillAscendedFlags.Add(Skills.SkillType.Jump, false);
             skillAscendedFlags.Add(Skills.SkillType.Knives, false);
             skillAscendedFlags.Add(Skills.SkillType.Pickaxes, false);
             skillAscendedFlags.Add(Skills.SkillType.Polearms, false);
             skillAscendedFlags.Add(Skills.SkillType.Run, false);
+            skillAscendedFlags.Add(SkillMan.Sailing, false);
             skillAscendedFlags.Add(Skills.SkillType.Sneak, false);
             skillAscendedFlags.Add(Skills.SkillType.Spears, false);
             skillAscendedFlags.Add(Skills.SkillType.Swim, false);
