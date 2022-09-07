@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace kingskills.UX
 {
-    class PrettyText
+    class PT
     {
-        public static string Prettify(float input, float decimals, TextType type)
+        public static string Prettify(float input, float decimals, TType type)
         {
             string color = "<color=";
             string endColor = "</color>";
@@ -17,7 +17,7 @@ namespace kingskills.UX
 
             switch (type)
             {
-                case TextType.TextlessPercent:
+                case TType.TextlessPercent:
                     if (input < 0)
                     {
                         color += "red>";
@@ -34,7 +34,7 @@ namespace kingskills.UX
                         extraColorText = "%";
                     }
                     break;
-                case TextType.Percent:
+                case TType.Percent:
                     if (input < 0)
                     {
                         color += "red>";
@@ -51,7 +51,7 @@ namespace kingskills.UX
                         extraColorText = "% extra";
                     }
                     break;
-                case TextType.Flat:
+                case TType.Flat:
                     if (input < 0)
                     {
                         color += "red>";
@@ -65,7 +65,7 @@ namespace kingskills.UX
                         color += "white>";
                     }
                     break;
-                case TextType.PercentRedux:
+                case TType.PercentRedux:
                     if (input < 0)
                     {
                         input *= -1f;
@@ -83,10 +83,10 @@ namespace kingskills.UX
                         extraColorText = "% reduced";
                     }
                     break;
-                case TextType.Straight:
+                case TType.Straight:
                     color += "white>";
                     break;
-                case TextType.ColorlessPercent:
+                case TType.ColorlessPercent:
                     color = "";
                     if (input < 0)
                     {
@@ -112,7 +112,7 @@ namespace kingskills.UX
             return result;
         }
 
-        public enum TextType
+        public enum TType
         {
             TextlessPercent,
             Percent,

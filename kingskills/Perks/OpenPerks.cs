@@ -346,10 +346,10 @@ namespace kingskills.UX
         public static void OpenSailingPerkBoxes()
         {
             OpenPerksByType(SkillMan.Sailing,
-                Perks.PerkType.Decapitation,
-                Perks.PerkType.Berserkr,
-                Perks.PerkType.Highlander,
-                Perks.PerkType.Throwback);
+                Perks.PerkType.SeaShanty,
+                Perks.PerkType.FirstMate,
+                Perks.PerkType.CoupDeBurst,
+                Perks.PerkType.Sailing4);
         }
         public static void OpenSpearPerkBoxes()
         {

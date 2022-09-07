@@ -13,8 +13,8 @@ namespace kingskills
     class CustomWorldTextManager
     {
         public const float InFrontRange = 2f;
-        public const float AboveRange = 3f;
-        public const float RandomRange = 1f;
+        public const float AboveRange = 2.7f;
+        public const float RandomRange = .8f;
 
         public static void CreateBXPText(Vector3 pos, float number)
         {
@@ -24,11 +24,11 @@ namespace kingskills
 
         public static Vector3 GetInFrontOfCharacter(Character character)
         {
-            return character.transform.position + character.m_lookDir * InFrontRange;
+            return character.transform.position + character.transform.forward * InFrontRange;
         }
         public static Vector3 GetAboveCharacter(Character character)
         {
-            return character.transform.position + new Vector3(0f, 1f, 0f) * AboveRange;
+            return character.transform.position + Vector3.up * AboveRange;
         }
 
         public static Vector3 GetRandomPosOffset()

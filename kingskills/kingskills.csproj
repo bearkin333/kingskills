@@ -94,7 +94,7 @@
     <Compile Include="Overhauls\KSPolearm.cs" />
     <Compile Include="Overhauls\KSSneak.cs" />
     <Compile Include="Util\CustomTextMan.cs" />
-    <Compile Include="UX\PrettyText.cs" />
+    <Compile Include="UX\PT.cs" />
     <Compile Include="Weapons\WeaponBonusExperience.cs" />
     <Compile Include="Patches\StatsPatch.cs" />
     <Compile Include="Weapons\WeaponDamage.cs" />

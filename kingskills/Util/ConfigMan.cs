@@ -105,22 +105,6 @@ namespace kingskills
         }
 
 
-        public static void InitGenericConfigs(ConfigFile cfg)
-        {
-            ColorBonusBlue = new Color(0.20f, 0.88f, 0.93f);
-            ColorAscendedGreen = new Color(0.45f, 0.92f, 0.32f);
-            ColorExperienceYellow = new Color(0.98f, 0.96f, 0.23f);
-            ColorTitle = new Color(0.98f, 0.96f, 0.43f);
-            ColorWhite = new Color(1f, 1f, 1f);
-            ColorKingSkills = new Color(0.77f, 0.23f, 0.99f);
-
-            MaxSkillLevel = cfg.Bind("Generic", "Max Skill Level", 100f,
-                    "This is the level that all king skills can go up to.");
-            DisplayExperienceThreshold = cfg.Bind("Generic", "Experience Display Threshold", .2f,
-                    "Threshold under which experience earned will not display as a message.");
-            DropNewItemThreshold = cfg.Bind("Generic", "Drop New Item Threshold", 50f,
-                    "% of 1 item needed to generate before you round up to a full item.");
-        }
 
         public static void InitSkillActiveDict()
         {
@@ -154,11 +138,53 @@ namespace kingskills
         public static ConfigEntry<float> DropNewItemThreshold;
         public static ConfigEntry<float> MaxSkillLevel;
         public static ConfigEntry<float> DisplayExperienceThreshold;
+        public static ConfigEntry<float> XPTextScaleMin;
+        public static ConfigEntry<float> XPTextScaleMax;
+        public static ConfigEntry<float> XPTextValueMin;
+        public static ConfigEntry<float> XPTextValueMax;
+        public static ConfigEntry<float> XPTextCurveFactor;
         #endregion configdef
+
+        public static void InitGenericConfigs(ConfigFile cfg)
+        {
+            ColorBonusBlue = new Color(0.20f, 0.88f, 0.93f);
+            ColorAscendedGreen = new Color(0.45f, 0.92f, 0.32f);
+            ColorExperienceYellow = new Color(0.98f, 0.96f, 0.23f);
+            ColorTitle = new Color(0.98f, 0.96f, 0.43f);
+            ColorWhite = new Color(1f, 1f, 1f);
+            ColorKingSkills = new Color(0.77f, 0.23f, 0.99f);
+
+            MaxSkillLevel = cfg.Bind("Generic", "Max Skill Level", 100f,
+                    "This is the level that all king skills can go up to.");
+            DisplayExperienceThreshold = cfg.Bind("Generic", "Experience Display Threshold", .2f,
+                    "Threshold under which experience earned will not display as a message.");
+            DropNewItemThreshold = cfg.Bind("Generic", "Drop New Item Threshold", 50f,
+                    "% of 1 item needed to generate before you round up to a full item.");
+
+
+            XPTextScaleMin = cfg.Bind("Generic", "Text Scale Min", 20f,
+                    "Font size of the smallest possible exp text");
+            XPTextScaleMax = cfg.Bind("Generic", "Text Scale Max", 65f,
+                    "Font size of the largest possible exp text");
+            XPTextValueMin = cfg.Bind("Generic", "Text Value Min", 0.2f,
+                    "Experience value to generate the smallest size exp text");
+            XPTextValueMax = cfg.Bind("Generic", "Text Value Max", 100f,
+                    "Experience value to generate the largest size exp text");
+            XPTextCurveFactor = cfg.Bind("Generic", "Text Value Max", .6f,
+                    "Factor to define the slope of the curve for exp text scaling");
+
+        }
 
         public static bool IsSkillActive(Skills.SkillType skill)
         {
             return SkillActive[skill];
+        }
+
+        public static int GetXPTextScaledSize(float num)
+        {
+            return (int)Mathf.Floor(Mathf.Lerp(XPTextScaleMin.Value, XPTextScaleMax.Value, 
+                Mathf.Pow((num - XPTextValueMin.Value) / (num - XPTextValueMax.Value), 
+                                            XPTextCurveFactor.Value)));
         }
 
         public static float GetDropItemThreshold()
@@ -1776,13 +1802,16 @@ namespace kingskills
         #region sail
         #region configdef
         public static ConfigEntry<bool> ActiveSkillSail;
-        public static ConfigEntry<float> SailXPFlat;
-        public static ConfigEntry<float> SailXPCaptainFlat;
+        public static ConfigEntry<float> SailXPCrewBase;
+        public static ConfigEntry<float> SailXPCaptainBase;
         public static ConfigEntry<float> SailXPWindMin;
         public static ConfigEntry<float> SailXPWindMax;
-        public static ConfigEntry<float> SailXPSpeedBonus;
+        public static ConfigEntry<float> SailXPSpeedMod;
         public static ConfigEntry<float> SailXPTierBonus;
         public static ConfigEntry<float> SailXPCrewBonus;
+        public static ConfigEntry<float> SailXPTimerLength;
+
+        public static Dictionary<string, ShipDef> SailShipDefs;
 
         public static ConfigEntry<float> SailSpeedMin;
         public static ConfigEntry<float> SailSpeedMax;
@@ -1792,8 +1821,23 @@ namespace kingskills
         public static ConfigEntry<float> SailExploreRangeMax;
         public static ConfigEntry<float> SailPaddleSpeedMin;
         public static ConfigEntry<float> SailPaddleSpeedMax;
+        public static ConfigEntry<float> SailRudderSpeedMin;
+        public static ConfigEntry<float> SailRudderSpeedMax;
+        public static ConfigEntry<float> SailControlTimer;
         public static ConfigEntry<float> SailDamageReduxMin;
         public static ConfigEntry<float> SailDamageReduxMax;
+
+        public class ShipDef
+        {
+            public float LevelRQ;
+            public int Tier;
+
+            public ShipDef(float levelRQ, int tier)
+            {
+                LevelRQ = levelRQ;
+                Tier = tier;
+            }
+        }
         #endregion configdef
 
         private static void InitSailConfig(ConfigFile cfg)
@@ -1802,20 +1846,28 @@ namespace kingskills
                     "Whether or not to allow King's sailing");
 
 
-            SailXPFlat = cfg.Bind("Sailing.Experience", "Flat", .15f,
+            SailXPCrewBase = cfg.Bind("Sailing.Experience", "Crew Base", .2f,
                     "Base rate while swimming or standing on board.");
-            SailXPCaptainFlat = cfg.Bind("Sailing.Experience", "Captain Flat", .4f,
+            SailXPCaptainBase = cfg.Bind("Sailing.Experience", "Captain Base", .45f,
                     "Base rate while captaining a ship.");
             SailXPWindMin = cfg.Bind("Sailing.Experience", "Wind Min", 0f,
                     "% experience bonus when wind is totally against you");
-            SailXPWindMax = cfg.Bind("Sailing.Experience", "Wind Max", 60f,
+            SailXPWindMax = cfg.Bind("Sailing.Experience", "Wind Max", 50f,
                     "% experience bonus when wind is totally in the sails");
-            SailXPSpeedBonus = cfg.Bind("Sailing.Experience", "Speed", .45f,
+            SailXPSpeedMod = cfg.Bind("Sailing.Experience", "Speed", .25f,
                     "Amount of experience each speed unit is worth");
-            SailXPTierBonus = cfg.Bind("Sailing.Experience", "Ship Tier", 50f,
+            SailXPTierBonus = cfg.Bind("Sailing.Experience", "Ship Tier", 66f,
                     "% of extra experience for each tier of ship after the first");
-            SailXPCrewBonus = cfg.Bind("Sailing.Experience", "Crew", 25f,
+            SailXPCrewBonus = cfg.Bind("Sailing.Experience", "Crew", 33f,
                     "% extra experience for each crew member on board past the first");
+            SailXPTimerLength = cfg.Bind("Sailing.Experience", "Timer", 2f,
+                    "Number of seconds for each sailing experience bundle");
+
+            SailShipDefs = new Dictionary<string, ShipDef>();
+
+            SailShipDefs.Add("Raft", new ShipDef(0, 0));
+            SailShipDefs.Add("Karve", new ShipDef(20, 1));
+            SailShipDefs.Add("Longship", new ShipDef(50, 2));
 
             SailSpeedMin = cfg.Bind("Sailing.Effect", "Speed Min", 0f,
                     "% of extra sailing speed at level 0");
@@ -1833,6 +1885,12 @@ namespace kingskills
                     "% extra paddling speed at level 0");
             SailPaddleSpeedMax = cfg.Bind("Sailing.Effect", "Paddle Speed Max", 100f,
                     "% extra paddling speed at level 100");
+            SailRudderSpeedMin = cfg.Bind("Sailing.Effect", "Rudder Speed Min", -5f,
+                    "% extra rudder turning speed at level 0");
+            SailRudderSpeedMax = cfg.Bind("Sailing.Effect", "Rudder Speed Max", 80f,
+                    "% extra rudder turning speed at level 100");
+            SailControlTimer = cfg.Bind("Sailing.Effect", "Control Timer", 1.5f,
+                    "seconds between each update of the sail controls");
             SailDamageReduxMin = cfg.Bind("Sailing.Effect", "Damage Redux Min", -20f,
                     "% less damage taken by the boat at level 0");
             SailDamageReduxMax = cfg.Bind("Sailing.Effect", "Damage Redux Max", 60f,
@@ -1840,6 +1898,32 @@ namespace kingskills
         }
 
 
+        public static float GetSailShipLevelRQ(Ship ship)
+        {
+            if (ship == null) return 0f;
+            string name = ship.m_nview.GetPrefabName();
+            if (SailShipDefs.ContainsKey(name)) return SailShipDefs[name].LevelRQ;
+
+            return 0f;
+        }
+        public static float GetSailXPWindMult(float windFactor)
+        {
+            return Mathf.Lerp(PerToMult(SailXPWindMin), 
+                PerToMult(SailXPWindMax), windFactor);
+        }
+        public static float GetSailXPTierMult(Ship ship)
+        {
+            if (ship == null) return 1f;
+            string name = ship.m_nview.GetPrefabName();
+            if (SailShipDefs.ContainsKey(name)) 
+                return 1f + SailShipDefs[name].Tier * PerToMod(SailXPTierBonus);
+
+            return 1f;
+        }
+        public static float GetSailXPCrewMult(float crewCount)
+        {
+            return 1f + ((crewCount - 1) * PerToMod(SailXPCrewBonus));
+        }
         public static float GetSailSpeedMult(float skillFactor)
         {
             return Mathf.Lerp(PerToMult(SailSpeedMin), 
@@ -1859,6 +1943,11 @@ namespace kingskills
         {
             return Mathf.Lerp(PerToMult(SailPaddleSpeedMin), 
                 PerToMult(SailPaddleSpeedMax), skillFactor);
+        }
+        public static float GetSailRudderSpeedMult(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(SailRudderSpeedMin),
+                PerToMult(SailRudderSpeedMax), skillFactor);
         }
         public static float GetSailDamageRedux(float skillFactor)
         {

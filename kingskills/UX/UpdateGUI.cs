@@ -232,10 +232,10 @@ namespace kingskills.UX
             float botFoodQuality = MultToPer(ConfigMan.GetAgricultureFoodQualityMult(skill));
             float botHealthGain = ConfigMan.GetAgricultureHealthRegain(skill);
 
-            string botYieldS = PrettyText.Prettify(botYield, 2, PrettyText.TextType.Percent);
-            string botGrowReduxS = PrettyText.Prettify(botGrowRedux, 0, PrettyText.TextType.PercentRedux);
-            string botFoodQualityS = PrettyText.Prettify(botFoodQuality, 0, PrettyText.TextType.Percent);
-            string botHealthGainS = PrettyText.Prettify(botHealthGain, 1, PrettyText.TextType.Flat);
+            string botYieldS = PT.Prettify(botYield, 2, PT.TType.Percent);
+            string botGrowReduxS = PT.Prettify(botGrowRedux, 0, PT.TType.PercentRedux);
+            string botFoodQualityS = PT.Prettify(botFoodQuality, 0, PT.TType.Percent);
+            string botHealthGainS = PT.Prettify(botHealthGain, 1, PT.TType.Flat);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -272,11 +272,11 @@ namespace kingskills.UX
             float axeChopBonus = MultToPer(1f + ConfigMan.GetAxeChopDamageMod(skill));
             float axeCarryCapacity = ConfigMan.GetAxeCarryCapacity(skill);
 
-            string axeDamageS = PrettyText.Prettify(axeDamage, 1, PrettyText.TextType.Percent);
-            string axeStaminaReduxS = PrettyText.Prettify(axeStaminaRedux, 1, PrettyText.TextType.PercentRedux);
-            string axeStaminaGainS = PrettyText.Prettify(axeStaminaGain, 0, PrettyText.TextType.Flat);
-            string axeChopBonusS = PrettyText.Prettify(axeChopBonus, 1, PrettyText.TextType.Percent);
-            string axeCarryCapacityS = PrettyText.Prettify(axeCarryCapacity, 0, PrettyText.TextType.Flat);
+            string axeDamageS = PT.Prettify(axeDamage, 1, PT.TType.Percent);
+            string axeStaminaReduxS = PT.Prettify(axeStaminaRedux, 1, PT.TType.PercentRedux);
+            string axeStaminaGainS = PT.Prettify(axeStaminaGain, 0, PT.TType.Flat);
+            string axeChopBonusS = PT.Prettify(axeChopBonus, 1, PT.TType.Percent);
+            string axeCarryCapacityS = PT.Prettify(axeCarryCapacity, 0, PT.TType.Flat);
 
             //Jotunn.Logger.LogMessage($"I'm changing the axe values in now");
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -314,10 +314,10 @@ namespace kingskills.UX
             float blockHealth = ConfigMan.GetBlockHealth(skill);
             float parryExpMod = MultToPer(ConfigMan.GetBlockParryExpMult());
 
-            string staminaReduxS = PrettyText.Prettify(staminaRedux, 1, PrettyText.TextType.PercentRedux);
-            string baseBlockPowerS = PrettyText.Prettify(baseBlockPower, 0, PrettyText.TextType.Percent);
-            string blockPerArmorS = PrettyText.Prettify(blockPerArmor, 1, PrettyText.TextType.Percent);
-            string blockHealthS = PrettyText.Prettify(blockHealth, 0, PrettyText.TextType.Percent);
+            string staminaReduxS = PT.Prettify(staminaRedux, 1, PT.TType.PercentRedux);
+            string baseBlockPowerS = PT.Prettify(baseBlockPower, 0, PT.TType.Percent);
+            string blockPerArmorS = PT.Prettify(blockPerArmor, 1, PT.TType.Percent);
+            string blockHealthS = PT.Prettify(blockHealth, 0, PT.TType.Percent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage you block is turned into experience.";
@@ -348,11 +348,11 @@ namespace kingskills.UX
             float bowDrawSpeed = ConfigMan.GetBowDrawSpeed(skill);
             float bowDropRate = MultToPer(ConfigMan.GetBowDropRateMod(skill)+1f);
 
-            string bowDamageS = PrettyText.Prettify(bowDamage, 1, PrettyText.TextType.Percent);
-            string bowStaminaReduxS = PrettyText.Prettify(bowStaminaRedux, 1, PrettyText.TextType.PercentRedux);
-            string bowVelocityS = PrettyText.Prettify(bowVelocity, 1, PrettyText.TextType.Percent);
-            string bowDrawSpeedS = PrettyText.Prettify(bowDrawSpeed, 1, PrettyText.TextType.Straight);
-            string bowDropRateS = PrettyText.Prettify(bowDropRate, 1, PrettyText.TextType.Percent);
+            string bowDamageS = PT.Prettify(bowDamage, 1, PT.TType.Percent);
+            string bowStaminaReduxS = PT.Prettify(bowStaminaRedux, 1, PT.TType.PercentRedux);
+            string bowVelocityS = PT.Prettify(bowVelocity, 1, PT.TType.Percent);
+            string bowDrawSpeedS = PT.Prettify(bowDrawSpeed, 1, PT.TType.Straight);
+            string bowDropRateS = PT.Prettify(bowDropRate, 1, PT.TType.Percent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -390,12 +390,12 @@ namespace kingskills.UX
             float buildFreeChance = MultToPer(1f + ConfigMan.GetBuildingFreeMod(skill));
             float buildStaminaRedux = MultToPer(ConfigMan.GetBuildingStaminaRedux(skill), true);
 
-            string buildHealthS = PrettyText.Prettify(buildHealth, 1, PrettyText.TextType.Percent);
-            string buildStabilityS = PrettyText.Prettify(buildStability, 1, PrettyText.TextType.Percent);
-            string buildDamageS = PrettyText.Prettify(buildDamage, 0, PrettyText.TextType.Percent);
-            string buildWNTS = PrettyText.Prettify(buildWNT, 0, PrettyText.TextType.PercentRedux);
-            string buildFreeChanceS = PrettyText.Prettify(buildFreeChance, 0, PrettyText.TextType.ColorlessPercent);
-            string buildStaminaReduxS = PrettyText.Prettify(buildStaminaRedux, 0, PrettyText.TextType.PercentRedux);
+            string buildHealthS = PT.Prettify(buildHealth, 1, PT.TType.Percent);
+            string buildStabilityS = PT.Prettify(buildStability, 1, PT.TType.Percent);
+            string buildDamageS = PT.Prettify(buildDamage, 0, PT.TType.Percent);
+            string buildWNTS = PT.Prettify(buildWNT, 0, PT.TType.PercentRedux);
+            string buildFreeChanceS = PT.Prettify(buildFreeChance, 0, PT.TType.ColorlessPercent);
+            string buildStaminaReduxS = PT.Prettify(buildStaminaRedux, 0, PT.TType.PercentRedux);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -435,11 +435,11 @@ namespace kingskills.UX
             float clubKnockback = MultToPer(ConfigMan.GetClubKnockbackMult(skill));
             float clubStagger = MultToPer(ConfigMan.GetClubStaggerMult(skill));
 
-            string clubDamageS = PrettyText.Prettify(clubDamage, 1, PrettyText.TextType.Percent);
-            string clubStaminaReduxS = PrettyText.Prettify(clubStaminaRedux, 1, PrettyText.TextType.PercentRedux);
-            string clubBluntS = PrettyText.Prettify(clubBlunt, 1, PrettyText.TextType.Percent);
-            string clubKnockbackS = PrettyText.Prettify(clubKnockback, 1, PrettyText.TextType.TextlessPercent);
-            string clubStaggerS = PrettyText.Prettify(clubStagger, 1, PrettyText.TextType.Percent);
+            string clubDamageS = PT.Prettify(clubDamage, 1, PT.TType.Percent);
+            string clubStaminaReduxS = PT.Prettify(clubStaminaRedux, 1, PT.TType.PercentRedux);
+            string clubBluntS = PT.Prettify(clubBlunt, 1, PT.TType.Percent);
+            string clubKnockbackS = PT.Prettify(clubKnockback, 1, PT.TType.TextlessPercent);
+            string clubStaggerS = PT.Prettify(clubStagger, 1, PT.TType.Percent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -475,10 +475,10 @@ namespace kingskills.UX
             float cookTimeRedux = MultToPer(ConfigMan.GetCookingTimeRedux(skill), true);
             float cookFermentTimeRedux = MultToPer(ConfigMan.GetCookingFermentTimeRedux(skill), true);
 
-            string cookAvgFQS = PrettyText.Prettify(cookAvgFQ, 1, PrettyText.TextType.TextlessPercent);
-            string cookFQRangeS = PrettyText.Prettify(cookFQRange, 1, PrettyText.TextType.TextlessPercent);
-            string cookTimeReduxS = PrettyText.Prettify(cookTimeRedux, 1, PrettyText.TextType.PercentRedux);
-            string cookFermentTimeReduxS = PrettyText.Prettify(cookFermentTimeRedux, 1, PrettyText.TextType.PercentRedux);
+            string cookAvgFQS = PT.Prettify(cookAvgFQ, 1, PT.TType.TextlessPercent);
+            string cookFQRangeS = PT.Prettify(cookFQRange, 1, PT.TType.TextlessPercent);
+            string cookTimeReduxS = PT.Prettify(cookTimeRedux, 1, PT.TType.PercentRedux);
+            string cookFermentTimeReduxS = PT.Prettify(cookFermentTimeRedux, 1, PT.TType.PercentRedux);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -521,11 +521,11 @@ namespace kingskills.UX
             float fistBlock = ConfigMan.GetFistBlockArmor(skill);
             float fistMovespeed = MultToPer(1f + ConfigMan.GetFistMovespeedMod(skill));
 
-            string fistDamageS = PrettyText.Prettify(fistDamage, 1, PrettyText.TextType.Percent);
-            string fistStaminaReduxS = PrettyText.Prettify(fistStaminaRedux, 1, PrettyText.TextType.PercentRedux);
-            string fistFlatDamageS = PrettyText.Prettify(fistFlatDamage, 0, PrettyText.TextType.Flat);
-            string fistBlockS = PrettyText.Prettify(fistBlock, 0, PrettyText.TextType.Flat);
-            string fistMovespeedS = PrettyText.Prettify(fistMovespeed, 1, PrettyText.TextType.Percent);
+            string fistDamageS = PT.Prettify(fistDamage, 1, PT.TType.Percent);
+            string fistStaminaReduxS = PT.Prettify(fistStaminaRedux, 1, PT.TType.PercentRedux);
+            string fistFlatDamageS = PT.Prettify(fistFlatDamage, 0, PT.TType.Flat);
+            string fistBlockS = PT.Prettify(fistBlock, 0, PT.TType.Flat);
+            string fistMovespeedS = PT.Prettify(fistMovespeed, 1, PT.TType.Percent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -566,12 +566,12 @@ namespace kingskills.UX
             float fallDamageThreshhold = ConfigMan.GetFallDamageThreshold(skill);
             float fallDamageRedux = MultToPer(ConfigMan.GetFallDamageRedux(skill), true);
 
-            string bonusJumpForceS = PrettyText.Prettify(bonusJumpForce, 1, PrettyText.TextType.Percent);
-            string bonusJumpForwardForceS = PrettyText.Prettify(bonusJumpForwardForce, 1, PrettyText.TextType.Percent);
-            string staminaReduxS = PrettyText.Prettify(staminaRedux, 1, PrettyText.TextType.PercentRedux);
-            string tiredS = PrettyText.Prettify(tired, 0, PrettyText.TextType.ColorlessPercent);
-            string fallDamageThreshholdS = PrettyText.Prettify(fallDamageThreshhold, 0, PrettyText.TextType.Flat);
-            string fallDamageReduxS = PrettyText.Prettify(fallDamageRedux, 1, PrettyText.TextType.PercentRedux);
+            string bonusJumpForceS = PT.Prettify(bonusJumpForce, 1, PT.TType.Percent);
+            string bonusJumpForwardForceS = PT.Prettify(bonusJumpForwardForce, 1, PT.TType.Percent);
+            string staminaReduxS = PT.Prettify(staminaRedux, 1, PT.TType.PercentRedux);
+            string tiredS = PT.Prettify(tired, 0, PT.TType.ColorlessPercent);
+            string fallDamageThreshholdS = PT.Prettify(fallDamageThreshhold, 0, PT.TType.Flat);
+            string fallDamageReduxS = PT.Prettify(fallDamageRedux, 1, PT.TType.PercentRedux);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -609,11 +609,11 @@ namespace kingskills.UX
             float knifeMovespeed = MultToPer(1f + ConfigMan.GetKnifeMovespeedMod(skill));
             float knifePierce = MultToPer(ConfigMan.GetKnifePierceMult(skill));
 
-            string knifeDamageS = PrettyText.Prettify(knifeDamage, 1, PrettyText.TextType.Percent);
-            string knifeStaminaReduxS = PrettyText.Prettify(knifeStaminaRedux, 1, PrettyText.TextType.PercentRedux);
-            string knifeBackstabS = PrettyText.Prettify(knifeBackstab, 0, PrettyText.TextType.Percent);
-            string knifeMovespeedS = PrettyText.Prettify(knifeMovespeed, 1, PrettyText.TextType.Percent);
-            string knifePierceS = PrettyText.Prettify(knifePierce, 1, PrettyText.TextType.Percent);
+            string knifeDamageS = PT.Prettify(knifeDamage, 1, PT.TType.Percent);
+            string knifeStaminaReduxS = PT.Prettify(knifeStaminaRedux, 1, PT.TType.PercentRedux);
+            string knifeBackstabS = PT.Prettify(knifeBackstab, 0, PT.TType.Percent);
+            string knifeMovespeedS = PT.Prettify(knifeMovespeed, 1, PT.TType.Percent);
+            string knifePierceS = PT.Prettify(knifePierce, 1, PT.TType.Percent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -651,11 +651,11 @@ namespace kingskills.UX
             float mineCarry = ConfigMan.GetMiningCarryCapacity(skill);
 
 
-            string mineDamageS = PrettyText.Prettify(mineDamage, 1, PrettyText.TextType.Percent);
-            string mineDropS = PrettyText.Prettify(mineDrop, 2, PrettyText.TextType.Percent);
-            string mineRebateS = PrettyText.Prettify(mineRebate, 0, PrettyText.TextType.Flat);
-            string mineRegenS = PrettyText.Prettify(mineRegen, 1, PrettyText.TextType.Straight);
-            string mineCarryS = PrettyText.Prettify(mineCarry, 0, PrettyText.TextType.Flat);
+            string mineDamageS = PT.Prettify(mineDamage, 1, PT.TType.Percent);
+            string mineDropS = PT.Prettify(mineDrop, 2, PT.TType.Percent);
+            string mineRebateS = PT.Prettify(mineRebate, 0, PT.TType.Flat);
+            string mineRegenS = PT.Prettify(mineRegen, 1, PT.TType.Straight);
+            string mineCarryS = PT.Prettify(mineCarry, 0, PT.TType.Flat);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt to rocks or ore is turned into experience.";
@@ -691,11 +691,11 @@ namespace kingskills.UX
             float polearmArmor = ConfigMan.GetPolearmArmor(skill);
             float polearmBlock = ConfigMan.GetPolearmBlock(skill);
 
-            string polearmDamageS = PrettyText.Prettify(polearmDamage, 1, PrettyText.TextType.Percent);
-            string polearmStaminaReduxS = PrettyText.Prettify(polearmStaminaRedux, 1, PrettyText.TextType.PercentRedux);
-            string polearmRangeS = PrettyText.Prettify(polearmRange, 0, PrettyText.TextType.Flat);
-            string polearmArmorS = PrettyText.Prettify(polearmArmor, 0, PrettyText.TextType.Flat);
-            string polearmBlockS = PrettyText.Prettify(polearmBlock, 0, PrettyText.TextType.Flat);
+            string polearmDamageS = PT.Prettify(polearmDamage, 1, PT.TType.Percent);
+            string polearmStaminaReduxS = PT.Prettify(polearmStaminaRedux, 1, PT.TType.PercentRedux);
+            string polearmRangeS = PT.Prettify(polearmRange, 0, PT.TType.Flat);
+            string polearmArmorS = PT.Prettify(polearmArmor, 0, PT.TType.Flat);
+            string polearmBlockS = PT.Prettify(polearmBlock, 0, PT.TType.Flat);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -743,18 +743,18 @@ namespace kingskills.UX
             float runSpeedExp = MultToPer(MovePatch.runSpeedExpBonus(player));
 
 
-            string runSpeedBonusS = PrettyText.Prettify(runSpeedBonus, 1, PrettyText.TextType.Percent);
-            string equipmentMalusReduxS = PrettyText.Prettify(equipmentMalusRedux, 1, PrettyText.TextType.PercentRedux);
-            string encumberanceReduxS = PrettyText.Prettify(encumberanceRedux, 1, PrettyText.TextType.PercentRedux);
-            string staminaDrainReduxS = PrettyText.Prettify(staminaDrainRedux, 1, PrettyText.TextType.PercentRedux);
-            string baseStaminaGainS = PrettyText.Prettify(baseStaminaGain, 0, PrettyText.TextType.Flat);
+            string runSpeedBonusS = PT.Prettify(runSpeedBonus, 1, PT.TType.Percent);
+            string equipmentMalusReduxS = PT.Prettify(equipmentMalusRedux, 1, PT.TType.PercentRedux);
+            string encumberanceReduxS = PT.Prettify(encumberanceRedux, 1, PT.TType.PercentRedux);
+            string staminaDrainReduxS = PT.Prettify(staminaDrainRedux, 1, PT.TType.PercentRedux);
+            string baseStaminaGainS = PT.Prettify(baseStaminaGain, 0, PT.TType.Flat);
 
-            string encumberanceFactorS = PrettyText.Prettify(encumberanceFactor, 1, PrettyText.TextType.PercentRedux);
-            string equipmentFactorS = PrettyText.Prettify(equipmentFactor, 1, PrettyText.TextType.PercentRedux);
+            string encumberanceFactorS = PT.Prettify(encumberanceFactor, 1, PT.TType.PercentRedux);
+            string equipmentFactorS = PT.Prettify(equipmentFactor, 1, PT.TType.PercentRedux);
 
-            string absWeightExpS = PrettyText.Prettify(absWeightExp, 1, PrettyText.TextType.ColorlessPercent);
-            string relWeightExpS = PrettyText.Prettify(relWeightExp, 1, PrettyText.TextType.ColorlessPercent);
-            string runSpeedExpS = PrettyText.Prettify(runSpeedExp, 1, PrettyText.TextType.ColorlessPercent);
+            string absWeightExpS = PT.Prettify(absWeightExp, 1, PT.TType.ColorlessPercent);
+            string relWeightExpS = PT.Prettify(relWeightExp, 1, PT.TType.ColorlessPercent);
+            string runSpeedExpS = PT.Prettify(runSpeedExp, 1, PT.TType.ColorlessPercent);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -791,12 +791,30 @@ namespace kingskills.UX
         }
         public static void OpenSailingPanels()
         {
-            float skill = Player.m_localPlayer.GetSkillFactor(SkillMan.Sailing);
+            Player player = Player.m_localPlayer;
+            float skill = player.GetSkillFactor(SkillMan.Sailing);
+            Ship ship = player.GetStandingOnShip() ?? player.GetControlledShip();
 
-            float sailXPRate = 0f;//ConfigManager.GetSailXPRate();
-            float sailCaptainBonus = 0f;//MultToPer(ConfigManager.GetSailCaptainBonus());
-            float sailVeselBonus = 0f;//MultToPer(ConfigManager.GetSailVesselBonus());
-            float sailCrewBonus = 0f;//MultToPer(ConfigManager.GetSailCrewBonus());
+            float sailXPRate = 0f;
+            float sailCaptainBonus = 0f;
+            float sailVesselBonus = 0f;
+            float sailCrewBonus = 0f;
+
+            if (ship != null)
+            {
+                if (player.GetControlledShip() == ship)
+                {
+                    sailXPRate = ConfigMan.SailXPCaptainBase.Value;
+                    sailCaptainBonus = Mathf.Abs(ship.GetSpeed()) * ConfigMan.SailXPSpeedMod.Value;
+                    sailCaptainBonus *= ConfigMan.GetSailXPWindMult(ship.GetWindAngleFactor());
+                }
+                else
+                {
+                    sailXPRate = ConfigMan.SailXPCrewBase.Value;
+                }
+                sailVesselBonus = MultToPer(ConfigMan.GetSailXPTierMult(ship));
+                sailCrewBonus = MultToPer(ConfigMan.GetSailXPCrewMult(ship.m_players.Count));
+            }
 
             float sailSpeed = MultToPer(ConfigMan.GetSailSpeedMult(skill));
             float sailWindNudge = MultToPer(1f + ConfigMan.GetSailWindNudgeMod(skill));
@@ -805,11 +823,17 @@ namespace kingskills.UX
             float sailShipDamageRedux = MultToPer(ConfigMan.GetSailDamageRedux(skill), true);
 
 
-            string sailSpeedS = PrettyText.Prettify(sailSpeed, 1, PrettyText.TextType.Percent);
-            string sailWindNudgeS = PrettyText.Prettify(sailWindNudge, 1, PrettyText.TextType.Percent);
-            string sailExploreRangeS = PrettyText.Prettify(sailExploreRange, 0, PrettyText.TextType.Flat);
-            string sailPaddleSpeedS = PrettyText.Prettify(sailPaddleSpeed, 1, PrettyText.TextType.Percent);
-            string sailShipDamageReduxS = PrettyText.Prettify(sailShipDamageRedux, 0, PrettyText.TextType.PercentRedux);
+            string sailSpeedS = PT.Prettify(sailSpeed, 1, PT.TType.Percent);
+            string sailWindNudgeS = PT.Prettify(sailWindNudge, 1, PT.TType.Percent);
+            string sailExploreRangeS = PT.Prettify(sailExploreRange, 0, PT.TType.Flat);
+            string sailPaddleSpeedS = PT.Prettify(sailPaddleSpeed, 1, PT.TType.Percent);
+            string sailShipDamageReduxS = PT.Prettify(sailShipDamageRedux, 0, PT.TType.PercentRedux);
+
+
+            string sailXPRateS = PT.Prettify(sailXPRate, 2, PT.TType.Straight);
+            string sailCaptainBonusS = PT.Prettify(sailCaptainBonus, 2, PT.TType.Flat);
+            string sailVesselBonusS = PT.Prettify(sailVesselBonus, 0, PT.TType.Percent);
+            string sailCrewBonusS = PT.Prettify(sailCrewBonus, 0, PT.TType.Percent);
 
 
 
@@ -823,10 +847,10 @@ namespace kingskills.UX
             SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text =
                 "Bonus experience is earned for all crewmates for each additional person there is onboard. \n" +
                 "Current Bonuses: \n" +
-                sailXPRate.ToString("F0") + " per second base rate\n" +
-                sailCaptainBonus.ToString("F1") + "% from Captain bonuses\n" +
-                sailVeselBonus.ToString("F0") + "% from vessel tier\n" +
-                sailCrewBonus.ToString("F0") + "% from number of crewmates";
+                sailXPRateS + " per second base rate\n" +
+                sailCaptainBonusS + " from Captain bonuses\n" +
+                sailVesselBonusS + " from vessel tier\n" +
+                sailCrewBonusS + " from number of crewmates";
 
             SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text =
                 sailSpeedS + " ship sailing speed";
@@ -853,11 +877,11 @@ namespace kingskills.UX
             float spearThrowDamage = MultToPer(ConfigMan.GetSpearProjectileDamageMult(skill));
             float spearBlock = ConfigMan.GetSpearBlockArmor(skill);
 
-            string spearDamageS = PrettyText.Prettify(spearDamage, 1, PrettyText.TextType.Percent);
-            string spearStaminaReduxS = PrettyText.Prettify(spearStaminaRedux, 1, PrettyText.TextType.PercentRedux);
-            string spearVelocityS = PrettyText.Prettify(spearVelocity, 1, PrettyText.TextType.Percent);
-            string spearThrowDamageS = PrettyText.Prettify(spearThrowDamage, 1, PrettyText.TextType.Percent);
-            string spearBlockS = PrettyText.Prettify(spearBlock, 0, PrettyText.TextType.Flat);
+            string spearDamageS = PT.Prettify(spearDamage, 1, PT.TType.Percent);
+            string spearStaminaReduxS = PT.Prettify(spearStaminaRedux, 1, PT.TType.PercentRedux);
+            string spearVelocityS = PT.Prettify(spearVelocity, 1, PT.TType.Percent);
+            string spearThrowDamageS = PT.Prettify(spearThrowDamage, 1, PT.TType.Percent);
+            string spearBlockS = PT.Prettify(spearBlock, 0, PT.TType.Flat);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -897,12 +921,12 @@ namespace kingskills.UX
 
             float sneakDangerXPMod = MultToPer(KSSneak.GetDangerEXPMult(Player.m_localPlayer));
 
-            string sneakSpeedS = PrettyText.Prettify(sneakSpeed, 1, PrettyText.TextType.Percent);
-            string sneakStaminaCostS = PrettyText.Prettify(sneakStaminaCost, 1, PrettyText.TextType.Straight);
-            string sneakLightFactorS = PrettyText.Prettify(sneakLightFactor, 0, PrettyText.TextType.Percent);
-            string sneakDarkFactorS = PrettyText.Prettify(sneakDarkFactor, 0, PrettyText.TextType.Percent);
+            string sneakSpeedS = PT.Prettify(sneakSpeed, 1, PT.TType.Percent);
+            string sneakStaminaCostS = PT.Prettify(sneakStaminaCost, 1, PT.TType.Straight);
+            string sneakLightFactorS = PT.Prettify(sneakLightFactor, 0, PT.TType.Percent);
+            string sneakDarkFactorS = PT.Prettify(sneakDarkFactor, 0, PT.TType.Percent);
 
-            string sneakDangerXPModS = PrettyText.Prettify(sneakDangerXPMod, 1, PrettyText.TextType.ColorlessPercent);
+            string sneakDangerXPModS = PT.Prettify(sneakDangerXPMod, 1, PT.TType.ColorlessPercent);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "While you are actively avoiding detection of a nearby enemy, " +
@@ -940,14 +964,14 @@ namespace kingskills.UX
             float relWeightExp = MultToPer(MovePatch.relativeWeightBonus(player));
             float swimSpeedExp = MultToPer(MovePatch.swimSpeedExpBonus(player));
 
-            string swimSpeedS = PrettyText.Prettify(swimSpeed, 1, PrettyText.TextType.Percent);
-            string swimAccelS = PrettyText.Prettify(swimAccel, 1, PrettyText.TextType.Percent);
-            string swimTurnS = PrettyText.Prettify(swimTurn, 1, PrettyText.TextType.Percent);
-            string swimStaminaCostS = PrettyText.Prettify(swimStaminaCost, 2, PrettyText.TextType.Straight);
+            string swimSpeedS = PT.Prettify(swimSpeed, 1, PT.TType.Percent);
+            string swimAccelS = PT.Prettify(swimAccel, 1, PT.TType.Percent);
+            string swimTurnS = PT.Prettify(swimTurn, 1, PT.TType.Percent);
+            string swimStaminaCostS = PT.Prettify(swimStaminaCost, 2, PT.TType.Straight);
 
-            string absWeightExpS = PrettyText.Prettify(absWeightExp, 1, PrettyText.TextType.ColorlessPercent);
-            string relWeightExpS = PrettyText.Prettify(relWeightExp, 1, PrettyText.TextType.ColorlessPercent);
-            string swimSpeedExpS = PrettyText.Prettify(swimSpeedExp, 1, PrettyText.TextType.ColorlessPercent);
+            string absWeightExpS = PT.Prettify(absWeightExp, 1, PT.TType.ColorlessPercent);
+            string relWeightExpS = PT.Prettify(relWeightExp, 1, PT.TType.ColorlessPercent);
+            string swimSpeedExpS = PT.Prettify(swimSpeedExp, 1, PT.TType.ColorlessPercent);
 
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
@@ -986,11 +1010,11 @@ namespace kingskills.UX
             float swordSlash = MultToPer(ConfigMan.GetSwordSlashMult(skill));
             float swordDodgeStaminaRedux = MultToPer(ConfigMan.GetSwordDodgeStaminaRedux(skill), true);
 
-            string swordDamageS = PrettyText.Prettify(swordDamage, 1, PrettyText.TextType.Percent);
-            string swordStaminaReduxS = PrettyText.Prettify(swordStaminaRedux, 1, PrettyText.TextType.PercentRedux);
-            string swordParryS = PrettyText.Prettify(swordParry, 0, PrettyText.TextType.Percent);
-            string swordSlashS = PrettyText.Prettify(swordSlash, 1, PrettyText.TextType.Percent);
-            string swordDodgeStaminaReduxS = PrettyText.Prettify(swordDodgeStaminaRedux, 1, PrettyText.TextType.PercentRedux);
+            string swordDamageS = PT.Prettify(swordDamage, 1, PT.TType.Percent);
+            string swordStaminaReduxS = PT.Prettify(swordStaminaRedux, 1, PT.TType.PercentRedux);
+            string swordParryS = PT.Prettify(swordParry, 0, PT.TType.Percent);
+            string swordSlashS = PT.Prettify(swordSlash, 1, PT.TType.Percent);
+            string swordDodgeStaminaReduxS = PT.Prettify(swordDodgeStaminaRedux, 1, PT.TType.PercentRedux);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt is turned into experience, " +
@@ -1027,11 +1051,11 @@ namespace kingskills.UX
             float woodRegen = ConfigMan.GetWoodcuttingRegenLessTime(skill);
             float woodCarry = ConfigMan.GetWoodcuttingCarryCapacity(skill);
 
-            string woodDamageS = PrettyText.Prettify(woodDamage, 1, PrettyText.TextType.Percent);
-            string woodDropS = PrettyText.Prettify(woodDrop, 2, PrettyText.TextType.Percent);
-            string woodRebateS = PrettyText.Prettify(woodRebate, 0, PrettyText.TextType.Flat);
-            string woodRegenS = PrettyText.Prettify(woodRegen, 0, PrettyText.TextType.Straight);
-            string woodCarryS = PrettyText.Prettify(woodCarry, 0, PrettyText.TextType.Flat);
+            string woodDamageS = PT.Prettify(woodDamage, 1, PT.TType.Percent);
+            string woodDropS = PT.Prettify(woodDrop, 2, PT.TType.Percent);
+            string woodRebateS = PT.Prettify(woodRebate, 0, PT.TType.Flat);
+            string woodRegenS = PT.Prettify(woodRegen, 0, PT.TType.Straight);
+            string woodCarryS = PT.Prettify(woodCarry, 0, PT.TType.Flat);
 
             SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text =
                 "A percentage of all damage dealt to trees is turned into experience.";
