@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace kingskills.KSkills
 {
@@ -55,10 +56,15 @@ perks:
                 zdo.Set("Building Owner", player.GetZDOID());
                 zdo.Set("Is Free", isFree);
 
-                Jotunn.Logger.LogMessage($"Health before placement change: {__instance.m_health}");
+                Aoe trap = __instance.GetComponentInChildren<Aoe>();
+                if (trap)
+                {
+                    zdo.Set("Trap", true);
+                    //Jotunn.Logger.LogMessage("Set a trap!");
+                }
+
                 //And has addtional health
                 __instance.m_health *= ConfigMan.GetBuildingHealthMult(skill);
-                Jotunn.Logger.LogMessage($"Health after placement change: {__instance.m_health}");
 
                 //We get some experience for it as well
                 player.RaiseSkill(SkillMan.Building, ConfigMan.BuildXPPerPiece.Value);
@@ -92,6 +98,8 @@ perks:
             float skill = zdo.GetFloat("Building Level", 0f);
             if (skill > 0)
                 __instance.m_health *= ConfigMan.GetBuildingHealthMult(skill);
+
+
         }
     }
 
@@ -175,7 +183,7 @@ perks:
             }
             else if (hit.GetAttacker().IsMonsterFaction())
             {
-                Player player = Player.GetPlayer((long)__instance.m_nview.GetZDO().GetFloat("Building Player", 0));
+                Player player = Player.GetPlayer(__instance.m_nview.GetZDO().GetLong("Building Player", 0));
                 if (player != null)
                 {
                     player.RaiseSkill(SkillMan.Building, 
@@ -185,14 +193,46 @@ perks:
         }
     }
 
-
-    [HarmonyPatch(typeof(HitArea), nameof(HitArea.Damage))]
+    [HarmonyPatch(typeof(Aoe))]
     public class BuildingDealDamage
     {
-        [HarmonyPrefix]
-        public static void IsBuilding(HitArea __instance)
+        [HarmonyPatch(nameof(Aoe.GetDamage), typeof(int))]
+        [HarmonyPostfix]
+        public static void GetMyDamage(Aoe __instance, ref HitData.DamageTypes __result)
         {
-            Jotunn.Logger.LogMessage($"Triggered area attack!");
+            if (__instance.m_nview?.GetZDO() == null || !__instance.m_nview.GetZDO().GetBool("Trap", false)) return;
+                
+            Player player = Player.m_localPlayer;
+            if (player.GetZDOID().m_userID != __instance.m_nview.GetZDO().GetLong("Building Player")) return;
+
+            __result.Modify(ConfigMan.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building)));
+            Jotunn.Logger.LogMessage($"Just multiplied the damage of this shit by {ConfigMan.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building))}");
+        }
+
+        [HarmonyPatch(nameof(Aoe.OnHit))]
+        [HarmonyPostfix]
+        public static void GetXPBounty(Aoe __instance, Collider collider)
+        {
+            if (__instance.m_nview?.GetZDO() == null || !__instance.m_nview.GetZDO().GetBool("Trap", false)) return;
+
+            Player player = Player.m_localPlayer;
+            if (player.GetZDOID().m_userID != (long)__instance.m_nview.GetZDO().GetLong("Building Player")) return;
+
+            Character enemy = collider.GetComponent<Character>();
+            if (enemy == null || !enemy.IsMonsterFaction()) return;
+
+            Jotunn.Logger.LogMessage($"Pretty sure we just hit an enemy. Gonna just give the exp to my player now");
+            try
+            {
+                Jotunn.Logger.LogMessage($"also my owner is {__instance.m_owner.m_name}");
+            }
+            catch
+            {
+                Jotunn.Logger.LogMessage($"mb. we do not have an owner");
+            }
+            float damageXP = __instance.GetDamage().GetTotalDamage() * ConfigMan.BuildXPDamageDoneMod.Value;
+
+            player.RaiseSkill(SkillMan.Building, damageXP);
         }
     }
 
@@ -253,4 +293,5 @@ perks:
                 v *= ConfigMan.GetBuildingStaminaRedux(Player.m_localPlayer.GetSkillFactor(SkillMan.Building));
         }
     }
+
 }

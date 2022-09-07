@@ -89,7 +89,7 @@
     <Compile Include="KSkills\SkillMan.cs" />
     <Compile Include="Overhauls\KSBlock.cs" />
     <Compile Include="Overhauls\KSJump.cs" />
-    <Compile Include="Patches\LevelUpPatches.cs" />
+    <Compile Include="Patches\LevelUp.cs" />
     <Compile Include="Patches\LootDropPatch.cs" />
     <Compile Include="Overhauls\KSPolearm.cs" />
     <Compile Include="Overhauls\KSSneak.cs" />

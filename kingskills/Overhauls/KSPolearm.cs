@@ -58,7 +58,7 @@ namespace kingskills.Patches
             sampleHit.ApplyArmor(__instance.GetBodyArmor());
             float damageBlocked = hit.GetTotalDamage() - sampleHit.GetTotalDamage();
 
-            Jotunn.Logger.LogMessage($"Just blocked {damageBlocked} damage with armor.");
+            //Jotunn.Logger.LogMessage($"Just blocked {damageBlocked} damage with armor.");
             __instance.RaiseSkill(Skills.SkillType.Polearms,
                 damageBlocked * ConfigMan.WeaponBXPPolearmDamageMod.Value);
         }

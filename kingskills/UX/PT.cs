@@ -8,6 +8,10 @@ namespace kingskills.UX
 {
     class PT
     {
+        public const string greenCode = "#7AF365FF>";
+        public const string redCode = "#EA0C0CFF>";
+        public const string whiteCode = "#FEFDF5FF>";
+
         public static string Prettify(float input, float decimals, TType type)
         {
             string color = "<color=";
@@ -20,71 +24,71 @@ namespace kingskills.UX
                 case TType.TextlessPercent:
                     if (input < 0)
                     {
-                        color += "red>";
+                        color += redCode;
                         extraColorText = "%";
                     }
                     else if (input > 0)
                     {
-                        color += "green>";
+                        color += greenCode;
                         extraColorText = "%";
                     }
                     else
                     {
-                        color += "white>";
+                        color += whiteCode;
                         extraColorText = "%";
                     }
                     break;
                 case TType.Percent:
                     if (input < 0)
                     {
-                        color += "red>";
+                        color += redCode;
                         extraColorText = "% less";
                     }
                     else if (input > 0)
                     {
-                        color += "green>+";
+                        color += greenCode + "+";
                         extraColorText = "% extra";
                     }
                     else
                     {
-                        color += "white>";
+                        color += whiteCode;
                         extraColorText = "% extra";
                     }
                     break;
                 case TType.Flat:
                     if (input < 0)
                     {
-                        color += "red>";
+                        color += redCode;
                     }
                     else if (input > 0)
                     {
-                        color += "green>+";
+                        color += greenCode + "+";
                     }
                     else
                     {
-                        color += "white>";
+                        color += whiteCode;
                     }
                     break;
                 case TType.PercentRedux:
                     if (input < 0)
                     {
                         input *= -1f;
-                        color += "red>+";
+                        color += redCode + "+";
                         extraColorText = "% increased";
                     }
                     else if (input > 0)
                     {
-                        color += "green>-";
+                        color += greenCode + "-";
                         extraColorText = "% reduced";
                     }
                     else
                     {
-                        color += "white>";
+                        color += whiteCode;
                         extraColorText = "% reduced";
                     }
                     break;
                 case TType.Straight:
-                    color += "white>";
+                    color += whiteCode;
                     break;
                 case TType.ColorlessPercent:
                     color = "";

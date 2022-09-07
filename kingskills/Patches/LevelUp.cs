@@ -6,19 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace kingskills.Patches
+namespace kingskills
 {
     [HarmonyPatch(typeof(Player))]
-    class LevelUpPatches
+    class LevelUp
     {
-        
+
         [HarmonyPatch(nameof(Player.GetSkillFactor))]
         [HarmonyPrefix]
-        public static bool GetRealSkillFactor(Player __instance, ref float __result, Skills.SkillType skill)
+        public static bool GetMySkillFactor(Player __instance, ref float __result, Skills.SkillType skill)
         {
             //Jotunn.Logger.LogMessage("Checking skill");
             if (skill == Skills.SkillType.None) __result = 0f;
-            
+
             //Ascended skills will always act as though at max level
             if (Perks.IsSkillAscended(skill))
                 __result = 1f;
@@ -30,14 +30,14 @@ namespace kingskills.Patches
 
         [HarmonyPatch(nameof(Player.OnSkillLevelup))]
         [HarmonyPostfix]
-        public static void SkillLevelupPatch(Player __instance, Skills.SkillType skill)
+        public static void SkillLevelup(Player __instance, Skills.SkillType skill)
         {
             StatsPatch.UpdateStats(__instance, true, skill);
         }
 
         [HarmonyPatch(nameof(Player.RaiseSkill))]
         [HarmonyPrefix]
-        public static bool RaiseSkillPatch(Player __instance, Skills.SkillType skill, float value = 1f)
+        public static bool RaiseMySkills(Player __instance, Skills.SkillType skill, float value = 1f)
         {
             //Largely stolen from the game
             if (skill == Skills.SkillType.None)
@@ -65,15 +65,25 @@ namespace kingskills.Patches
             }
 
 
-            if (SkillRaise(skillActual, __instance, value))
+            if (KingSkillRaise(skillActual, __instance, value))
                 if (__instance.GetSkills().m_useSkillCap)
                     __instance.GetSkills().RebalanceSkills(skill);
 
             return false;
         }
 
+        public static void BXP(Player player, Skills.SkillType skill, float number){
+            if (!ConfigMan.IsSkillActive(skill)) return;
 
-        public static bool SkillRaise(Skills.Skill skill, Player player, float factor)
+            player.m_nview.GetZDO().Set("BXP", true);
+
+            player.RaiseSkill(skill, number);
+
+            player.m_nview.GetZDO().Set("BXP", false);
+        }
+
+
+        public static bool KingSkillRaise(Skills.Skill skill, Player player, float factor)
         {
             if (skill.m_level >= ConfigMan.MaxSkillLevel.Value)
                 return false;
@@ -81,19 +91,6 @@ namespace kingskills.Patches
             float num = skill.m_info.m_increseStep * factor;
             skill.m_accumulator += num;
             Skills.SkillType skillT = skill.m_info.m_skill;
-            float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / ConfigMan.MaxSkillLevel.Value);
-
-            if (factor >= ConfigMan.DisplayExperienceThreshold.Value)
-            {
-                string expMsg = "+" + factor.ToString("F1") + " experience\n" +
-                    skillT.ToString();
-                int textSize = ConfigMan.GetXPTextScaledSize(factor);
-
-                CustomWorldTextManager.AddCustomWorldText(ConfigMan.ColorExperienceYellow, 
-                    CustomWorldTextManager.GetAboveCharacter(player) + CustomWorldTextManager.GetRandomPosOffset(), 
-                    textSize, expMsg);
-
-            }
 
             float nextLevelRequirement = skill.GetNextLevelRequirement();
             while (skill.m_accumulator >= nextLevelRequirement)
@@ -106,10 +103,46 @@ namespace kingskills.Patches
                 if (skill.m_level >= ConfigMan.MaxSkillLevel.Value)
                 {
                     OnMaxLevel(skillT);
-                    return false;
+                    player.Message(MessageHud.MessageType.Center, "MAX LEVEL!");
+                    break;
                 }
 
                 nextLevelRequirement = skill.GetNextLevelRequirement();
+            }
+
+            float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / ConfigMan.MaxSkillLevel.Value);
+
+            //Display the in-world text
+            if (factor >= ConfigMan.DisplayExperienceThreshold.Value)
+            {
+                Color msgColor;
+                string msgTxt;
+                Vector3 pos;
+                int textSize = ConfigMan.GetXPTextScaledSize(factor);
+
+                //When we do bonus experience, we run through a function that automatically sets
+                //BXP to true. Using this, we can get information into this function - even though
+                //Raise Skill is normally only called using their framework
+                if (player.m_nview.m_zdo.GetBool("BXP", false))
+                {
+                    msgTxt = "+" + factor.ToString("F1") + " BONUS EXPERIENCE!\n" +
+                    skillT.ToString();
+                    msgColor = ConfigMan.ColorBonusBlue;
+                    pos = CustomWorldTextManager.GetInFrontOfCharacter(player) +
+                        CustomWorldTextManager.GetRandomPosOffset();
+                }
+                else
+                {
+                    msgTxt = "+" + factor.ToString("F1") + " experience\n" +
+                    skillT.ToString();
+                    msgColor = ConfigMan.ColorExperienceYellow;
+                    pos = CustomWorldTextManager.GetAboveCharacter(player) +
+                        CustomWorldTextManager.GetRandomPosOffset();
+                }
+                if (skill.m_level < ConfigMan.MaxSkillLevel.Value)
+                    msgTxt += "\n" + percent.ToString("F0") + "% to level " + skill.m_level + 1;
+
+                CustomWorldTextManager.AddCustomWorldText(msgColor, pos, textSize, msgTxt);
             }
 
             return false;

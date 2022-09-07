@@ -98,7 +98,7 @@ namespace kingskills.UX
             rect.anchorMin = new Vector2(0f, 1f);
             rect.anchorMax = new Vector2(0f, 1f);
             rect.anchoredPosition = new Vector2(150f, -60f);
-            rect.sizeDelta = new Vector2(100f, 100f);
+            rect.sizeDelta = new Vector2(90f, 90f);
 
             //Create skill icon
             SSIcon = new GameObject();

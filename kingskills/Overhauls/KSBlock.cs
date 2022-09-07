@@ -105,23 +105,13 @@ namespace kingskills
                 if (isParry)
                 {
                     expValue *= ConfigMan.GetBlockParryExpMult();
-                    //Jotunn.Logger.LogMessage($"Parried! Exp Value doubled!");
                 }
             }
 
             __instance.RaiseSkill(Skills.SkillType.Blocking, expValue);
 
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Unarmed) &&
-                __instance.GetCurrentBlocker() == __instance.m_unarmedWeapon.m_itemData)
-            {
-                //Bonus exp for unarmed block!
-                __instance.RaiseSkill(Skills.SkillType.Unarmed, ConfigMan.WeaponBXPUnarmedBlock.Value);
-
-                CustomWorldTextManager.CreateBXPText(
-                    CustomWorldTextManager.GetInFrontOfCharacter(__instance),
-                    ConfigMan.WeaponBXPUnarmedBlock.Value);
-            }
-            //Jotunn.Logger.LogMessage($"Increased blocking skill by {expValue} due to damage");
+            if (__instance.GetCurrentBlocker() == __instance.m_unarmedWeapon.m_itemData)
+                LevelUp.BXP(__instance as Player, Skills.SkillType.Unarmed, ConfigMan.WeaponBXPUnarmedBlock.Value);
         }
 
         private static float FixBlockPower(

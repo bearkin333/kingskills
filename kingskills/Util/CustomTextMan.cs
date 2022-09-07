@@ -14,13 +14,7 @@ namespace kingskills
     {
         public const float InFrontRange = 2f;
         public const float AboveRange = 2.7f;
-        public const float RandomRange = .8f;
-
-        public static void CreateBXPText(Vector3 pos, float number)
-        {
-            //Jotunn.Logger.LogMessage("Created Bonus Experience text!");
-            AddCustomWorldText(ConfigMan.ColorBonusBlue, pos, 20, "Bonus experience: " + number.ToString("F1"));
-        }
+        public const float RandomRange = 0.8f;
 
         public static Vector3 GetInFrontOfCharacter(Character character)
         {

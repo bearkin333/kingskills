@@ -189,15 +189,21 @@ namespace kingskills.UX
                     OpenPerks.OpenWoodcuttingPerkBoxes();
                     break;
             }
-
             Skills.Skill skillRef = player.GetSkills().GetSkill(skill);
-            //Jotunn.Logger.LogMessage($"The skill the player seems to want is {skillRef.m_info}");
 
             SkillGUI.SSIcon.GetComponent<Image>().sprite = player.m_skills.GetSkillDef(skill).m_icon;
             SkillGUI.SSkillName.GetComponent<Text>().text = skillName;
-            SkillGUI.SSkillLevel.GetComponent<Text>().text = "Level: " + skillRef.m_level.ToString("F0") + " / 100";
-            SkillGUI.SSkillExp.GetComponent<Text>().text = "Experience: " + skillRef.m_accumulator.ToString("F2") + " / " + skillRef.GetNextLevelRequirement().ToString("F2");
-            //scroll.GetComponent<ScrollRect>().Rebuild(UnityEngine.UI.CanvasUpdate.PreRender);
+            if (skillRef.m_level >= ConfigMan.MaxSkillLevel.Value)
+            {
+                SkillGUI.SSkillLevel.GetComponent<Text>().text = "Level: MAX!";
+                SkillGUI.SSkillExp.GetComponent<Text>().text = "Experience: ---";
+            }
+            else
+            {
+                SkillGUI.SSkillLevel.GetComponent<Text>().text = "Level: " + skillRef.m_level.ToString("F0") + " / 100";
+                SkillGUI.SSkillExp.GetComponent<Text>().text = "Experience: " + skillRef.m_accumulator.ToString("F2") + " / " + skillRef.GetNextLevelRequirement().ToString("F2");
+            }
+
 
 
             if (!ConfigMan.IsSkillActive(skill))

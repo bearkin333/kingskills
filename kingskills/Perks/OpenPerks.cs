@@ -180,7 +180,9 @@ namespace kingskills.UX
             Image tintImg = tint.GetComponent<Image>();
 
             //Jotunn.Logger.LogMessage($"skill vs threshold: {skillLevel} < {skillThreshold}");
-            if (skillLevel < skillThreshold)
+
+            if (Mathf.Floor(skillLevel * ConfigMan.MaxSkillLevel.Value) < 
+                Mathf.Floor(skillThreshold * ConfigMan.MaxSkillLevel.Value))
             {
                 //Jotunn.Logger.LogMessage($"too low. setting locked for perk {perk}");
                 //If the player isn't high enough level to see them, they are always locked

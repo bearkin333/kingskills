@@ -215,9 +215,10 @@ perks:
         public static bool YouMayNotPass(ShipControlls __instance)
         {
             Player player = Player.m_localPlayer;
-            float skillLevel = player.GetSkillFactor(SkillMan.Sailing);
+            float skillLevel = player.GetSkillFactor(SkillMan.Sailing)*ConfigMan.MaxSkillLevel.Value;
             float skillRQ = ConfigMan.GetSailShipLevelRQ(__instance.m_ship);
-            Jotunn.Logger.LogMessage($"{skillLevel} out of {skillRQ}");
+            //Jotunn.Logger.LogMessage($"{skillLevel} out of {skillRQ}");
+
             if (skillLevel >= skillRQ)
                 return true;
 

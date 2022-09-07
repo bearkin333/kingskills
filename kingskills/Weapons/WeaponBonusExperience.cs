@@ -12,7 +12,7 @@ namespace kingskills
 {
 
     [HarmonyPatch(typeof(Character))]
-    class SwordStaggerWatch
+    class StaggerWatch
     {
         //For transferring stagger experience check
         static Player playerRef = null;
@@ -72,46 +72,23 @@ namespace kingskills
         {
             if (staggerFlag)
             {
-                //Jotunn.Logger.LogMessage($"Stagger flag redeemed! Turned back off");
-
-                if ( ConfigMan.IsSkillActive(Skills.SkillType.Clubs) && 
-                    Util.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
-                {
-                    playerRef.RaiseSkill(Skills.SkillType.Clubs, ConfigMan.WeaponBXPClubStagger.Value);
-                    CustomWorldTextManager.CreateBXPText(
-                        CustomWorldTextManager.GetInFrontOfCharacter(playerRef),
-                        ConfigMan.WeaponBXPClubStagger.Value);
-                }
+                if (Util.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
+                    LevelUp.BXP(playerRef, Skills.SkillType.Clubs, ConfigMan.WeaponBXPClubStagger.Value);
+                        
                 staggerFlag = false;
             }
         }
 
         private static void OnStaggerHurt(Player attacker)
         {
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Swords) &&
-                    Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
-            {
-                attacker.RaiseSkill(Skills.SkillType.Swords, ConfigMan.WeaponBXPSwordStagger.Value);
-
-                CustomWorldTextManager.CreateBXPText(
-                    CustomWorldTextManager.GetInFrontOfCharacter(attacker),
-                    ConfigMan.WeaponBXPSwordStagger.Value);
-                //Jotunn.Logger.LogMessage($"A player just hit us with a sword while we were staggered, so applying bonus exp");
-            }
+            if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
+                LevelUp.BXP(attacker, Skills.SkillType.Swords, ConfigMan.WeaponBXPSwordStagger.Value);
         }
 
         private static void OnBackstab(Player attacker)
         {
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Knives) &&
-                    Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
-            {
-                attacker.RaiseSkill(Skills.SkillType.Swords, ConfigMan.WeaponBXPKnifeBackstab.Value);
-
-                CustomWorldTextManager.CreateBXPText(
-                    CustomWorldTextManager.GetInFrontOfCharacter(attacker),
-                    ConfigMan.WeaponBXPKnifeBackstab.Value);
-                //Jotunn.Logger.LogMessage($"A player just backstabbed us with a knife, so +exp");
-            }
+            if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
+                LevelUp.BXP(attacker, Skills.SkillType.Swords, ConfigMan.WeaponBXPKnifeBackstab.Value);
         }
     }
 
@@ -129,16 +106,8 @@ namespace kingskills
                 ConfigMan.WeaponBXPAxeRange.Value);
 
             if (closestPlayer != null)
-            {
                 if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
-                {
-                    closestPlayer.RaiseSkill(Skills.SkillType.Axes, ConfigMan.WeaponBXPAxeTreeAmount.Value);
-                    CustomWorldTextManager.CreateBXPText(
-                        CustomWorldTextManager.GetInFrontOfCharacter(closestPlayer), 
-                        ConfigMan.WeaponBXPAxeTreeAmount.Value);
-                }
-
-            }
+                    LevelUp.BXP(closestPlayer, Skills.SkillType.Axes, ConfigMan.WeaponBXPAxeTreeAmount.Value);
         }
 
         [HarmonyPatch(typeof(Destructible),nameof(Destructible.Destroy))]
@@ -148,22 +117,12 @@ namespace kingskills
             if (!ConfigMan.IsSkillActive(Skills.SkillType.WoodCutting)) return;
             if (!__instance.gameObject.name.Contains("Stub")) return;
 
-            //Jotunn.Logger.LogMessage("Detected stub destroyed?");
-
             Player closestPlayer = Player.GetClosestPlayer(__instance.gameObject.transform.position, 
                 ConfigMan.WeaponBXPAxeRange.Value);
 
             if (closestPlayer != null)
-            {
                 if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
-                {
-                    closestPlayer.RaiseSkill(Skills.SkillType.WoodCutting, ConfigMan.ToolBXPWoodStubReward.Value);
-                    CustomWorldTextManager.CreateBXPText(
-                        CustomWorldTextManager.GetInFrontOfCharacter(closestPlayer),
-                        ConfigMan.ToolBXPWoodStubReward.Value);
-                }
-
-            }
+                    LevelUp.BXP(closestPlayer, Skills.SkillType.WoodCutting, ConfigMan.ToolBXPWoodStubReward.Value);
         }
     }
 }
