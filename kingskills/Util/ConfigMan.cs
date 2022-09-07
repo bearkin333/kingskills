@@ -1126,6 +1126,8 @@ namespace kingskills
         public static ConfigEntry<float> BuildHealthMax;
         public static ConfigEntry<float> BuildStabilityMin;
         public static ConfigEntry<float> BuildStabilityMax;
+        public static ConfigEntry<float> BuildStabilityLossReduxMin;
+        public static ConfigEntry<float> BuildStabilityLossReduxMax;
         public static ConfigEntry<float> BuildDamageMin;
         public static ConfigEntry<float> BuildDamageMax;
         public static ConfigEntry<float> BuildWNTReduxMin;
@@ -1160,6 +1162,10 @@ namespace kingskills
                     "% increase to building stability at level 0");
             BuildStabilityMax = cfg.Bind("Build.Effect", "Stability Max", 100f,
                     "% increase to building stability at level 100");
+            BuildStabilityLossReduxMin = cfg.Bind("Build.Effect", "Stability Loss Reduction Min", -10f,
+                    "% reduction to loss of support at level 0");
+            BuildStabilityLossReduxMax = cfg.Bind("Build.Effect", "Stability Loss Reduction  Max", 45f,
+                    "% reduction to loss of support at level 100");
             BuildDamageMin = cfg.Bind("Build.Effect", "Damage Min", 0f,
                     "% increase to building damage at level 0");
             BuildDamageMax = cfg.Bind("Build.Effect", "Damage Max", 300f,
@@ -1194,6 +1200,11 @@ namespace kingskills
             return Mathf.Lerp(PerToMult(BuildStabilityMin), 
                 PerToMult(BuildStabilityMax), skillFactor);
         }
+        public static float GetBuildingStabilityLossRedux(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMult(BuildStabilityLossReduxMin, true),
+                PerToMult(BuildStabilityLossReduxMax), skillFactor);
+        }
         public static float GetBuildingDamageMult(float skillFactor)
         {
             return Mathf.Lerp(PerToMult(BuildDamageMin), 
@@ -1210,9 +1221,13 @@ namespace kingskills
         }
         public static float GetBuildingFreeMod(float skillFactor)
         {
-            //This gets an exponential curve that doesn't start until the minimum level
+            //This gets an exponential curve that doesn't start until the minimum level, supposedly
             return Mathf.Lerp(PerToMod(BuildFreeChanceMin), PerToMod(BuildFreeChanceMax), 
                 Mathf.Pow(Mathf.Clamp01(skillFactor - GetFCMinLevelAsMod()), BuildFreeChanceFactor.Value));
+        }
+        public static bool GetBuildingRandomFreeChance(float skillFactor)
+        {
+            return (UnityEngine.Random.Range(0, 1) < GetBuildingFreeMod(skillFactor));
         }
         public static float GetBuildingStaminaRedux(float skillFactor)
         {

@@ -102,7 +102,6 @@ namespace kingskills.UX
                         extraColorText = "%";
                     }
                     return color + input.ToString("F" + decimals) + extraColorText;
-                    break;
 
             }
 

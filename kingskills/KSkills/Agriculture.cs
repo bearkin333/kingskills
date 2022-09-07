@@ -45,13 +45,13 @@ perks:
 
 
     [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece))]
-    public class PlayerPlanting
+    public class LocalPlayerPlacing
     {
-        public static bool flag = false;
+        public static bool isTrue = false;
         [HarmonyPrefix]
-        private static void BeforePlacement() => flag = true;
+        private static void BeforePlacement() => isTrue = true;
         [HarmonyFinalizer]
-        private static void AfterPlacement() => flag = false;
+        private static void AfterPlacement() => isTrue = false;
     }
 
     [HarmonyPatch(typeof(Plant), nameof(Plant.Awake))]
@@ -60,7 +60,7 @@ perks:
         [HarmonyPostfix]
         private static void AfterPlantWakeup(Plant __instance)
         {
-            if (PlayerPlanting.flag)
+            if (LocalPlayerPlacing.isTrue)
             {
                 Player player = Player.m_localPlayer;
 
