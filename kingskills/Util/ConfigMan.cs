@@ -1120,7 +1120,7 @@ namespace kingskills
         public static ConfigEntry<bool> ActiveSkillBuild;
         public static ConfigEntry<float> BuildXPPerPiece;
         public static ConfigEntry<float> BuildXPRepairMod;
-        public static ConfigEntry<float> BuildXPDamageReceivedMod;
+        public static ConfigEntry<float> BuildXPDamageTakenMod;
         public static ConfigEntry<float> BuildXPDamageDoneMod;
         public static ConfigEntry<float> BuildHealthMin;
         public static ConfigEntry<float> BuildHealthMax;
@@ -1149,7 +1149,7 @@ namespace kingskills
                     "How much experience for placed build piece");
             BuildXPRepairMod = cfg.Bind("Build.Experience", "Repair Mod", .5f,
                     "Amount of experience for each point of repaired damage");
-            BuildXPDamageReceivedMod = cfg.Bind("Build.Experience", "Damage Taken Mod", .2f,
+            BuildXPDamageTakenMod = cfg.Bind("Build.Experience", "Damage Taken Mod", .2f,
                     "Amount of experience for each point of damage taken by buildings");
             BuildXPDamageDoneMod = cfg.Bind("Build.Experience", "Damage Done Mod", .9f,
                     "Amount of experience for each point of damage done by buildings");

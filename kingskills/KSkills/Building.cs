@@ -163,15 +163,24 @@ perks:
         [HarmonyPrefix]
         public static void IsBuilding(WearNTear __instance, ref HitData hit)
         {
-            Jotunn.Logger.LogWarning($"I am a building and I took damage!");
+            //Jotunn.Logger.LogWarning($"I am a building and I took damage!");
 
-            if (hit.m_attacker == null)
+            if (hit.m_attacker.IsNone())
             {
-                Jotunn.Logger.LogWarning($"From wear n tear!");
+                //Jotunn.Logger.LogWarning($"From wear n tear!");
 
                 float skill = __instance.m_nview.GetZDO().GetFloat("Building Level", 0f);
 
                 hit.m_damage.Modify(ConfigMan.GetBuildingWNTRedux(skill));
+            }
+            else if (hit.GetAttacker().IsMonsterFaction())
+            {
+                Player player = Player.GetPlayer((long)__instance.m_nview.GetZDO().GetFloat("Building Player", 0));
+                if (player != null)
+                {
+                    player.RaiseSkill(SkillMan.Building, 
+                        hit.GetTotalDamage() * ConfigMan.BuildXPDamageTakenMod.Value);
+                }
             }
         }
     }
@@ -187,6 +196,7 @@ perks:
         }
     }
 
+
     [HarmonyPatch(typeof(Player), nameof(Player.Repair))]
     public class LocalPlayerRepairing
     {
@@ -200,6 +210,36 @@ perks:
         [HarmonyFinalizer]
         public static void FinishRepair() => 
             isTrue = false;
+    }
+
+
+    [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.Repair))]
+    public class RepairTracker
+    {
+        public static Player playerRef = null;
+        [HarmonyPrefix]
+        public static void OnRepair()
+        {
+            if (LocalPlayerRepairing.isTrue)
+                playerRef = Player.m_localPlayer;
+            else
+                playerRef = null;
+        }
+
+        [HarmonyPatch(nameof(WearNTear.RPC_Repair))]
+        [HarmonyPrefix]
+        public static void OnRPCRepair(WearNTear __instance)
+        {
+            if (playerRef != null)
+            {
+                if (!__instance.m_nview.IsValid() || !__instance.m_nview.IsOwner()) return;
+
+                float healthChange = __instance.m_health - __instance.m_nview.GetZDO().GetFloat("health", __instance.m_health);
+                if (healthChange < 0) healthChange = 0;
+
+                playerRef.RaiseSkill(SkillMan.Building, ConfigMan.BuildXPRepairMod.Value * healthChange);
+            }
+        }
     }
 
 
