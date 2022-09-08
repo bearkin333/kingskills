@@ -101,6 +101,7 @@
     <Compile Include="Util\SaveFoodQuality.cs" />
     <Compile Include="Util\StackablePatch.cs" />
     <Compile Include="UX\PT.cs" />
+    <Compile Include="UX\SkillGUIData.cs" />
     <Compile Include="Weapons\WeaponBonusExperience.cs" />
     <Compile Include="Patches\StatsPatch.cs" />
     <Compile Include="Weapons\WeaponDamage.cs" />

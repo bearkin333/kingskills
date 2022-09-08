@@ -125,5 +125,11 @@ namespace kingskills.UX
             Straight,
             ColorlessPercent
         }
+
+        public static float MultToPer(float number, bool redux = false)
+        {
+            if (redux) return (1 - number) * 100;
+            return (number - 1) * 100;
+        }
     }
 }
