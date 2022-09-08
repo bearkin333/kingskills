@@ -48,6 +48,9 @@
     <Reference Include="0Harmony, Version=2.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HarmonyX.2.9.0\lib\net45\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="ExtendedItemDataFramework">
+      <HintPath>Lib\ExtendedItemDataFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Jotunn, Version=2.7.7.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\JotunnLib.2.7.7\lib\net462\Jotunn.dll</HintPath>
     </Reference>
@@ -89,11 +92,14 @@
     <Compile Include="KSkills\SkillMan.cs" />
     <Compile Include="Overhauls\KSBlock.cs" />
     <Compile Include="Overhauls\KSJump.cs" />
+    <Compile Include="Overhauls\KSMining.cs" />
     <Compile Include="Patches\LevelUp.cs" />
     <Compile Include="Patches\LootDropPatch.cs" />
     <Compile Include="Overhauls\KSPolearm.cs" />
     <Compile Include="Overhauls\KSSneak.cs" />
     <Compile Include="Util\CustomTextMan.cs" />
+    <Compile Include="Util\SaveFoodQuality.cs" />
+    <Compile Include="Util\StackablePatch.cs" />
     <Compile Include="UX\PT.cs" />
     <Compile Include="Weapons\WeaponBonusExperience.cs" />
     <Compile Include="Patches\StatsPatch.cs" />

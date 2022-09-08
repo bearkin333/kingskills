@@ -39,9 +39,6 @@ namespace kingskills
         #region globalvariables
         //Variables and constants for use that aren't configurable
         public static Dictionary<Skills.SkillType, bool> SkillActive = new Dictionary<Skills.SkillType, bool>();
-        public static Dictionary<string, float> WoodcuttingDropTable = new Dictionary<string, float>();
-        public static Dictionary<string, float> MiningDropTable = new Dictionary<string, float>();
-        public static Dictionary<string, float> BowDropTable = new Dictionary<string, float>();
 
         public static Color ColorBonusBlue;
         public static Color ColorAscendedGreen;
@@ -334,6 +331,8 @@ namespace kingskills
         public static ConfigEntry<float> BowVelocityPercentMax;
         public static ConfigEntry<float> BowDropPercentMin;
         public static ConfigEntry<float> BowDropPercentMax;
+
+        public static Dictionary<string, float> BowDropTable = new Dictionary<string, float>();
         #endregion configdef
 
         public static void InitBowConfigs(ConfigFile cfg)
@@ -1287,6 +1286,7 @@ namespace kingskills
         public static ConfigEntry<float> CookingXPFinish;
         public static ConfigEntry<float> CookingXPTierBonus;
         public static ConfigEntry<float> CookingXPStatMod;
+        public static ConfigEntry<float> CookingXPCustomerBonus;
         public static ConfigEntry<float> CookingAverageFQMin;
         public static ConfigEntry<float> CookingAverageFQMax;
         public static ConfigEntry<float> CookingFQRangeMin;
@@ -1296,6 +1296,13 @@ namespace kingskills
         public static ConfigEntry<float> CookingTimeReduxMax;
         public static ConfigEntry<float> CookingFermentTimeReduxMin;
         public static ConfigEntry<float> CookingFermentTimeReduxMax;
+
+        public static Dictionary<string, float> CookingStationTiers;
+
+        public const string CookHealthColor = "<color=#F9582EFF>";
+        public const string CookStaminaColor = "<color=#F9DE2EFF>";
+        public const string CookDurationColor = "<color=#E9E9E9ff>";
+        public const string EndColor = "</color>";
         #endregion configdef
 
         private static void InitCookConfig(ConfigFile cfg)
@@ -1308,10 +1315,17 @@ namespace kingskills
                     "How much experience for a started project");
             CookingXPFinish = cfg.Bind("Cooking.Experience", "Finish", .8f,
                     "How much experience for successfully cooking a project");
-            CookingXPTierBonus = cfg.Bind("Cooking.Experience", "t", 25f,
+            CookingXPTierBonus = cfg.Bind("Cooking.Experience", "Tier Bonus", 25f,
                     "% increase in exp gained per tier level of cooking machine");
-            CookingXPStatMod = cfg.Bind("Cooking.Experience", "t", .3f,
+            CookingXPStatMod = cfg.Bind("Cooking.Experience", "Stat Mod", .05f,
                     "Amount of experience gained per health and stamina of eaten food.");
+            CookingXPCustomerBonus = cfg.Bind("Cooking.Experience", "Customer bonus", 100f,
+                    "% extra experience when your food is eaten by another person.");
+
+            CookingStationTiers = new Dictionary<string, float>();
+
+            CookingStationTiers.Add("", 0);
+            CookingStationTiers.Add("2", 1);
 
             CookingAverageFQMin = cfg.Bind("Cooking.Effect", "Average FQ Min", 0f,
                     "% of average food quality at level 0");
@@ -1335,13 +1349,25 @@ namespace kingskills
         }
 
 
-        public static float GetCookingXP(float kitchenTier = 0f, bool start = true)
+        public static float GetCookingXP(CookingStation cook, bool start = true)
         {
             float XP = CookingXPFinish.Value;
             if (start)
                 XP = CookingXPStart.Value;
 
-            return XP * (kitchenTier * PerToMod(CookingXPTierBonus));
+            return XP * (1 + GetCookingXPTier(cook) * PerToMod(CookingXPTierBonus));
+        }
+        public static float GetCookingXPTier(CookingStation cook)
+        {
+            if (CookingStationTiers.ContainsKey(cook.m_name))
+                return CookingStationTiers[cook.m_name];
+
+            Jotunn.Logger.LogMessage($"Just asked about cooking station {cook.m_name}");
+            return 0f;
+        }
+        public static float GetCookingXPCustomerMult()
+        {
+            return PerToMult(CookingXPCustomerBonus);
         }
         public static float GetCookingAverageFoodQualityMod(float skillFactor)
         {
@@ -1359,15 +1385,24 @@ namespace kingskills
         {
             float baseQ = GetCookingAverageFoodQualityMod(skillFactor);
             float range = GetCookingFoodQualityRangeMod(skillFactor)/2;
+            //Jotunn.Logger.LogMessage($"Base quality is {baseQ}, and half of the range is {range}");
             float timingMod = PerToMod(CookingFQRangeTimingPercent);
-            float randomFactor = UnityEngine.Random.Range(0, 1);
+            float randomFactor = UnityEngine.Random.Range(0f, 1f);
+            //Jotunn.Logger.LogMessage($"The random quality was {randomFactor}");
+            timing = Mathf.Clamp01(timing);
+            //Jotunn.Logger.LogMessage($"I clamped timing, and now it is {timing}");
 
             //the change to the overall quality is based (timingPercent)% on the timing,
             //and the rest on random chance. 
             float qualityChange = Mathf.Lerp(-range, range, (timing * timingMod) +
                 randomFactor * (1f - timingMod));
 
-            return baseQ + qualityChange;
+
+            float newQuality = Mathf.Clamp(baseQ + qualityChange, -1, 10);
+
+            newQuality = (float)(Mathf.Round(newQuality * 100f) / 100f);
+
+            return newQuality;
         }
         public static float GetCookingTimeRedux(float skillFactor)
         {
@@ -1513,6 +1548,11 @@ namespace kingskills
         public static ConfigEntry<float> MiningRegenHealthMax;
         public static ConfigEntry<float> MiningCarryCapacityMin;
         public static ConfigEntry<float> MiningCarryCapacityMax;
+
+        public static ConfigEntry<float> MiningXPRockTimer;
+
+        public static Dictionary<string, float> MiningDropTable = new Dictionary<string, float>();
+        public static Dictionary<string, float> MiningBXPTable = new Dictionary<string, float>();
         #endregion configdef
 
         public static void InitMineConfigs(ConfigFile cfg)
@@ -1529,8 +1569,25 @@ namespace kingskills
             MiningDropTable.Add("Stone", 0);
             MiningDropTable.Add("Chitin", 0);
 
-            //exp
-            //EAT ROOOOOOCKS
+
+            //List of all objects that you can eat and their exp reward
+            MiningBXPTable.Add("Stone", 1);
+            MiningBXPTable.Add("CopperOre", 5);
+            MiningBXPTable.Add("CopperBar", 20);
+            MiningBXPTable.Add("TinOre", 7);
+            MiningBXPTable.Add("TinBar", 32);
+            MiningBXPTable.Add("BronzeBar", 60);
+            MiningBXPTable.Add("IronScrap", 33);
+            MiningBXPTable.Add("IronBar", 80);
+            MiningBXPTable.Add("Obsidian", 24);
+            MiningBXPTable.Add("SilverOre", 56);
+            MiningBXPTable.Add("SilverBar", 115);
+            MiningBXPTable.Add("Chitin", 35);
+
+
+            MiningXPRockTimer = cfg.Bind("Mining.Experience", "Rock Timer", 30f,
+                "How many minutes a rock will last in your belly");
+            MiningXPRockTimer.Value = MiningXPRockTimer.Value * 60f;
 
             //effects
             MiningPickDamagePercentMin = cfg.Bind("Mining.Effect", "Pick Damage Min", 0f,
@@ -1578,6 +1635,16 @@ namespace kingskills
         {
             return Mathf.Lerp(MiningCarryCapacityMin.Value,
                 MiningCarryCapacityMax.Value, skillFactor);
+        }
+        public static float GetMiningXPEatRock(ItemDrop.ItemData rock)
+        {
+            if (rock == null) return 0f;
+            string rockName = rock.m_dropPrefab.name;
+            if (MiningBXPTable.ContainsKey(rockName))
+            {
+                return MiningBXPTable[rockName];
+            }
+            return 0f;
         }
 
 
@@ -2115,6 +2182,8 @@ namespace kingskills
         public static ConfigEntry<float> WoodcuttingRegenStaminaMax;
         public static ConfigEntry<float> WoodcuttingCarryCapacityMin;
         public static ConfigEntry<float> WoodcuttingCarryCapacityMax;
+
+        public static Dictionary<string, float> WoodcuttingDropTable = new Dictionary<string, float>();
         #endregion configdef
 
         public static void InitWoodConfigs(ConfigFile cfg)

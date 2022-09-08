@@ -10,6 +10,7 @@ using HarmonyLib;
 using Jotunn.Configs;
 using Jotunn.Entities;
 using Jotunn.Managers;
+using kingskills.KSkills;
 using kingskills.UX;
 using System.IO;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace kingskills
 {
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     [BepInDependency(Jotunn.Main.ModGuid)]
+    [BepInDependency("randyknapp.mods.extendeditemdataframework")]
     //[NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Minor)]
     internal class KingSkills : BaseUnityPlugin
     {
@@ -36,6 +38,7 @@ namespace kingskills
         {
             Jotunn.Logger.LogInfo("King's skills has awakened!");
             InitConfig();
+            InitExtendedItem.Init();
             CommandManager.Instance.AddConsoleCommand(new TestSkillCommand());
             CommandManager.Instance.AddConsoleCommand(new SkillUpdateCommand());
             CommandManager.Instance.AddConsoleCommand(new TestSkillsCommand());
