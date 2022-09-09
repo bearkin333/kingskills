@@ -17,13 +17,16 @@ namespace kingskills
         public static bool GetMySkillFactor(Player __instance, ref float __result, Skills.SkillType skill)
         {
             //Jotunn.Logger.LogMessage("Checking skill");
+            
             if (skill == Skills.SkillType.None) __result = 0f;
 
             //Ascended skills will always act as though at max level
-            if (Perks.IsSkillAscended(skill))
-                __result = 1f;
-            else
-                __result = Mathf.Clamp01(__instance.GetSkills().GetSkillLevel(skill) / CFG.MaxSkillLevel.Value);
+            //No longer the case
+            //if (Perks.IsSkillAscended(skill))
+            //    __result = 1f;
+            //else
+                
+            __result = Mathf.Clamp01(__instance.GetSkills().GetSkillLevel(skill) / CFG.MaxSkillLevel.Value);
 
             return false;
         }
@@ -32,7 +35,7 @@ namespace kingskills
         [HarmonyPostfix]
         public static void SkillLevelup(Player __instance, Skills.SkillType skill)
         {
-            StatsPatch.UpdateStats(__instance, true, skill);
+            StatsUpdate.UpdateStats(__instance, true, skill);
         }
 
         [HarmonyPatch(nameof(Player.RaiseSkill))]
@@ -115,6 +118,7 @@ namespace kingskills
             //Display the in-world text
             if (factor >= CFG.DisplayExperienceThreshold.Value)
             {
+                string skillName = CFG.GetNameFromSkill(skillT);
                 Color msgColor;
                 string msgTxt;
                 Vector3 pos;
@@ -125,22 +129,20 @@ namespace kingskills
                 //Raise Skill is normally only called using their framework
                 if (player.m_nview.m_zdo.GetBool("BXP", false))
                 {
-                    msgTxt = "+" + factor.ToString("F1") + " BONUS EXPERIENCE!\n" +
-                    skillT.ToString();
+                    msgTxt = "+" + factor.ToString("F1") + " BONUS EXPERIENCE!\n" + skillName;
                     msgColor = CFG.ColorBonusBlue;
                     pos = CustomWorldTextManager.GetInFrontOfCharacter(player) +
                         CustomWorldTextManager.GetRandomPosOffset();
                 }
                 else
                 {
-                    msgTxt = "+" + factor.ToString("F1") + " experience\n" +
-                    skillT.ToString();
+                    msgTxt = "+" + factor.ToString("F1") + " experience\n" + skillName;
                     msgColor = CFG.ColorExperienceYellow;
                     pos = CustomWorldTextManager.GetAboveCharacter(player) +
                         CustomWorldTextManager.GetRandomPosOffset();
                 }
                 if (skill.m_level < CFG.MaxSkillLevel.Value)
-                    msgTxt += "\n" + percent.ToString("F0") + "% to level " + skill.m_level + 1;
+                    msgTxt += "\n" + percent.ToString("F0") + "% to level " + (skill.m_level + 1);
 
                 CustomWorldTextManager.AddCustomWorldText(msgColor, pos, textSize, msgTxt);
             }
@@ -150,7 +152,8 @@ namespace kingskills
 
         public static void OnMaxLevel(Skills.SkillType skill)
         {
-            Perks.skillAscendedFlags[skill] = true;
+            AscensionManager.isAscendable.Add(skill, true);
+            Player.m_localPlayer.ShowTutorial("kingskills_ascend");
         }
 
         public static void LevelUpPing(Player player, Skills.Skill skill)

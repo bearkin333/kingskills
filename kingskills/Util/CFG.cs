@@ -10,6 +10,7 @@ namespace kingskills
 {
     //ConfigManager. I saved over 3,000 characters across the entire
     //mod by shortening the name, so... oh well. Makes things more readable.
+    //Actually stands for Cool Fucking Game
     class CFG
     {
         /*
@@ -155,7 +156,7 @@ namespace kingskills
         public const string ColorPTRedFF = "<color=#EA0C0CFF>";
         public const string ColorPTWhiteFF = "<color=#FEFDF5FF>";
 
-        public const string ColorEnd = "{CFG.ColorEnd}";
+        public const string ColorEnd = "</color>";
 
         #endregion configdef
 
@@ -184,7 +185,7 @@ namespace kingskills
                     "Experience value to generate the smallest size exp text");
             XPTextValueMax = cfg.Bind("Generic", "Text Value Max", 100f,
                     "Experience value to generate the largest size exp text");
-            XPTextCurveFactor = cfg.Bind("Generic", "Text Value Max", .6f,
+            XPTextCurveFactor = cfg.Bind("Generic", "Text Curve Factor", .6f,
                     "Factor to define the slope of the curve for exp text scaling");
 
         }
@@ -196,9 +197,16 @@ namespace kingskills
 
         public static int GetXPTextScaledSize(float num)
         {
-            return (int)Mathf.Floor(Mathf.Lerp(XPTextScaleMin.Value, XPTextScaleMax.Value, 
-                Mathf.Pow((num - XPTextValueMin.Value) / (num - XPTextValueMax.Value), 
-                                            XPTextCurveFactor.Value)));
+
+            float expPercent = (num - XPTextValueMin.Value) / (XPTextValueMax.Value - XPTextValueMin.Value);
+            float curveFactor = Mathf.Pow(expPercent, XPTextCurveFactor.Value);
+
+            //Jotunn.Logger.LogMessage($"this exp is {num}, which makes it  {expPercent}% of the max value");
+            //Jotunn.Logger.LogMessage($"I am running {expPercent} to the power of {XPTextCurveFactor.Value}");
+            //Jotunn.Logger.LogMessage($"applying our curve to it causes it to be {curveFactor}%");
+            //Jotunn.Logger.LogMessage($"our final size will be {(int)Mathf.Floor(Mathf.Lerp(XPTextScaleMin.Value, XPTextScaleMax.Value, curveFactor))}");
+
+            return (int)Mathf.Floor(Mathf.Lerp(XPTextScaleMin.Value, XPTextScaleMax.Value, curveFactor));
         }
 
         public static float GetDropItemThreshold()
@@ -242,7 +250,59 @@ namespace kingskills
             return Mathf.Sin(Mathf.Lerp(0f, Mathf.PI / 2, x));
         }
 
+        public static string GetNameFromSkill(Skills.SkillType skill)
+        {
+            switch (skill){
+                case Skills.SkillType.Axes: return "Axes";
+                case Skills.SkillType.Blocking: return "Blocking";
+                case Skills.SkillType.Bows: return "Bows";
+                case Skills.SkillType.Clubs: return "Clubs";
+                case Skills.SkillType.Unarmed: return "Fists";
+                case Skills.SkillType.Jump: return "Jump";
+                case Skills.SkillType.Knives: return "Knives";
+                case Skills.SkillType.Pickaxes: return "Mining";
+                case Skills.SkillType.Polearms: return "Polearms";
+                case Skills.SkillType.Run: return "Run";
+                case Skills.SkillType.Spears: return "Spears";
+                case Skills.SkillType.Sneak: return "Sneak";
+                case Skills.SkillType.Swim: return "Swim";
+                case Skills.SkillType.Swords: return "Swords";
+                case Skills.SkillType.WoodCutting: return "Woodcutting";
+            } if (skill == SkillMan.Agriculture) return "Agriculture";
+            else if (skill == SkillMan.Sailing) return "Sailing";
+            else if (skill == SkillMan.Building) return "Building";
+            else if (skill == SkillMan.Cooking) return "Cooking";
+
+            return "None";
+        }
+
+        public static Skills.SkillType GetSkillFromName(string name)
+        {   
+            switch (name){
+                    case "Agriculture": return SkillMan.Agriculture;
+                    case "Axes": return Skills.SkillType.Axes;
+                    case "Blocking": return Skills.SkillType.Blocking;
+                    case "Bows": return Skills.SkillType.Bows;
+                    case "Building": return SkillMan.Building;
+                    case "Clubs": return Skills.SkillType.Clubs;
+                    case "Cooking": return SkillMan.Cooking;
+                    case "Fists": return Skills.SkillType.Unarmed;
+                    case "Jump": return Skills.SkillType.Jump;
+                    case "Knives": return Skills.SkillType.Knives;
+                    case "Mining": return Skills.SkillType.Pickaxes;
+                    case "Polearms": return Skills.SkillType.Polearms;
+                    case "Run": return Skills.SkillType.Run;
+                    case "Sailing": return SkillMan.Sailing;
+                    case "Spears": return Skills.SkillType.Spears;
+                    case "Sneak": return Skills.SkillType.Sneak;
+                    case "Swim": return Skills.SkillType.Swim;
+                    case "Swords": return Skills.SkillType.Swords;
+                    case "Woodcutting": return Skills.SkillType.WoodCutting;
+                } return Skills.SkillType.None;
+            }
+
         #endregion genericfunc
+
 
         ////////////////////////////////////////////////////////////////////////////////////////
         ///                                    Weapons
@@ -339,7 +399,8 @@ namespace kingskills
         #region bow
         #region configdef
         public static ConfigEntry<bool> ActiveSkillBow;
-        public static ConfigEntry<float> WeaponBXPBowDistancePercent;
+        public static ConfigEntry<float> BowBXPDistanceFactor;
+        public static ConfigEntry<float> BowBXPDistanceMod;
         public static ConfigEntry<float> BowDamagePercentMin;
         public static ConfigEntry<float> BowDamagePercentMax;
         public static ConfigEntry<float> BowStaminaReduxMin;
@@ -370,8 +431,10 @@ namespace kingskills
             BowDropTable.Add("BoneFragments", 0);
 
             //exp
-            WeaponBXPBowDistancePercent = cfg.Bind("Weapon.BonusExperience", "Bow Distance Percent", 50f,
-                "% of distance that becomes bow experience on hit.");
+            BowBXPDistanceFactor = cfg.Bind("Weapon.BonusExperience", "Bow Distance Factor", 1.12f,
+                "Factor to define the scale of the distance curve");
+            BowBXPDistanceMod = cfg.Bind("Weapon.BonusExperience", "Bow Distance Mod", .5f,
+                "how much each point of distance is worth base for distance bow bxp");
 
             //effects
             BowDamagePercentMin = cfg.Bind("Bow.Effect", "Damage Min", 0f,
@@ -397,9 +460,9 @@ namespace kingskills
 
         }
 
-        public static float GetWeaponBXPBowDistanceMult()
+        public static float GetBowBXPDistance(float distance)
         {
-            return PerToMult(WeaponBXPBowDistancePercent);
+            return Mathf.Pow(BowBXPDistanceMod.Value * distance, BowBXPDistanceFactor.Value);
         }
         public static float GetBowDamageMult(float skillFactor)
         {
@@ -439,7 +502,7 @@ namespace kingskills
         #region club
         #region configdef
         public static ConfigEntry<bool> ActiveSkillClub;
-        public static ConfigEntry<float> WeaponBXPClubStagger;
+        public static ConfigEntry<float> ClubBXPHealthFactor;
         public static ConfigEntry<float> ClubDamagePercentMin;
         public static ConfigEntry<float> ClubDamagePercentMax;
         public static ConfigEntry<float> ClubStaminaReduxMin;
@@ -459,8 +522,8 @@ namespace kingskills
                     "Whether or not to activate king's skills version of the clubs skill"); ;
 
             //exp
-            WeaponBXPClubStagger = cfg.Bind("Weapon.BonusExperience", "Club Stagger", 5f,
-                "Flat BXP gained every time you stagger an enemy with clubs");
+            ClubBXPHealthFactor = cfg.Bind("Weapon.BonusExperience", "Club Stagger factor", .1f,
+                "how much each point of max health is worth in exp when staggering an enemy with clubs");
 
             //effects
             ClubDamagePercentMin = cfg.Bind("Club.Effect", "Damage Min", 0f,
@@ -486,6 +549,10 @@ namespace kingskills
 
         }
 
+        public static float GetClubBXPStagger(float maxHealth)
+        {
+            return maxHealth * ClubBXPHealthFactor.Value;
+        }
         public static float GetClubDamageMult(float skillFactor)
         {
             return Mathf.Lerp(PerToMult(ClubDamagePercentMin),
@@ -525,7 +592,8 @@ namespace kingskills
         #region fist
         #region configdef
         public static ConfigEntry<bool> ActiveSkillFist;
-        public static ConfigEntry<float> WeaponBXPUnarmedBlock;
+        public static ConfigEntry<float> FistBXPBlockFactor;
+
         public static ConfigEntry<float> FistDamagePercentMin;
         public static ConfigEntry<float> FistDamagePercentMax;
         public static ConfigEntry<float> FistStaminaReduxMin;
@@ -545,8 +613,8 @@ namespace kingskills
                     "Whether or not to activate king's skills version of the unarmed skill"); ;
 
             //exp
-            WeaponBXPUnarmedBlock = cfg.Bind("Weapon.BonusExperience", "Unarmed Block", 3f,
-                "Flat BXP gained every time you perform an unarmed block");
+            FistBXPBlockFactor = cfg.Bind("Weapon.BonusExperience", "Unarmed Block", .3f,
+                "mod to multiply fist block bonus exp per damage point");
 
             //effects
             FistDamagePercentMin = cfg.Bind("Fist.Effect", "Damage Min", -10f,
@@ -571,6 +639,11 @@ namespace kingskills
                 "% movespeed increase at level 100");
         }
 
+
+        public static float GetFistBXPBlock(float damage)
+        {
+            return damage * FistBXPBlockFactor.Value;
+        }
         public static float GetFistDamageMult(float skillFactor)
         {
             return Mathf.Lerp(PerToMult(FistDamagePercentMin),
@@ -774,7 +847,9 @@ namespace kingskills
         #region spear
         #region configdef
         public static ConfigEntry<bool> ActiveSkillSpear;
-        public static ConfigEntry<float> WeaponBXPSpearThrown;
+        public static ConfigEntry<float> SpearBXPDistanceFactor;
+        public static ConfigEntry<float> SpearBXPDistanceMod;
+
         public static ConfigEntry<float> SpearDamagePercentMin;
         public static ConfigEntry<float> SpearDamagePercentMax;
         public static ConfigEntry<float> SpearStaminaReduxMin;
@@ -794,8 +869,10 @@ namespace kingskills
                     "Whether or not to activate king's skills version of the spear skill"); ;
 
             //exp
-            WeaponBXPSpearThrown = cfg.Bind("Weapon.BonusExperience", "Spear Throw", 10f,
-                "Flat BXP gained every time you hit with a thrown spear");
+            SpearBXPDistanceFactor = cfg.Bind("Weapon.BonusExperience", "Spear Distance Factor", 1.12f,
+                "Factor to define the scale of the distance curve");
+            SpearBXPDistanceMod = cfg.Bind("Weapon.BonusExperience", "Spear Distance Mod", .5f,
+                "how much each point of distance is worth base for distance spear bxp");
 
             //effect
             SpearDamagePercentMin = cfg.Bind("Spear.Effect", "Damage Min", 0f,
@@ -820,6 +897,10 @@ namespace kingskills
                 "Flat block armor always applied at level 100");
         }
 
+        public static float GetSpearBXPDistance(float distance)
+        {
+            return Mathf.Pow(SpearBXPDistanceMod.Value * distance, SpearBXPDistanceFactor.Value);
+        }
         public static float GetSpearDamageMult(float skillFactor)
         {
             return Mathf.Lerp(PerToMult(SpearDamagePercentMin),
@@ -1189,7 +1270,7 @@ namespace kingskills
 
             BuildXPPerPiece = cfg.Bind("Build.Experience", "Per Piece", .8f,
                     "How much experience for placed build piece");
-            BuildXPRepairMod = cfg.Bind("Build.Experience", "Repair Mod", .5f,
+            BuildXPRepairMod = cfg.Bind("Build.Experience", "Repair Mod", .05f,
                     "Amount of experience for each point of repaired damage");
             BuildXPDamageTakenMod = cfg.Bind("Build.Experience", "Damage Taken Mod", .2f,
                     "Amount of experience for each point of damage taken by buildings");
@@ -1220,8 +1301,8 @@ namespace kingskills
                     "% chance to build a piece for free at minimum level");
             BuildFreeChanceMax = cfg.Bind("Build.Effect", "Free Chance Max", 35f,
                     "% chance to build a piece for free at level 100");
-            BuildFreeChanceFactor = cfg.Bind("Build.Effect", "Free Chance Factor", .24f,
-                    "Factor for defining the slope of the free chance curve. Like most factors, should be below .8f");
+            BuildFreeChanceFactor = cfg.Bind("Build.Effect", "Free Chance Factor", 2.5f,
+                    "Factor for defining the slope of the free chance curve.");
             BuildFreeChanceMinLevel = cfg.Bind("Build.Effect", "Free Chance Level", 20f,
                     "Smallest level at which free chance curve begins");
             BuildStaminaReduxMin = cfg.Bind("Build.Effect", "Stamina Redux Min", 0f,
@@ -1263,13 +1344,19 @@ namespace kingskills
         }
         public static float GetBuildingFreeMod(float skillFactor)
         {
+            float minLevel = GetFCMinLevelAsMod();
+            float newSkillFactor = Mathf.Clamp01((skillFactor - minLevel) / (MaxSkillLevel.Value - minLevel));
+
             //This gets an exponential curve that doesn't start until the minimum level, supposedly
             return Mathf.Lerp(PerToMod(BuildFreeChanceMin), PerToMod(BuildFreeChanceMax), 
-                Mathf.Pow(Mathf.Clamp01(skillFactor - GetFCMinLevelAsMod()), BuildFreeChanceFactor.Value));
+                Mathf.Pow(newSkillFactor, BuildFreeChanceFactor.Value));
         }
         public static bool GetBuildingRandomFreeChance(float skillFactor)
         {
-            return (UnityEngine.Random.Range(0, 1) < GetBuildingFreeMod(skillFactor));
+            float rand = UnityEngine.Random.Range(0f, 1f);
+            float skill = GetBuildingFreeMod(skillFactor);
+            //Jotunn.Logger.LogMessage($"rolled a random number of {rand} against {skill}");
+            return rand < skill;
         }
         public static float GetBuildingStaminaRedux(float skillFactor)
         {
@@ -1359,7 +1446,7 @@ namespace kingskills
                     "% reduction in cooking times at level 100");
             CookingFermentTimeReduxMin = cfg.Bind("Cooking.Effect", "Fermentation Redux Min", 0f,
                     "% reduction in fermentation times at level 0");
-            CookingFermentTimeReduxMax = cfg.Bind("Cooking.Effect", "Fermentation Redux Min", 75f,
+            CookingFermentTimeReduxMax = cfg.Bind("Cooking.Effect", "Fermentation Redux Max", 75f,
                     "% reduction in fermentation times at level 100");
 
         }
@@ -1589,15 +1676,15 @@ namespace kingskills
             //List of all objects that you can eat and their exp reward
             MiningBXPTable.Add("Stone", 1);
             MiningBXPTable.Add("CopperOre", 5);
-            MiningBXPTable.Add("CopperBar", 20);
+            MiningBXPTable.Add("Copper", 20);
             MiningBXPTable.Add("TinOre", 7);
-            MiningBXPTable.Add("TinBar", 32);
-            MiningBXPTable.Add("BronzeBar", 60);
+            MiningBXPTable.Add("Tin", 32);
+            MiningBXPTable.Add("Bronze", 60);
             MiningBXPTable.Add("IronScrap", 33);
-            MiningBXPTable.Add("IronBar", 80);
+            MiningBXPTable.Add("Iron", 80);
             MiningBXPTable.Add("Obsidian", 24);
             MiningBXPTable.Add("SilverOre", 56);
-            MiningBXPTable.Add("SilverBar", 115);
+            MiningBXPTable.Add("Silver", 115);
             MiningBXPTable.Add("Chitin", 35);
 
 
@@ -1680,6 +1767,7 @@ namespace kingskills
         public static ConfigEntry<float> RunAbsoluteWeightMaxWeight;
         public static ConfigEntry<float> RunAbsoluteWeightFactor;
         public static ConfigEntry<float> RunXPAbsoluteWeightPercent;
+
         public static ConfigEntry<float> RunRelativeWeightLight;
         public static ConfigEntry<float> RunRelativeWeightLightPercent;
         public static ConfigEntry<float> RunRelativeWeightMed;
@@ -1692,7 +1780,10 @@ namespace kingskills
         public static ConfigEntry<float> RunRelativeWeightFullPercent;
         public static ConfigEntry<float> RunRelativeWeightOverPercent;
         public static ConfigEntry<float> RunXPRelativeWeightPercent;
+
         public static ConfigEntry<float> RunXPSpeedPercent;
+        public static ConfigEntry<float> RunEncumberanceCurveFactor;
+
         public static ConfigEntry<float> RunSpeedPercentMin;
         public static ConfigEntry<float> RunSpeedPercentMax;
         public static ConfigEntry<float> RunEquipmentReduxMin;
@@ -1755,6 +1846,7 @@ namespace kingskills
                 "% of extra experience gained from run speed");
 
 
+
             //Run Effects
             RunSpeedPercentMin = cfg.Bind("Run.Effect", "Speed Min", 0f,
                 "% extra run speed at level 0");
@@ -1764,14 +1856,18 @@ namespace kingskills
                 "% less movespeed reduction from equipment at level 0");
             RunEquipmentReduxMax = cfg.Bind("Run.Effect", "Equipment Reduction Max", 60f,
                 "% less movespeed reduction from equipment at level 100");
+
             RunEncumberancePercentMin = cfg.Bind("Run.Effect", "Encumberance Min", 0f,
                 "% less run speed when your inventory is empty");
             RunEncumberancePercentMax = cfg.Bind("Run.Effect", "Encumberance Max", 50f,
                 "% less run speed when your inventory is full");
+            RunEncumberanceCurveFactor = cfg.Bind("Run.Effect", "Encumberance Curve", 1.8f,
+                "Factor for the curve of encumberance");
             RunEncumberanceReduxMin = cfg.Bind("Run.Effect", "Encumberance Reduction Min", -15f,
                 "% less effect from encumberance at level 0");
             RunEncumberanceReduxMax = cfg.Bind("Run.Effect", "Encumberance Reduction Max", 75f,
                 "% less effect from encumberance at level 100");
+
             RunStaminaReduxMin = cfg.Bind("Run.Effect", "Stamina Reduction Min", -25f,
                 "% less stamina cost to run at level 100");
             RunStaminaReduxMax = cfg.Bind("Run.Effect", "Stamina Reduction Max", 80f,
@@ -1788,7 +1884,10 @@ namespace kingskills
         public static float GetEncumberanceCurveRedux(float encumberanceMod)
         {
             return Mathf.Lerp(PerToMult(RunEncumberancePercentMin, true),
-                PerToMult(RunEncumberancePercentMax, true), ShapeFactorSin(encumberanceMod));
+                PerToMult(RunEncumberancePercentMax, true), 
+                Mathf.Pow(encumberanceMod, RunEncumberanceCurveFactor.Value));
+            //ShapeFactorSin(encumberanceMod));
+
             /*
             float runEncMin = PerToMult(RunEncumberanceModMin, true);
             float runEncMax = PerToMult(RunEncumberanceModMax, true);

@@ -574,7 +574,9 @@ namespace kingskills
         {
             if (loaded)
             {
-                return skillAscendedFlags[skill];
+                bool contains = skillAscendedFlags.TryGetValue(skill, out bool value);
+                if (contains) return value;
+                else return contains;
             }
             else
             {

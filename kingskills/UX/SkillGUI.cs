@@ -55,7 +55,6 @@ namespace kingskills.UX
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        #region windowbase
         #region var
         public static GameObject SkillGUIWindow;
 
@@ -66,6 +65,10 @@ namespace kingskills.UX
         public static GameObject SSExp;
 
         public static Dropdown dd;
+        public static GameObject ddUpBtn;
+        public static GameObject ddDownBtn;
+        public static GameObject CloseBtn;
+        public static GameObject StickBtn;
 
         public static GameObject LPTipsTabBtn;
         public static GameObject LPEffectsTabBtn;
@@ -163,7 +166,7 @@ namespace kingskills.UX
             SSExp.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
 
             // Create the close button
-            GameObject closeBtn = GUIManager.Instance.CreateButton(
+            CloseBtn = GUIManager.Instance.CreateButton(
                 text: "Close",
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(1f, 1f),
@@ -173,11 +176,11 @@ namespace kingskills.UX
                 height: 45f);
 
             // Add a listener to the button to close the panel again
-            Button button = closeBtn.GetComponent<Button>();
+            Button button = CloseBtn.GetComponent<Button>();
             button.onClick.AddListener(SkillGUIUpdate.ToggleSkillGUI);
 
             // Create the close button
-            GameObject stickBtn = GUIManager.Instance.CreateButton(
+            StickBtn = GUIManager.Instance.CreateButton(
                 text: "Stick",
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(1f, 1f),
@@ -187,7 +190,7 @@ namespace kingskills.UX
                 height: 45f);
 
             // Add a listener to the button to close the panel again
-            button = stickBtn.GetComponent<Button>();
+            button = StickBtn.GetComponent<Button>();
             button.onClick.AddListener(SkillGUIUpdate.StickGUI);
 
 
@@ -196,9 +199,9 @@ namespace kingskills.UX
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(0f, 0f),
                 anchorMax: new Vector2(0f, 0f),
-                position: new Vector2(130f, 90f),
+                position: new Vector2(110f, 90f),
                 width: 100f,
-                height: 50f);
+                height: 40f);
 
             // Add a listener to the button to close the panel again
             button = LPEffectsTabBtn.GetComponent<Button>();
@@ -210,9 +213,9 @@ namespace kingskills.UX
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(0f, 0f),
                 anchorMax: new Vector2(0f, 0f),
-                position: new Vector2(260f, 90f),
+                position: new Vector2(240f, 90f),
                 width: 100f,
-                height: 50f);
+                height: 40f);
 
             // Add a listener to the button to close the panel again
             button = LPTipsTabBtn.GetComponent<Button>();
@@ -243,6 +246,36 @@ namespace kingskills.UX
             dd.captionText.horizontalOverflow = HorizontalWrapMode.Wrap;
             dd.itemText.horizontalOverflow = HorizontalWrapMode.Wrap;
 
+            // Create the dropdown down button
+            ddDownBtn = GUIManager.Instance.CreateButton(
+                text: "Down",
+                parent: SkillDropDown.transform,
+                anchorMin: new Vector2(1f, 0.5f),
+                anchorMax: new Vector2(1f, 0.5f),
+                position: new Vector2(150f, 0f),
+                width: 80f,
+                height: 30f);
+
+            // Add a listener to the button to close the panel again
+            button = ddDownBtn.GetComponent<Button>();
+            button.onClick.AddListener(SkillGUIUpdate.DDDown);
+
+
+            // Create the dropdown down button
+            ddUpBtn = GUIManager.Instance.CreateButton(
+                text: "Up",
+                parent: SkillDropDown.transform,
+                anchorMin: new Vector2(1f, 0.5f),
+                anchorMax: new Vector2(1f, 0.5f),
+                position: new Vector2(50f, 0f),
+                width: 80f,
+                height: 30f);
+
+            // Add a listener to the button to close the panel again
+            button = ddUpBtn.GetComponent<Button>();
+            button.onClick.AddListener(SkillGUIUpdate.DDUp);
+
+
 
             //Create the King's Skills brand text
             GUIManager.Instance.CreateText(
@@ -261,10 +294,8 @@ namespace kingskills.UX
                 addContentSizeFitter: false);
 
         }
-        #endregion windowbase
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        #region leftpaneleffects
         #region var
         public static GameObject LeftPanelEffectsTab;
         public static Dictionary<string, GameObject> LPEffectsTexts;
@@ -274,8 +305,6 @@ namespace kingskills.UX
 
         public static void InitEffectsPanel()
         {
-
-
             //Create the left panel
             LeftPanelEffectsTab =
             GUIManager.Instance.CreateWoodpanel(
@@ -321,7 +350,7 @@ namespace kingskills.UX
             scrollVert.transform.SetParent(LPEffectsScroll.transform);
 
             rect = scrollVert.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(300, 350);
+            rect.sizeDelta = new Vector2(300, 425);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0, 0);
@@ -437,10 +466,8 @@ namespace kingskills.UX
             LPEffectsTexts["x3"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
 
         }
-        #endregion leftpaneleffects
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        #region leftpaneltips
         #region var
         public static GameObject LeftPanelTipsTab;
         public static GameObject LPTipsScroll;
@@ -504,6 +531,9 @@ namespace kingskills.UX
             vertSettings.spacing = 1f;
             vertSettings.childControlWidth = true;
 
+            ContentSizeFitter sizeFitter = scrollVert.AddComponent(typeof(ContentSizeFitter)) as ContentSizeFitter;
+            sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
 
             scrollSet.content = rect;
             scrollSet.verticalNormalizedPosition = 1;
@@ -512,7 +542,7 @@ namespace kingskills.UX
 
             //Create the Experience Title in the left panel
             LPTipsTexts.Add(0, GUIManager.Instance.CreateText(
-                text: "Tips",
+                text: "      Tips\n",
                 parent: scrollVert.transform,
                 anchorMin: new Vector2(0f, 1f),
                 anchorMax: new Vector2(0f, 1f),
@@ -556,14 +586,13 @@ namespace kingskills.UX
 
 
         }
-        #endregion leftpaneltips
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        #region rightpanel
         #region var
         public static GameObject RightPanel;
 
         public static GameObject RPAscendedText;
+        public static GameObject RPAscendedBtn;
 
         public static GameObject RPFirstPerkLVLThreshold;
         public static GameObject RPSecondPerkLVLThreshold;
@@ -618,6 +647,22 @@ namespace kingskills.UX
                 width: 300f,
                 height: 80f,
                 addContentSizeFitter: false);
+            RPAscendedText.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+
+            RPAscendedBtn = GUIManager.Instance.CreateButton(
+                text: "Ascend?",
+                parent: RightPanel.transform,
+                anchorMin: new Vector2(0.5f, 0f),
+                anchorMax: new Vector2(0.5f, 0f),
+                position: new Vector2(0f, 50f),
+                width: 300f,
+                height: 80f);
+
+            // Add a listener to the button to close the panel again
+            Button button = RPAscendedBtn.GetComponent<Button>();
+            button.onClick.AddListener(AscensionManager.OnAscendButton);
+            RPAscendedBtn.SetActive(false);
+
             RPAscendedText.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
 
             // Create perk 1 level text
@@ -817,6 +862,5 @@ namespace kingskills.UX
             Jotunn.Logger.LogMessage(logDD);*/
 
         }
-        #endregion rightpanel
     }
 }

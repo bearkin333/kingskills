@@ -219,6 +219,7 @@ perks:
             float skillRQ = CFG.GetSailShipLevelRQ(__instance.m_ship);
             //Jotunn.Logger.LogMessage($"{skillLevel} out of {skillRQ}");
 
+            //You may enter the palace
             if (skillLevel >= skillRQ)
                 return true;
 

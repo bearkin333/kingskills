@@ -111,7 +111,7 @@ namespace kingskills
             __instance.RaiseSkill(Skills.SkillType.Blocking, expValue);
 
             if (__instance.GetCurrentBlocker() == __instance.m_unarmedWeapon.m_itemData)
-                LevelUp.BXP(__instance as Player, Skills.SkillType.Unarmed, CFG.WeaponBXPUnarmedBlock.Value);
+                LevelUp.BXP(__instance as Player, Skills.SkillType.Unarmed, CFG.GetFistBXPBlock(damage));
         }
 
         private static float FixBlockPower(

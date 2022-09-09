@@ -36,7 +36,7 @@ namespace kingskills
 
         private void Awake()
         {
-            Jotunn.Logger.LogInfo("King's skills has awakened!");
+            Jotunn.Logger.LogInfo("King's skills HAS COME!");
             InitConfig();
             InitExtendedItem.Init();
             CommandManager.Instance.AddConsoleCommand(new TestSkillCommand());
@@ -44,6 +44,7 @@ namespace kingskills
             CommandManager.Instance.AddConsoleCommand(new TestSkillsCommand());
             CommandManager.Instance.AddConsoleCommand(new ResetPerksCommand());
             CommandManager.Instance.AddConsoleCommand(new ResetAscensionsCommand());
+            CommandManager.Instance.AddConsoleCommand(new TestExperienceCommand());
             SkillMan.AddSkills();
             Assets.AssetLoader.InitAssets();
             AddInputs();

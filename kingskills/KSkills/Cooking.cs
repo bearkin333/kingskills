@@ -245,7 +245,7 @@ perks:
 				if (FQ == null) return;
 				if (FQ?.foodQuality == null) FQ.foodQuality = 0;
 
-				Jotunn.Logger.LogMessage($"Eating this yum yum food and its quality is {FQ.foodQuality}");
+				//Jotunn.Logger.LogMessage($"Eating this yum yum food and its quality is {FQ.foodQuality}");
 				float foodMult = 1f + FQ.foodQuality;
 
 				food = item.m_shared.m_food;
@@ -263,7 +263,7 @@ perks:
 
 				if (chef != null)
                 {
-					Jotunn.Logger.LogMessage($"chef was found as a player");
+					//Jotunn.Logger.LogMessage($"chef was found as a player");
 					if (__instance.GetZDOID().m_userID != FQ.chefID)
 						chefXPReward *= CFG.GetCookingXPCustomerMult();
 

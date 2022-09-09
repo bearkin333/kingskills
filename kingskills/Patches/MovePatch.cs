@@ -64,43 +64,43 @@ namespace kingskills
             if (__instance.m_rightItem != null)
             {
                 m = __instance.m_rightItem.m_shared.m_movementModifier;
-                if (m < 0) m *= equipmentMalusRedux;
+                if (m < 0) m = Mathf.Lerp(0f, m, equipmentMalusRedux);
                 __instance.m_equipmentMovementModifier += m;
             }
             if (__instance.m_leftItem != null)
             {
                 m = __instance.m_leftItem.m_shared.m_movementModifier;
-                if (m < 0) m *= equipmentMalusRedux;
+                if (m < 0) m = Mathf.Lerp(0f, m, equipmentMalusRedux);
                 __instance.m_equipmentMovementModifier += m;
             }
             if (__instance.m_chestItem != null)
             {
                 m = __instance.m_chestItem.m_shared.m_movementModifier;
-                if (m < 0) m *= equipmentMalusRedux;
+                if (m < 0) m = Mathf.Lerp(0f, m, equipmentMalusRedux);
                 __instance.m_equipmentMovementModifier += m;
             }
             if (__instance.m_legItem != null)
             {
                 m = __instance.m_legItem.m_shared.m_movementModifier;
-                if (m < 0) m *= equipmentMalusRedux;
+                if (m < 0) m = Mathf.Lerp(0f, m, equipmentMalusRedux);
                 __instance.m_equipmentMovementModifier += m;
             }
             if (__instance.m_helmetItem != null)
             {
                 m = __instance.m_helmetItem.m_shared.m_movementModifier;
-                if (m < 0) m *= equipmentMalusRedux;
+                if (m < 0) m = Mathf.Lerp(0f, m, equipmentMalusRedux);
                 __instance.m_equipmentMovementModifier += m;
             }
             if (__instance.m_shoulderItem != null)
             {
                 m = __instance.m_shoulderItem.m_shared.m_movementModifier;
-                if (m < 0) m *= equipmentMalusRedux;
+                if (m < 0) m = Mathf.Lerp(0f, m, equipmentMalusRedux);
                 __instance.m_equipmentMovementModifier += m;
             }
             if (__instance.m_utilityItem != null)
             {
                 m = __instance.m_utilityItem.m_shared.m_movementModifier;
-                if (m < 0) m *= equipmentMalusRedux;
+                if (m < 0) m = Mathf.Lerp(0f, m, equipmentMalusRedux);
                 __instance.m_equipmentMovementModifier += m;
             }
 
@@ -139,7 +139,13 @@ namespace kingskills
             float encumberanceMod = Mathf.Clamp01(player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight());
             float encumberanceCurved = CFG.GetEncumberanceCurveRedux(encumberanceMod);
             float skillEncumberanceRedux = CFG.GetEncumberanceRedux(skillFactor);
-            return encumberanceCurved * skillEncumberanceRedux;
+
+            //Jotunn.Logger.LogMessage($"Run skill {skillFactor}");
+            //Jotunn.Logger.LogMessage($"euncumberance percent {encumberanceMod}");
+            //Jotunn.Logger.LogMessage($"curved: {encumberanceCurved}");
+            //Jotunn.Logger.LogMessage($"reduxed by (mutliplied by) {skillEncumberanceRedux}");
+
+            return Mathf.Lerp(1f, encumberanceCurved, skillEncumberanceRedux);
         }
         public static float GetEquipmentMult(Player player)
         {

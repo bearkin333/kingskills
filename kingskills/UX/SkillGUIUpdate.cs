@@ -18,7 +18,7 @@ namespace kingskills.UX
         public const float updateGUITimer = 2f;
 
         public static float timeSinceUpdate = 0f;
-        public static bool GUIOpen = false;
+        public static bool closable = true;
 
         [HarmonyPatch(typeof(Player), nameof(Player.FixedUpdate))]
         [HarmonyPrefix]
@@ -56,6 +56,7 @@ namespace kingskills.UX
             {
                 SkillGUI.Init();
             }
+            if (!closable) return;
 
             bool state = !SkillGUI.SkillGUIWindow.activeSelf;
 
@@ -69,14 +70,34 @@ namespace kingskills.UX
             }
         }
 
-
         public static void OnDropdownValueChange()
         {
+            //Reset the scroll position
+
+            //Check if the up and down buttons should be turned off or on
+            if (SkillGUI.dd.value == 0) SkillGUI.ddUpBtn.GetComponent<Button>().enabled = false;
+            else SkillGUI.ddUpBtn.GetComponent<Button>().enabled = true;
+            if (SkillGUI.dd.value == SkillGUI.dd.options.Count-1) SkillGUI.ddDownBtn.GetComponent<Button>().enabled = false;
+            else SkillGUI.ddDownBtn.GetComponent<Button>().enabled = true;
+
+            GUICheck();
             SkillGUI.LPEffectsScroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
             SkillGUI.LPTipsScroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
-            GUICheck();
         }
-
+        public static void DDDown()
+        {
+            if (SkillGUI.dd.value < SkillGUI.dd.options.Count-1)
+            {
+                SkillGUI.dd.value++;
+            }
+        }
+        public static void DDUp()
+        {
+            if (SkillGUI.dd.value > 0)
+            {
+                SkillGUI.dd.value--;
+            }
+        }
         public static void StickGUI() => GUIManager.BlockInput(false);
         public static void OnEffectsTab() => SetTipsTab(false);
         public static void OnTipsTab() => SetTipsTab(true);
@@ -86,6 +107,18 @@ namespace kingskills.UX
             SkillGUI.LeftPanelTipsTab.SetActive(isActive);
         }
 
+        public static void SetInteractable(bool interactable)
+        {
+            SkillGUI.dd.interactable = interactable;
+            SkillGUI.ddDownBtn.GetComponent<Button>().interactable = interactable;
+            SkillGUI.ddUpBtn.GetComponent<Button>().interactable = interactable;
+            SkillGUI.LPTipsTabBtn.GetComponent<Button>().interactable = interactable;
+            SkillGUI.LPEffectsTabBtn.GetComponent<Button>().interactable = interactable;
+            SkillGUI.RPAscendedBtn.GetComponent<Button>().interactable = interactable;
+            SkillGUI.CloseBtn.GetComponent<Button>().interactable = interactable;
+            SkillGUI.StickBtn.GetComponent<Button>().interactable = interactable;
+            closable = interactable;
+        }
 
         public static void GUICheck()
         {
@@ -95,86 +128,69 @@ namespace kingskills.UX
             Skills.SkillType skill = Skills.SkillType.None;
 
             string skillName = SkillGUI.dd.options[SkillGUI.dd.value].text;
-            StatsPatch.UpdateStats(player);
+            StatsUpdate.UpdateStats(player);
             ResetText();
+
+            skill = CFG.GetSkillFromName(skillName);
 
             //Deciding which skillgui object to call for filling in the data
             switch (skillName)
             {
                 case "Agriculture":
-                    skill = SkillMan.Agriculture;
                     data = new AgricultureGUI();
                     break;
                 case "Axes":
-                    skill = Skills.SkillType.Axes;
                     data = new AxeGUI();
                     break;
                 case "Blocking":
-                    skill = Skills.SkillType.Blocking;
                     data = new BlockGUI();
                     break;
                 case "Bows":
-                    skill = Skills.SkillType.Bows;
                     data = new BowGUI();
                     break;
                 case "Building":
-                    skill = SkillMan.Building;
                     data = new BuildGUI();
                     break;
                 case "Clubs":
-                    skill = Skills.SkillType.Clubs;
                     data = new ClubGUI();
                     break;
                 case "Cooking":
-                    skill = SkillMan.Cooking;
                     data = new CookGUI();
                     break;
                 case "Fists":
-                    skill = Skills.SkillType.Unarmed;
                     data = new FistGUI();
                     break;
                 case "Jump":
-                    skill = Skills.SkillType.Jump;
                     data = new JumpGUI();
                     break;
                 case "Knives":
-                    skill = Skills.SkillType.Knives;
                     data = new KnifeGUI();
                     break;
                 case "Mining":
-                    skill = Skills.SkillType.Pickaxes;
                     data = new MineGUI();
                     break;
                 case "Polearms":
-                    skill = Skills.SkillType.Polearms;
                     data = new PolearmGUI();
                     break;
                 case "Run":
-                    skill = Skills.SkillType.Run;
                     data = new RunGUI();
                     break;
                 case "Sailing":
-                    skill = SkillMan.Sailing;
                     data = new SailGUI();
                     break;
                 case "Spears":
-                    skill = Skills.SkillType.Spears;
                     data = new SpearGUI();
                     break;
                 case "Sneak":
-                    skill = Skills.SkillType.Sneak;
                     data = new SneakGUI();
                     break;
                 case "Swim":
-                    skill = Skills.SkillType.Swim;
                     data = new SwimGUI();
                     break;
                 case "Swords":
-                    skill = Skills.SkillType.Swords;
                     data = new SwordGUI();
                     break;
                 case "Woodcutting":
-                    skill = Skills.SkillType.WoodCutting;
                     data = new WoodGUI();
                     break;
             }
@@ -212,6 +228,7 @@ namespace kingskills.UX
             data.oPanels();
             data.oPerks();
             data.oTips();
+            data.AddTipBreaks();
 
             if (data.isOutsideFactors())
             {
@@ -232,6 +249,16 @@ namespace kingskills.UX
             else
             {
                 SkillGUI.RPAscendedText.GetComponent<Text>().text = "";
+            }
+
+            Jotunn.Logger.LogMessage($"{skill} is ascendable: {AscensionManager.IsAscendable(skill)}");
+            if (AscensionManager.IsAscendable(skill))
+            {
+                SkillGUI.RPAscendedBtn.SetActive(true);
+            }
+            else
+            {
+                SkillGUI.RPAscendedBtn.SetActive(false);
             }
             //Jotunn.Logger.LogMessage($"{Perks.IsSkillAscended(skill).ToString()}");
         }

@@ -18,6 +18,15 @@ namespace kingskills.UX
         public virtual void oPerks() { }
 
         public virtual void oTips() { }
+
+        public void AddTipBreaks()
+        {
+            SkillGUI.LPTipsTexts[1].GetComponent<Text>().text += "\n";
+            SkillGUI.LPTipsTexts[2].GetComponent<Text>().text += "\n";
+            SkillGUI.LPTipsTexts[3].GetComponent<Text>().text += "\n";
+            SkillGUI.LPTipsTexts[4].GetComponent<Text>().text += "\n";
+            SkillGUI.LPTipsTexts[5].GetComponent<Text>().text += "\n";
+        }
     }
 
 
@@ -640,7 +649,7 @@ namespace kingskills.UX
         public override void oPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Swords);
-            StatsPatch.SwordUpdate(Player.m_localPlayer);
+            StatsUpdate.SwordUpdate(Player.m_localPlayer);
 
 
             float swordDamage = PT.MultToPer(CFG.GetSwordDamageMult(skill));
@@ -1053,7 +1062,7 @@ namespace kingskills.UX
         public override void oPanels()
         {
             Player player = Player.m_localPlayer;
-            StatsPatch.JumpForceUpdate(player);
+            StatsUpdate.JumpForceUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Jump);
 
             float bonusJumpForce = PT.MultToPer(CFG.GetJumpForceMult(skill));
@@ -1068,7 +1077,7 @@ namespace kingskills.UX
             string bonusJumpForwardForceS = PT.Prettify(bonusJumpForwardForce, 1, PT.TType.Percent);
             string staminaReduxS = PT.Prettify(staminaRedux, 1, PT.TType.PercentRedux);
             string tiredS = PT.Prettify(tired, 0, PT.TType.ColorlessPercent);
-            string fallDamageThreshholdS = PT.Prettify(fallDamageThreshhold, 0, PT.TType.Flat);
+            string fallDamageThreshholdS = PT.Prettify(fallDamageThreshhold, 0, PT.TType.Straight);
             string fallDamageReduxS = PT.Prettify(fallDamageRedux, 1, PT.TType.PercentRedux);
 
 
@@ -1125,7 +1134,7 @@ namespace kingskills.UX
     ////////////////////////////////////////////////////////////////////////////////////////
     public class MineGUI : SkillGUIData
     {
-        public override bool isOutsideFactors() => false;
+        public override bool isOutsideFactors() => true;
 
         public override void oPanels()
         {
@@ -1137,12 +1146,18 @@ namespace kingskills.UX
             float mineRegen = CFG.GetMiningRegenLessTime(skill);
             float mineCarry = CFG.GetMiningCarryCapacity(skill);
 
+            GameObject rockObj = Player.m_localPlayer.m_hovering;
+            ItemDrop.ItemData rock = null;
+            if (rockObj != null) rock = rockObj.GetComponent<ItemDrop.ItemData>();
+            float mineBXPHoveredRock = CFG.GetMiningXPEatRock(rock);
+
 
             string mineDamageS = PT.Prettify(mineDamage, 1, PT.TType.Percent);
             string mineDropS = PT.Prettify(mineDrop, 2, PT.TType.Percent);
             string mineRebateS = PT.Prettify(mineRebate, 0, PT.TType.Flat);
             string mineRegenS = PT.Prettify(mineRegen, 1, PT.TType.Straight);
             string mineCarryS = PT.Prettify(mineCarry, 0, PT.TType.Flat);
+            string mineBXPHoveredRockS = PT.Prettify(mineBXPHoveredRock, 0, PT.TType.Straight);
 
             SkillGUI.LPEffectsTexts["f1"].GetComponent<Text>().text =
                 mineDamageS + " mining damage";
@@ -1158,6 +1173,10 @@ namespace kingskills.UX
 
             SkillGUI.LPEffectsTexts["f5"].GetComponent<Text>().text =
                 mineCarryS + " carrying capacity";
+
+
+            SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text =
+                $"Bonus Exp from currently hovered rock: {CFG.ColorBonusBlueFF}{mineBXPHoveredRockS}{CFG.ColorEnd}";
         }
 
         public override void oPerks()
@@ -1209,7 +1228,7 @@ namespace kingskills.UX
                 $"EAT ROCKS EAT ROCKS EAT ROCKS EAT ROCKS EAT ROCKS";
             SkillGUI.LPTipsTexts[5].GetComponent<Text>().text =
                 $"{CFG.ColorBonusBlueFF}Bonus experience with mining is earned by eating rocks! Rocks will stay in your body " +
-                $"for {CFG.MiningXPRockTimer} minutes, so you'll have to trade off the value of your food slots and the value " +
+                $"for {CFG.MiningXPRockTimer.Value} minutes, so you'll have to trade off the value of your food slots and the value " +
                 $"of the rock in question for sizable experience bonuses. Any kind of metal, ore, or rock can be eaten. The " +
                 $"effects screen will show you the experience value for any rock you're currently hovering over. {CFG.ColorEnd}";
         }
@@ -1228,7 +1247,7 @@ namespace kingskills.UX
         public override void oPanels()
         {
             Player player = Player.m_localPlayer;
-            StatsPatch.RunSpeedUpdate(player);
+            StatsUpdate.RunSpeedUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Run);
 
             float runSpeedBonus = PT.MultToPer(CFG.GetRunSpeedMult(skill));
@@ -1237,8 +1256,14 @@ namespace kingskills.UX
             float staminaDrainRedux = PT.MultToPer(CFG.GetRunStaminaRedux(skill), true);
             float baseStaminaGain = CFG.GetRunStamina(skill);
 
-            float encumberanceFactor = PT.MultToPer(MovePatch.GetEncumberanceRedux(player), true);
-            float equipmentFactor = PT.MultToPer(MovePatch.GetEquipmentMult(player));
+
+            float encumberanceFactor = -1f * PT.MultToPer(MovePatch.GetEncumberanceRedux(player), true);
+            float equipmentFactor = -1f * PT.MultToPer(MovePatch.GetEquipmentMult(player), true);
+
+            //Jotunn.Logger.LogMessage($"encumberance factor comes out as {MovePatch.GetEncumberanceRedux(player)}");
+            //Jotunn.Logger.LogMessage($"equipment factor comes out as {MovePatch.GetEquipmentMult(player)}");
+            //Jotunn.Logger.LogMessage($"after mult to per, encumb is {encumberanceFactor}");
+            //Jotunn.Logger.LogMessage($"after mult to per, equip is {equipmentFactor}");
 
             float absWeightExp = PT.MultToPer(MovePatch.absoluteWeightBonus(player));
             float relWeightExp = PT.MultToPer(MovePatch.relativeWeightBonus(player));
@@ -1251,8 +1276,8 @@ namespace kingskills.UX
             string staminaDrainReduxS = PT.Prettify(staminaDrainRedux, 1, PT.TType.PercentRedux);
             string baseStaminaGainS = PT.Prettify(baseStaminaGain, 0, PT.TType.Flat);
 
-            string encumberanceFactorS = PT.Prettify(encumberanceFactor, 1, PT.TType.PercentRedux);
-            string equipmentFactorS = PT.Prettify(equipmentFactor, 1, PT.TType.PercentRedux);
+            string encumberanceFactorS = PT.Prettify(encumberanceFactor, 1, PT.TType.Percent);
+            string equipmentFactorS = PT.Prettify(equipmentFactor, 1, PT.TType.Percent);
 
             string absWeightExpS = PT.Prettify(absWeightExp, 1, PT.TType.ColorlessPercent);
             string relWeightExpS = PT.Prettify(relWeightExp, 1, PT.TType.ColorlessPercent);
@@ -1277,12 +1302,12 @@ namespace kingskills.UX
 
             SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text =
                 encumberanceFactorS + " speed from encumberance\n " +
-                equipmentFactorS + " speed from equipment";
+                equipmentFactorS + " speed from equipment\n";
 
             SkillGUI.LPEffectsTexts["x2"].GetComponent<Text>().text =
-                runSpeedExpS + " from current run speed \n" +
-                absWeightExpS + " from absolute weight carried \n" +
-                relWeightExpS + " from fullness of inventory";
+                $"{CFG.ColorBonusBlueFF}{runSpeedExpS} experience{CFG.ColorEnd} from current run speed \n" +
+                $"{CFG.ColorBonusBlueFF}{absWeightExpS} experience{CFG.ColorEnd} from absolute weight carried \n" +
+                $"{CFG.ColorBonusBlueFF}{relWeightExpS} experience{CFG.ColorEnd} from fullness of inventory";
         }
 
         public override void oPerks()
@@ -1444,10 +1469,12 @@ namespace kingskills.UX
     ////////////////////////////////////////////////////////////////////////////////////////
     public class SneakGUI : SkillGUIData
     {
+        public override bool isOutsideFactors() => true;
+
         public override void oPanels()
         {
             float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Sneak);
-            StatsPatch.SneakUpdate(Player.m_localPlayer);
+            StatsUpdate.SneakUpdate(Player.m_localPlayer);
 
             float sneakSpeed = PT.MultToPer(CFG.GetSneakSpeedMult(skill));
             float sneakStaminaCost = CFG.GetSneakStaminaDrain(skill);
@@ -1463,26 +1490,24 @@ namespace kingskills.UX
 
             string sneakDangerXPModS = PT.Prettify(sneakDangerXPMod, 1, PT.TType.ColorlessPercent);
 
+            /*
             SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text =
                 "While you are actively avoiding detection of a nearby enemy, " +
                 "you gain experience every second.";
             SkillGUI.LPEffectsTexts["x2"].GetComponent<Text>().text =
                 "If you aren't nearby an enemy while sneaking, you gain 10% experience.";
-            SkillGUI.LPEffectsTexts["bonus"].GetComponent<Text>().text =
-                "You get bonus experience based on how dangerous the biggest enemy you're sneaing past is.\n" +
-                "Current bonus from spotted enemy: " + sneakDangerXPModS;
+            */
 
             SkillGUI.LPEffectsTexts["f1"].GetComponent<Text>().text =
                 sneakSpeedS + " sneak speed";
 
             SkillGUI.LPEffectsTexts["f2"].GetComponent<Text>().text =
-                sneakStaminaCostS + " stamina per second while sneaking";
+                sneakStaminaCostS + " stamina per second cost while sneaking";
 
-            SkillGUI.LPEffectsTexts["f3"].GetComponent<Text>().text =
-                sneakLightFactorS + " ---";
 
-            SkillGUI.LPEffectsTexts["f4"].GetComponent<Text>().text =
-                sneakDarkFactorS + " ---";
+
+            SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text =
+                "Current bonus from spotted enemy: " + sneakDangerXPModS;
         }
 
         public override void oPerks()
@@ -1497,15 +1522,20 @@ namespace kingskills.UX
         public override void oTips()
         {
             SkillGUI.LPTipsTexts[1].GetComponent<Text>().text =
-                $"";
+                $"Sneak is one of the most interesting, but difficult to pull off gameplay styles in Valheim. King's Skills " +
+                $"strives to patch some of the holes a regular sneak player might experience when trying to play through the " +
+                $"game with sneak. ";
             SkillGUI.LPTipsTexts[2].GetComponent<Text>().text =
-                $"";
+                $"You gain experience very slowly while sneaking, but the rate increases by 10x while you're sneaking within the " +
+                $"sight line of an enemy.";
             SkillGUI.LPTipsTexts[3].GetComponent<Text>().text =
-                $"";
+                $"Stealth in Valheim is not random. Based on your skill and your level, all enemies have their sight lines decrease " +
+                $"by a deterministic amount. If you touch one of their sight cones, you will be noticed. At the same thing, you are " +
+                $"totally silent while sneaking, allowing you to perfectly sneak up behind someone as long as they don't turn around.";
             SkillGUI.LPTipsTexts[4].GetComponent<Text>().text =
-                $"";
-            SkillGUI.LPTipsTexts[5].GetComponent<Text>().text =
-                $"";
+                $"{CFG.ColorBonusBlueFF}Bonus experience with sneak is gained based on the difficulty of the enemy you're sneaking " +
+                $"around. The current bonus from the strongest nearby enemy is displayed on the effects screen. And remember - " +
+                $"the thrill is part of the fun!{CFG.ColorEnd}";
         }
     }
 
@@ -1522,7 +1552,7 @@ namespace kingskills.UX
         public override void oPanels()
         {
             Player player = Player.m_localPlayer;
-            StatsPatch.SwimSpeedUpdate(player);
+            StatsUpdate.SwimSpeedUpdate(player);
             float skill = player.GetSkillFactor(Skills.SkillType.Swim);
 
             float swimSpeed = PT.MultToPer(CFG.GetSwimSpeedMult(skill));
@@ -1557,9 +1587,9 @@ namespace kingskills.UX
                 swimStaminaCostS + " stamina per second swim cost";
 
             SkillGUI.LPEffectsTexts["x2"].GetComponent<Text>().text =
-                swimSpeedExpS + " from current run speed \n" +
-                absWeightExpS + " from absolute weight carried \n" +
-                relWeightExpS + " from fullness of inventory";
+                $"{CFG.ColorBonusBlueFF}{swimSpeedExpS} experience{CFG.ColorEnd} from current swim speed \n" +
+                $"{CFG.ColorBonusBlueFF}{absWeightExpS} experience{CFG.ColorEnd} from absolute weight carried \n" +
+                $"{CFG.ColorBonusBlueFF}{relWeightExpS} experience{CFG.ColorEnd} from fullness of inventory";
         }
 
         public override void oPerks()
@@ -1621,13 +1651,6 @@ namespace kingskills.UX
             string woodRebateS = PT.Prettify(woodRebate, 0, PT.TType.Flat);
             string woodRegenS = PT.Prettify(woodRegen, 0, PT.TType.Straight);
             string woodCarryS = PT.Prettify(woodCarry, 0, PT.TType.Flat);
-
-            SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text =
-                "A percentage of all damage dealt to trees is turned into experience.";
-            SkillGUI.LPEffectsTexts["x2"].GetComponent<Text>().text =
-                "Every time you swing, a small amount of experience is gained, whether you hit anything or not.";
-            SkillGUI.LPEffectsTexts["bonus"].GetComponent<Text>().text =
-                "Bonus experience for the axe is gained when you destroy tree stumps.";
 
             SkillGUI.LPEffectsTexts["f1"].GetComponent<Text>().text =
                 woodDamageS + " woodcutting damage";

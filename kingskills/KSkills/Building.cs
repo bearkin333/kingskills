@@ -50,10 +50,19 @@ perks:
 
                 //We decide if this is free
                 isFree = CFG.GetBuildingRandomFreeChance(skill);
+                //Jotunn.Logger.LogMessage($"This building being free {isFree}");
+
+                if (isFree) 
+                {
+                    CustomWorldTextManager.AddCustomWorldText(CFG.ColorTitle,
+                        __instance.transform.position + Vector3.up * 1.5f,
+                        30, "Free Building!");
+                }
+
 
                 //When we place a piece down, it now remembers who we are and our skill level
                 zdo.Set("Building Level", skill);
-                zdo.Set("Building Owner", player.GetZDOID());
+                zdo.Set("Building Owner", player.GetPlayerID());
                 zdo.Set("Is Free", isFree);
 
                 Aoe trap = __instance.GetComponentInChildren<Aoe>();
@@ -175,7 +184,7 @@ perks:
 
             if (hit.m_attacker.IsNone())
             {
-                //Jotunn.Logger.LogWarning($"From wear n tear!");
+                //Jotunn.Logger.LogWarning($"WNT damage on building");
 
                 float skill = __instance.m_nview.GetZDO().GetFloat("Building Level", 0f);
 
@@ -183,7 +192,9 @@ perks:
             }
             else if (hit.GetAttacker().IsMonsterFaction())
             {
-                Player player = Player.GetPlayer(__instance.m_nview.GetZDO().GetLong("Building Player", 0));
+                //Jotunn.Logger.LogWarning($"monster damage on building");
+
+                Player player = Player.GetPlayer(__instance.m_nview.GetZDO().GetLong("Building Owner", 0));
                 if (player != null)
                 {
                     player.RaiseSkill(SkillMan.Building, 
@@ -201,12 +212,13 @@ perks:
         public static void GetMyDamage(Aoe __instance, ref HitData.DamageTypes __result)
         {
             if (__instance.m_nview?.GetZDO() == null || !__instance.m_nview.GetZDO().GetBool("Trap", false)) return;
+            //Jotunn.Logger.LogMessage("Trap dealt damage");
                 
             Player player = Player.m_localPlayer;
-            if (player.GetZDOID().m_userID != __instance.m_nview.GetZDO().GetLong("Building Player")) return;
+            if (player.GetPlayerID() != __instance.m_nview.GetZDO().GetLong("Building Owner")) return;
 
             __result.Modify(CFG.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building)));
-            Jotunn.Logger.LogMessage($"Just multiplied the damage of this shit by {CFG.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building))}");
+            //Jotunn.Logger.LogMessage($"Just multiplied the damage of this shit by {CFG.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building))}");
         }
 
         [HarmonyPatch(nameof(Aoe.OnHit))]
@@ -216,20 +228,13 @@ perks:
             if (__instance.m_nview?.GetZDO() == null || !__instance.m_nview.GetZDO().GetBool("Trap", false)) return;
 
             Player player = Player.m_localPlayer;
-            if (player.GetZDOID().m_userID != (long)__instance.m_nview.GetZDO().GetLong("Building Player")) return;
+            if (player.GetPlayerID() != (long)__instance.m_nview.GetZDO().GetLong("Building Owner")) return;
 
             Character enemy = collider.GetComponent<Character>();
             if (enemy == null || !enemy.IsMonsterFaction()) return;
 
-            Jotunn.Logger.LogMessage($"Pretty sure we just hit an enemy. Gonna just give the exp to my player now");
-            try
-            {
-                Jotunn.Logger.LogMessage($"also my owner is {__instance.m_owner.m_name}");
-            }
-            catch
-            {
-                Jotunn.Logger.LogMessage($"mb. we do not have an owner");
-            }
+            //Jotunn.Logger.LogMessage($"Pretty sure we just hit an enemy. Gonna just give the exp to my player now");
+
             float damageXP = __instance.GetDamage().GetTotalDamage() * CFG.BuildXPDamageDoneMod.Value;
 
             player.RaiseSkill(SkillMan.Building, damageXP);

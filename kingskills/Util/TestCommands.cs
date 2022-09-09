@@ -8,6 +8,24 @@ using kingskills;
 
 namespace kingskills
 {
+    public class TestExperienceCommand : ConsoleCommand
+    {
+        public override string Name => "expks";
+
+        public override string Help => "applies a certain experience for testing";
+
+        public override void Run(string[] args)
+        {
+            if (args.Length != 2)
+            {
+                return;
+            }
+            string skill = args[0];
+            float.TryParse(args[1], out float factor);
+
+            Player.m_localPlayer.RaiseSkill(CFG.GetSkillFromName(skill), factor);
+        }
+    }
     public class TestSkillCommand : ConsoleCommand
     {
         public override string Name => "raiseks";
@@ -75,7 +93,7 @@ namespace kingskills
                 return;
             }
 
-            StatsPatch.UpdateStats(Player.m_localPlayer);
+            StatsUpdate.UpdateStats(Player.m_localPlayer);
         }
     }
 

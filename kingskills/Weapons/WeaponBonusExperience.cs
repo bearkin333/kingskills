@@ -16,15 +16,15 @@ namespace kingskills
     {
         //For transferring stagger experience check
         static Player playerRef = null;
-        static bool staggerFlag = false;
 
         [HarmonyPatch(nameof(Character.ApplyDamage))]
         [HarmonyPrefix]
         private static void OnDamageTrigger(Character __instance, HitData hit)
         {
             if (Player.m_localPlayer == null) return;
-            //Jotunn.Logger.LogMessage($"An apply damage function has run, and I'm catching a hit. the hit says");
             ZDOID player = hit.m_attacker;
+
+            //Jotunn.Logger.LogMessage($"An apply damage function has run, and I'm catching a hit. the hit says");
             //Jotunn.Logger.LogMessage($"{player.ToString()} is the one perpetrating this attack");
 
             if (Player.m_localPlayer.GetZDOID().Equals(player))
@@ -34,12 +34,12 @@ namespace kingskills
 
                 if (__instance.IsStaggering())
                 {
-                    staggerFlag = false;
+                    __instance.m_nview.GetZDO().Set("Local Player Staggered Me", true);
                     OnStaggerHurt(playerRef);
                 }
                 else
                 {
-                    staggerFlag = true;
+                    __instance.m_nview.GetZDO().Set("Local Player Staggered Me", false);
                 }
 
             }
@@ -70,12 +70,12 @@ namespace kingskills
         [HarmonyPostfix]
         private static void StaggerPostFix(Character __instance)
         {
-            if (staggerFlag)
+            if (__instance.m_nview.m_zdo.GetBool("Local Player Staggered Me", false))
             {
                 if (Util.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
-                    LevelUp.BXP(playerRef, Skills.SkillType.Clubs, CFG.WeaponBXPClubStagger.Value);
-                        
-                staggerFlag = false;
+                    LevelUp.BXP(playerRef, Skills.SkillType.Clubs, CFG.GetClubBXPStagger(__instance.GetMaxHealth()));
+
+                __instance.m_nview.m_zdo.Set("Local Player Staggered Me", false);
             }
         }
 

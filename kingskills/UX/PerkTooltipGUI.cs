@@ -44,7 +44,7 @@ namespace kingskills.UX
                     parent: SkillGUI.RightPanel.transform,
                     anchorMin: new Vector2(.5f, .5f),
                     anchorMax: new Vector2(.5f, .5f),
-                    position: new Vector2(0f, 20),
+                    position: new Vector2(0f, 35),
                     width: 320,
                     height: 80,
                     draggable: true);

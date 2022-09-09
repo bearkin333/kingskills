@@ -117,7 +117,7 @@ namespace kingskills
                 }
 
                 Perks.UpdatePerkList();
-
+                AscensionManager.InitAscendables();
             }
             catch
             {
@@ -132,7 +132,7 @@ namespace kingskills
         [HarmonyPostfix]
         public static void LoadPlayerPatch(PlayerProfile __instance, Player player)
         {
-            StatsPatch.UpdateStats(player);
+            StatsUpdate.UpdateStats(player);
         }
 
         public static ZPackage StreamFromFile(string filePath)

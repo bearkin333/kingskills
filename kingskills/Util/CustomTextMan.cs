@@ -45,9 +45,12 @@ namespace kingskills
             worldText.m_textField = worldText.m_gui.GetComponent<Text>();
             DamageText.instance.m_worldTexts.Add(worldText);
 
+            //Jotunn.Logger.LogMessage($"spawning message of font size {fontSize}");
             worldText.m_textField.color = msgColor;
             worldText.m_textField.text = text;
             worldText.m_textField.fontSize = fontSize;
+            worldText.m_textField.horizontalOverflow = HorizontalWrapMode.Overflow;
+            worldText.m_textField.verticalOverflow = VerticalWrapMode.Overflow;
             worldText.m_timer = 0f;
         }
     }

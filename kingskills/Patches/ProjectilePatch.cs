@@ -86,11 +86,12 @@ namespace kingskills
                 Jotunn.Logger.LogMessage($"That projectile travelled {distanceTravelled} units");
 
             if (skill == Skills.SkillType.Spears)
-                LevelUp.BXP(player as Player, Skills.SkillType.Spears, CFG.WeaponBXPSpearThrown.Value);
+                LevelUp.BXP(player as Player, Skills.SkillType.Spears,
+                    CFG.GetSpearBXPDistance(distanceTravelled));
 
             else if (skill == Skills.SkillType.Bows)
                 LevelUp.BXP(player as Player, Skills.SkillType.Bows, 
-                    distanceTravelled * CFG.GetWeaponBXPBowDistanceMult());
+                    CFG.GetBowBXPDistance(distanceTravelled));
         }
     }
 }

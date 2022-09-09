@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace kingskills.Patches
 {
@@ -20,7 +21,7 @@ namespace kingskills.Patches
                 //Jotunn.Logger.LogMessage($"Before patch, armor was {__result}");
 
                 __result +=
-                    CFG.GetPolearmArmor(__instance.GetSkillFactor(Skills.SkillType.Polearms));
+                    Mathf.Round(CFG.GetPolearmArmor(__instance.GetSkillFactor(Skills.SkillType.Polearms)));
 
                 //Jotunn.Logger.LogMessage($"now, armor is {__result}");
             }

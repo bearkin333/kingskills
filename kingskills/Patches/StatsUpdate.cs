@@ -9,7 +9,7 @@ using UnityEngine;
 namespace kingskills
 {
     [HarmonyPatch(typeof(Player))]
-    class StatsPatch
+    class StatsUpdate
     {
         public static void UpdateStats(Player player, bool selectively = false, Skills.SkillType skill = Skills.SkillType.None)
         {
@@ -144,22 +144,24 @@ namespace kingskills
         {
             if (!CFG.IsSkillActive(Skills.SkillType.WoodCutting)) return;
 
+            //Jotunn.Logger.LogMessage($"stamina regen delay is {player.m_staminaRegenDelay}. I am setting it to the base " +
+            //    $"[{CFG.BaseStaminaRegenTimer}] minus the less regen time, which is {CFG.GetWoodcuttingRegenLessTime(player.GetSkillFactor(Skills.SkillType.WoodCutting))}");
+
             player.m_staminaRegenDelay = CFG.BaseStaminaRegenTimer -
                 CFG.GetWoodcuttingRegenLessTime(player.GetSkillFactor(Skills.SkillType.WoodCutting));
+
+            //Jotunn.Logger.LogMessage($"so now it is {player.m_staminaRegenDelay}");
         }
         public static void CheckMaxLevel(Player player)
         {
             Dictionary<Skills.SkillType, bool> temp = new Dictionary<Skills.SkillType, bool>(Perks.skillAscendedFlags);
             foreach (KeyValuePair<Skills.SkillType, bool> skillAcension in temp)
             {
-                if (Perks.skillAscendedFlags[skillAcension.Key])
+                if (!Perks.skillAscendedFlags[skillAcension.Key] && 
+                    (player.GetSkills().GetSkillLevel(skillAcension.Key) >= CFG.MaxSkillLevel.Value))
                 {
-                    //No need to check if it's already ascended
-                }
-                else if (player.GetSkills().GetSkillLevel(skillAcension.Key) >= CFG.MaxSkillLevel.Value)
-                {
-                    Perks.skillAscendedFlags[skillAcension.Key] = true;
-                    Jotunn.Logger.LogMessage("Regular update found a maxed skill and set it to be ascended");
+                    AscensionManager.isAscendable[skillAcension.Key] = true;
+                    Jotunn.Logger.LogMessage("Regular update found a maxed skill and set it to be ascendable");
                 }
             }
         }
@@ -196,10 +198,9 @@ namespace kingskills
         [HarmonyPrefix]
         public static void HealthRegenPatch(Player __instance, ref float ___m_foodRegenTimer)
         {
-            if (___m_foodRegenTimer == 0)
+            if (__instance.m_foodRegenTimer == 0)
             {
-                ___m_foodRegenTimer = CFG.BaseFoodHealTimer -
-                    CFG.GetMiningRegenLessTime(__instance.GetSkillFactor(Skills.SkillType.Pickaxes));
+                __instance.m_foodRegenTimer = CFG.GetMiningRegenLessTime(__instance.GetSkillFactor(Skills.SkillType.Pickaxes));
             }
         }
 

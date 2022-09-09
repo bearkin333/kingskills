@@ -60,13 +60,20 @@ namespace kingskills.Overhauls
                 fallThreshold = CFG.GetFallDamageThreshold(skillFactor);
 
 
-            float expGained = 0f;
-            if (fallHeight > 4f)
+            if (IsPlayer())
             {
-                expGained = (fallHeight - 4) * 8.33f;
-            }
-            if (IsPlayer() && !InIntro())
-            {
+                if (m_nview.m_zdo.GetBool("Valkyrie Dropped", false))
+                {
+                    m_nview.m_zdo.Set("Valkyrie Dropped", false);
+                    return;
+                }
+
+                float expGained = 0f;
+                if (fallHeight > 4f)
+                {
+                    expGained = (fallHeight - 4) * 8.33f;
+                }
+
                 if (fallHeight > fallThreshold)
                 {
                     HitData hitData = new HitData();
@@ -93,4 +100,14 @@ namespace kingskills.Overhauls
         }
     }
 
+    [HarmonyPatch(typeof(Valkyrie), nameof(Valkyrie.DropPlayer))]
+    class IntroPatch 
+    {
+
+        [HarmonyPrefix]
+        public static void ResetAltitude(Valkyrie __instance)
+        {
+            Player.m_localPlayer.m_nview.m_zdo.Set("Valkyrie Dropped", true);
+        }
+    }
 }

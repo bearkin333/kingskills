@@ -20,6 +20,7 @@ namespace kingskills.UX
         public static List<bool> perkLocked;
         public static List<bool> perkClickable;
         public static float skillLevel;
+        public static Skills.SkillType openSkill;
 
         public static void Init()
         {
@@ -27,6 +28,7 @@ namespace kingskills.UX
             perkLocked = new List<bool>();
             perkClickable = new List<bool>();
             skillLevel = 0;
+            openSkill = Skills.SkillType.None;
         }
 
 
@@ -37,7 +39,7 @@ namespace kingskills.UX
             if (!SkillGUI.SkillGUIWindow.activeSelf) return;
 
             //Jotunn.Logger.LogMessage("eeeee");
-            if (LearnConfirmationGUI.IsConfirmOpen())
+            if (LearnConfirmationGUI.IsConfirmOpen() || !SkillGUIUpdate.closable)
                 return;
 
             int hoveredPerkKey = MouseOverPerkBox();
@@ -75,29 +77,42 @@ namespace kingskills.UX
         public static void UpdateLearnables()
         {
             if (openedPerks == null) return;
+            bool ascended = Perks.IsSkillAscended(openSkill);
 
 
             if (openedPerks[0].learned)
             {
-                openedPerks[1].learnable = false;
+                if (!ascended)
+                    openedPerks[1].learnable = false;
+                else
+                    openedPerks[1].learnable = true;
                 //Jotunn.Logger.LogMessage($"just set perk {openedPerks[1].name} to unlearnable, since the other one is learned");
             }
 
             else if (openedPerks[1].learned)
             {
-                openedPerks[0].learnable = false;
+                if (!ascended)
+                    openedPerks[0].learnable = false;
+                else
+                    openedPerks[0].learnable = true;
                 //Jotunn.Logger.LogMessage($"just set perk {openedPerks[0].name} to unlearnable, since the other one is learned");
             }
 
             if (openedPerks[2].learned)
             {
-                openedPerks[3].learnable = false;
+                if (!ascended)
+                    openedPerks[3].learnable = false;
+                else
+                    openedPerks[3].learnable = true;
                 //Jotunn.Logger.LogMessage($"just set perk {openedPerks[3].name} to unlearnable, since the other one is learned");
             }
 
             else if (openedPerks[3].learned)
             {
-                openedPerks[2].learnable = false;
+                if (!ascended)
+                    openedPerks[2].learnable = false;
+                else
+                    openedPerks[2].learnable = true;
                 //Jotunn.Logger.LogMessage($"just set perk {openedPerks[2].name} to unlearnable, since the other one is learned");
             }
 
@@ -142,7 +157,8 @@ namespace kingskills.UX
             Perks.PerkType perk1a, Perks.PerkType perk1b,
             Perks.PerkType perk2a, Perks.PerkType perk2b)
         {
-            skillLevel = Player.m_localPlayer.GetSkillFactor(skill);
+            openSkill = skill;
+            skillLevel = Player.m_localPlayer.GetSkillFactor(openSkill);
             if (openedPerks == null) Init();
 
             openedPerks.Clear();
@@ -163,12 +179,12 @@ namespace kingskills.UX
             perkLocked.Add(false);
             perkLocked.Add(false);
 
+            UpdateLearnables();
+
             SetPerkBox(0, "1a", CFG.PerkOneLVLThreshold.Value);
             SetPerkBox(1, "1b", CFG.PerkOneLVLThreshold.Value);
             SetPerkBox(2, "2a", CFG.PerkTwoLVLThreshold.Value);
             SetPerkBox(3, "2b", CFG.PerkTwoLVLThreshold.Value);
-
-            UpdateLearnables();
         }
 
 
@@ -179,9 +195,17 @@ namespace kingskills.UX
             GameObject tint = SkillGUI.RPPerkBoxes[perkBoxString + "Tint"];
             Image tintImg = tint.GetComponent<Image>();
 
-            //Jotunn.Logger.LogMessage($"skill vs threshold: {skillLevel} < {skillThreshold}");
+            if (Perks.IsSkillAscended(openSkill) && openedPerks[perk].learned)
+            {
+                perkClickable[perk] = false;
+                tintImg.enabled = false;
+                perkImage.sprite = openedPerks[perk].icon;
+                perkImage.enabled = true;
 
-            if (Mathf.Floor(skillLevel * CFG.MaxSkillLevel.Value) < 
+                SkillGUI.RPPerkBoxes[perkBoxString].GetComponent<Image>().sprite =
+                    Assets.AssetLoader.perkBoxSprites["perkbox"];
+            }
+            else if (Mathf.Floor(skillLevel * CFG.MaxSkillLevel.Value) < 
                 Mathf.Floor(skillThreshold * CFG.MaxSkillLevel.Value))
             {
                 //Jotunn.Logger.LogMessage($"too low. setting locked for perk {perk}");
@@ -198,6 +222,8 @@ namespace kingskills.UX
             }
             else
             {
+                Player.m_localPlayer.ShowTutorial("kingskills_perks");
+
                 //Jotunn.Logger.LogMessage($"good enough. unlocked perk {perk}");
                 //If the player is high enough, they aren't locked, 
                 perkLocked[perk] = false;
@@ -238,8 +264,5 @@ namespace kingskills.UX
                 }
             }
         }
-
-
-
     }
 }
