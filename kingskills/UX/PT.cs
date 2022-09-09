@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace kingskills.UX
 {
+    //Pretty Text. I shortened it since it gets referenced all over the place and I wanted
+    //things to be more readable
     class PT
     {
-        public const string greenCode = "#7AF365FF>";
-        public const string redCode = "#EA0C0CFF>";
-        public const string whiteCode = "#FEFDF5FF>";
 
         public static string Prettify(float input, float decimals, TType type)
         {
-            string color = "<color=";
-            string endColor = "</color>";
+            string color = "";
             string extraColorText = "";
             string extraCleanText = "";
 
@@ -24,71 +22,71 @@ namespace kingskills.UX
                 case TType.TextlessPercent:
                     if (input < 0)
                     {
-                        color += redCode;
+                        color += CFG.ColorPTRedFF;
                         extraColorText = "%";
                     }
                     else if (input > 0)
                     {
-                        color += greenCode;
+                        color += CFG.ColorPTGreenFF;
                         extraColorText = "%";
                     }
                     else
                     {
-                        color += whiteCode;
+                        color += CFG.ColorPTWhiteFF;
                         extraColorText = "%";
                     }
                     break;
                 case TType.Percent:
                     if (input < 0)
                     {
-                        color += redCode;
+                        color += CFG.ColorPTRedFF;
                         extraColorText = "% less";
                     }
                     else if (input > 0)
                     {
-                        color += greenCode + "+";
+                        color += CFG.ColorPTGreenFF + "+";
                         extraColorText = "% extra";
                     }
                     else
                     {
-                        color += whiteCode;
+                        color += CFG.ColorPTWhiteFF;
                         extraColorText = "% extra";
                     }
                     break;
                 case TType.Flat:
                     if (input < 0)
                     {
-                        color += redCode;
+                        color += CFG.ColorPTRedFF;
                     }
                     else if (input > 0)
                     {
-                        color += greenCode + "+";
+                        color += CFG.ColorPTGreenFF + "+";
                     }
                     else
                     {
-                        color += whiteCode;
+                        color += CFG.ColorPTWhiteFF;
                     }
                     break;
                 case TType.PercentRedux:
                     if (input < 0)
                     {
                         input *= -1f;
-                        color += redCode + "+";
+                        color += CFG.ColorPTRedFF + "+";
                         extraColorText = "% increased";
                     }
                     else if (input > 0)
                     {
-                        color += greenCode + "-";
+                        color += CFG.ColorPTGreenFF + "-";
                         extraColorText = "% reduced";
                     }
                     else
                     {
-                        color += whiteCode;
+                        color += CFG.ColorPTWhiteFF;
                         extraColorText = "% reduced";
                     }
                     break;
                 case TType.Straight:
-                    color += whiteCode;
+                    color += CFG.ColorPTWhiteFF;
                     break;
                 case TType.ColorlessPercent:
                     color = "";
@@ -111,7 +109,7 @@ namespace kingskills.UX
 
             string inputText = input.ToString("F" + decimals);
 
-            string result = color + inputText + extraColorText + endColor + extraCleanText;
+            string result = color + inputText + extraColorText + CFG.ColorEnd + extraCleanText;
 
             return result;
         }

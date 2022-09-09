@@ -49,7 +49,7 @@ perks:
                 float skill = player.GetSkillFactor(SkillMan.Building);
 
                 //We decide if this is free
-                isFree = ConfigMan.GetBuildingRandomFreeChance(skill);
+                isFree = CFG.GetBuildingRandomFreeChance(skill);
 
                 //When we place a piece down, it now remembers who we are and our skill level
                 zdo.Set("Building Level", skill);
@@ -64,10 +64,10 @@ perks:
                 }
 
                 //And has addtional health
-                __instance.m_health *= ConfigMan.GetBuildingHealthMult(skill);
+                __instance.m_health *= CFG.GetBuildingHealthMult(skill);
 
                 //We get some experience for it as well
-                player.RaiseSkill(SkillMan.Building, ConfigMan.BuildXPPerPiece.Value);
+                player.RaiseSkill(SkillMan.Building, CFG.BuildXPPerPiece.Value);
             }
         }
     }
@@ -97,7 +97,7 @@ perks:
 
             float skill = zdo.GetFloat("Building Level", 0f);
             if (skill > 0)
-                __instance.m_health *= ConfigMan.GetBuildingHealthMult(skill);
+                __instance.m_health *= CFG.GetBuildingHealthMult(skill);
 
 
         }
@@ -129,8 +129,8 @@ perks:
             else
                 skill = zdo.GetFloat("Building Level", 0f);
 
-            float supportMult = ConfigMan.GetBuildingStabilityMult(skill);
-            float lossRedux = ConfigMan.GetBuildingStabilityLossRedux(skill);
+            float supportMult = CFG.GetBuildingStabilityMult(skill);
+            float lossRedux = CFG.GetBuildingStabilityLossRedux(skill);
 
             maxSupport *= supportMult;
             horizontalLoss *= lossRedux;
@@ -179,7 +179,7 @@ perks:
 
                 float skill = __instance.m_nview.GetZDO().GetFloat("Building Level", 0f);
 
-                hit.m_damage.Modify(ConfigMan.GetBuildingWNTRedux(skill));
+                hit.m_damage.Modify(CFG.GetBuildingWNTRedux(skill));
             }
             else if (hit.GetAttacker().IsMonsterFaction())
             {
@@ -187,7 +187,7 @@ perks:
                 if (player != null)
                 {
                     player.RaiseSkill(SkillMan.Building, 
-                        hit.GetTotalDamage() * ConfigMan.BuildXPDamageTakenMod.Value);
+                        hit.GetTotalDamage() * CFG.BuildXPDamageTakenMod.Value);
                 }
             }
         }
@@ -205,8 +205,8 @@ perks:
             Player player = Player.m_localPlayer;
             if (player.GetZDOID().m_userID != __instance.m_nview.GetZDO().GetLong("Building Player")) return;
 
-            __result.Modify(ConfigMan.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building)));
-            Jotunn.Logger.LogMessage($"Just multiplied the damage of this shit by {ConfigMan.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building))}");
+            __result.Modify(CFG.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building)));
+            Jotunn.Logger.LogMessage($"Just multiplied the damage of this shit by {CFG.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building))}");
         }
 
         [HarmonyPatch(nameof(Aoe.OnHit))]
@@ -230,7 +230,7 @@ perks:
             {
                 Jotunn.Logger.LogMessage($"mb. we do not have an owner");
             }
-            float damageXP = __instance.GetDamage().GetTotalDamage() * ConfigMan.BuildXPDamageDoneMod.Value;
+            float damageXP = __instance.GetDamage().GetTotalDamage() * CFG.BuildXPDamageDoneMod.Value;
 
             player.RaiseSkill(SkillMan.Building, damageXP);
         }
@@ -277,7 +277,7 @@ perks:
                 float healthChange = __instance.m_health - __instance.m_nview.GetZDO().GetFloat("health", __instance.m_health);
                 if (healthChange < 0) healthChange = 0;
 
-                playerRef.RaiseSkill(SkillMan.Building, ConfigMan.BuildXPRepairMod.Value * healthChange);
+                playerRef.RaiseSkill(SkillMan.Building, CFG.BuildXPRepairMod.Value * healthChange);
             }
         }
     }
@@ -290,7 +290,7 @@ perks:
         public static void BeforeCost(Player __instance, ref float v)
         {
             if (LocalPlayerRepairing.isTrue || LocalPlayerPlacing.isTrue)
-                v *= ConfigMan.GetBuildingStaminaRedux(Player.m_localPlayer.GetSkillFactor(SkillMan.Building));
+                v *= CFG.GetBuildingStaminaRedux(Player.m_localPlayer.GetSkillFactor(SkillMan.Building));
         }
     }
 

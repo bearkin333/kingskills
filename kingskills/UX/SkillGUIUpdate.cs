@@ -12,7 +12,7 @@ using UnityEngine.UI;
 namespace kingskills.UX
 {
     [HarmonyPatch]
-    class UpdateGUI
+    class SkillGUIUpdate
     {
         //how many seconds between GUI update
         public const float updateGUITimer = 2f;
@@ -54,7 +54,7 @@ namespace kingskills.UX
             }
             if (!SkillGUI.SkillGUIWindow)
             {
-                SkillGUI.InitSkillWindow();
+                SkillGUI.Init();
             }
 
             bool state = !SkillGUI.SkillGUIWindow.activeSelf;
@@ -69,16 +69,23 @@ namespace kingskills.UX
             }
         }
 
-        public static void StickGUI()
-        {
-            GUIManager.BlockInput(false);
-        }
 
         public static void OnDropdownValueChange()
         {
-            SkillGUI.scroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
+            SkillGUI.LPEffectsScroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
+            SkillGUI.LPTipsScroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
             GUICheck();
         }
+
+        public static void StickGUI() => GUIManager.BlockInput(false);
+        public static void OnEffectsTab() => SetTipsTab(false);
+        public static void OnTipsTab() => SetTipsTab(true);
+        public static void SetTipsTab(bool isActive)
+        {
+            SkillGUI.LeftPanelEffectsTab.SetActive(!isActive);
+            SkillGUI.LeftPanelTipsTab.SetActive(isActive);
+        }
+
 
         public static void GUICheck()
         {
@@ -172,61 +179,80 @@ namespace kingskills.UX
                     break;
             }
 
+
+
             Skills.Skill skillRef = player.GetSkills().GetSkill(skill);
 
             SkillGUI.SSIcon.GetComponent<Image>().sprite = player.m_skills.GetSkillDef(skill).m_icon;
-            SkillGUI.SSkillName.GetComponent<Text>().text = skillName;
-            if (skillRef.m_level >= ConfigMan.MaxSkillLevel.Value)
+            SkillGUI.SSName.GetComponent<Text>().text = skillName;
+            //If we hit max level, no need to have an experience counter anymore
+            if (skillRef.m_level >= CFG.MaxSkillLevel.Value)
             {
-                SkillGUI.SSkillLevel.GetComponent<Text>().text = "Level: MAX!";
-                SkillGUI.SSkillExp.GetComponent<Text>().text = "Experience: ---";
+                SkillGUI.SSLevel.GetComponent<Text>().text = "Level: MAX!";
+                SkillGUI.SSExp.GetComponent<Text>().text = "Experience: ---";
             }
             else
             {
-                SkillGUI.SSkillLevel.GetComponent<Text>().text = "Level: " + skillRef.m_level.ToString("F0") + " / 100";
-                SkillGUI.SSkillExp.GetComponent<Text>().text = "Experience: " + skillRef.m_accumulator.ToString("F2") + " / " + skillRef.GetNextLevelRequirement().ToString("F2");
+                SkillGUI.SSLevel.GetComponent<Text>().text = "Level: " + skillRef.m_level.ToString("F0") + " / 100";
+                SkillGUI.SSExp.GetComponent<Text>().text = "Experience: " + skillRef.m_accumulator.ToString("F2") + " / " + skillRef.GetNextLevelRequirement().ToString("F2");
             }
 
+            if (!CFG.IsSkillActive(skill))
+            {
+                SkillGUI.LPEffectsTexts["experience"].GetComponent<Text>().text =
+                    "Not currently active";
+                SkillGUI.LPEffectsTexts["other"].GetComponent<Text>().text =
+                    "Not currently active";
+                ResetText();
+                return;
+            }
+
+            //found in SkillGUIData, these functions open the panels, perk boxes, and
+            //tips for the type of skill that was determined in the switch statement
             data.oPanels();
             data.oPerks();
             data.oTips();
 
-
-            if (!ConfigMan.IsSkillActive(skill))
+            if (data.isOutsideFactors())
             {
-                SkillGUI.LeftPanelTexts["experience"].GetComponent<Text>().text =
-                    "Not currently active";
-                SkillGUI.LeftPanelTexts["effects"].GetComponent<Text>().text =
-                    "Not currently active";
-                return;
-            }
-
-            if (Perks.IsSkillAscended(skill))
-            {
-                SkillGUI.RightPanelAscendedText.GetComponent<Text>().text = "Ascended";
+                SkillGUI.LPEffectsTexts["other"].GetComponent<Text>().text =
+                    "Outside Factors:";
             }
             else
             {
-                SkillGUI.RightPanelAscendedText.GetComponent<Text>().text = "";
+                SkillGUI.LPEffectsTexts["other"].GetComponent<Text>().text =
+                    "";
+            }
+
+
+            if (Perks.IsSkillAscended(skill))
+            {
+                SkillGUI.RPAscendedText.GetComponent<Text>().text = "Ascended";
+            }
+            else
+            {
+                SkillGUI.RPAscendedText.GetComponent<Text>().text = "";
             }
             //Jotunn.Logger.LogMessage($"{Perks.IsSkillAscended(skill).ToString()}");
         }
 
-
         public static void ResetText()
         {
-            SkillGUI.LeftPanelTexts["x1"].GetComponent<Text>().text = "";
-            SkillGUI.LeftPanelTexts["x2"].GetComponent<Text>().text = "";
-            SkillGUI.LeftPanelTexts["x3"].GetComponent<Text>().text = "";
-            //SkillGUI.LeftPanelTexts["x4"].GetComponent<Text>().text = "";
-            SkillGUI.LeftPanelTexts["bonus"].GetComponent<Text>().text = "";
+            SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text = "";
+            SkillGUI.LPEffectsTexts["x2"].GetComponent<Text>().text = "";
+            SkillGUI.LPEffectsTexts["x3"].GetComponent<Text>().text = "";
 
-            SkillGUI.LeftPanelTexts["f1"].GetComponent<Text>().text = "";
-            SkillGUI.LeftPanelTexts["f2"].GetComponent<Text>().text = "";
-            SkillGUI.LeftPanelTexts["f3"].GetComponent<Text>().text = "";
-            SkillGUI.LeftPanelTexts["f4"].GetComponent<Text>().text = "";
-            SkillGUI.LeftPanelTexts["f5"].GetComponent<Text>().text = "";
-            SkillGUI.LeftPanelTexts["f6"].GetComponent<Text>().text = "";
+            SkillGUI.LPEffectsTexts["f1"].GetComponent<Text>().text = "";
+            SkillGUI.LPEffectsTexts["f2"].GetComponent<Text>().text = "";
+            SkillGUI.LPEffectsTexts["f3"].GetComponent<Text>().text = "";
+            SkillGUI.LPEffectsTexts["f4"].GetComponent<Text>().text = "";
+            SkillGUI.LPEffectsTexts["f5"].GetComponent<Text>().text = "";
+            SkillGUI.LPEffectsTexts["f6"].GetComponent<Text>().text = "";
+
+            for (int i = 1; i <= SkillGUI.NumTipParagraphs; i++)
+            {
+                SkillGUI.LPTipsTexts[i].GetComponent<Text>().text = "";
+            }
         }
     }
 

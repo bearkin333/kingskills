@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static kingskills.StackablePatch;
+using static kingskills.StackableItems;
 
 namespace kingskills
 {
@@ -58,7 +58,9 @@ namespace kingskills
                 i++;
             }
 
-            foodQuality = float.Parse(poppedData);
+            if (!float.TryParse(poppedData, out foodQuality))
+                Jotunn.Logger.LogWarning("Failed to parse foodquality");
+
             //Jotunn.Logger.LogMessage($"parsed out food quality of [{poppedData}]");
             poppedData = "";
             go = true;
@@ -77,8 +79,11 @@ namespace kingskills
             }
 
             //Jotunn.Logger.LogMessage($"parsed out array count of [{poppedData}]");
-            int count = int.Parse(poppedData);
+            int count = 0;
+            if (!int.TryParse(poppedData, out count))
+                Jotunn.Logger.LogWarning("Failed to parse buff count");
             int j = 0;
+            int buffID = 0;
 
             while (j < count)
             {
@@ -97,7 +102,9 @@ namespace kingskills
                     i++;
                 }
                 //Jotunn.Logger.LogMessage($"popped out a buff type of [{poppedData}]");
-                buffs.Add((BuffType)int.Parse(poppedData));
+                if (!int.TryParse(poppedData, out buffID))
+                    Jotunn.Logger.LogWarning("Failed to parse a buff");
+                buffs.Add((BuffType)buffID);
 
                 j++;
             }
@@ -107,6 +114,7 @@ namespace kingskills
 
             while (go)
             {
+                if (data.Count() == i) break;
                 if (data[i] != 'D')
                 {
                     poppedData += data[i];
@@ -119,8 +127,8 @@ namespace kingskills
             }
 
             //Jotunn.Logger.LogMessage($"parsed out chef ID of [{poppedData}]");
-            chefID = long.Parse(poppedData);
-
+            if (!long.TryParse(poppedData, out chefID))
+                Jotunn.Logger.LogWarning("Failed to parse chefID");
         }
 
         public override BaseExtendedItemComponent Clone() => (BaseExtendedItemComponent)MemberwiseClone();

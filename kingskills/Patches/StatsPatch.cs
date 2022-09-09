@@ -52,16 +52,16 @@ namespace kingskills
 
         public static void RunSpeedUpdate(Player player)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Run)) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.Run)) return;
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
-            float newRunStaminaDrain = ConfigMan.BaseRunStaminaDrain;
+            float newRunStaminaDrain = CFG.BaseRunStaminaDrain;
 
             //We want to undo the game's skillfactor Lerp first before we do our own
             //Jotunn.Logger.LogMessage($"According to vanilla, the stamina drain ought to be {newRunStaminaDrain}.");
             newRunStaminaDrain /= Mathf.Lerp(1f, .5f, skillFactor);
 
             //Jotunn.Logger.LogMessage($"Reversing the effect of the skill, it's now {newRunStaminaDrain}.");
-            newRunStaminaDrain *= ConfigMan.GetRunStaminaRedux(skillFactor);
+            newRunStaminaDrain *= CFG.GetRunStaminaRedux(skillFactor);
             player.m_runStaminaDrain = newRunStaminaDrain;
 
             //Jotunn.Logger.LogMessage($"Adding in our own skill effects, it's now {newRunStaminaDrain}.");
@@ -89,26 +89,26 @@ namespace kingskills
         }
         public static void SwimSpeedUpdate(Player player)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Swim)) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.Swim)) return;
 
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Swim);
-            player.m_swimSpeed = ConfigMan.BaseSwimSpeed * ConfigMan.GetSwimSpeedMult(skillFactor);
-            player.m_swimAcceleration = ConfigMan.BaseSwimAccel * ConfigMan.GetSwimAccelMult(skillFactor);
-            player.m_swimTurnSpeed = ConfigMan.BaseSwimTurn * ConfigMan.GetSwimTurnMult(skillFactor);
-            player.m_swimStaminaDrainMinSkill = ConfigMan.SwimStaminaPerSecMin.Value;
-            player.m_swimStaminaDrainMaxSkill = ConfigMan.SwimStaminaPerSecMax.Value;
+            player.m_swimSpeed = CFG.BaseSwimSpeed * CFG.GetSwimSpeedMult(skillFactor);
+            player.m_swimAcceleration = CFG.BaseSwimAccel * CFG.GetSwimAccelMult(skillFactor);
+            player.m_swimTurnSpeed = CFG.BaseSwimTurn * CFG.GetSwimTurnMult(skillFactor);
+            player.m_swimStaminaDrainMinSkill = CFG.SwimStaminaPerSecMin.Value;
+            player.m_swimStaminaDrainMaxSkill = CFG.SwimStaminaPerSecMax.Value;
         }
         public static void JumpForceUpdate(Player player)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Jump)) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.Jump)) return;
 
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Jump);
 
             float vanillaJumpAddition = 1f + skillFactor * .4f;
-            float newJumpForce = ConfigMan.BaseJumpForce * ConfigMan.GetJumpForceMult(skillFactor);
-            float newJumpForwardForce = ConfigMan.BaseJumpForwardForce * ConfigMan.GetJumpForwardForceMult(skillFactor);
-            float newStaminaUse = ConfigMan.BaseJumpStaminaUse * ConfigMan.GetJumpStaminaRedux(skillFactor);
-            float newTiredFactor = ConfigMan.BaseJumpTiredFactor + ConfigMan.GetJumpTiredMod(skillFactor);
+            float newJumpForce = CFG.BaseJumpForce * CFG.GetJumpForceMult(skillFactor);
+            float newJumpForwardForce = CFG.BaseJumpForwardForce * CFG.GetJumpForwardForceMult(skillFactor);
+            float newStaminaUse = CFG.BaseJumpStaminaUse * CFG.GetJumpStaminaRedux(skillFactor);
+            float newTiredFactor = CFG.BaseJumpTiredFactor + CFG.GetJumpTiredMod(skillFactor);
 
             newJumpForce /= vanillaJumpAddition; //Removing the vanilla calculations
             newJumpForwardForce /= vanillaJumpAddition; //Removing the vanilla calculations
@@ -128,24 +128,24 @@ namespace kingskills
         }
         public static void SwordUpdate(Player player)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Swords)) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.Swords)) return;
 
-            player.m_dodgeStaminaUsage = ConfigMan.BaseDodgeStaminaUsage *
-                ConfigMan.GetSwordDodgeStaminaRedux(player.GetSkillFactor(Skills.SkillType.Swords));
+            player.m_dodgeStaminaUsage = CFG.BaseDodgeStaminaUsage *
+                CFG.GetSwordDodgeStaminaRedux(player.GetSkillFactor(Skills.SkillType.Swords));
         }
         public static void SneakUpdate(Player player)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Sneak)) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.Sneak)) return;
 
-            player.m_crouchSpeed = ConfigMan.BaseCrouchSpeed *
-                ConfigMan.GetSneakSpeedMult(player.GetSkillFactor(Skills.SkillType.Sneak));
+            player.m_crouchSpeed = CFG.BaseCrouchSpeed *
+                CFG.GetSneakSpeedMult(player.GetSkillFactor(Skills.SkillType.Sneak));
         }
         public static void WoodcuttingUpdate(Player player)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.WoodCutting)) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.WoodCutting)) return;
 
-            player.m_staminaRegenDelay = ConfigMan.BaseStaminaRegenTimer -
-                ConfigMan.GetWoodcuttingRegenLessTime(player.GetSkillFactor(Skills.SkillType.WoodCutting));
+            player.m_staminaRegenDelay = CFG.BaseStaminaRegenTimer -
+                CFG.GetWoodcuttingRegenLessTime(player.GetSkillFactor(Skills.SkillType.WoodCutting));
         }
         public static void CheckMaxLevel(Player player)
         {
@@ -156,7 +156,7 @@ namespace kingskills
                 {
                     //No need to check if it's already ascended
                 }
-                else if (player.GetSkills().GetSkillLevel(skillAcension.Key) >= ConfigMan.MaxSkillLevel.Value)
+                else if (player.GetSkills().GetSkillLevel(skillAcension.Key) >= CFG.MaxSkillLevel.Value)
                 {
                     Perks.skillAscendedFlags[skillAcension.Key] = true;
                     Jotunn.Logger.LogMessage("Regular update found a maxed skill and set it to be ascended");
@@ -170,12 +170,12 @@ namespace kingskills
         [HarmonyPostfix]
         public static void GetMyMaxCarryWeight(Player __instance, ref float __result)
         {
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Axes))
-                __result += ConfigMan.GetAxeCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Axes));
-            if (ConfigMan.IsSkillActive(Skills.SkillType.WoodCutting))
-                __result += ConfigMan.GetWoodcuttingCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.WoodCutting));
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Pickaxes))
-                __result += ConfigMan.GetMiningCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Pickaxes));
+            if (CFG.IsSkillActive(Skills.SkillType.Axes))
+                __result += CFG.GetAxeCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Axes));
+            if (CFG.IsSkillActive(Skills.SkillType.WoodCutting))
+                __result += CFG.GetWoodcuttingCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.WoodCutting));
+            if (CFG.IsSkillActive(Skills.SkillType.Pickaxes))
+                __result += CFG.GetMiningCarryCapacity(__instance.GetSkillFactor(Skills.SkillType.Pickaxes));
         }
 
         [HarmonyPatch(nameof(Player.SetMaxStamina))]
@@ -184,10 +184,10 @@ namespace kingskills
         {
             //Jotunn.Logger.LogMessage($"tried to set max stamina to {stamina}...");
 
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Run))
-                stamina += ConfigMan.GetRunStamina(__instance.GetSkillFactor(Skills.SkillType.Run));
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Axes))
-                stamina += ConfigMan.GetAxeStamina(__instance.GetSkillFactor(Skills.SkillType.Axes));
+            if (CFG.IsSkillActive(Skills.SkillType.Run))
+                stamina += CFG.GetRunStamina(__instance.GetSkillFactor(Skills.SkillType.Run));
+            if (CFG.IsSkillActive(Skills.SkillType.Axes))
+                stamina += CFG.GetAxeStamina(__instance.GetSkillFactor(Skills.SkillType.Axes));
 
             //Jotunn.Logger.LogMessage($"Setting max stamina to {stamina} instead!");
         }
@@ -198,8 +198,8 @@ namespace kingskills
         {
             if (___m_foodRegenTimer == 0)
             {
-                ___m_foodRegenTimer = ConfigMan.BaseFoodHealTimer -
-                    ConfigMan.GetMiningRegenLessTime(__instance.GetSkillFactor(Skills.SkillType.Pickaxes));
+                ___m_foodRegenTimer = CFG.BaseFoodHealTimer -
+                    CFG.GetMiningRegenLessTime(__instance.GetSkillFactor(Skills.SkillType.Pickaxes));
             }
         }
 
@@ -208,11 +208,11 @@ namespace kingskills
         [HarmonyPrefix]
         public static void SetMyMaxHealth(Character __instance, ref float health)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Blocking)) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.Blocking)) return;
             if (!__instance.IsPlayer()) return;
 
             //Jotunn.Logger.LogMessage($"tried to set max health to {health}...");
-            health += ConfigMan.GetBlockHealth(__instance.GetSkillFactor(Skills.SkillType.Blocking));
+            health += CFG.GetBlockHealth(__instance.GetSkillFactor(Skills.SkillType.Blocking));
             //Jotunn.Logger.LogMessage($"Setting max health to {health} instead!");
         }
 

@@ -56,7 +56,7 @@ namespace kingskills
             {
                 if (ZInput.GetButtonDown(OpenSkillWindowBtn.Name))
                 {
-                    UpdateGUI.ToggleSkillGUI();
+                    SkillGUIUpdate.ToggleSkillGUI();
                 }
             }
 
@@ -65,7 +65,7 @@ namespace kingskills
 
         private void InitConfig()
         {
-            ConfigMan.Init(Config);
+            CFG.Init(Config);
         }
 
         private void AddInputs()

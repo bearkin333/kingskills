@@ -56,8 +56,8 @@ namespace kingskills.Overhauls
             float skillFactor = GetSkillFactor(Skills.SkillType.Jump);
 
             float fallThreshold = 4;
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Jump))
-                fallThreshold = ConfigMan.GetFallDamageThreshold(skillFactor);
+            if (CFG.IsSkillActive(Skills.SkillType.Jump))
+                fallThreshold = CFG.GetFallDamageThreshold(skillFactor);
 
 
             float expGained = 0f;
@@ -73,8 +73,8 @@ namespace kingskills.Overhauls
 
                     float fallDamage = (fallHeight - fallThreshold) * 8.33f;
 
-                    if (ConfigMan.IsSkillActive(Skills.SkillType.Jump))
-                        fallDamage *= ConfigMan.GetFallDamageRedux(skillFactor);
+                    if (CFG.IsSkillActive(Skills.SkillType.Jump))
+                        fallDamage *= CFG.GetFallDamageRedux(skillFactor);
 
                     hitData.m_damage.m_damage = fallDamage;
                     hitData.m_point = m_lastGroundPoint;
@@ -84,9 +84,9 @@ namespace kingskills.Overhauls
 
                 }
                 //Jotunn.Logger.LogMessage("Jump exp just increased by " + expGained + " thanks to fall damage");
-                if (ConfigMan.IsSkillActive(Skills.SkillType.Jump) && expGained > 0)
+                if (CFG.IsSkillActive(Skills.SkillType.Jump) && expGained > 0)
                 {
-                    expGained *= ConfigMan.GetJumpXPMod();
+                    expGained *= CFG.GetJumpXPMod();
                     RaiseSkill(Skills.SkillType.Jump, expGained);
                 }
             }

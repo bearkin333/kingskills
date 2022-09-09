@@ -55,10 +55,10 @@ perks:
 
             //I only run this update once every few seconds, to save on computing power
             controlTimer += dt;
-            if (controlTimer < ConfigMan.SailControlTimer.Value)
+            if (controlTimer < CFG.SailControlTimer.Value)
                 return;
 
-            controlTimer -= ConfigMan.SailControlTimer.Value;
+            controlTimer -= CFG.SailControlTimer.Value;
 
             ZDO zdo = __instance?.m_nview?.GetZDO();
             if (zdo == null) return;
@@ -78,8 +78,8 @@ perks:
             }
             float skill = player.GetSkillFactor(SkillMan.Sailing);
 
-            __instance.m_rudderSpeed = baseRudderSpeed * ConfigMan.GetSailRudderSpeedMult(skill);
-            __instance.m_backwardForce = basePaddleSpeed * ConfigMan.GetSailPaddleSpeedMult(skill);
+            __instance.m_rudderSpeed = baseRudderSpeed * CFG.GetSailRudderSpeedMult(skill);
+            __instance.m_backwardForce = basePaddleSpeed * CFG.GetSailPaddleSpeedMult(skill);
         }
 
 
@@ -93,26 +93,26 @@ perks:
 
             if (player.GetControlledShip() == ship)
             {
-                expBounty = ConfigMan.SailXPCaptainBase.Value;
-                float capBounty = Mathf.Abs(ship.GetSpeed()) * ConfigMan.SailXPSpeedMod.Value;
-                capBounty *= ConfigMan.GetSailXPWindMult(ship.GetWindAngleFactor());
+                expBounty = CFG.SailXPCaptainBase.Value;
+                float capBounty = Mathf.Abs(ship.GetSpeed()) * CFG.SailXPSpeedMod.Value;
+                capBounty *= CFG.GetSailXPWindMult(ship.GetWindAngleFactor());
                 expBounty += capBounty;
 
             }
             else
             {
-                expBounty = ConfigMan.SailXPCrewBase.Value;
+                expBounty = CFG.SailXPCrewBase.Value;
             }
 
-            expBounty *= ConfigMan.GetSailXPTierMult(ship);
-            expBounty *= ConfigMan.GetSailXPCrewMult(ship.m_players.Count);
+            expBounty *= CFG.GetSailXPTierMult(ship);
+            expBounty *= CFG.GetSailXPCrewMult(ship.m_players.Count);
 
             expTimer += dt;
             //Jotunn.Logger.LogMessage($"{expTimer} < {ConfigMan.SailXPTimerLength.Value}");
 
-            if (expTimer >= ConfigMan.SailXPTimerLength.Value)
+            if (expTimer >= CFG.SailXPTimerLength.Value)
             {
-                expTimer -= ConfigMan.SailXPTimerLength.Value;
+                expTimer -= CFG.SailXPTimerLength.Value;
 
                 player.RaiseSkill(SkillMan.Sailing, expBounty);
             }
@@ -126,7 +126,7 @@ perks:
             Player player = Player.m_localPlayer;
             if (!IsCaptain(__instance)) return;
 
-            __result *= ConfigMan.GetSailSpeedMult(player.GetSkillFactor(SkillMan.Sailing));
+            __result *= CFG.GetSailSpeedMult(player.GetSkillFactor(SkillMan.Sailing));
         }
 
 
@@ -140,7 +140,7 @@ perks:
             Vector3 desiredWindDir = __instance.transform.forward;
             Vector3 windDir = EnvMan.instance.GetWindDir();
             Vector3 newResult = Vector3.Lerp(windDir, desiredWindDir,
-                ConfigMan.GetSailWindNudgeMod(player.GetSkillFactor(SkillMan.Sailing)));
+                CFG.GetSailWindNudgeMod(player.GetSkillFactor(SkillMan.Sailing)));
 
             //No clue if this will work
             __result = Utils.YawFromDirection(__instance.transform.InverseTransformDirection(newResult));
@@ -158,7 +158,7 @@ perks:
             //I just know it works
             float windAngleDif = Vector3.Dot(EnvMan.instance.GetWindDir(), -__instance.transform.forward);
             windAngleDif = Mathf.Clamp01(windAngleDif + 
-                ConfigMan.GetSailWindNudgeMod(player.GetSkillFactor(SkillMan.Sailing)));
+                CFG.GetSailWindNudgeMod(player.GetSkillFactor(SkillMan.Sailing)));
 
             float magicPowers = Mathf.Lerp(0.7f, 1f, 1f - Mathf.Abs(windAngleDif));
             float mysticPowers = 1f - Utils.LerpStep(0.75f, 0.8f, windAngleDif);
@@ -187,7 +187,7 @@ perks:
             Player player = Player.m_localPlayer;
             if (player.GetStandingOnShip())
             {
-                radius += ConfigMan.GetSailExploreRange(player.GetSkillFactor(SkillMan.Sailing));
+                radius += CFG.GetSailExploreRange(player.GetSkillFactor(SkillMan.Sailing));
             }
         }
     }
@@ -203,7 +203,7 @@ perks:
             Player player = Player.m_localPlayer;
             if (!ship || !ship.IsPlayerInBoat(player)) return;
 
-            hit.m_damage.Modify(ConfigMan.GetSailDamageRedux(player.GetSkillFactor(SkillMan.Sailing)));
+            hit.m_damage.Modify(CFG.GetSailDamageRedux(player.GetSkillFactor(SkillMan.Sailing)));
         }
     }
 
@@ -215,16 +215,16 @@ perks:
         public static bool YouMayNotPass(ShipControlls __instance)
         {
             Player player = Player.m_localPlayer;
-            float skillLevel = player.GetSkillFactor(SkillMan.Sailing)*ConfigMan.MaxSkillLevel.Value;
-            float skillRQ = ConfigMan.GetSailShipLevelRQ(__instance.m_ship);
+            float skillLevel = player.GetSkillFactor(SkillMan.Sailing)*CFG.MaxSkillLevel.Value;
+            float skillRQ = CFG.GetSailShipLevelRQ(__instance.m_ship);
             //Jotunn.Logger.LogMessage($"{skillLevel} out of {skillRQ}");
 
             if (skillLevel >= skillRQ)
                 return true;
 
             Player.m_localPlayer.Message(MessageHud.MessageType.Center, 
-                "Your sailing skill is too low. You need <color=red>" + skillRQ.ToString("F0") + 
-                " sailing</color> to commandeer this vessel!");
+                $"Your sailing skill is too low. You need {CFG.ColorPTRedFF}" + skillRQ.ToString("F0") + 
+                $" sailing{CFG.ColorEnd} to commandeer this vessel!");
             return false;
         }
     }

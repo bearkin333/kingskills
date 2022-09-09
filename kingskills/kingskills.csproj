@@ -99,7 +99,8 @@
     <Compile Include="Overhauls\KSSneak.cs" />
     <Compile Include="Util\CustomTextMan.cs" />
     <Compile Include="Util\SaveFoodQuality.cs" />
-    <Compile Include="Util\StackablePatch.cs" />
+    <Compile Include="Util\StackableItems.cs" />
+    <Compile Include="UX\CombineGUI.cs" />
     <Compile Include="UX\PT.cs" />
     <Compile Include="UX\SkillGUIData.cs" />
     <Compile Include="Weapons\WeaponBonusExperience.cs" />
@@ -110,13 +111,13 @@
     <Compile Include="Perks\SaveLoad.cs" />
     <Compile Include="Util\Utilities.cs" />
     <Compile Include="Util\TestCommands.cs" />
-    <Compile Include="Util\ConfigMan.cs" />
+    <Compile Include="Util\CFG.cs" />
     <Compile Include="Patches\ProjectilePatch.cs" />
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
     <Compile Include="kingskills.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UX\PerkTooltipGUI.cs" />
-    <Compile Include="UX\UpdateGUI.cs" />
+    <Compile Include="UX\SkillGUIUpdate.cs" />
     <Compile Include="UX\LearnConfirmationGUI.cs" />
     <Compile Include="Perks\OpenPerks.cs" />
     <Compile Include="UX\SkillGUI.cs" />

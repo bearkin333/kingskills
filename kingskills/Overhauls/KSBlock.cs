@@ -82,11 +82,11 @@ namespace kingskills
 
         private static void UseBlockStamina(Humanoid __instance, float stamina)
         {
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Blocking))
+            if (CFG.IsSkillActive(Skills.SkillType.Blocking))
             {
                 float skillFactor = __instance.GetSkillFactor(Skills.SkillType.Blocking);
                 //Jotunn.Logger.LogMessage($"Stamina before redux is {stamina}");
-                stamina *= ConfigMan.GetBlockStaminaRedux(skillFactor);
+                stamina *= CFG.GetBlockStaminaRedux(skillFactor);
                 //Jotunn.Logger.LogMessage($"Stamina after redux is {stamina}");
             }
             __instance.UseStamina(stamina);
@@ -98,20 +98,20 @@ namespace kingskills
             hit.BlockDamage(damage);
             float expValue = 1f;
 
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Blocking)) 
+            if (CFG.IsSkillActive(Skills.SkillType.Blocking)) 
             {
-                expValue *= damage * ConfigMan.GetBlockExpMult();
+                expValue *= damage * CFG.GetBlockExpMult();
 
                 if (isParry)
                 {
-                    expValue *= ConfigMan.GetBlockParryExpMult();
+                    expValue *= CFG.GetBlockParryExpMult();
                 }
             }
 
             __instance.RaiseSkill(Skills.SkillType.Blocking, expValue);
 
             if (__instance.GetCurrentBlocker() == __instance.m_unarmedWeapon.m_itemData)
-                LevelUp.BXP(__instance as Player, Skills.SkillType.Unarmed, ConfigMan.WeaponBXPUnarmedBlock.Value);
+                LevelUp.BXP(__instance as Player, Skills.SkillType.Unarmed, CFG.WeaponBXPUnarmedBlock.Value);
         }
 
         private static float FixBlockPower(
@@ -127,42 +127,42 @@ namespace kingskills
             float baseBlockPower = currentBlocker.GetBaseBlockPower();
 
             //The flat block from blocking skill
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Blocking))
-                baseBlockPower += ConfigMan.GetBlockPowerFlat(skillFactor);
+            if (CFG.IsSkillActive(Skills.SkillType.Blocking))
+                baseBlockPower += CFG.GetBlockPowerFlat(skillFactor);
 
             //The flat block armor bonus from spears
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Spears))
+            if (CFG.IsSkillActive(Skills.SkillType.Spears))
                 baseBlockPower +=
-                    ConfigMan.GetSpearBlockArmor(instance.GetSkillFactor(Skills.SkillType.Spears));
+                    CFG.GetSpearBlockArmor(instance.GetSkillFactor(Skills.SkillType.Spears));
 
             //The flat bonus for an unarmed block
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Unarmed) && 
+            if (CFG.IsSkillActive(Skills.SkillType.Unarmed) && 
                 currentBlocker == instance.m_unarmedWeapon.m_itemData)
                 baseBlockPower += 
-                    ConfigMan.GetFistBlockArmor(instance.GetSkillFactor(Skills.SkillType.Unarmed));
+                    CFG.GetFistBlockArmor(instance.GetSkillFactor(Skills.SkillType.Unarmed));
 
             //The flat bonus for a polearm block
-            else if (ConfigMan.IsSkillActive(Skills.SkillType.Polearms) && 
+            else if (CFG.IsSkillActive(Skills.SkillType.Polearms) && 
                 currentBlocker.m_shared.m_skillType == Skills.SkillType.Polearms)
                 baseBlockPower +=
-                    ConfigMan.GetPolearmBlock(instance.GetSkillFactor(Skills.SkillType.Polearms));
+                    CFG.GetPolearmBlock(instance.GetSkillFactor(Skills.SkillType.Polearms));
 
             float blockPower = baseBlockPower;
 
             //Skill bonus for block level
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Blocking))
-                blockPower *= ConfigMan.GetBlockPowerMult(skillFactor);
+            if (CFG.IsSkillActive(Skills.SkillType.Blocking))
+                blockPower *= CFG.GetBlockPowerMult(skillFactor);
             //Otherwise, we have to use base numbers
             else
             {
-                blockPower *= ConfigMan.GetVanillaBlockMult(skillFactor);
+                blockPower *= CFG.GetVanillaBlockMult(skillFactor);
             }
 
             //Here's the additional bonus to sword parry
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Swords) && isParry)
+            if (CFG.IsSkillActive(Skills.SkillType.Swords) && isParry)
             { 
                 blockPower *= 
-                    ConfigMan.GetSwordParryMult(instance.GetSkillFactor(Skills.SkillType.Swords));
+                    CFG.GetSwordParryMult(instance.GetSkillFactor(Skills.SkillType.Swords));
             }
 
             return blockPower;

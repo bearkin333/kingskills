@@ -73,7 +73,7 @@ namespace kingskills
             if (staggerFlag)
             {
                 if (Util.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
-                    LevelUp.BXP(playerRef, Skills.SkillType.Clubs, ConfigMan.WeaponBXPClubStagger.Value);
+                    LevelUp.BXP(playerRef, Skills.SkillType.Clubs, CFG.WeaponBXPClubStagger.Value);
                         
                 staggerFlag = false;
             }
@@ -82,13 +82,13 @@ namespace kingskills
         private static void OnStaggerHurt(Player attacker)
         {
             if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
-                LevelUp.BXP(attacker, Skills.SkillType.Swords, ConfigMan.WeaponBXPSwordStagger.Value);
+                LevelUp.BXP(attacker, Skills.SkillType.Swords, CFG.WeaponBXPSwordStagger.Value);
         }
 
         private static void OnBackstab(Player attacker)
         {
             if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
-                LevelUp.BXP(attacker, Skills.SkillType.Swords, ConfigMan.WeaponBXPKnifeBackstab.Value);
+                LevelUp.BXP(attacker, Skills.SkillType.Swords, CFG.WeaponBXPKnifeBackstab.Value);
         }
     }
 
@@ -99,30 +99,30 @@ namespace kingskills
         [HarmonyPrefix]
         public static void TreeLogDestroyPatch(TreeLog __instance)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Axes)) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.Axes)) return;
 
             //Jotunn.Logger.LogMessage($"This log is killed. Closest player's getting the exp");
             Player closestPlayer = Player.GetClosestPlayer(__instance.m_body.transform.position, 
-                ConfigMan.WeaponBXPAxeRange.Value);
+                CFG.WeaponBXPAxeRange.Value);
 
             if (closestPlayer != null)
                 if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
-                    LevelUp.BXP(closestPlayer, Skills.SkillType.Axes, ConfigMan.WeaponBXPAxeTreeAmount.Value);
+                    LevelUp.BXP(closestPlayer, Skills.SkillType.Axes, CFG.WeaponBXPAxeTreeAmount.Value);
         }
 
         [HarmonyPatch(typeof(Destructible),nameof(Destructible.Destroy))]
         [HarmonyPrefix]
         public static void StubDestroyPatch(Destructible __instance)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.WoodCutting)) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.WoodCutting)) return;
             if (!__instance.gameObject.name.Contains("Stub")) return;
 
             Player closestPlayer = Player.GetClosestPlayer(__instance.gameObject.transform.position, 
-                ConfigMan.WeaponBXPAxeRange.Value);
+                CFG.WeaponBXPAxeRange.Value);
 
             if (closestPlayer != null)
                 if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
-                    LevelUp.BXP(closestPlayer, Skills.SkillType.WoodCutting, ConfigMan.ToolBXPWoodStubReward.Value);
+                    LevelUp.BXP(closestPlayer, Skills.SkillType.WoodCutting, CFG.ToolBXPWoodStubReward.Value);
         }
     }
 }

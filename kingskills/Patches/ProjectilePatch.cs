@@ -32,19 +32,19 @@ namespace kingskills
             if (__instance.m_owner.GetZDOID() == playerRef.GetZDOID())
             {
                     
-                if (ConfigMan.IsSkillActive(Skills.SkillType.Bows) &&
+                if (CFG.IsSkillActive(Skills.SkillType.Bows) &&
                     __instance.m_skill == Skills.SkillType.Bows)
                 {
                     __instance.m_vel *=
-                        ConfigMan.GetBowVelocityMult(playerRef.GetSkillFactor(Skills.SkillType.Bows));
+                        CFG.GetBowVelocityMult(playerRef.GetSkillFactor(Skills.SkillType.Bows));
                 }
-                else if (ConfigMan.IsSkillActive(Skills.SkillType.Spears) &&
+                else if (CFG.IsSkillActive(Skills.SkillType.Spears) &&
                     __instance.m_skill == Skills.SkillType.Spears)
                 {
                     __instance.m_damage.Modify(
-                        ConfigMan.GetSpearProjectileDamageMult(playerRef.GetSkillFactor(Skills.SkillType.Spears)));
+                        CFG.GetSpearProjectileDamageMult(playerRef.GetSkillFactor(Skills.SkillType.Spears)));
                     __instance.m_vel *=
-                        ConfigMan.GetSpearVelocityMult(playerRef.GetSkillFactor(Skills.SkillType.Spears));
+                        CFG.GetSpearVelocityMult(playerRef.GetSkillFactor(Skills.SkillType.Spears));
                 }
             }
         }
@@ -86,11 +86,11 @@ namespace kingskills
                 Jotunn.Logger.LogMessage($"That projectile travelled {distanceTravelled} units");
 
             if (skill == Skills.SkillType.Spears)
-                LevelUp.BXP(player as Player, Skills.SkillType.Spears, ConfigMan.WeaponBXPSpearThrown.Value);
+                LevelUp.BXP(player as Player, Skills.SkillType.Spears, CFG.WeaponBXPSpearThrown.Value);
 
             else if (skill == Skills.SkillType.Bows)
                 LevelUp.BXP(player as Player, Skills.SkillType.Bows, 
-                    distanceTravelled * ConfigMan.GetWeaponBXPBowDistanceMult());
+                    distanceTravelled * CFG.GetWeaponBXPBowDistanceMult());
         }
     }
 }

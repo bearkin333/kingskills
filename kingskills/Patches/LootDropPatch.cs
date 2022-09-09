@@ -30,16 +30,16 @@ namespace kingskills.Patches
             float mineSkill = playerRef.GetSkillFactor(Skills.SkillType.Pickaxes);
             float bowSkill = playerRef.GetSkillFactor(Skills.SkillType.Bows);
 
-            float woodDropRate = ConfigMan.GetWoodDropMod(woodSkill);
-            float mineDropRate = ConfigMan.GetMiningDropMod(mineSkill);
-            float bowDropRate = ConfigMan.GetBowDropRateMod(bowSkill);
+            float woodDropRate = CFG.GetWoodDropMod(woodSkill);
+            float mineDropRate = CFG.GetMiningDropMod(mineSkill);
+            float bowDropRate = CFG.GetBowDropRateMod(bowSkill);
 
             Dictionary<string, float> woodDrops
-                = new Dictionary<string, float>(ConfigMan.WoodcuttingDropTable);
+                = new Dictionary<string, float>(CFG.WoodcuttingDropTable);
             Dictionary<string, float> mineDrops
-                = new Dictionary<string, float>(ConfigMan.MiningDropTable);
+                = new Dictionary<string, float>(CFG.MiningDropTable);
             Dictionary<string, float> bowDrops
-                = new Dictionary<string, float>(ConfigMan.BowDropTable);
+                = new Dictionary<string, float>(CFG.BowDropTable);
 
             bool lastResult = false;
             int i = 0;
@@ -55,18 +55,18 @@ namespace kingskills.Patches
                 //Jotunn.Logger.LogMessage($"list entry {i}: Drop is called {drop.name}");
 
                 //Jotunn.Logger.LogMessage("Checking for wood drops..");
-                if (ConfigMan.IsSkillActive(Skills.SkillType.WoodCutting))
-                    dropChecker(ConfigMan.WoodcuttingDropTable, ref woodDrops,
+                if (CFG.IsSkillActive(Skills.SkillType.WoodCutting))
+                    dropChecker(CFG.WoodcuttingDropTable, ref woodDrops,
                         woodDropRate, drop, ref newDrops, lastResult);
 
                 //Jotunn.Logger.LogMessage("Checking for mine drops..");
-                if (ConfigMan.IsSkillActive(Skills.SkillType.Pickaxes))
-                    dropChecker(ConfigMan.MiningDropTable, ref mineDrops,
+                if (CFG.IsSkillActive(Skills.SkillType.Pickaxes))
+                    dropChecker(CFG.MiningDropTable, ref mineDrops,
                         mineDropRate, drop, ref newDrops, lastResult);
 
                 //Jotunn.Logger.LogMessage("Checking for bow drops..");
-                if (ConfigMan.IsSkillActive(Skills.SkillType.Bows))
-                    dropChecker(ConfigMan.BowDropTable, ref bowDrops,
+                if (CFG.IsSkillActive(Skills.SkillType.Bows))
+                    dropChecker(CFG.BowDropTable, ref bowDrops,
                         bowDropRate, drop, ref newDrops, lastResult);
 
                 i++;
@@ -103,7 +103,7 @@ namespace kingskills.Patches
                         //Jotunn.Logger.LogMessage($"Now that I've made all those, it should be {dropBonus}");
                     }
                     if (lastResult &&
-                        dropBonus >= ConfigMan.GetDropItemThreshold())
+                        dropBonus >= CFG.GetDropItemThreshold())
                     {
                         newDrops.Add(drop);
                     }

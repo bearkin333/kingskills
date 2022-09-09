@@ -15,7 +15,7 @@ namespace kingskills.Patches
         public static bool StaminaUsePatch(Attack __instance, ref float __result)
         {
             Skills.SkillType skillT = __instance.m_weapon.m_shared.m_skillType;
-            if (!ConfigMan.IsSkillActive(skillT)) return true;
+            if (!CFG.IsSkillActive(skillT)) return true;
 
             float stamina = __instance.m_attackStamina;
             float skillFactor = __instance.m_character.GetSkillFactor(skillT);
@@ -31,31 +31,31 @@ namespace kingskills.Patches
             {
                 case Skills.SkillType.Swords:
                     stamina *=
-                        ConfigMan.GetSwordStaminaRedux(skillFactor);
+                        CFG.GetSwordStaminaRedux(skillFactor);
                     break;
                 case Skills.SkillType.Unarmed:
                     stamina *=
-                        ConfigMan.GetFistStaminaRedux(skillFactor);
+                        CFG.GetFistStaminaRedux(skillFactor);
                     break;
                 case Skills.SkillType.Axes:
                     stamina *=
-                        ConfigMan.GetAxeStaminaRedux(skillFactor);
+                        CFG.GetAxeStaminaRedux(skillFactor);
                     break;
                 case Skills.SkillType.Bows:
                     stamina *=
-                        ConfigMan.GetBowStaminaRedux(skillFactor);
+                        CFG.GetBowStaminaRedux(skillFactor);
                     break;
                 case Skills.SkillType.Clubs:
                     stamina *=
-                        ConfigMan.GetClubStaminaRedux(skillFactor);
+                        CFG.GetClubStaminaRedux(skillFactor);
                     break;
                 case Skills.SkillType.Knives:
                     stamina *=
-                        ConfigMan.GetKnifeStaminaRedux(skillFactor);
+                        CFG.GetKnifeStaminaRedux(skillFactor);
                     break;
                 case Skills.SkillType.Polearms:
                     stamina *=
-                        ConfigMan.GetPolearmStaminaRedux(skillFactor);
+                        CFG.GetPolearmStaminaRedux(skillFactor);
                     break;
             }
 
@@ -72,7 +72,7 @@ namespace kingskills.Patches
         public static bool StaminaHoldPatch(ItemDrop.ItemData __instance, ref float __result)
         {
             Skills.SkillType skillT = __instance.m_shared.m_skillType;
-            if (!ConfigMan.IsSkillActive(skillT)) return true;
+            if (!CFG.IsSkillActive(skillT)) return true;
 
             float stamina = __instance.m_shared.m_holdStaminaDrain;
             float skillFactor = Player.m_localPlayer.GetSkillFactor(skillT);
@@ -82,7 +82,7 @@ namespace kingskills.Patches
 
             if (skillT == Skills.SkillType.Bows)
                 stamina *=
-                    ConfigMan.GetBowStaminaRedux(skillFactor);
+                    CFG.GetBowStaminaRedux(skillFactor);
 
             //Jotunn.Logger.LogMessage($"But we end up turning it into {stamina }"); 
 

@@ -8,7 +8,9 @@ using UnityEngine;
 
 namespace kingskills
 {
-    class ConfigMan
+    //ConfigManager. I saved over 3,000 characters across the entire
+    //mod by shortening the name, so... oh well. Makes things more readable.
+    class CFG
     {
         /*
          * Generalized language:
@@ -40,12 +42,6 @@ namespace kingskills
         //Variables and constants for use that aren't configurable
         public static Dictionary<Skills.SkillType, bool> SkillActive = new Dictionary<Skills.SkillType, bool>();
 
-        public static Color ColorBonusBlue;
-        public static Color ColorAscendedGreen;
-        public static Color ColorExperienceYellow;
-        public static Color ColorTitle;
-        public static Color ColorWhite;
-        public static Color ColorKingSkills;
 
         //These are the base stats already in valheim
         public const float BaseSwimSpeed = 2f;
@@ -140,6 +136,27 @@ namespace kingskills
         public static ConfigEntry<float> XPTextValueMin;
         public static ConfigEntry<float> XPTextValueMax;
         public static ConfigEntry<float> XPTextCurveFactor;
+
+        public static Color ColorBonusBlue;
+        public static Color ColorAscendedGreen;
+        public static Color ColorExperienceYellow;
+        public static Color ColorTitle;
+        public static Color ColorWhite;
+        public static Color ColorKingSkills;
+
+        public static string ColorBonusBlueFF = "<color=#33E0EDFF>";
+        public static string ColorAscendedGreenFF = "<color=#73EA52FF>";
+        public static string ColorExperienceYellowFF = "<color=#FAF53BFF>";
+        public static string ColorTitleFF = "<color=#FAF56EFF>";
+        public static string ColorWhiteFF = "<color=#FFFFFFFF>";
+        public static string ColorKingSkillsFF = "<color=#C43BFDFF>";
+
+        public const string ColorPTGreenFF = "<color=#7AF365FF>";
+        public const string ColorPTRedFF = "<color=#EA0C0CFF>";
+        public const string ColorPTWhiteFF = "<color=#FEFDF5FF>";
+
+        public const string ColorEnd = "{CFG.ColorEnd}";
+
         #endregion configdef
 
         public static void InitGenericConfigs(ConfigFile cfg)
@@ -302,7 +319,7 @@ namespace kingskills
         }
         public static float GetAxeStamina(float skillFactor)
         {
-            return AxeStaminaPerLevel.Value * skillFactor * ConfigMan.MaxSkillLevel.Value;
+            return AxeStaminaPerLevel.Value * skillFactor * CFG.MaxSkillLevel.Value;
         }
         public static float GetAxeCarryCapacity(float skillFactor)
         {
@@ -1299,10 +1316,9 @@ namespace kingskills
 
         public static Dictionary<string, float> CookingStationTiers;
 
-        public const string CookHealthColor = "<color=#F9582EFF>";
-        public const string CookStaminaColor = "<color=#F9DE2EFF>";
-        public const string CookDurationColor = "<color=#E9E9E9ff>";
-        public const string EndColor = "</color>";
+        public const string ColorCookHealthFF = "<color=#F9582EFF>";
+        public const string ColorCookStaminaFF = "<color=#F9DE2EFF>";
+        public const string ColorCookDurationFF = "<color=#E9E9E9ff>";
         #endregion configdef
 
         private static void InitCookConfig(ConfigFile cfg)
@@ -1335,7 +1351,7 @@ namespace kingskills
                     "% range of possible food quality values at level 0");
             CookingFQRangeMax = cfg.Bind("Cooking.Effect", "FQ Range Max", 10f,
                     "% range of possible food quality values at level 100");
-            CookingFQRangeTimingPercent = cfg.Bind("Cooking.Effect", "FQ Range From Timing", 30f,
+            CookingFQRangeTimingPercent = cfg.Bind("Cooking.Effect", "FQ Range From Timing", 50f,
                     "% of the range that can be controlled with timing. the rest is random based on skill level");
             CookingTimeReduxMin = cfg.Bind("Cooking.Effect", "Time Redux Min", -20f,
                     "% reduction in cooking times at level 0");

@@ -68,7 +68,7 @@ namespace kingskills.UX
             Perks.perkFlags.Add(openedPerks[perk].type, true);
 
             UpdateLearnables();
-            UpdateGUI.GUICheck();
+            SkillGUIUpdate.GUICheck();
         }
 
 
@@ -115,13 +115,13 @@ namespace kingskills.UX
             {
                 if (result.gameObject.GetComponent<IsPerkBox>() != null)
                 {
-                    if (result.gameObject == SkillGUI.RightPanelPerkBoxes["1a"])
+                    if (result.gameObject == SkillGUI.RPPerkBoxes["1a"])
                         return GetPerkKeyFromBox(0);
-                    else if (result.gameObject == SkillGUI.RightPanelPerkBoxes["1b"])
+                    else if (result.gameObject == SkillGUI.RPPerkBoxes["1b"])
                         return GetPerkKeyFromBox(1);
-                    else if (result.gameObject == SkillGUI.RightPanelPerkBoxes["2a"])
+                    else if (result.gameObject == SkillGUI.RPPerkBoxes["2a"])
                         return GetPerkKeyFromBox(2);
-                    else if (result.gameObject == SkillGUI.RightPanelPerkBoxes["2b"])
+                    else if (result.gameObject == SkillGUI.RPPerkBoxes["2b"])
                         return GetPerkKeyFromBox(3);
                 }
             }
@@ -163,10 +163,10 @@ namespace kingskills.UX
             perkLocked.Add(false);
             perkLocked.Add(false);
 
-            SetPerkBox(0, "1a", ConfigMan.PerkOneLVLThreshold.Value);
-            SetPerkBox(1, "1b", ConfigMan.PerkOneLVLThreshold.Value);
-            SetPerkBox(2, "2a", ConfigMan.PerkTwoLVLThreshold.Value);
-            SetPerkBox(3, "2b", ConfigMan.PerkTwoLVLThreshold.Value);
+            SetPerkBox(0, "1a", CFG.PerkOneLVLThreshold.Value);
+            SetPerkBox(1, "1b", CFG.PerkOneLVLThreshold.Value);
+            SetPerkBox(2, "2a", CFG.PerkTwoLVLThreshold.Value);
+            SetPerkBox(3, "2b", CFG.PerkTwoLVLThreshold.Value);
 
             UpdateLearnables();
         }
@@ -174,15 +174,15 @@ namespace kingskills.UX
 
         public static void SetPerkBox(int perk, string perkBoxString, float skillThreshold)
         {
-            GameObject perkSprite = SkillGUI.RightPanelPerkBoxes[perkBoxString + "Perk"];
+            GameObject perkSprite = SkillGUI.RPPerkBoxes[perkBoxString + "Perk"];
             Image perkImage = perkSprite.GetComponent<Image>();
-            GameObject tint = SkillGUI.RightPanelPerkBoxes[perkBoxString + "Tint"];
+            GameObject tint = SkillGUI.RPPerkBoxes[perkBoxString + "Tint"];
             Image tintImg = tint.GetComponent<Image>();
 
             //Jotunn.Logger.LogMessage($"skill vs threshold: {skillLevel} < {skillThreshold}");
 
-            if (Mathf.Floor(skillLevel * ConfigMan.MaxSkillLevel.Value) < 
-                Mathf.Floor(skillThreshold * ConfigMan.MaxSkillLevel.Value))
+            if (Mathf.Floor(skillLevel * CFG.MaxSkillLevel.Value) < 
+                Mathf.Floor(skillThreshold * CFG.MaxSkillLevel.Value))
             {
                 //Jotunn.Logger.LogMessage($"too low. setting locked for perk {perk}");
                 //If the player isn't high enough level to see them, they are always locked
@@ -193,7 +193,7 @@ namespace kingskills.UX
                 tintImg.enabled = false;
 
                 //And the parent perkbox will also show as locked
-                SkillGUI.RightPanelPerkBoxes[perkBoxString].GetComponent<Image>().sprite =
+                SkillGUI.RPPerkBoxes[perkBoxString].GetComponent<Image>().sprite =
                     Assets.AssetLoader.perkBoxSprites["perkboxLocked"];
             }
             else
@@ -207,7 +207,7 @@ namespace kingskills.UX
                 perkImage.enabled = true;
 
 
-                SkillGUI.RightPanelPerkBoxes[perkBoxString].GetComponent<Image>().sprite =
+                SkillGUI.RPPerkBoxes[perkBoxString].GetComponent<Image>().sprite =
                     Assets.AssetLoader.perkBoxSprites["perkbox"];
 
                 //If it's learned, it has no tint, and isn't clickable.

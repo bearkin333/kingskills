@@ -26,12 +26,12 @@ namespace kingskills.WeaponExperience
 
                 float damage_xp = 1f;
 
-                if (ConfigMan.IsSkillActive(hit.m_skill))
+                if (CFG.IsSkillActive(hit.m_skill))
                 {
                     if (tool)
-                        damage_xp = ConfigMan.GetToolDamageToExperience(damage);
+                        damage_xp = CFG.GetToolDamageToExperience(damage);
                     else
-                        damage_xp = ConfigMan.GetWeaponDamageToExperience(damage);
+                        damage_xp = CFG.GetWeaponDamageToExperience(damage);
                 }
                 
                 float final_xp = damage_xp * mod;
@@ -42,13 +42,13 @@ namespace kingskills.WeaponExperience
 
         public static void Swing(Player p, Skills.SkillType skill)
         {
-            if (!ConfigMan.IsSkillActive(skill)) return;
+            if (!CFG.IsSkillActive(skill)) return;
 
             //Jotunn.Logger.LogMessage($"Player swinging with {skill} for {ConfigManager.XpSwingRate} XP");
-            p.RaiseSkill(skill, ConfigMan.WeaponXPSwing.Value);
+            p.RaiseSkill(skill, CFG.WeaponXPSwing.Value);
 
             if (skill == Skills.SkillType.Axes)
-                p.RaiseSkill(Skills.SkillType.WoodCutting, ConfigMan.WeaponXPSwing.Value);
+                p.RaiseSkill(Skills.SkillType.WoodCutting, CFG.WeaponXPSwing.Value);
         }
     }
 
@@ -113,7 +113,7 @@ namespace kingskills.WeaponExperience
                 if (livingTarget)
                     factor = 1f;
                 else
-                    factor = ConfigMan.GetWeaponEXPStrikeDestructibleMod();
+                    factor = CFG.GetWeaponEXPStrikeDestructibleMod();
             }
 
 
@@ -166,7 +166,7 @@ namespace kingskills.WeaponExperience
                 last = null;
                 return;
             }
-            if (!ConfigMan.IsSkillActive(weapon.m_shared.m_skillType))
+            if (!CFG.IsSkillActive(weapon.m_shared.m_skillType))
             {
                 last = null;
                 return;
@@ -183,19 +183,19 @@ namespace kingskills.WeaponExperience
             else
             {
                 timer += dt;
-                if (timer >= ConfigMan.WeaponXPHoldTickLength.Value)
+                if (timer >= CFG.WeaponXPHoldTickLength.Value)
                 {
-                    float ticks = timer / ConfigMan.WeaponXPHoldTickLength.Value;
-                    float holdXp = ticks * ConfigMan.WeaponXPHoldPerTick.Value;
+                    float ticks = timer / CFG.WeaponXPHoldTickLength.Value;
+                    float holdXp = ticks * CFG.WeaponXPHoldPerTick.Value;
                     if (weapon == __instance.m_unarmedWeapon.m_itemData || 
                         weapon.m_shared.m_skillType == Skills.SkillType.Unarmed)
                     {
-                        holdXp *= ConfigMan.GetWeaponEXPHoldUnarmedMod();
+                        holdXp *= CFG.GetWeaponEXPHoldUnarmedMod();
                     }
                     Skills.SkillType skill = weapon.m_shared.m_skillType;
                     //Jotunn.Logger.LogMessage($"Holding {skill} for {timer}s, adding {holdXp} xp");
                     __instance.RaiseSkill(skill, holdXp);
-                    timer -= ticks * ConfigMan.WeaponXPHoldTickLength.Value;
+                    timer -= ticks * CFG.WeaponXPHoldTickLength.Value;
                 }
             }
         }

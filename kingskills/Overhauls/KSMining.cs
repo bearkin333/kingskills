@@ -18,7 +18,7 @@ namespace kingskills.Overhauls
 
             if (player != null)
             {
-                float edible = ConfigMan.GetMiningXPEatRock(item);
+                float edible = CFG.GetMiningXPEatRock(item);
 
                 if (edible <= 0) return true;
 

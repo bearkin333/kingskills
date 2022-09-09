@@ -17,13 +17,13 @@ namespace kingskills
         [HarmonyPrefix]
         public static bool GetRunSpeedPatch(Player __instance, ref float __result)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Run))
+            if (!CFG.IsSkillActive(Skills.SkillType.Run))
             {
                 return true;
             }
 
             //This function provides a number to multiply the base run speed by
-            float runSkillFactor = ConfigMan.GetRunSpeedMult(__instance.m_skills.GetSkillFactor(Skills.SkillType.Run));
+            float runSkillFactor = CFG.GetRunSpeedMult(__instance.m_skills.GetSkillFactor(Skills.SkillType.Run));
 
             float runSpeed = runSkillFactor * GetGenericMovespeedAdjustments(__instance);
             __result = runSpeed;
@@ -55,9 +55,9 @@ namespace kingskills
         public static bool UpdateEquipmentModOverride(Player __instance)
         {
             //Another override of the original with mostly copied code.
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Run)) return true;
+            if (!CFG.IsSkillActive(Skills.SkillType.Run)) return true;
 
-            float equipmentMalusRedux = ConfigMan.GetEquipmentRedux(__instance.GetSkillFactor(Skills.SkillType.Run));
+            float equipmentMalusRedux = CFG.GetEquipmentRedux(__instance.GetSkillFactor(Skills.SkillType.Run));
             float m;
 
             __instance.m_equipmentMovementModifier = 0;
@@ -119,11 +119,11 @@ namespace kingskills
         {
             float mod = 1f;
 
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Unarmed))
-                mod += ConfigMan.GetFistMovespeedMod(player.GetSkillFactor(Skills.SkillType.Unarmed));
+            if (CFG.IsSkillActive(Skills.SkillType.Unarmed))
+                mod += CFG.GetFistMovespeedMod(player.GetSkillFactor(Skills.SkillType.Unarmed));
 
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Run))
-                mod += ConfigMan.GetKnifeMovespeedMod(player.GetSkillFactor(Skills.SkillType.Knives));
+            if (CFG.IsSkillActive(Skills.SkillType.Run))
+                mod += CFG.GetKnifeMovespeedMod(player.GetSkillFactor(Skills.SkillType.Knives));
 
             return mod;
         }
@@ -133,12 +133,12 @@ namespace kingskills
         //
         public static float GetEncumberanceRedux(Player player)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Run)) return 1f;
+            if (!CFG.IsSkillActive(Skills.SkillType.Run)) return 1f;
 
             float skillFactor = player.GetSkillFactor(Skills.SkillType.Run);
             float encumberanceMod = Mathf.Clamp01(player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight());
-            float encumberanceCurved = ConfigMan.GetEncumberanceCurveRedux(encumberanceMod);
-            float skillEncumberanceRedux = ConfigMan.GetEncumberanceRedux(skillFactor);
+            float encumberanceCurved = CFG.GetEncumberanceCurveRedux(encumberanceMod);
+            float skillEncumberanceRedux = CFG.GetEncumberanceRedux(skillFactor);
             return encumberanceCurved * skillEncumberanceRedux;
         }
         public static float GetEquipmentMult(Player player)
@@ -149,27 +149,27 @@ namespace kingskills
         }
         public static float absoluteWeightBonus(Player player)
         {
-            float weightPercent = ConfigMan.GetAbsoluteWeightMod(player.m_inventory.GetTotalWeight());
-            return ConfigMan.GetAbsoluteWeightCurveMult(weightPercent);
+            float weightPercent = CFG.GetAbsoluteWeightMod(player.m_inventory.GetTotalWeight());
+            return CFG.GetAbsoluteWeightCurveMult(weightPercent);
         }
         public static float relativeWeightBonus(Player player)
         {
             float weightPercent = player.GetInventory().GetTotalWeight() / player.GetMaxCarryWeight();
-            return ConfigMan.GetRelativeWeightStageMult(weightPercent);
+            return CFG.GetRelativeWeightStageMult(weightPercent);
         }
         public static float runSpeedExpBonus(Player player)
         {
             float runMod = player.GetRunSpeedFactor();
             player.m_seman.ApplyStatusEffectSpeedMods(ref runMod);
 
-            return runMod * ConfigMan.GetRunEXPSpeedMult();
+            return runMod * CFG.GetRunEXPSpeedMult();
         }
         public static float swimSpeedExpBonus(Player player)
         {
             float swimMod = player.m_swimSpeed;
             player.m_seman.ApplyStatusEffectSpeedMods(ref swimMod);
 
-            return swimMod * ConfigMan.GetSwimXPSpeedMult();
+            return swimMod * CFG.GetSwimXPSpeedMult();
         }
     }
        

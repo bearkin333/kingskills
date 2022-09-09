@@ -23,7 +23,7 @@ namespace kingskills
             if (Perks.IsSkillAscended(skill))
                 __result = 1f;
             else
-                __result = Mathf.Clamp01(__instance.GetSkills().GetSkillLevel(skill) / ConfigMan.MaxSkillLevel.Value);
+                __result = Mathf.Clamp01(__instance.GetSkills().GetSkillLevel(skill) / CFG.MaxSkillLevel.Value);
 
             return false;
         }
@@ -51,13 +51,13 @@ namespace kingskills
             __instance.m_seman.ModifyRaiseSkill(skill, ref value);
 
 
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Run) && skill == Skills.SkillType.Run)
+            if (CFG.IsSkillActive(Skills.SkillType.Run) && skill == Skills.SkillType.Run)
             {
                 value *= MovePatch.absoluteWeightBonus(__instance);
                 value *= MovePatch.relativeWeightBonus(__instance);
                 value *= MovePatch.runSpeedExpBonus(__instance);
             }
-            else if (ConfigMan.IsSkillActive(Skills.SkillType.Swim) && skill == Skills.SkillType.Swim)
+            else if (CFG.IsSkillActive(Skills.SkillType.Swim) && skill == Skills.SkillType.Swim)
             {
                 value *= MovePatch.absoluteWeightBonus(__instance);
                 value *= MovePatch.relativeWeightBonus(__instance);
@@ -73,7 +73,7 @@ namespace kingskills
         }
 
         public static void BXP(Player player, Skills.SkillType skill, float number){
-            if (!ConfigMan.IsSkillActive(skill)) return;
+            if (!CFG.IsSkillActive(skill)) return;
 
             player.m_nview.GetZDO().Set("BXP", true);
 
@@ -85,7 +85,7 @@ namespace kingskills
 
         public static bool KingSkillRaise(Skills.Skill skill, Player player, float factor)
         {
-            if (skill.m_level >= ConfigMan.MaxSkillLevel.Value)
+            if (skill.m_level >= CFG.MaxSkillLevel.Value)
                 return false;
 
             float num = skill.m_info.m_increseStep * factor;
@@ -96,11 +96,11 @@ namespace kingskills
             while (skill.m_accumulator >= nextLevelRequirement)
             {
                 skill.m_level += 1f;
-                skill.m_level = Mathf.Clamp(skill.m_level, 0f, ConfigMan.MaxSkillLevel.Value);
+                skill.m_level = Mathf.Clamp(skill.m_level, 0f, CFG.MaxSkillLevel.Value);
                 LevelUpPing(player, skill);
 
                 skill.m_accumulator -= nextLevelRequirement;
-                if (skill.m_level >= ConfigMan.MaxSkillLevel.Value)
+                if (skill.m_level >= CFG.MaxSkillLevel.Value)
                 {
                     OnMaxLevel(skillT);
                     player.Message(MessageHud.MessageType.Center, "MAX LEVEL!");
@@ -110,15 +110,15 @@ namespace kingskills
                 nextLevelRequirement = skill.GetNextLevelRequirement();
             }
 
-            float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / ConfigMan.MaxSkillLevel.Value);
+            float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / CFG.MaxSkillLevel.Value);
 
             //Display the in-world text
-            if (factor >= ConfigMan.DisplayExperienceThreshold.Value)
+            if (factor >= CFG.DisplayExperienceThreshold.Value)
             {
                 Color msgColor;
                 string msgTxt;
                 Vector3 pos;
-                int textSize = ConfigMan.GetXPTextScaledSize(factor);
+                int textSize = CFG.GetXPTextScaledSize(factor);
 
                 //When we do bonus experience, we run through a function that automatically sets
                 //BXP to true. Using this, we can get information into this function - even though
@@ -127,7 +127,7 @@ namespace kingskills
                 {
                     msgTxt = "+" + factor.ToString("F1") + " BONUS EXPERIENCE!\n" +
                     skillT.ToString();
-                    msgColor = ConfigMan.ColorBonusBlue;
+                    msgColor = CFG.ColorBonusBlue;
                     pos = CustomWorldTextManager.GetInFrontOfCharacter(player) +
                         CustomWorldTextManager.GetRandomPosOffset();
                 }
@@ -135,11 +135,11 @@ namespace kingskills
                 {
                     msgTxt = "+" + factor.ToString("F1") + " experience\n" +
                     skillT.ToString();
-                    msgColor = ConfigMan.ColorExperienceYellow;
+                    msgColor = CFG.ColorExperienceYellow;
                     pos = CustomWorldTextManager.GetAboveCharacter(player) +
                         CustomWorldTextManager.GetRandomPosOffset();
                 }
-                if (skill.m_level < ConfigMan.MaxSkillLevel.Value)
+                if (skill.m_level < CFG.MaxSkillLevel.Value)
                     msgTxt += "\n" + percent.ToString("F0") + "% to level " + skill.m_level + 1;
 
                 CustomWorldTextManager.AddCustomWorldText(msgColor, pos, textSize, msgTxt);

@@ -34,7 +34,7 @@ namespace kingskills
             Building = SkillManager.Instance.GetSkill("bearking.kingskills.building").m_skill;
             Agriculture = SkillManager.Instance.GetSkill("bearking.kingskills.agriculture").m_skill;
 
-            ConfigMan.InitSkillActiveDict();
+            CFG.InitSkillActiveDict();
         }
 
         public static void UnDeepFryIcons(Skills skills)

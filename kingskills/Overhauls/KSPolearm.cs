@@ -15,12 +15,12 @@ namespace kingskills.Patches
         [HarmonyPostfix]
         public static void ArmorPatch(Player __instance, ref float __result)
         {
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Polearms))
+            if (CFG.IsSkillActive(Skills.SkillType.Polearms))
             {
                 //Jotunn.Logger.LogMessage($"Before patch, armor was {__result}");
 
                 __result +=
-                    ConfigMan.GetPolearmArmor(__instance.GetSkillFactor(Skills.SkillType.Polearms));
+                    CFG.GetPolearmArmor(__instance.GetSkillFactor(Skills.SkillType.Polearms));
 
                 //Jotunn.Logger.LogMessage($"now, armor is {__result}");
             }
@@ -31,14 +31,14 @@ namespace kingskills.Patches
         [HarmonyPrefix]
         public static void RangePatch(Attack __instance)
         {
-            if (ConfigMan.IsSkillActive(Skills.SkillType.Polearms) &&
+            if (CFG.IsSkillActive(Skills.SkillType.Polearms) &&
                 __instance.m_character.IsPlayer() && 
                 __instance.m_character.GetZDOID() == Player.m_localPlayer.GetZDOID())
             {
                 //Jotunn.Logger.LogMessage($"before change, range is {__instance.m_attackRange}");
 
                 __instance.m_attackRange +=
-                    ConfigMan.GetPolearmRange(Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Polearms));
+                    CFG.GetPolearmRange(Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Polearms));
 
                 //Jotunn.Logger.LogMessage($"Increased range to {__instance.m_attackRange}");
             }
@@ -50,7 +50,7 @@ namespace kingskills.Patches
         [HarmonyPrefix]
         public static void DamageArmorWatch(Character __instance, HitData hit)
         {
-            if (!ConfigMan.IsSkillActive(Skills.SkillType.Polearms)) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.Polearms)) return;
             if (!__instance.IsPlayer()) return;
             if (__instance.IsBlocking() && hit.m_blockable) return;
 
@@ -60,7 +60,7 @@ namespace kingskills.Patches
 
             //Jotunn.Logger.LogMessage($"Just blocked {damageBlocked} damage with armor.");
             __instance.RaiseSkill(Skills.SkillType.Polearms,
-                damageBlocked * ConfigMan.WeaponBXPPolearmDamageMod.Value);
+                damageBlocked * CFG.WeaponBXPPolearmDamageMod.Value);
         }
     }
 }

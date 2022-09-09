@@ -66,7 +66,7 @@ perks:
 
                 __instance.m_nview.GetZDO().Set("Agriculture Level", 
                     player.GetSkillFactor(SkillMan.Agriculture));
-               player.RaiseSkill(SkillMan.Agriculture, ConfigMan.AgricultureXPPlantFlat.Value);
+               player.RaiseSkill(SkillMan.Agriculture, CFG.AgricultureXPPlantFlat.Value);
             }
         }
     }
@@ -79,7 +79,7 @@ perks:
         {
             ZDO zdo = __instance.m_nview.GetZDO();
             if (zdo.m_floats.ContainsKey("Agriculture Level".GetStableHashCode()))
-                __result *= ConfigMan.GetAgricultureGrowTimeRedux(zdo.GetFloat("Agriculture Level"));
+                __result *= CFG.GetAgricultureGrowTimeRedux(zdo.GetFloat("Agriculture Level"));
         }
     }
 
@@ -119,11 +119,11 @@ perks:
 
             //We increase the drop amount
             __instance.m_amount = 
-                (int)(__instance.m_amount * Mathf.Floor(ConfigMan.GetAgricultureRandomYield(skillF)));
+                (int)(__instance.m_amount * Mathf.Floor(CFG.GetAgricultureRandomYield(skillF)));
 
             //I could also put the quality code in here, but I'm gonna wait until I work that out with cooking
 
-            float expReward = ConfigMan.GetAgriculturePlantReward(__instance.gameObject);
+            float expReward = CFG.GetAgriculturePlantReward(__instance.gameObject);
 
             //We get experience based on the dictionary defined rewards
             if (expReward > 0)
@@ -133,14 +133,14 @@ perks:
             }
 
             //We regain health
-            character.Heal(ConfigMan.GetAgricultureHealthRegain(skillF));
+            character.Heal(CFG.GetAgricultureHealthRegain(skillF));
 
             //This piece of code checks to see if this pickable has already had it's respawn timer tinkered with
             //If not, then it tinkers with it
             if (__instance.m_nview.GetZDO().GetFloat("Modified Respawn Time", -20) == -20)
             {
                 __instance.m_respawnTimeMinutes = (int)Mathf.Floor(
-                        __instance.m_respawnTimeMinutes * ConfigMan.GetAgricultureGrowTimeRedux(skillF));
+                        __instance.m_respawnTimeMinutes * CFG.GetAgricultureGrowTimeRedux(skillF));
 
                 __instance.m_nview.GetZDO().Set("Modified Respawn Time", __instance.m_respawnTimeMinutes);
             }

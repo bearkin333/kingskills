@@ -77,7 +77,7 @@ perks:
 						skillFactor = 0;
                     }
 
-					float newQuality = ConfigMan.GetCookingRandomFQ(skillFactor, timingPercent);
+					float newQuality = CFG.GetCookingRandomFQ(skillFactor, timingPercent);
 
 					FQ.foodQuality = newQuality;
 
@@ -124,7 +124,7 @@ perks:
 			Jotunn.Logger.LogMessage($" recording the player's cooking skill as {(user as Player).GetSkillFactor(SkillMan.Cooking)}");
 			zdo.Set("Cooking Skill", (user as Player).GetSkillFactor(SkillMan.Cooking));
 
-			(user as Player).RaiseSkill(SkillMan.Cooking, ConfigMan.GetCookingXP(__instance));
+			(user as Player).RaiseSkill(SkillMan.Cooking, CFG.GetCookingXP(__instance));
 		}
 
 		[HarmonyPatch(nameof(CookingStation.GetItemConversion))]
@@ -138,7 +138,7 @@ perks:
 			//Jotunn.Logger.LogMessage($"Reading my zdo says cooking skill is {zdo.GetFloat("Cooking Skill", 0)}");
 			if (recordedSkill > 0)
 			{
-				__result.m_cookTime *= ConfigMan.GetCookingTimeRedux(zdo.GetFloat("Cooking Skill", 0));
+				__result.m_cookTime *= CFG.GetCookingTimeRedux(zdo.GetFloat("Cooking Skill", 0));
 				//Jotunn.Logger.LogMessage($"Cook time is now {__result.m_cookTime}. removing the cooking skill float.");
 				zdo.Set("Cooking Skill", 0f);
 			}
@@ -160,7 +160,7 @@ perks:
 			//If no one has claimed it yet, we apply their time reduction to the process.
 			if (recordedChefID == 0)
             {
-				float redux = ConfigMan.GetCookingFermentTimeRedux(user.GetSkillFactor(SkillMan.Cooking));
+				float redux = CFG.GetCookingFermentTimeRedux(user.GetSkillFactor(SkillMan.Cooking));
 				__instance.m_fermentationDuration *= redux;
 
 				zdo.Set("Ferment Redux", redux);
@@ -175,7 +175,7 @@ perks:
 			{
 				__instance.m_fermentationDuration /= zdo.GetFloat("Ferment Redux", 0f);
 
-				float redux = ConfigMan.GetCookingFermentTimeRedux(user.GetSkillFactor(SkillMan.Cooking));
+				float redux = CFG.GetCookingFermentTimeRedux(user.GetSkillFactor(SkillMan.Cooking));
 				__instance.m_fermentationDuration *= redux;
 
 				zdo.Set("Ferment Redux", redux);
@@ -212,7 +212,7 @@ perks:
 					{
 						Player player = Player.m_localPlayer;
 
-						player.RaiseSkill(SkillMan.Cooking, ConfigMan.GetCookingXP(__instance, false));
+						player.RaiseSkill(SkillMan.Cooking, CFG.GetCookingXP(__instance, false));
 					}
 					break;
 				}
@@ -257,7 +257,7 @@ perks:
 				item.m_shared.m_foodBurnTime = Mathf.Floor(item.m_shared.m_foodBurnTime * foodMult);
 
 				float chefXPReward = item.m_shared.m_food + item.m_shared.m_foodStamina;
-				chefXPReward *= ConfigMan.CookingXPStatMod.Value;
+				chefXPReward *= CFG.CookingXPStatMod.Value;
 
 				Player chef = Player.GetPlayer(FQ.chefID);
 
@@ -265,7 +265,7 @@ perks:
                 {
 					Jotunn.Logger.LogMessage($"chef was found as a player");
 					if (__instance.GetZDOID().m_userID != FQ.chefID)
-						chefXPReward *= ConfigMan.GetCookingXPCustomerMult();
+						chefXPReward *= CFG.GetCookingXPCustomerMult();
 
 					chef.RaiseSkill(SkillMan.Cooking, chefXPReward);
                 }
@@ -329,11 +329,11 @@ perks:
 					newFoodDuration = Mathf.Round(newFoodDuration);
 
 					__result = new Regex("(\\$item_food_health.*?</color>)").Replace(__result, 
-						$"$1 ({ConfigMan.CookHealthColor}{newFood}{ConfigMan.EndColor})");
+						$"$1 ({CFG.ColorCookHealthFF}{newFood}{CFG.ColorEnd})");
 					__result = new Regex("(\\$item_food_stamina.*?</color>)").Replace(__result, 
-						$"$1 ({ConfigMan.CookStaminaColor}{newFoodStamina}{ConfigMan.EndColor})");
+						$"$1 ({CFG.ColorCookStaminaFF}{newFoodStamina}{CFG.ColorEnd})");
 					__result = new Regex("(\\$item_food_duration.*?</color>)").Replace(__result, 
-						$"$1 ({ConfigMan.CookDurationColor}{newFoodDuration}m{ConfigMan.EndColor})");
+						$"$1 ({CFG.ColorCookDurationFF}{newFoodDuration}m{CFG.ColorEnd})");
 
 					__result += "\nQuality: " + PT.Prettify(FQ.foodQuality*100f, 0, PT.TType.TextlessPercent);
 
@@ -341,7 +341,7 @@ perks:
 
 					if (player != null)
 					{
-						__result += $"\nThis meal was prepared by {ConfigMan.CookDurationColor}{player.GetPlayerName()}{ConfigMan.EndColor}";
+						__result += $"\nThis meal was prepared by {CFG.ColorKingSkillsFF}{player.GetPlayerName()}{CFG.ColorEnd}";
                     }
 				}
 			}
