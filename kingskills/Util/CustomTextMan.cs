@@ -36,7 +36,7 @@ namespace kingskills
         //[HarmonyPatch(typeof(DamageText))]
         //[HarmonyPatch(nameof(DamageText.UpdateWorldTexts))]
         //[HarmonyPrefix]
-        public static void AddCustomWorldText(Color msgColor, Vector3 pos, int fontSize, string text)
+        public static void AddCustomWorldText(Color msgColor, Vector3 pos, int fontSize, string text, bool useColor = true)
         {
             DamageText.WorldTextInstance worldText = new DamageText.WorldTextInstance();
             worldText.m_worldPos = pos;

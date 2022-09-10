@@ -36,12 +36,20 @@ perks:
      * 
      */
 
-    [HarmonyPatch]
-    class Agriculture
+    [HarmonyPatch(typeof(Plant), nameof(Plant.Grow))]
+    public class TreeGrowWatcher
     {
+        [HarmonyPrefix]
+        public static void TreeGrowing(Plant __instance)
+        {
+            if (__instance.m_status != 0) return;
+            if (__instance.m_nview.m_zdo.GetLong("Current Botanist", 0) != Player.m_localPlayer.GetPlayerID()) return;
+            float reward = CFG.GetAgricultureTreeReward(__instance);
+            if (reward == 0) return;
 
+            Player.m_localPlayer.RaiseSkill(SkillMan.Agriculture, reward);
+        }
     }
-
 
 
     [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece))]
@@ -67,6 +75,7 @@ perks:
                 __instance.m_nview.GetZDO().Set("Agriculture Level", 
                     player.GetSkillFactor(SkillMan.Agriculture));
                player.RaiseSkill(SkillMan.Agriculture, CFG.AgricultureXPPlantFlat.Value);
+                __instance.m_nview.m_zdo.Set("Current Botanist", player.GetPlayerID());
             }
         }
     }
@@ -115,11 +124,12 @@ perks:
                 PlayerPickRef.pickingPlayer != character.GetZDOID() ||
                 __instance.m_tarPreventsPicking) return;
 
+            if (!CFG.GetAgricultureIsPlant(__instance)) return;
+
             float skillF = character.GetSkillFactor(SkillMan.Agriculture);
 
             //We increase the drop amount
-            __instance.m_amount = 
-                (int)(__instance.m_amount * Mathf.Floor(CFG.GetAgricultureRandomYield(skillF)));
+            __instance.m_amount += CFG.GetAgricultureRandomAdditionalYield(skillF, __instance.m_amount);
 
             //I could also put the quality code in here, but I'm gonna wait until I work that out with cooking
 

@@ -99,7 +99,6 @@ namespace kingskills
         }
 
 
-
         public static void InitSkillActiveDict()
         {
             SkillActive.Add(SkillMan.Agriculture, ActiveSkillBotany.Value);
@@ -144,6 +143,8 @@ namespace kingskills
         public static Color ColorTitle;
         public static Color ColorWhite;
         public static Color ColorKingSkills;
+        public static Color ColorPTGreen;
+        public static Color ColorPTRed;
 
         public static string ColorBonusBlueFF = "<color=#33E0EDFF>";
         public static string ColorAscendedGreenFF = "<color=#73EA52FF>";
@@ -168,6 +169,8 @@ namespace kingskills
             ColorTitle = new Color(0.98f, 0.96f, 0.43f);
             ColorWhite = new Color(1f, 1f, 1f);
             ColorKingSkills = new Color(0.77f, 0.23f, 0.99f);
+            ColorPTGreen = new Color(0.48f, 0.95f, 0.40f);
+            ColorPTRed = new Color(0.92f, 0.05f, 0.05f);
 
             MaxSkillLevel = cfg.Bind("Generic", "Max Skill Level", 100f,
                     "This is the level that all king skills can go up to.");
@@ -177,9 +180,9 @@ namespace kingskills
                     "% of 1 item needed to generate before you round up to a full item.");
 
 
-            XPTextScaleMin = cfg.Bind("Generic", "Text Scale Min", 20f,
+            XPTextScaleMin = cfg.Bind("Generic", "Text Scale Min", 16f,
                     "Font size of the smallest possible exp text");
-            XPTextScaleMax = cfg.Bind("Generic", "Text Scale Max", 65f,
+            XPTextScaleMax = cfg.Bind("Generic", "Text Scale Max", 75f,
                     "Font size of the largest possible exp text");
             XPTextValueMin = cfg.Bind("Generic", "Text Value Min", 0.2f,
                     "Experience value to generate the smallest size exp text");
@@ -455,7 +458,7 @@ namespace kingskills
             //    "% extra bow draw speed at level 100");
             BowDropPercentMin = cfg.Bind("Bow.Effect", "Drop rate min", 0f,
                 "% to increase creature drops at level 0");
-            BowDropPercentMax = cfg.Bind("Bow.Effect", "Drop rate max", 100f,
+            BowDropPercentMax = cfg.Bind("Bow.Effect", "Drop rate max", 300f,
                 "% to increase creature drops at level 100");
 
         }
@@ -613,19 +616,19 @@ namespace kingskills
                     "Whether or not to activate king's skills version of the unarmed skill"); ;
 
             //exp
-            FistBXPBlockFactor = cfg.Bind("Weapon.BonusExperience", "Unarmed Block", .3f,
+            FistBXPBlockFactor = cfg.Bind("Weapon.BonusExperience", "Unarmed Block", .2f,
                 "mod to multiply fist block bonus exp per damage point");
 
             //effects
             FistDamagePercentMin = cfg.Bind("Fist.Effect", "Damage Min", -10f,
                 "% extra damage done with bare fists at level 0");
-            FistDamagePercentMax = cfg.Bind("Fist.Effect", "Damage Max", 120f,
+            FistDamagePercentMax = cfg.Bind("Fist.Effect", "Damage Max", 160f,
                 "% extra damage done with bare fists at level 100");
             FistStaminaReduxMin = cfg.Bind("Fist.Effect", "Stamina Reduction Min", 0f,
                 "% less stamina usage for fists at level 0");
             FistStaminaReduxMax = cfg.Bind("Fist.Effect", "Stamina Reduction Max", 80f,
                 "% less stamina usage for fists at level 100");
-            FistDamageFlatMin = cfg.Bind("Fist.Effect", "Flat Damage Min", -5f,
+            FistDamageFlatMin = cfg.Bind("Fist.Effect", "Flat Damage Min", -3f,
                 "Flat extra damage at level 0");
             FistDamageFlatMax = cfg.Bind("Fist.Effect", "Flat Damage Max", 62f,
                 "Flat extra damage at level 100");
@@ -635,7 +638,7 @@ namespace kingskills
                 "Flat extra unarmed block armor at level 100");
             FistMovespeedPercentMin = cfg.Bind("Fist.Effect", "Movespeed Min", 0f,
                 "% movespeed increase at level 0");
-            FistMovespeedPercentMax = cfg.Bind("Fist.Effect", "Movespeed Max", 50f,
+            FistMovespeedPercentMax = cfg.Bind("Fist.Effect", "Movespeed Max", 65f,
                 "% movespeed increase at level 100");
         }
 
@@ -700,7 +703,7 @@ namespace kingskills
                     "Whether or not to activate king's skills version of the knives skill"); ;
 
             //exp
-            WeaponBXPKnifeBackstab = cfg.Bind("Weapon.BonusExperience", "Knife Backstab", 10f,
+            WeaponBXPKnifeBackstab = cfg.Bind("Weapon.BonusExperience", "Knife Backstab", 25f,
                 "Flat BXP gained every time you get a sneak attack using the knife.");
 
             //Knives
@@ -718,7 +721,7 @@ namespace kingskills
                 "% extra sneak attack damage with ALL weapons at level 100");
             KnifeMovespeedPercentMin = cfg.Bind("Knife.Effect", "Movementspeed Min", 0f,
                 "% movespeed increase at level 0");
-            KnifeMovespeedPercentMax = cfg.Bind("Knife.Effect", "Movementspeed Max", 80f,
+            KnifeMovespeedPercentMax = cfg.Bind("Knife.Effect", "Movementspeed Max", 45f,
                 "% movespeed increase at level 100");
             KnifePiercePercentMin = cfg.Bind("Knife.Effect", "Generic Pierce Min", 0f,
                 "% extra pierce damage with ALL weapons at level 0");
@@ -798,11 +801,11 @@ namespace kingskills
                 "% less stamina usage for polearms at level 100");
             PolearmRangeMin = cfg.Bind("Polearm.Effect", "Generic Range Min", 0f,
                 "Added units of range to all weapon attacks at level 0");
-            PolearmRangeMax = cfg.Bind("Polearm.Effect", "Generic Range Max", .8f,
+            PolearmRangeMax = cfg.Bind("Polearm.Effect", "Generic Range Max", 1f,
                 "Added units of range to all weapon attacks at level 100");
-            PolearmArmorMin = cfg.Bind("Polearm.Effect", "Block Flat Min", 0f,
+            PolearmArmorMin = cfg.Bind("Polearm.Effect", "Armor Flat Min", 0f,
                 "Flat armor added to character at level 0");
-            PolearmArmorMax = cfg.Bind("Polearm.Effect", "Block Flat Max", 25f,
+            PolearmArmorMax = cfg.Bind("Polearm.Effect", "Armor Flat Max", 45f,
                 "Flat armor added to character at level 100");
             PolearmBlockMin = cfg.Bind("Polearm.Effect", "Block Min", 0f,
                 "Flat block armor added to polearms at level 0");
@@ -891,9 +894,9 @@ namespace kingskills
                 "% extra damage done with thrown weapons at level 0");
             SpearProjectilePercentMax = cfg.Bind("Spear.Effect", "Thrown Damage Percent Max", 200f,
                 "% extra damage done with thrown weapons at level 100");
-            SpearBlockArmorMin = cfg.Bind("Spear.Effect", "Generic Block Armor Min", 0f,
+            SpearBlockArmorMin = cfg.Bind("Spear.Effect", "Generic Block Armor Min", 0f,s
                 "Flat block armor always applied at level 0");
-            SpearBlockArmorMax = cfg.Bind("Spear.Effect", "Generic Block Armor Max", 25f,
+            SpearBlockArmorMax = cfg.Bind("Spear.Effect", "Generic Block Armor Max", 40f,
                 "Flat block armor always applied at level 100");
         }
 
@@ -972,11 +975,11 @@ namespace kingskills
                 "% less stamina usage for swords at level 100");
             SwordParryPercentMin = cfg.Bind("Sword.Effect", "Generic Parry Min", 0f,
                 "% extra parry bonus for ALL weapons at level 0");
-            SwordParryPercentMax = cfg.Bind("Sword.Effect", "Generic Parry Max", 80f,
+            SwordParryPercentMax = cfg.Bind("Sword.Effect", "Generic Parry Max", 100f,
                 "% extra parry bonus for ALL weapons at level 100");
             SwordSlashPercentMin = cfg.Bind("Sword.Effect", "Generic Slash Min", 0f,
                 "% extra slash damage for ALL weapons at level 0");
-            SwordSlashPercentMax = cfg.Bind("Sword.Effect", "Generic Slash Max", 50f,
+            SwordSlashPercentMax = cfg.Bind("Sword.Effect", "Generic Slash Max", 65f,
                 "% extra slash damage for ALL weapons at level 100");
             SwordDodgeStaminaReduxMin = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 0f,
                 "% less stamina cost to dodge roll at level 0");
@@ -1035,8 +1038,10 @@ namespace kingskills
         public static ConfigEntry<float> AgricultureYieldMax;
         public static ConfigEntry<float> AgricultureGrowReduxMin;
         public static ConfigEntry<float> AgricultureGrowReduxMax;
-        public static ConfigEntry<float> AgricultureFQMin;
-        public static ConfigEntry<float> AgricultureFQMax;
+        public static ConfigEntry<float> AgricultureAvgFQMin;
+        public static ConfigEntry<float> AgricultureAvgFQMax;
+        public static ConfigEntry<float> AgricultureFQRangeMin;
+        public static ConfigEntry<float> AgricultureFQRangeMax;
         public static ConfigEntry<float> AgricultureHealthRegainMin;
         public static ConfigEntry<float> AgricultureHealthRegainMax;
 
@@ -1054,29 +1059,29 @@ namespace kingskills
             AgricultureTreeGrowRewards = new Dictionary<string, float>();
 
             AgriculturePickableRewards.Add("Raspberry", 0.3f);
-            AgriculturePickableRewards.Add("Blueberries", 0.8f);
-            AgriculturePickableRewards.Add("Cloudberry", 1.5f);
+            AgriculturePickableRewards.Add("Blueberries", 1.8f);
+            AgriculturePickableRewards.Add("Cloudberry", 3.4f);
             AgriculturePickableRewards.Add("Mushroom", 0.5f);
             AgriculturePickableRewards.Add("Dandelion", 0.8f);
-            AgriculturePickableRewards.Add("Thistle", 1.0f);
+            AgriculturePickableRewards.Add("Thistle", 3.5f);
             AgriculturePickableRewards.Add("CarrotSeeds", 2f);
-            AgriculturePickableRewards.Add("Carrot", 4f);
+            AgriculturePickableRewards.Add("Carrot", 8f);
             AgriculturePickableRewards.Add("MushroomYellow", 2.5f);
             AgriculturePickableRewards.Add("TurnipSeeds", 8f);
-            AgriculturePickableRewards.Add("Turnip", 10f);
+            AgriculturePickableRewards.Add("Turnip", 15f);
             AgriculturePickableRewards.Add("OnionSeeds", 10f);
-            AgriculturePickableRewards.Add("Onion", 12f);
+            AgriculturePickableRewards.Add("Onion", 20f);
             AgriculturePickableRewards.Add("FlaxW", 15f);
-            AgriculturePickableRewards.Add("Flax", 20f);
+            AgriculturePickableRewards.Add("Flax", 30f);
             AgriculturePickableRewards.Add("BarleyW", 15f);
-            AgriculturePickableRewards.Add("Barley", 20f);
+            AgriculturePickableRewards.Add("Barley", 30f);
             AgriculturePickableRewards.Add("MushroomBlue", 200f);
 
-            AgricultureTreeGrowRewards.Add("Fir", 8f);
-            AgricultureTreeGrowRewards.Add("Beech", 12f);
-            AgricultureTreeGrowRewards.Add("Birch", 25f);
-            AgricultureTreeGrowRewards.Add("Pine", 45f);
-            AgricultureTreeGrowRewards.Add("Acorn", 100f);
+            AgricultureTreeGrowRewards.Add("$prop_fir_sapling", 8f);
+            AgricultureTreeGrowRewards.Add("$prop_beech_sapling", 12f);
+            AgricultureTreeGrowRewards.Add("$prop_birch_sapling", 25f);
+            AgricultureTreeGrowRewards.Add("$prop_pine_sapling", 45f);
+            AgricultureTreeGrowRewards.Add("$prop_oak_sapling", 100f);
 
             //exp
             AgricultureXPPlantFlat = cfg.Bind("Agriculture.Experience", "Plant", 1f,
@@ -1085,16 +1090,20 @@ namespace kingskills
             //effects
             AgricultureYieldMin = cfg.Bind("Agriculture.Effect", "Yield Min", 0f,
             "% increase to yield of plants at level 0");
-            AgricultureYieldMax = cfg.Bind("Agriculture.Effect", "Yield Max", 250f,
+            AgricultureYieldMax = cfg.Bind("Agriculture.Effect", "Yield Max", 450f,
             "% increase to yield of plants at level 100");
             AgricultureGrowReduxMin = cfg.Bind("Agriculture.Effect", "Grow Time Reduction Min", -10f,
             "% less time on plant grow timers after you pick or plant at level 0");
-            AgricultureGrowReduxMax = cfg.Bind("Agriculture.Effect", "Grow Time Reduction Max", 75f,
+            AgricultureGrowReduxMax = cfg.Bind("Agriculture.Effect", "Grow Time Reduction Max", 85f,
             "% less time on plant grow timers after you pick or plant at level 100");
-            AgricultureFQMin = cfg.Bind("Agriculture.Effect", "Food Quality Min", -10f,
+            AgricultureAvgFQMin = cfg.Bind("Agriculture.Effect", "Food Quality Min", -10f,
             "% average food quality of harvested plants at level 0");
-            AgricultureFQMax = cfg.Bind("Agriculture.Effect", "Food Quality Min", 35f,
+            AgricultureAvgFQMax = cfg.Bind("Agriculture.Effect", "Food Quality Max", 60f,
             "% average food quality of harvested plants at level 100");
+            AgricultureFQRangeMin = cfg.Bind("Agriculture.Effect", "Food Quality Range Min", 20f,
+            "spread of possible food quality values at level 0");
+            AgricultureFQRangeMax = cfg.Bind("Agriculture.Effect", "Food Quality Range Max", 50f,
+            "spread of possible food quality values at level 100");
             AgricultureHealthRegainMin = cfg.Bind("Agriculture.Effect", "Health Regain Min", 0f,
             "Amount of health regained each time you harvest a plant at level 0");
             AgricultureHealthRegainMax = cfg.Bind("Agriculture.Effect", "Health Regain Max", 10f,
@@ -1116,14 +1125,76 @@ namespace kingskills
 
             return 0f;
         }
-        public static float GetAgricultureYieldMult(float skillFactor)
+        public static float GetAgricultureTreeReward(Plant plant)
         {
-            return Mathf.Lerp(PerToMult(AgricultureYieldMin), 
-                PerToMult(AgricultureYieldMax), skillFactor);
+            if (plant == null) return 0f;
+
+            string name = plant.m_name;
+            Jotunn.Logger.LogMessage(name);
+
+            if (AgricultureTreeGrowRewards.ContainsKey(name))
+                return AgricultureTreeGrowRewards[name];
+
+            return 0f;
+
         }
-        public static float GetAgricultureRandomYield(float skillFactor)
+        public static bool GetAgricultureIsPlant(Pickable item)
         {
-            return GetAgricultureYieldMult(skillFactor) + UnityEngine.Random.Range(-.5f, .5f);
+            if (item == null) return false;
+            string name = item.m_itemPrefab.name;
+            if (item.name.Contains("Wild")) name += "W";
+            if (AgriculturePickableRewards.ContainsKey(name))
+                return true;
+
+            return false;
+        }
+        public static float GetAgricultureAverageFoodQualityMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(AgricultureAvgFQMin),
+                PerToMod(AgricultureAvgFQMax), skillFactor);
+        }
+        public static float GetAgricultureFoodQualityRangeMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(AgricultureFQRangeMin),
+                PerToMod(AgricultureFQRangeMax), skillFactor);
+        }
+        //Timing should be a number between 0 and 1 that reflects how close to perfect
+        //the timing was, 1 being right on the money
+        public static float GetAgricultureRandomFQ(float skillFactor)
+        {
+            float baseQ = GetAgricultureAverageFoodQualityMod(skillFactor);
+            float range = GetAgricultureFoodQualityRangeMod(skillFactor) / 2;
+            float randomFactor = UnityEngine.Random.Range(0f, 1f);
+
+
+            float qualityChange = Mathf.Lerp(-range, range, randomFactor);
+
+
+            float newQuality = Mathf.Clamp(baseQ + qualityChange, -1, 10);
+
+            newQuality = (float)(Mathf.Round(newQuality * 100f) / 100f);
+
+            return newQuality;
+        }
+        public static float GetAgricultureYieldMod(float skillFactor)
+        {
+            return Mathf.Lerp(PerToMod(AgricultureYieldMin), 
+                PerToMod(AgricultureYieldMax), skillFactor);
+        }
+        public static int GetAgricultureRandomAdditionalYield(float skillFactor, int baseYield)
+        {
+            float rand = UnityEngine.Random.Range(0f, 1f);
+            float yieldMult = GetAgricultureYieldMod(skillFactor);
+            float bestCase = baseYield * yieldMult;
+            float modifier = Mathf.Lerp(-yieldMult / 2, yieldMult / 2, rand);
+
+            //Jotunn.Logger.LogMessage($"Our extra yield will be multiplied by {yieldMult}" +
+            //    $"\nOur base case scenario, since the base is {baseYield}, is {bestCase}" +
+            //    $"\nthe modifier, or half the extra yield, ended up as {modifier}" +
+            //    $"\nwe're returning {Mathf.FloorToInt(bestCase + modifier)}");
+            if (modifier - Mathf.Floor(modifier) > 0.5f) modifier++;
+
+            return Mathf.FloorToInt(bestCase + modifier);
         }
         public static float GetAgricultureGrowTimeRedux(float skillFactor)
         {
@@ -1132,8 +1203,8 @@ namespace kingskills
         }
         public static float GetAgricultureFoodQualityMult(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(AgricultureFQMin), 
-                PerToMult(AgricultureFQMax), skillFactor);
+            return Mathf.Lerp(PerToMult(AgricultureAvgFQMin), 
+                PerToMult(AgricultureAvgFQMax), skillFactor);
         }
         public static float GetAgricultureHealthRegain(float skillFactor)
         {
@@ -1192,7 +1263,7 @@ namespace kingskills
                 "% less stamina to block at level 0");
             BlockStaminaReduxMax = cfg.Bind("Block.Effect", "Stamina Reduction Max", 50f,
                 "% less stamina to block at level 100");
-            BlockHealthPerLevel = cfg.Bind("Block.Effect", "Health", .5f,
+            BlockHealthPerLevel = cfg.Bind("Block.Effect", "Health", .8f,
                 "flat increase to max health per level of block");
         }
 
@@ -1268,7 +1339,7 @@ namespace kingskills
             ActiveSkillBuild = cfg.Bind("Generic.Active", "Building", true,
                     "Whether or not to allow King's building");
 
-            BuildXPPerPiece = cfg.Bind("Build.Experience", "Per Piece", .8f,
+            BuildXPPerPiece = cfg.Bind("Build.Experience", "Per Piece", .5f,
                     "How much experience for placed build piece");
             BuildXPRepairMod = cfg.Bind("Build.Experience", "Repair Mod", .05f,
                     "Amount of experience for each point of repaired damage");
@@ -1279,7 +1350,7 @@ namespace kingskills
 
             BuildHealthMin = cfg.Bind("Build.Effect", "Health Min", 0f,
                     "% increase to building health at level 0");
-            BuildHealthMax = cfg.Bind("Build.Effect", "Health Max", 150f,
+            BuildHealthMax = cfg.Bind("Build.Effect", "Health Max", 200f,
                     "% increase to building health at level 100");
             BuildStabilityMin = cfg.Bind("Build.Effect", "Stability Min", -15f,
                     "% increase to building stability at level 0");
@@ -1291,11 +1362,11 @@ namespace kingskills
                     "% reduction to loss of support at level 100");
             BuildDamageMin = cfg.Bind("Build.Effect", "Damage Min", 0f,
                     "% increase to building damage at level 0");
-            BuildDamageMax = cfg.Bind("Build.Effect", "Damage Max", 300f,
+            BuildDamageMax = cfg.Bind("Build.Effect", "Damage Max", 400f,
                     "% increase to building damage at level 0");
             BuildWNTReduxMin = cfg.Bind("Build.Effect", "WNT Redux Min", 0f,
                     "% less damage taken by buildings from wear and tear at level 0");
-            BuildWNTReduxMax = cfg.Bind("Build.Effect", "WNT Redux Max", 65f,
+            BuildWNTReduxMax = cfg.Bind("Build.Effect", "WNT Redux Max", 75f,
                     "% less damage taken by buildings from wear and tear at level 100");
             BuildFreeChanceMin = cfg.Bind("Build.Effect", "Free Chance Min", 0f,
                     "% chance to build a piece for free at minimum level");
@@ -1305,7 +1376,7 @@ namespace kingskills
                     "Factor for defining the slope of the free chance curve.");
             BuildFreeChanceMinLevel = cfg.Bind("Build.Effect", "Free Chance Level", 20f,
                     "Smallest level at which free chance curve begins");
-            BuildStaminaReduxMin = cfg.Bind("Build.Effect", "Stamina Redux Min", 0f,
+            BuildStaminaReduxMin = cfg.Bind("Build.Effect", "Stamina Redux Min", -20f,
                     "% reduction in stamina costs at level 0");
             BuildStaminaReduxMax = cfg.Bind("Build.Effect", "Stamina Redux Max", 82f,
                     "% reduction in stamina costs at level 100");
@@ -1396,16 +1467,23 @@ namespace kingskills
         public static ConfigEntry<float> CookingFQRangeMin;
         public static ConfigEntry<float> CookingFQRangeMax;
         public static ConfigEntry<float> CookingFQRangeTimingPercent;
+        public static ConfigEntry<float> CookingFQRangeFactor;
         public static ConfigEntry<float> CookingTimeReduxMin;
         public static ConfigEntry<float> CookingTimeReduxMax;
+        public static ConfigEntry<float> CookingTimeGuessMinLevel;
+        public static ConfigEntry<float> CookingTimeGuessMin;
+        public static ConfigEntry<float> CookingTimeGuessMax;
         public static ConfigEntry<float> CookingFermentTimeReduxMin;
         public static ConfigEntry<float> CookingFermentTimeReduxMax;
 
         public static Dictionary<string, float> CookingStationTiers;
+        public static Dictionary<string, float> CookingStationLevelRQs;
 
         public const string ColorCookHealthFF = "<color=#F9582EFF>";
         public const string ColorCookStaminaFF = "<color=#F9DE2EFF>";
         public const string ColorCookDurationFF = "<color=#E9E9E9ff>";
+        public const float MinimumFQ = -2f;
+        public const float MaximumFQ = 50f;
         #endregion configdef
 
         private static void InitCookConfig(ConfigFile cfg)
@@ -1414,11 +1492,11 @@ namespace kingskills
                     "Whether or not to allow King's cooking");
 
 
-            CookingXPStart = cfg.Bind("Cooking.Experience", "Start", .4f,
+            CookingXPStart = cfg.Bind("Cooking.Experience", "Start", .5f,
                     "How much experience for a started project");
-            CookingXPFinish = cfg.Bind("Cooking.Experience", "Finish", .8f,
+            CookingXPFinish = cfg.Bind("Cooking.Experience", "Finish", 1.2f,
                     "How much experience for successfully cooking a project");
-            CookingXPTierBonus = cfg.Bind("Cooking.Experience", "Tier Bonus", 25f,
+            CookingXPTierBonus = cfg.Bind("Cooking.Experience", "Tier Bonus", 50f,
                     "% increase in exp gained per tier level of cooking machine");
             CookingXPStatMod = cfg.Bind("Cooking.Experience", "Stat Mod", .05f,
                     "Amount of experience gained per health and stamina of eaten food.");
@@ -1426,33 +1504,52 @@ namespace kingskills
                     "% extra experience when your food is eaten by another person.");
 
             CookingStationTiers = new Dictionary<string, float>();
+            CookingStationLevelRQs = new Dictionary<string, float>();
 
-            CookingStationTiers.Add("", 0);
-            CookingStationTiers.Add("2", 1);
+            CookingStationTiers.Add("piece_cookingstation", 0);
+            CookingStationTiers.Add("piece_cauldron", 1);
+            CookingStationTiers.Add("piece_cookingstation_iron", 2);
+            CookingStationTiers.Add("piece_oven", 3);
+            CookingStationTiers.Add("piece_fermenter", 4);
+
+            CookingStationLevelRQs.Add("piece_cookingstation", 0);
+            CookingStationLevelRQs.Add("piece_cauldron", 20);
+            CookingStationLevelRQs.Add("piece_cookingstation_iron", 35);
+            CookingStationLevelRQs.Add("piece_oven", 50);
+            CookingStationLevelRQs.Add("piece_fermenter", 44);
 
             CookingAverageFQMin = cfg.Bind("Cooking.Effect", "Average FQ Min", 0f,
                     "% of average food quality at level 0");
-            CookingAverageFQMax = cfg.Bind("Cooking.Effect", "Average FQ Max", 100f,
+            CookingAverageFQMax = cfg.Bind("Cooking.Effect", "Average FQ Max", 150f,
                     "% of average food quality at level 100");
             CookingFQRangeMin = cfg.Bind("Cooking.Effect", "FQ Range Min", 60f,
                     "% range of possible food quality values at level 0");
-            CookingFQRangeMax = cfg.Bind("Cooking.Effect", "FQ Range Max", 10f,
+            CookingFQRangeMax = cfg.Bind("Cooking.Effect", "FQ Range Max", 20f,
                     "% range of possible food quality values at level 100");
             CookingFQRangeTimingPercent = cfg.Bind("Cooking.Effect", "FQ Range From Timing", 50f,
                     "% of the range that can be controlled with timing. the rest is random based on skill level");
+            CookingFQRangeFactor = cfg.Bind("Cooking.Effect", "Cook! FQ Range Factor", 0.67f,
+                    "factor for defining the 1-x squared parabola of the quality calcs");
+
             CookingTimeReduxMin = cfg.Bind("Cooking.Effect", "Time Redux Min", -20f,
                     "% reduction in cooking times at level 0");
-            CookingTimeReduxMax = cfg.Bind("Cooking.Effect", "Time Redux Max", 60f,
+            CookingTimeReduxMax = cfg.Bind("Cooking.Effect", "Time Redux Max", 70f,
                     "% reduction in cooking times at level 100");
+            CookingTimeGuessMinLevel = cfg.Bind("Cooking.Effect", "Time Guess Min Level", 20f,
+                    "Level at which you start being able to see how long food will take");
+            CookingTimeGuessMin = cfg.Bind("Cooking.Effect", "Time Guess Min", 50f,
+                    "% the represents your uncertainty in your ability to guess how long food will take at minimum level");
+            CookingTimeGuessMax = cfg.Bind("Cooking.Effect", "Time Guess Max", 0f,
+                    "% the represents your uncertainty in your ability to guess how long food will take at maximum level");
             CookingFermentTimeReduxMin = cfg.Bind("Cooking.Effect", "Fermentation Redux Min", 0f,
                     "% reduction in fermentation times at level 0");
-            CookingFermentTimeReduxMax = cfg.Bind("Cooking.Effect", "Fermentation Redux Max", 75f,
+            CookingFermentTimeReduxMax = cfg.Bind("Cooking.Effect", "Fermentation Redux Max", 85f,
                     "% reduction in fermentation times at level 100");
 
         }
 
 
-        public static float GetCookingXP(CookingStation cook, bool start = true)
+        public static float GetCookingXP(string cook, bool start = true)
         {
             float XP = CookingXPFinish.Value;
             if (start)
@@ -1460,12 +1557,18 @@ namespace kingskills
 
             return XP * (1 + GetCookingXPTier(cook) * PerToMod(CookingXPTierBonus));
         }
-        public static float GetCookingXPTier(CookingStation cook)
+        public static float GetCookingLevelRQ(string station)
         {
-            if (CookingStationTiers.ContainsKey(cook.m_name))
-                return CookingStationTiers[cook.m_name];
+            if (CookingStationLevelRQs.ContainsKey(station)) return CookingStationLevelRQs[station];
 
-            Jotunn.Logger.LogMessage($"Just asked about cooking station {cook.m_name}");
+            return 0f;
+        }
+        public static float GetCookingXPTier(string cook)
+        {
+            //Jotunn.Logger.LogMessage($"Comparing {cook}");
+            if (CookingStationTiers.ContainsKey(cook))
+                return CookingStationTiers[cook];
+
             return 0f;
         }
         public static float GetCookingXPCustomerMult()
@@ -1484,28 +1587,106 @@ namespace kingskills
         }
         //Timing should be a number between 0 and 1 that reflects how close to perfect
         //the timing was, 1 being right on the money
-        public static float GetCookingRandomFQ(float skillFactor, float timing)
+        public static float GetCookingTimingRandomFQ(float skillFactor, float timingPercent)
         {
             float baseQ = GetCookingAverageFoodQualityMod(skillFactor);
             float range = GetCookingFoodQualityRangeMod(skillFactor)/2;
-            //Jotunn.Logger.LogMessage($"Base quality is {baseQ}, and half of the range is {range}");
             float timingMod = PerToMod(CookingFQRangeTimingPercent);
             float randomFactor = UnityEngine.Random.Range(0f, 1f);
-            //Jotunn.Logger.LogMessage($"The random quality was {randomFactor}");
-            timing = Mathf.Clamp01(timing);
-            //Jotunn.Logger.LogMessage($"I clamped timing, and now it is {timing}");
 
             //the change to the overall quality is based (timingPercent)% on the timing,
-            //and the rest on random chance. 
-            float qualityChange = Mathf.Lerp(-range, range, (timing * timingMod) +
-                randomFactor * (1f - timingMod));
+            //and the rest on random chance.
+            //at this point the negatives no longer serve us, so we're getting rid of them
+            float timingAndRandom = (Mathf.Abs(timingPercent) * timingMod) + 
+                (randomFactor * (1f - timingMod));
+
+            //then we parabolize.
+            float curvedQualityChange = Mathf.Pow(timingAndRandom, CookingFQRangeFactor.Value);
+
+            if (curvedQualityChange < 0.02) curvedQualityChange = 0f;
+
+            //This creates a nice U parabola. but, for it to be useful, we actually need it inverted
+            float goodCurve = 1f - curvedQualityChange;
 
 
-            float newQuality = Mathf.Clamp(baseQ + qualityChange, -1, 10);
+            //finally, this will give us a nice standard deviation type parabola where it's a little easier to
+            //get middle values than otherwise.
 
-            newQuality = (float)(Mathf.Round(newQuality * 100f) / 100f);
+            //Jotunn.Logger.LogMessage($"Since the effect of Timing was {timingPercent.ToString("F2")} and the effect of randomness was {randomFactor.ToString("F2")}," +
+            //    $"the final result is a combination at {timingAndRandom.ToString("F2")}");
+            //Jotunn.Logger.LogMessage($"Applying our curve gives us {curvedQualityChange.ToString("F2")}, and then inversing it gives us " +
+            //    $"{goodCurve.ToString("F2")}");
 
-            return newQuality;
+            //(timingPercent * timingMod) + randomFactor * (1f - timingMod)
+            //Jotunn.Logger.LogMessage($"Base quality is {baseQ}, and half of the range is {range}");
+            //Jotunn.Logger.LogMessage($"The random quality was {randomFactor}");
+            //Jotunn.Logger.LogMessage($"I clamped timing, and now it is {timing}");
+
+
+            float qualityChange = Mathf.Lerp(-range, range, goodCurve);
+
+            qualityChange = Mathf.Clamp(baseQ + qualityChange, MinimumFQ, MaximumFQ);
+
+            qualityChange = (float)(Mathf.Round(qualityChange * 100f) / 100f);
+
+            return qualityChange;
+        }
+
+        public static float GetCookingRandomFQ(float skillFactor)
+        {
+            //yeah, I mean, it's stupid. but fuck you
+            return GetCookingTimingRandomFQ(skillFactor, UnityEngine.Random.Range(-1f, 1f));
+        }
+
+        public static float GetCookingTimingPercent(float cookingFinishedTime, float timeToCook)
+        {
+            float cookingPeakTime = timeToCook * 1.5f;
+
+            //Jotunn.Logger.LogMessage($"meat finishes at {timeToCook.ToString("F1")}, it was finished at " +
+            //    $"{cookingFinishedTime.ToString("F1")}, and it would have been perfect at " +
+            //    $"{cookingPeakTime.ToString("F1")}.");
+
+            float timeP = (cookingFinishedTime - cookingPeakTime) / (timeToCook * 2 - cookingPeakTime);
+
+            //Jotunn.Logger.LogMessage($"The resulting time percent is thus {timeP.ToString("F3")}");
+
+            return timeP;
+
+            // 10,   15,   20
+            //     13
+            //
+            //-5,     0,    5
+            //     -2
+            // (cookingFinishedTime - cookingPeakTime) /  (upperBound - cookingPeakTime)
+            // gives -1 to 1, with 0 being the peak
+        }
+
+        //timingpercent should be between -1 and 1, with 0 being ideal cooking time
+        public static string GetCookingFlavorText(float timingPercent)
+        {
+            if (timingPercent > 1f) return "Impossibly well done";
+            if (timingPercent > .75f) return "This meat was nearly grilled into charcoal.";
+            if (timingPercent > .50f) return "This meat puts 'well done' to shame.";
+            if (timingPercent > .25f) return "This meat is dry and tough.";
+            if (timingPercent > .1f) return "This meat is lean, but packed with flavor.";
+            if (timingPercent > .02f) return "This meat has a delicious, crunchy skin.";
+            if (timingPercent > -.02f) return $"This meat is {CFG.ColorKingSkillsFF}Legendary{CFG.ColorEnd}.";
+            if (timingPercent > -.10f) return "This meat is marbelized perfectly.";
+            if (timingPercent > -.25f) return "This meat is tender and juicy.";
+            if (timingPercent > -.50f) return "This meat is just a little too pink in the middle.";
+            if (timingPercent > -.75f) return "This meat is chewy and pink.";
+            if (timingPercent > -1f) return "This meat is bloody raw.";
+            return "Impossibly raw";
+        }
+        public static bool GetCookingIsMeatStation(string name)
+        {
+            if (!CookingStationTiers.ContainsKey(name)) return false;
+            return (name == "piece_cookingstation" || name == "piece_cookingstation_iron");
+        }
+        public static bool GetCookingIsKitchen(string name)
+        {
+            if (!CookingStationTiers.ContainsKey(name)) return false;
+            return (name == "piece_cauldron" || name == "piece_oven");
         }
         public static float GetCookingTimeRedux(float skillFactor)
         {
@@ -1551,35 +1732,35 @@ namespace kingskills
                     "Whether or not to activate king's skills version of the jump skill"); ;
 
             //Jump Experience
-            JumpXPPercent = cfg.Bind("Jump.Experience", "Jump Experience Mod", 53f,
+            JumpXPPercent = cfg.Bind("Jump.Experience", "Jump Experience Mod", 43f,
                 "% of fall damage that becomes experience");
 
             //Jump Effects
             JumpFallDamageThresholdMin = cfg.Bind("Jump.Effect", "Fall Damage Threshold Min", 4f,
                 "meters to fall before you start calculating fall damage at level 0");
-            JumpFallDamageThresholdMax = cfg.Bind("Jump.Effect", "Fall Damage Threshold Max", 24f,
+            JumpFallDamageThresholdMax = cfg.Bind("Jump.Effect", "Fall Damage Threshold Max", 30f,
                 "meters to fall before you start calculating fall damage at level 100");
-            JumpFallDamageReduxMin = cfg.Bind("Jump.Effect", "Fall Damage Reduction Min", -20f,
+            JumpFallDamageReduxMin = cfg.Bind("Jump.Effect", "Fall Damage Reduction Min", -25f,
                 "% less fall damage to take at level 0");
-            JumpFallDamageReduxMax = cfg.Bind("Jump.Effect", "Fall Damage Reduction Max", 75f,
+            JumpFallDamageReduxMax = cfg.Bind("Jump.Effect", "Fall Damage Reduction Max", 85f,
                 "% less fall damage to take at level 100");
             JumpForcePercentMin = cfg.Bind("Jump.Effect", "Vertical Force Min", -10f,
                 "% extra vertical jump force at level 0");
-            JumpForcePercentMax = cfg.Bind("Jump.Effect", "Vertical Force Max", 120f,
+            JumpForcePercentMax = cfg.Bind("Jump.Effect", "Vertical Force Max", 160f,
                 "% extra vertical jump force at level 100");
             JumpForwardForcePercentMin = cfg.Bind("Jump.Effect", "Horizontal Force Min", 0f,
                 "% extra horizontal jump force at level 0");
-            JumpForwardForcePercentMax = cfg.Bind("Jump.Effect", "Horizontal Force Max", 250f,
+            JumpForwardForcePercentMax = cfg.Bind("Jump.Effect", "Horizontal Force Max", 310f,
                 "% extra horizontal jump force at level 100");
             //May not actually be used or be different from jump force
             JumpStaminaReduxMin = cfg.Bind("Jump.Effect", "Stamina Cost Min", 0f,
                 "% less stamina cost to jump at level 0");
-            JumpStaminaReduxMax = cfg.Bind("Jump.Effect", "Stamina Cost Max", 60f,
+            JumpStaminaReduxMax = cfg.Bind("Jump.Effect", "Stamina Cost Max", 80f,
                 "% less stamina cost to jump at level 100");
             JumpTiredModMin = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Min", 0f,
                 "% jump force added to the base game's tired factor, which " +
                 "reduces your jump force when out of stamina, at level 0");
-            JumpTiredModMax = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Max", 20f,
+            JumpTiredModMax = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Max", 30f,
                 "% jump force added to the base game's tired factor, which " +
                 "reduces your jump force when out of stamina, at level 100");
 
@@ -1674,7 +1855,7 @@ namespace kingskills
 
 
             //List of all objects that you can eat and their exp reward
-            MiningBXPTable.Add("Stone", 1);
+            MiningBXPTable.Add("Stone", 2);
             MiningBXPTable.Add("CopperOre", 5);
             MiningBXPTable.Add("Copper", 20);
             MiningBXPTable.Add("TinOre", 7);
@@ -1688,7 +1869,7 @@ namespace kingskills
             MiningBXPTable.Add("Chitin", 35);
 
 
-            MiningXPRockTimer = cfg.Bind("Mining.Experience", "Rock Timer", 30f,
+            MiningXPRockTimer = cfg.Bind("Mining.Experience", "Rock Timer", 25f,
                 "How many minutes a rock will last in your belly");
             MiningXPRockTimer.Value = MiningXPRockTimer.Value * 60f;
 
@@ -1711,7 +1892,7 @@ namespace kingskills
                 "How many seconds to reduce the health regeneration timer at level 100");
             MiningCarryCapacityMin = cfg.Bind("Mining.Effect", "Carry Capacity Min", 0f,
                 "How much extra carrying capacity you get at level 0");
-            MiningCarryCapacityMax = cfg.Bind("Mining.Effect", "Carry Capacity Max", 50f,
+            MiningCarryCapacityMax = cfg.Bind("Mining.Effect", "Carry Capacity Max", 120f,
                 "How much extra carrying capacity you get at level 100");
         }
 
@@ -1850,7 +2031,7 @@ namespace kingskills
             //Run Effects
             RunSpeedPercentMin = cfg.Bind("Run.Effect", "Speed Min", 0f,
                 "% extra run speed at level 0");
-            RunSpeedPercentMax = cfg.Bind("Run.Effect", "Speed Max", 175f,
+            RunSpeedPercentMax = cfg.Bind("Run.Effect", "Speed Max", 200f,
                 "% extra run speed at level 100");
             RunEquipmentReduxMin = cfg.Bind("Run.Effect", "Equipment Reduction Min", -20f,
                 "% less movespeed reduction from equipment at level 0");
@@ -1872,7 +2053,7 @@ namespace kingskills
                 "% less stamina cost to run at level 100");
             RunStaminaReduxMax = cfg.Bind("Run.Effect", "Stamina Reduction Max", 80f,
                 "% less stamina cost to run at level 100");
-            RunStaminaPerLevel = cfg.Bind("Run.Effect", "Stamina Flat", .25f,
+            RunStaminaPerLevel = cfg.Bind("Run.Effect", "Stamina Flat", .44f,
                 "How much base stamina is added per level of run");
         }
 
@@ -2034,7 +2215,7 @@ namespace kingskills
                     "Base rate while captaining a ship.");
             SailXPWindMin = cfg.Bind("Sailing.Experience", "Wind Min", 0f,
                     "% experience bonus when wind is totally against you");
-            SailXPWindMax = cfg.Bind("Sailing.Experience", "Wind Max", 50f,
+            SailXPWindMax = cfg.Bind("Sailing.Experience", "Wind Max", 70f,
                     "% experience bonus when wind is totally in the sails");
             SailXPSpeedMod = cfg.Bind("Sailing.Experience", "Speed", .25f,
                     "Amount of experience each speed unit is worth");
@@ -2163,15 +2344,15 @@ namespace kingskills
                     "Whether or not to activate king's skills version of the sneak skill"); ;
 
             //effects
-            SneakXPThreatPercent = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 24f,
+            SneakXPThreatPercent = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 1f,
                     "Determines how much each 'point of danger' is worth in sneak exp");
             SneakStaminaDrainMin = cfg.Bind("Sneak.Effect", "Stamina Drain Min", 10f,
                     "Amount of stamina drain per second while sneaking at level 0");
-            SneakStaminaDrainMax = cfg.Bind("Sneak.Effect", "Stamina Drain Max", 1.5f,
+            SneakStaminaDrainMax = cfg.Bind("Sneak.Effect", "Stamina Drain Max", 1.0f,
                     "Amount of stamina drain per second while sneaking at level 100");
             SneakSpeedPercentMin = cfg.Bind("Sneak.Effect", "Speed Min", 0f,
                     "% speed increase while sneaking at level 0");
-            SneakSpeedPercentMax = cfg.Bind("Sneak.Effect", "Speed Max", 250f,
+            SneakSpeedPercentMax = cfg.Bind("Sneak.Effect", "Speed Max", 350f,
                     "% speed increase while sneaking at level 100");
         }
 
@@ -2232,11 +2413,11 @@ namespace kingskills
             //Swim effects
             SwimSpeedPercentMin = cfg.Bind("Swim.Effect", "Speed Min", 0f,
                 "% to increase swim speed at level 0");
-            SwimSpeedPercentMax = cfg.Bind("Swim.Effect", "Speed Max", 250f,
+            SwimSpeedPercentMax = cfg.Bind("Swim.Effect", "Speed Max", 350f,
                 "% to increase swim speed at level 100");
             SwimAccelPercentMin = cfg.Bind("Swim.Effect", "Acceleration Min", 0f,
                 "% to increase swim acceleration at level 0");
-            SwimAccelPercentMax = cfg.Bind("Swim.Effect", "Acceleration Max", 250f,
+            SwimAccelPercentMax = cfg.Bind("Swim.Effect", "Acceleration Max", 350f,
                 "% to increase swim acceleration at level 100");
             SwimTurnPercentMin = cfg.Bind("Swim.Effect", "Turn Speed Min", 0f,
                 "% to increase swim turn speed at level 0");
@@ -2330,15 +2511,15 @@ namespace kingskills
                 "Flat stamina rebate on each hit of a tree at level 100");
             WoodcuttingDropPercentMin = cfg.Bind("Wood.Effect", "Drop rate min", 0f,
                 "% increase to wood drops at level 0");
-            WoodcuttingDropPercentMax = cfg.Bind("Wood.Effect", "Drop rate max", 150f,
+            WoodcuttingDropPercentMax = cfg.Bind("Wood.Effect", "Drop rate max", 250f,
                 "% increase to wood drops at level 100");
             WoodcuttingRegenStaminaMin = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", -.1f,
                     "Amount of seconds to take off the stamina regeneration timer at level 0. Base value in vanilla is 1s");
-            WoodcuttingRegenStaminaMax = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", .5f,
+            WoodcuttingRegenStaminaMax = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", .7f,
                     "Amount of seconds to take off the stamina regeneration timer at level 100");
             WoodcuttingCarryCapacityMin = cfg.Bind("Wood.Effect", "Carry Capacity Min", 0f,
                 "How much extra carrying capacity you get at level 0");
-            WoodcuttingCarryCapacityMax = cfg.Bind("Wood.Effect", "Carry Capacity Max", 50f,
+            WoodcuttingCarryCapacityMax = cfg.Bind("Wood.Effect", "Carry Capacity Max", 120f,
                 "How much extra carrying capacity you get at level 100");
         }
 

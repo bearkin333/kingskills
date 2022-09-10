@@ -45,47 +45,92 @@ perks:
         {
 			ExtendedItemData.NewExtendedItemData += itemMade =>
 			{
-				if ((LocalChefCooking.isTrue || LocalChefInvCooking.isTrue) &&
-				(itemMade.m_shared.m_food > 0 || itemMade.m_shared.m_foodStamina > 0))
+				if (!(itemMade.m_shared.m_food > 0 || itemMade.m_shared.m_foodStamina > 0)) return;
+				if (LocalChefCooking.isTrue)
                 {
 					SaveFoodQuality FQ = itemMade.AddComponent<SaveFoodQuality>();
 					Player player = Player.m_localPlayer;
 
-					float cookingTime = 1.25f;
-					float cookingFinished = 1f;
-					float cookingPeakTime = 1.5f;
+					float timeToCook = 0f;
+					float cookingFinishedTime = 0f;
 
 					//Will be more interesting later
 					if (ThrowItem.throwing)
 					{
-						cookingTime = ThrowItem.cookTime;
-						cookingFinished = ThrowItem.cookFinishedTime;
-						cookingPeakTime = cookingFinished * 1.5f;
+						timeToCook = ThrowItem.timeToCook;
+						cookingFinishedTime = ThrowItem.cookingFinishedTime;
 					}
-
-					float timingPercent = 1f - Mathf.Abs(cookingPeakTime - cookingTime)/(cookingFinished/2);
-
-					Jotunn.Logger.LogMessage($"Your cooking rating was {timingPercent*100}%");
 
 					float skillFactor;
 					if (player != null)
 					{
 						skillFactor = player.GetSkillFactor(SkillMan.Cooking);
+						FQ.chefID = player.GetPlayerID();
+
+						//Jotunn.Logger.LogMessage($"saved the chef as {FQ.chefID}");
 					}
-                    else
+					else
                     {
 						skillFactor = 0;
                     }
+					float timingPercent = CFG.GetCookingTimingPercent(cookingFinishedTime, timeToCook);
 
-					float newQuality = CFG.GetCookingRandomFQ(skillFactor, timingPercent);
+					FQ.flavorText = CFG.GetCookingFlavorText(timingPercent);
+
+					float newQuality = CFG.GetCookingTimingRandomFQ(skillFactor, timingPercent);
 
 					FQ.foodQuality = newQuality;
 
-					FQ.chefID = player.GetPlayerID();
-					Jotunn.Logger.LogMessage($"saved the chef as {FQ.chefID}");
+					QualityTextDisplayer(newQuality, player);
+				}
+				else if (LocalChefInvCooking.isTrue)
+				{
+					SaveFoodQuality FQ = itemMade.AddComponent<SaveFoodQuality>();
+					Player player = Player.m_localPlayer;
+
+					float skillFactor;
+					if (player != null)
+					{
+						skillFactor = player.GetSkillFactor(SkillMan.Cooking);
+						FQ.chefID = player.GetPlayerID();
+
+						//Jotunn.Logger.LogMessage($"saved the chef as {FQ.chefID}");
+					}
+					else
+					{
+						skillFactor = 0;
+					}
+
+					float newQuality = CFG.GetCookingRandomFQ(skillFactor);
+
+					FQ.foodQuality = newQuality;
+
+					QualityTextDisplayer(newQuality, player);
+				}
+				else if (PlayerPickRef.pickingPlayer != null)
+				{
+					SaveFoodQuality FQ = itemMade.AddComponent<SaveFoodQuality>();
+					Player player = Player.m_localPlayer;
+
+					FQ.chefID = 0;
+
+					if (player != null)
+						FQ.foodQuality = CFG.GetAgricultureRandomFQ(player.GetSkillFactor(SkillMan.Agriculture));
 				}
 			};
         }
+
+		public static void QualityTextDisplayer(float quality, Character player)
+		{
+			string qualityMessage = (quality * 100f).ToString("F0") + "% quality";
+			Vector3 msgPos = CustomWorldTextManager.GetInFrontOfCharacter(player) + Vector3.up;
+			Color msgColor = Color.black;
+
+			if (quality > 0) msgColor = CFG.ColorPTGreen;
+			else msgColor = CFG.ColorPTRed;
+
+			CustomWorldTextManager.AddCustomWorldText(CFG.ColorAscendedGreen, msgPos, 34, qualityMessage);
+		}
 	}
 
 
@@ -95,7 +140,11 @@ perks:
 		public static bool isTrue = false;
 
 		[HarmonyPrefix]
-		public static void Prefix() => isTrue = true;
+		[HarmonyPriority(2)]
+		public static void Prefix() 
+		{
+			isTrue = true;
+		}
 
 		[HarmonyFinalizer]
 		public static void Finalizer() => isTrue = false;
@@ -121,10 +170,13 @@ perks:
 			ZDO zdo = __instance.m_nview.m_zdo;
 			if (zdo == null) return;
 
-			Jotunn.Logger.LogMessage($" recording the player's cooking skill as {(user as Player).GetSkillFactor(SkillMan.Cooking)}");
-			zdo.Set("Cooking Skill", (user as Player).GetSkillFactor(SkillMan.Cooking));
+			//Jotunn.Logger.LogMessage($" recording the player's cooking skill as {(user as Player).GetSkillFactor(SkillMan.Cooking)}");
 
-			(user as Player).RaiseSkill(SkillMan.Cooking, CFG.GetCookingXP(__instance));
+			zdo.Set("Cooking Skill", (user as Player).GetSkillFactor(SkillMan.Cooking));
+			//zdo.Set("Meat Station", true);
+
+			(user as Player).RaiseSkill(SkillMan.Cooking, 
+				CFG.GetCookingXP(__instance.m_nview.GetPrefabName()));
 		}
 
 		[HarmonyPatch(nameof(CookingStation.GetItemConversion))]
@@ -134,13 +186,64 @@ perks:
 			ZDO zdo = __instance.m_nview.m_zdo;
 			if (zdo == null) return;
 
-			float recordedSkill = zdo.GetFloat("Cooking Skill", 0);
-			//Jotunn.Logger.LogMessage($"Reading my zdo says cooking skill is {zdo.GetFloat("Cooking Skill", 0)}");
-			if (recordedSkill > 0)
+			Player user = Player.m_localPlayer;
+			if (user == null) return;
+
+			string itemName = __result.m_from.name;
+			//Jotunn.Logger.LogMessage($"Checking for item {itemName}");
+
+			float recordedRedux = zdo.GetFloat("Cooking Time Redux for " + itemName, 1f);
+			float recordedSkill = zdo.GetFloat("Cooking Level for " + itemName, 0f);
+			long recordedChefID = zdo.GetLong("Chef for " + itemName, 0);
+			bool conversionChanged = zdo.GetBool(itemName + " changed", false);
+			bool conversionRecorded = zdo.GetBool(itemName + " recorded", false);
+			bool dataChanged = false;
+
+			float redux = 1f;
+
+			if (!conversionRecorded)
+            {
+				zdo.Set(itemName + " recorded", true);
+				zdo.Set(itemName + " base time", __result.m_cookTime);
+			}
+
+			//If this conversion hasn't recorded a player yet, we claim it
+			if (recordedChefID == 0 || 
+				recordedChefID != user.GetPlayerID() ||
+				user.GetSkillFactor(SkillMan.Cooking) != recordedSkill)
 			{
-				__result.m_cookTime *= CFG.GetCookingTimeRedux(zdo.GetFloat("Cooking Skill", 0));
-				//Jotunn.Logger.LogMessage($"Cook time is now {__result.m_cookTime}. removing the cooking skill float.");
-				zdo.Set("Cooking Skill", 0f);
+				redux = CFG.GetCookingTimeRedux(user.GetSkillFactor(SkillMan.Cooking));
+
+				zdo.Set("Cooking Time Redux for " + itemName, redux);
+				zdo.Set("Cooking Level for " + itemName, user.GetSkillFactor(SkillMan.Cooking));
+				zdo.Set("Chef for " + itemName, user.GetPlayerID());
+				dataChanged = true;
+			}
+
+			//If nothing has changed, there's no need to touch the result
+			if (!dataChanged) return;
+
+			//Jotunn.Logger.LogMessage($"This station's data for this item conversion has changed.");
+			//if we haven't touched this particular item conversion yet
+			if (!conversionChanged)
+			{
+				//Jotunn.Logger.LogMessage($"This item conversion hasn't been changed before, so we're changing it from " +
+				//	$"{__result.m_cookTime} to {__result.m_cookTime * redux}.");
+				__result.m_cookTime *= redux;
+
+				zdo.Set(itemName + " changed", true);
+			}
+			//but if it's been changed before, we need to fix it
+            else
+			{
+				//Jotunn.Logger.LogMessage($"This item conversion HAS been changed before, so we're " +
+				//	$"grabbing the base value, {zdo.GetFloat(itemName + " base time", 25.1337f)}");
+
+				__result.m_cookTime = zdo.GetFloat(itemName + " base time", 25.1337f);
+
+				//Jotunn.Logger.LogMessage($"And then from {__result.m_cookTime} to {__result.m_cookTime * redux}.");
+
+				__result.m_cookTime *= redux;
 			}
 		}
 
@@ -189,8 +292,8 @@ perks:
 	[HarmonyPatch(typeof(CookingStation), nameof(CookingStation.RPC_RemoveDoneItem))]
 	public class ThrowItem
 	{
-		public static float cookTime = 0;
-		public static float cookFinishedTime = 0;
+		public static float timeToCook = 0;
+		public static float cookingFinishedTime = 0;
 		public static bool throwing = false;
 
 		[HarmonyPrefix]
@@ -202,17 +305,18 @@ perks:
 				if (itemName != "" && __instance.IsItemDone(itemName))
 				{
 					throwing = true;
-					cookTime = timing;
-					cookFinishedTime = __instance.GetItemConversion(itemName).m_cookTime;
+					cookingFinishedTime = timing;
+					timeToCook = __instance.GetItemConversion(itemName).m_cookTime;
 
-					Jotunn.Logger.LogMessage($"Grabbed a cook time of {timing}. " +
-						$"item finishes at {__instance.GetItemConversion(itemName).m_cookTime}");
+					//Jotunn.Logger.LogMessage($"Grabbed a cook time of {timing}. " +
+					//	$"item finishes at {__instance.GetItemConversion(itemName).m_cookTime}");
 
 					if (LocalChefCooking.isTrue)
 					{
 						Player player = Player.m_localPlayer;
 
-						player.RaiseSkill(SkillMan.Cooking, CFG.GetCookingXP(__instance, false));
+						player.RaiseSkill(SkillMan.Cooking, 
+							CFG.GetCookingXP(__instance.m_nview.GetPrefabName(), false));
 					}
 					break;
 				}
@@ -222,8 +326,8 @@ perks:
 		public static void DisposeCookTimes(CookingStation __instance)
 		{
 			throwing = false;
-			cookFinishedTime = 0;
-			cookTime = 0; 
+			cookingFinishedTime = 0;
+			timeToCook = 0; 
 		}
 	}
 
@@ -314,7 +418,8 @@ perks:
 	{
 		public static void Postfix(ItemDrop.ItemData item, bool crafting, ref string __result)
 		{
-			if (item.m_shared.m_food > 0 && item.m_shared.m_foodStamina > 0)
+			if ((item.m_shared.m_food > 0 && item.m_shared.m_foodStamina > 0) &&
+				item.IsExtended())
 			{
 				SaveFoodQuality FQ = item.Extended().GetComponent<SaveFoodQuality>();
 				if (FQ == null) return;
@@ -343,6 +448,10 @@ perks:
 					{
 						__result += $"\nThis meal was prepared by {CFG.ColorKingSkillsFF}{player.GetPlayerName()}{CFG.ColorEnd}";
                     }
+					if (FQ.flavorText != null && FQ.flavorText != "")
+					{
+						__result += $"\n{FQ.flavorText}";
+					}
 				}
 			}
 		}
@@ -361,6 +470,56 @@ perks:
 					yield return new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(Mathf), nameof(Mathf.Round)));
 				}
 			}
+		}
+	}
+
+
+	[HarmonyPatch(typeof(CraftingStation), nameof(CraftingStation.CheckUsable))]
+	public class CookingLevelRQ
+	{
+		[HarmonyPrefix]
+		public static bool KitchenLevelCheck(CraftingStation __instance, Player player)
+		{
+			string name = __instance.m_nview.GetPrefabName();
+
+			//Jotunn.Logger.LogMessage($"checked a kitchen, and its name was {name}");
+
+			if (CFG.GetCookingIsKitchen(name))
+				return CheckRQ(name, player);
+
+			return false;
+		}
+
+		[HarmonyPatch(typeof(CookingStation), nameof(CookingStation.OnInteract))]
+		[HarmonyPrefix]
+		[HarmonyPriority(1)]
+		public static bool MeatLevelCheck(CookingStation __instance)
+		{
+			string name = __instance.m_nview.GetPrefabName();
+
+			//Jotunn.Logger.LogMessage($"checked a cooking station, and its name was {name}");
+
+			if (CFG.GetCookingIsMeatStation(name))
+				return CheckRQ(name, Player.m_localPlayer);
+
+			return false;
+		}
+
+		public static bool CheckRQ(string station, Player player)
+		{
+			float skillLevel = player.GetSkillFactor(SkillMan.Cooking) * CFG.MaxSkillLevel.Value;
+			float skillRQ = CFG.GetCookingLevelRQ(station);
+
+			//Jotunn.Logger.LogMessage($"{skillLevel} out of {skillRQ}");
+
+			//You may enter the palace
+			if (skillLevel >= skillRQ)
+				return true;
+
+			Player.m_localPlayer.Message(MessageHud.MessageType.Center,
+				$"Your cooking skill is too low. You need {CFG.ColorPTRedFF}" + skillRQ.ToString("F0") +
+				$" cooking{CFG.ColorEnd} to operate this station!");
+			return false;
 		}
 	}
 }

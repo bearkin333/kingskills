@@ -13,6 +13,7 @@ namespace kingskills
         public float foodQuality;
         public List<BuffType> buffs;
         public long chefID;
+        public string flavorText;
 
         public enum BuffType
         {
@@ -33,7 +34,8 @@ namespace kingskills
             {
                 serial += buff + "C";
             }
-            serial += chefID + "D";
+            serial += chefID.ToString() + "D";
+            serial += flavorText + "^";
 
             //Jotunn.Logger.LogMessage(serial);
             return serial;
@@ -41,94 +43,67 @@ namespace kingskills
 
         public override void Deserialize(string data)
         {
-            string poppedData = "";
+            //Jotunn.Logger.LogWarning($"data has {data.Count()} elements]");
             int i = 0;
-            bool go = true;
 
-            while (go)
-            {
-                if (data[i] != 'A')
-                {
-                    poppedData += data[i];
-                }
-                else
-                {
-                    go = false;
-                }
-                i++;
-            }
 
-            if (!float.TryParse(poppedData, out foodQuality))
+            string foodQualitySerial = DeserializeField('A', data, ref i);
+            if (!float.TryParse(foodQualitySerial, out foodQuality))
                 Jotunn.Logger.LogWarning("Failed to parse foodquality");
 
-            //Jotunn.Logger.LogMessage($"parsed out food quality of [{poppedData}]");
-            poppedData = "";
-            go = true;
 
-            while (go)
-            {
-                if (data[i] != 'B')
-                {
-                    poppedData += data[i];
-                }
-                else
-                {
-                    go = false;
-                }
-                i++;
-            }
-
-            //Jotunn.Logger.LogMessage($"parsed out array count of [{poppedData}]");
+            string countSerial = DeserializeField('B', data, ref i);
             int count = 0;
-            if (!int.TryParse(poppedData, out count))
+            if (!int.TryParse(countSerial, out count))
                 Jotunn.Logger.LogWarning("Failed to parse buff count");
-            int j = 0;
-            int buffID = 0;
 
+
+            int j = 0;
             while (j < count)
             {
-                go = true;
-                poppedData = "";
-                while (go)
-                {
-                    if (data[i] != 'C')
-                    {
-                        poppedData += data[i];
-                    }
-                    else
-                    {
-                        go = false;
-                    }
-                    i++;
-                }
-                //Jotunn.Logger.LogMessage($"popped out a buff type of [{poppedData}]");
-                if (!int.TryParse(poppedData, out buffID))
+                int buffID = 0;
+                string buffIDSerial = DeserializeField('C', data, ref i);
+
+                if (!int.TryParse(buffIDSerial, out buffID))
                     Jotunn.Logger.LogWarning("Failed to parse a buff");
+
                 buffs.Add((BuffType)buffID);
 
                 j++;
             }
 
-            poppedData = "";
-            go = true;
+
+            string chefIDSerial = DeserializeField('D', data, ref i);
+            if (!long.TryParse(chefIDSerial, out chefID))
+                Jotunn.Logger.LogWarning("Failed to parse chefID");
+
+
+            string flavorTextSerial = DeserializeField('^', data, ref i);
+            flavorText = flavorTextSerial;
+        }
+
+        public static string DeserializeField(char key, string data, ref int i)
+        {
+            string poppedData = "";
+            bool go = true;
 
             while (go)
             {
-                if (data.Count() == i) break;
-                if (data[i] != 'D')
+                if (i >= data.Count()) break;
+
+                if (data[i] != key)
                 {
                     poppedData += data[i];
+                    //Jotunn.Logger.LogWarning($"[{poppedData}]");
                 }
                 else
                 {
                     go = false;
                 }
                 i++;
+                //Jotunn.Logger.LogWarning($"parsing array index: [{i}]");
             }
-
-            //Jotunn.Logger.LogMessage($"parsed out chef ID of [{poppedData}]");
-            if (!long.TryParse(poppedData, out chefID))
-                Jotunn.Logger.LogWarning("Failed to parse chefID");
+            return poppedData;
         }
 
         public override BaseExtendedItemComponent Clone() => (BaseExtendedItemComponent)MemberwiseClone();

@@ -251,7 +251,8 @@ namespace kingskills.UX
                 SkillGUI.RPAscendedText.GetComponent<Text>().text = "";
             }
 
-            Jotunn.Logger.LogMessage($"{skill} is ascendable: {AscensionManager.IsAscendable(skill)}");
+            //Jotunn.Logger.LogMessage($"{skill} is ascendable: {AscensionManager.IsAscendable(skill)}");
+            
             if (AscensionManager.IsAscendable(skill))
             {
                 SkillGUI.RPAscendedBtn.SetActive(true);

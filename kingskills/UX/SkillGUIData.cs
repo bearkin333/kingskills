@@ -747,7 +747,7 @@ namespace kingskills.UX
 
             float plantXPReward = CFG.GetAgriculturePlantReward(Player.m_localPlayer.m_hovering);
 
-            float botYield = PT.MultToPer(CFG.GetAgricultureYieldMult(skill));
+            float botYield = PT.MultToPer(1f+CFG.GetAgricultureYieldMod(skill));
             float botGrowRedux = PT.MultToPer(CFG.GetAgricultureGrowTimeRedux(skill), true);
             float botFoodQuality = PT.MultToPer(CFG.GetAgricultureFoodQualityMult(skill));
             float botHealthGain = CFG.GetAgricultureHealthRegain(skill);
