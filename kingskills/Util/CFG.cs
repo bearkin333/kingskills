@@ -894,7 +894,7 @@ namespace kingskills
                 "% extra damage done with thrown weapons at level 0");
             SpearProjectilePercentMax = cfg.Bind("Spear.Effect", "Thrown Damage Percent Max", 200f,
                 "% extra damage done with thrown weapons at level 100");
-            SpearBlockArmorMin = cfg.Bind("Spear.Effect", "Generic Block Armor Min", 0f,s
+            SpearBlockArmorMin = cfg.Bind("Spear.Effect", "Generic Block Armor Min", 0f,
                 "Flat block armor always applied at level 0");
             SpearBlockArmorMax = cfg.Bind("Spear.Effect", "Generic Block Armor Max", 40f,
                 "Flat block armor always applied at level 100");
