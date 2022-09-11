@@ -45,6 +45,26 @@ perks:
         {
 			ExtendedItemData.NewExtendedItemData += itemMade =>
 			{
+                try
+				{
+					Jotunn.Logger.LogMessage($"This client responsible for creating an extended item. This one's " +
+						$"ID is {Player.m_localPlayer.GetPlayerID()}" +
+						$"\nLocal chef cooking is {LocalChefCooking.isTrue}" +
+						$"\nLocal chef cooking from inventory is {LocalChefInvCooking.isTrue}");
+				}
+                catch
+                {
+					Jotunn.Logger.LogMessage($"Local player didn't exist trying to make an extended item");
+				}
+				try
+				{
+					Jotunn.Logger.LogMessage($"Item made is {itemMade.m_dropPrefab.name}, and it's stats are " +
+						$"{itemMade.m_shared.m_food} and {itemMade.m_shared.m_foodStamina}");
+				}
+				catch
+				{
+					Jotunn.Logger.LogMessage($"item has no info");
+				}
 				if (!(itemMade.m_shared.m_food > 0 || itemMade.m_shared.m_foodStamina > 0)) return;
 				if (LocalChefCooking.isTrue)
                 {
@@ -83,6 +103,9 @@ perks:
 					FQ.foodQuality = newQuality;
 
 					QualityTextDisplayer(newQuality, player);
+
+					Jotunn.Logger.LogMessage($"Showed tutorial and added new FQ components:" +
+						$"{FQ.foodQuality}, ID: {FQ.chefID}");
 				}
 				else if (LocalChefInvCooking.isTrue)
 				{
@@ -214,6 +237,12 @@ perks:
 				user.GetSkillFactor(SkillMan.Cooking) != recordedSkill)
 			{
 				redux = CFG.GetCookingTimeRedux(user.GetSkillFactor(SkillMan.Cooking));
+
+				Jotunn.Logger.LogMessage($"Cooking station data change!. I had no recorded chef OR the ID didn't " +
+					$"match mine OR the recorded skill is different from ours." +
+					$"\nsetting {"Cooking Time Redux for " + itemName} to {redux}" +
+					$"\nsetting {"Cooking Level for " + itemName} to {user.GetSkillFactor(SkillMan.Cooking)}" +
+					$"\nsetting {"Chef for " + itemName} to {user.GetPlayerID()}");
 
 				zdo.Set("Cooking Time Redux for " + itemName, redux);
 				zdo.Set("Cooking Level for " + itemName, user.GetSkillFactor(SkillMan.Cooking));
