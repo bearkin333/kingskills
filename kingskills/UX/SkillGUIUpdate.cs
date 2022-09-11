@@ -24,6 +24,7 @@ namespace kingskills.UX
         [HarmonyPrefix]
         public static void FixedUpdateGUI(Player __instance)
         {
+            //Jotunn.Logger.LogWarning("DID UPDATE");
             try
             {
                 if (!__instance.m_nview) return;
@@ -33,9 +34,10 @@ namespace kingskills.UX
             }
             catch
             {
-                Jotunn.Logger.LogWarning("Didn't check for GUI Update");
+                //Jotunn.Logger.LogWarning("Didn't check for GUI Update");
                 return;
             }
+
 
             timeSinceUpdate += Time.fixedDeltaTime;
             if (timeSinceUpdate >= updateGUITimer)
@@ -48,41 +50,64 @@ namespace kingskills.UX
 
         public static void ToggleSkillGUI()
         {
+            if (!GoodInput()) return;
+            if (SkillGUI.SkillGUIWindow.activeSelf) CloseSkillGUI();
+            else OpenSkillGUI();
+        }
+
+        public static bool GoodInput()
+        {
             if (Player.m_localPlayer == null)
             {
-                return;
+                return false;
             }
             if (!SkillGUI.SkillGUIWindow)
             {
                 SkillGUI.Init();
+                CheckDropdownButtons();
+                return true;
             }
-            if (!closable) return;
+            if (!closable) return false;
 
-            bool state = !SkillGUI.SkillGUIWindow.activeSelf;
-
-            SkillGUI.SkillGUIWindow.SetActive(state);
-
-            GUIManager.BlockInput(state);
-
-            if (state)
-            {
-                GUICheck();
-            }
+            return true;
         }
+
+        public static void OpenSkillGUI()
+        {
+            if (!GoodInput()) return;
+
+            SkillGUI.SkillGUIWindow.SetActive(true);
+            GUIManager.BlockInput(true);
+            GUICheck();
+        }
+
+        public static void CloseSkillGUI()
+        {
+            if (!GoodInput()) return;
+
+            SkillGUI.SkillGUIWindow.SetActive(false);
+            GUIManager.BlockInput(false);
+        }
+
+
 
         public static void OnDropdownValueChange()
         {
-            //Reset the scroll position
-
-            //Check if the up and down buttons should be turned off or on
-            if (SkillGUI.dd.value == 0) SkillGUI.ddUpBtn.GetComponent<Button>().enabled = false;
-            else SkillGUI.ddUpBtn.GetComponent<Button>().enabled = true;
-            if (SkillGUI.dd.value == SkillGUI.dd.options.Count-1) SkillGUI.ddDownBtn.GetComponent<Button>().enabled = false;
-            else SkillGUI.ddDownBtn.GetComponent<Button>().enabled = true;
+            CheckDropdownButtons();
 
             GUICheck();
+            //Reset the scroll position
             SkillGUI.LPEffectsScroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
             SkillGUI.LPTipsScroll.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
+        }
+
+        public static void CheckDropdownButtons()
+        {
+            //Check if the up and down buttons should be turned off or on
+            if (SkillGUI.dd.value == 0) SkillGUI.ddUpBtn.GetComponent<Button>().interactable = false;
+            else SkillGUI.ddUpBtn.GetComponent<Button>().interactable = true;
+            if (SkillGUI.dd.value == SkillGUI.dd.options.Count - 1) SkillGUI.ddDownBtn.GetComponent<Button>().interactable = false;
+            else SkillGUI.ddDownBtn.GetComponent<Button>().interactable = true;
         }
         public static void DDDown()
         {

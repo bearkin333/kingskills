@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AssetLoader.cs" />
+    <Compile Include="Food Quality\QuickCombineGUI.cs" />
     <Compile Include="KSkills\Agriculture.cs" />
     <Compile Include="KSkills\Building.cs" />
     <Compile Include="KSkills\Cooking.cs" />
@@ -99,10 +100,10 @@
     <Compile Include="Overhauls\KSSneak.cs" />
     <Compile Include="Perks\AscensionManager.cs" />
     <Compile Include="Util\CustomTextMan.cs" />
-    <Compile Include="Util\SaveFoodQuality.cs" />
-    <Compile Include="Util\StackableItems.cs" />
+    <Compile Include="Food Quality\SaveFoodQuality.cs" />
+    <Compile Include="Food Quality\StackableItems.cs" />
     <Compile Include="UX\AscendConfirmGUI.cs" />
-    <Compile Include="UX\CombineGUI.cs" />
+    <Compile Include="Food Quality\CombineGUI.cs" />
     <Compile Include="UX\PT.cs" />
     <Compile Include="UX\SkillGUIData.cs" />
     <Compile Include="UX\Tutorials.cs" />

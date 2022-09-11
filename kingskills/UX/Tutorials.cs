@@ -60,6 +60,25 @@ namespace kingskills.UX
                 Tutorial.instance.m_texts.Add(ascend);
             }
 
+            Tutorial.TutorialText foodQ = new Tutorial.TutorialText
+            {
+                m_label = "King's Skills - Food Quality",
+                m_name = "kingskills_foodQ",
+                m_text = $"Look carefully at that piece of food you just picked up! You'll notice there's a number at the " +
+                $"bottom of the tooltip that says [{CFG.ColorAscendedGreen}Quality{CFG.ColorEnd}]. Every piece of food you pick " +
+                $"up has a different food quality, which affects its duration, health, and stamina increase. Read the tips page for" +
+                $" cooking and agriculture carefully if you want to figure out how to get better quality food! " +
+                $"\n\nFoods of different quality can be packaged together to save space, but doing so will reduce the quality of " +
+                $"the higher level food.",
+                m_topic = "King's Skills Food Quality"
+            };
+            if (!Tutorial.instance.m_texts.Contains(foodQ))
+            {
+                Tutorial.instance.m_texts.Add(foodQ);
+            }
+
+
+
 
             __instance.ShowTutorial("kingskills_intro");
         }

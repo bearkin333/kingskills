@@ -19,6 +19,9 @@ namespace kingskills.WeaponExperience
         {
             if (!WeaponDamagePatch.CheckHitGood(hit)) return;
 
+            Character attacker = hit.GetAttacker();
+            if (attacker.IsPlayer() && (!attacker.IsPVPEnabled() || !p.IsPVPEnabled())) return;
+
             if (hit.m_attacker == p.GetZDOID())
             {
                 //Jotunn.Logger.LogMessage($"Player dealt damage to {__instance.GetDestructibleType()}");
@@ -44,11 +47,11 @@ namespace kingskills.WeaponExperience
         {
             if (!CFG.IsSkillActive(skill)) return;
 
-            //Jotunn.Logger.LogMessage($"Player swinging with {skill} for {ConfigManager.XpSwingRate} XP");
-            p.RaiseSkill(skill, CFG.WeaponXPSwing.Value);
+            Jotunn.Logger.LogMessage($"Player swinging with {skill} for {CFG.WeaponXPSwing} XP");
+            LevelUp.CustomRaiseSkill(p, skill, CFG.WeaponXPSwing.Value, false);
 
             if (skill == Skills.SkillType.Axes)
-                p.RaiseSkill(Skills.SkillType.WoodCutting, CFG.WeaponXPSwing.Value);
+                LevelUp.CustomRaiseSkill(p, Skills.SkillType.WoodCutting, CFG.WeaponXPSwing.Value, false);
         }
     }
 
@@ -60,36 +63,42 @@ namespace kingskills.WeaponExperience
         [HarmonyPatch(typeof(Character), nameof(Character.Damage))]
         static void Character_Damage(Character __instance, HitData hit)
         {
+            Jotunn.Logger.LogMessage("character hit detected");
             DamageToExp(__instance, hit, true);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Destructible), nameof(Destructible.Damage))]
         static void Destructible_Damage(Destructible __instance, HitData hit)
         {
+            Jotunn.Logger.LogMessage("Destructible hit detected");
             DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(MineRock), nameof(MineRock.Damage))]
         static void MineRock_Damage(Destructible __instance, HitData hit)
         {
+            Jotunn.Logger.LogMessage("Mine Rock hit detected");
             DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Damage))]
         static void MineRock5_Damage(Destructible __instance, HitData hit)
         {
+            Jotunn.Logger.LogMessage("Mine Rock 5 hit detected");
             DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Damage))]
         static void TreeBase_Damage(Destructible __instance, HitData hit)
         {
+            Jotunn.Logger.LogMessage("Tree Base hit detected");
             DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))]
         static void TreeLog_Damage(Destructible __instance, HitData hit)
         {
+            Jotunn.Logger.LogMessage("Tree Log hit detected");
             //DamageToExp(__instance, hit, false);
             //Redundant with TreeBase
         }

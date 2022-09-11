@@ -71,11 +71,13 @@ perks:
             if (LocalPlayerPlacing.isTrue)
             {
                 Player player = Player.m_localPlayer;
+                ZDO zdo = __instance.m_nview.m_zdo;
 
-                __instance.m_nview.GetZDO().Set("Agriculture Level", 
+                zdo.Set("Agriculture Level", 
                     player.GetSkillFactor(SkillMan.Agriculture));
-               player.RaiseSkill(SkillMan.Agriculture, CFG.AgricultureXPPlantFlat.Value);
-                __instance.m_nview.m_zdo.Set("Current Botanist", player.GetPlayerID());
+                player.RaiseSkill(SkillMan.Agriculture, CFG.AgricultureXPPlantFlat.Value);
+                zdo.Set("Current Botanist", player.GetPlayerID());
+                Jotunn.Logger.LogMessage($"This plant's botanist set to {zdo.GetLong("Current Botanist", 0)}");
             }
         }
     }
@@ -113,25 +115,24 @@ perks:
     }
 
 
-    [HarmonyPatch(typeof(Pickable), nameof(Pickable.Interact))]
+    [HarmonyPatch(typeof(Pickable), nameof(Pickable.RPC_Pick))]
     public static class PickItem
     {
         [HarmonyPrefix]
-        public static void BeforeInteract(Pickable __instance, Humanoid character)
+        public static void BeforePick(Pickable __instance)
         {
-            if (!__instance.m_nview.IsValid() ||
-                PlayerPickRef.pickingPlayer == null ||
-                PlayerPickRef.pickingPlayer != character.GetZDOID() ||
-                __instance.m_tarPreventsPicking) return;
+            if ((PlayerPickRef.pickingPlayer == null) || 
+               (!CFG.GetAgricultureIsPlant(__instance)) ||
+               (!__instance.m_nview.IsOwner() || __instance.m_picked))
+               return;
 
-            if (!CFG.GetAgricultureIsPlant(__instance)) return;
+            Player player = ZNetScene.instance.FindInstance((ZDOID)PlayerPickRef.pickingPlayer).GetComponent<Player>();
 
-            float skillF = character.GetSkillFactor(SkillMan.Agriculture);
+            float skillF = player.GetSkillFactor(SkillMan.Agriculture);
 
             //We increase the drop amount
             __instance.m_amount += CFG.GetAgricultureRandomAdditionalYield(skillF, __instance.m_amount);
 
-            //I could also put the quality code in here, but I'm gonna wait until I work that out with cooking
 
             float expReward = CFG.GetAgriculturePlantReward(__instance.gameObject);
 
@@ -139,11 +140,11 @@ perks:
             if (expReward > 0)
             {
                 for (int i = 0; i < __instance.m_amount; i++)
-                character.RaiseSkill(SkillMan.Agriculture, expReward);
+                player.RaiseSkill(SkillMan.Agriculture, expReward);
             }
 
             //We regain health
-            character.Heal(CFG.GetAgricultureHealthRegain(skillF));
+            player.Heal(CFG.GetAgricultureHealthRegain(skillF));
 
             //This piece of code checks to see if this pickable has already had it's respawn timer tinkered with
             //If not, then it tinkers with it
@@ -156,8 +157,8 @@ perks:
             }
             else
             {
-                __instance.m_respawnTimeMinutes = 
-                    (int)__instance.m_nview.GetZDO().GetFloat("Modified Respawn Time", -20);
+                //__instance.m_respawnTimeMinutes = 
+                //    (int)__instance.m_nview.GetZDO().GetFloat("Modified Respawn Time", -20);
             }
         }
     }

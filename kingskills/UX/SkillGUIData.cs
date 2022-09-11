@@ -834,7 +834,7 @@ namespace kingskills.UX
             float parryExpMod = PT.MultToPer(CFG.GetBlockParryExpMult());
 
             string staminaReduxS = PT.Prettify(staminaRedux, 1, PT.TType.PercentRedux);
-            string baseBlockPowerS = PT.Prettify(baseBlockPower, 0, PT.TType.Percent);
+            string baseBlockPowerS = PT.Prettify(baseBlockPower, 0, PT.TType.Flat);
             string blockPerArmorS = PT.Prettify(blockPerArmor, 1, PT.TType.Percent);
             string blockHealthS = PT.Prettify(blockHealth, 0, PT.TType.Percent);
             string parryExpModS = PT.Prettify(parryExpMod, 0, PT.TType.ColorlessPercent);
@@ -1115,13 +1115,16 @@ namespace kingskills.UX
                 $"Jumping would be a strange skill to focus your energies on, but as with every skill in King's Skills, you can eventually " +
                 $"gain very powerful abilities by dedicating your time and training to it.";
             SkillGUI.LPTipsTexts[2].GetComponent<Text>().text =
-                $"You gain a flat amount of experience every time you jump. The higher the jump, and the farther you fall, the more experience " +
-                $"you get. If you really want to maximize your jumping abilities, you'll have to find a <i>very</i> tall cliff. However, " +
-                $"you don't gain the experience if you die from the fall, so you'll want to wean your way into it.";
+                $"You gain a flat amount of experience every time you jump.";
             SkillGUI.LPTipsTexts[3].GetComponent<Text>().text =
                 $"Levelling up jumping both increases the height at which you have to fall before fall damage is calculated and reduces the" +
                 $" amount of total fall damage you take. However, those reductions won't affect the experience you get from falling, so the higher " +
-                $"your jump gets, the easier time you should have levelling it up.";
+                $"your jump gets, the easier time you have levelling it up.";
+            SkillGUI.LPTipsTexts[4].GetComponent<Text>().text = 
+                $"{CFG.ColorBonusBlueFF}Bonus experience for jumping is earned by falling from very tall heights. " +
+                $"If you really want to maximize your jumping abilities, you'll have to find a <i>very</i> tall cliff. " +
+                $"However, you don't gain the experience if you die from the fall, so " +
+                $"be careful!{CFG.ColorEnd}";
         }
     }
 
@@ -1228,7 +1231,7 @@ namespace kingskills.UX
                 $"EAT ROCKS EAT ROCKS EAT ROCKS EAT ROCKS EAT ROCKS";
             SkillGUI.LPTipsTexts[5].GetComponent<Text>().text =
                 $"{CFG.ColorBonusBlueFF}Bonus experience with mining is earned by eating rocks! Rocks will stay in your body " +
-                $"for {CFG.MiningXPRockTimer.Value} minutes, so you'll have to trade off the value of your food slots and the value " +
+                $"for {CFG.GetMiningXPRockTimerInSeconds().ToString("F0")} minutes, so you'll have to trade off the value of your food slots and the value " +
                 $"of the rock in question for sizable experience bonuses. Any kind of metal, ore, or rock can be eaten. The " +
                 $"effects screen will show you the experience value for any rock you're currently hovering over. {CFG.ColorEnd}";
         }
@@ -1685,7 +1688,8 @@ namespace kingskills.UX
                 $"from the bottom of their soul. ";
             SkillGUI.LPTipsTexts[2].GetComponent<Text>().text =
                 $"Woodcutting is one of the oldest and most vital skills in Valheim. No matter what stage of the game you're in, you'll " +
-                $"never run out of the need for wood. Luckily, levelling this skill up will give you a plethora of ways to ";
+                $"never run out of the desire for wood. Luckily, levelling this skill up will give you a plethora of ways to compensate " +
+                $"for that ever-growing need.";
             SkillGUI.LPTipsTexts[3].GetComponent<Text>().text =
                 $"Experience for any tool-based skill in King's skills can be gained in several ways. " +
                 $"\n{CFG.ColorWhiteFF}Hold:{CFG.ColorEnd} You get a experience very slowly over time while holding the tool." +

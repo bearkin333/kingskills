@@ -51,11 +51,18 @@ namespace kingskills.Patches
         [HarmonyPrefix]
         public static void DamageArmorWatch(Character __instance, HitData hit)
         {
-            if (!CFG.IsSkillActive(Skills.SkillType.Polearms)) return;
-            if (!__instance.IsPlayer()) return;
-            if (__instance.IsBlocking() && hit.m_blockable) return;
+            if (!CFG.IsSkillActive(Skills.SkillType.Polearms) ||
+                !__instance.IsPlayer() ||
+                Util.GetPlayerWeapon((Player)__instance).m_shared.m_skillType != Skills.SkillType.Polearms ||
+                (__instance.IsBlocking() && hit.m_blockable)) 
+                return;
+            Character attacker = hit.GetAttacker();
+            if ((hit.HaveAttacker() && attacker == null) || 
+                !__instance.IsPVPEnabled() && attacker != null && attacker.IsPlayer())
+                return;
 
             HitData sampleHit = hit.Clone();
+            sampleHit.ApplyResistance(__instance.m_damageModifiers, out _);
             sampleHit.ApplyArmor(__instance.GetBodyArmor());
             float damageBlocked = hit.GetTotalDamage() - sampleHit.GetTotalDamage();
 

@@ -177,7 +177,7 @@ namespace kingskills.UX
 
             // Add a listener to the button to close the panel again
             Button button = CloseBtn.GetComponent<Button>();
-            button.onClick.AddListener(SkillGUIUpdate.ToggleSkillGUI);
+            button.onClick.AddListener(SkillGUIUpdate.CloseSkillGUI);
 
             // Create the close button
             StickBtn = GUIManager.Instance.CreateButton(
@@ -341,6 +341,7 @@ namespace kingskills.UX
             scrollSet.horizontal = false;
             scrollSet.vertical = true;
             scrollSet.enabled = true;
+            scrollSet.scrollSensitivity = 100f;
 
 
             GameObject scrollVert = GameObject.Instantiate(LPEffectsScroll);
@@ -348,6 +349,17 @@ namespace kingskills.UX
             GameObject.Destroy(scrollVert.GetComponent<Scrollbar>());
             GameObject.Destroy(scrollVert.GetComponent<Mask>());
             scrollVert.transform.SetParent(LPEffectsScroll.transform);
+
+            GameObject scrollBar = GameObject.Instantiate(scrollVert);
+            scrollBar.transform.SetParent(LPEffectsScroll.transform);
+            Scrollbar scrollB = scrollBar.AddComponent<Scrollbar>();
+            rect = scrollBar.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(40, 500);
+            rect.anchorMin = new Vector2(1f, 0.5f);
+            rect.anchorMax = new Vector2(1f, 0.5f);
+            rect.anchoredPosition = new Vector2(-20f, 0);
+
+            scrollSet.horizontalScrollbar = scrollB;
 
             rect = scrollVert.GetComponent<RectTransform>();
             rect.sizeDelta = new Vector2(300, 425);
@@ -514,6 +526,7 @@ namespace kingskills.UX
             scrollSet.vertical = true;
             scrollSet.enabled = true;
 
+            scrollSet.scrollSensitivity = 100f;
 
             GameObject scrollVert = GameObject.Instantiate(LPTipsScroll);
             GameObject.Destroy(scrollVert.GetComponent<ScrollRect>());
@@ -521,8 +534,16 @@ namespace kingskills.UX
             GameObject.Destroy(scrollVert.GetComponent<Mask>());
             scrollVert.transform.SetParent(LPTipsScroll.transform);
 
+            GameObject scrollBar = GameObject.Instantiate(scrollVert);
+            scrollBar.transform.SetParent(LPTipsScroll.transform);
+            Scrollbar scrollB = scrollBar.AddComponent<Scrollbar>();
+            rect = scrollBar.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(100, 500);
+
+            scrollSet.verticalScrollbar = scrollB;
+
             rect = scrollVert.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(300, 1600);
+            rect.sizeDelta = new Vector2(300, 425);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0, 0);

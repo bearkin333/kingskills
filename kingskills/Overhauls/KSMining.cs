@@ -31,7 +31,7 @@ namespace kingskills.Overhauls
                 if (hoverable != null && !fromInventoryGui && (hoverObject.GetComponentInParent<Interactable>()?.UseItem(__instance, item) ?? false))
                     return false;
 
-                item.m_shared.m_foodBurnTime = 1600;
+                item.m_shared.m_foodBurnTime = CFG.GetMiningXPRockTimerInSeconds();
 
                 if (player.EatFood(item))
                 {

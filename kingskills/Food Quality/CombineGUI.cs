@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using kingskills;
 
 namespace kingskills.UX
 {
@@ -198,6 +199,18 @@ namespace kingskills.UX
 			btn = NoBtn.GetComponent<Button>();
 			btn.onClick.AddListener(DontAsk);
 
+		}
+
+		public static void CombineUpdate(string buttonName)
+		{
+			if (CombineGUI.CombineWindow == null) return;
+			if (!CombineGUI.CombineWindow.activeSelf) return;
+			if (ZInput.instance == null) return;
+
+			if (ZInput.GetButtonDown(buttonName))
+			{
+				OnConfirmClick();
+			}
 		}
 
 		public static void OnConfirmClick()

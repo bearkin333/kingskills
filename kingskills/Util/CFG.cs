@@ -603,6 +603,7 @@ namespace kingskills
         public static ConfigEntry<float> FistStaminaReduxMax;
         public static ConfigEntry<float> FistDamageFlatMin;
         public static ConfigEntry<float> FistDamageFlatMax;
+        public static ConfigEntry<float> FistDamageFlatFactor;
         public static ConfigEntry<float> FistBlockArmorMin;
         public static ConfigEntry<float> FistBlockArmorMax;
         public static ConfigEntry<float> FistMovespeedPercentMin;
@@ -630,8 +631,10 @@ namespace kingskills
                 "% less stamina usage for fists at level 100");
             FistDamageFlatMin = cfg.Bind("Fist.Effect", "Flat Damage Min", -3f,
                 "Flat extra damage at level 0");
-            FistDamageFlatMax = cfg.Bind("Fist.Effect", "Flat Damage Max", 62f,
+            FistDamageFlatMax = cfg.Bind("Fist.Effect", "Flat Damage Max", 32f,
                 "Flat extra damage at level 100");
+            FistDamageFlatFactor = cfg.Bind("Fist.Effect", "Flat Damage Factor", 1.65f,
+                "Curve for fist damage increase over levels");
             FistBlockArmorMin = cfg.Bind("Fist.Effect", "Unarmed Block Armor Flat Min", -5f,
                 "Flat extra unarmed block armor at level 0");
             FistBlockArmorMax = cfg.Bind("Fist.Effect", "Unarmed Block Armor Flat Max", 50f,
@@ -659,7 +662,8 @@ namespace kingskills
         }
         public static float GetFistDamageFlat(float skillFactor)
         {
-            return Mathf.Lerp(FistDamageFlatMin.Value, FistDamageFlatMax.Value, skillFactor);
+            return Mathf.Lerp(FistDamageFlatMin.Value, FistDamageFlatMax.Value, 
+                Mathf.Pow(skillFactor, FistDamageFlatFactor.Value));
         }
         public static float GetFistBlockArmor(float skillFactor)
         {
@@ -1492,15 +1496,15 @@ namespace kingskills
                     "Whether or not to allow King's cooking");
 
 
-            CookingXPStart = cfg.Bind("Cooking.Experience", "Start", .5f,
+            CookingXPStart = cfg.Bind("Cooking.Experience", "Start", 1.5f,
                     "How much experience for a started project");
-            CookingXPFinish = cfg.Bind("Cooking.Experience", "Finish", 1.2f,
+            CookingXPFinish = cfg.Bind("Cooking.Experience", "Finish", 4f,
                     "How much experience for successfully cooking a project");
             CookingXPTierBonus = cfg.Bind("Cooking.Experience", "Tier Bonus", 50f,
                     "% increase in exp gained per tier level of cooking machine");
-            CookingXPStatMod = cfg.Bind("Cooking.Experience", "Stat Mod", .05f,
+            CookingXPStatMod = cfg.Bind("Cooking.Experience", "Stat Mod", .11f,
                     "Amount of experience gained per health and stamina of eaten food.");
-            CookingXPCustomerBonus = cfg.Bind("Cooking.Experience", "Customer bonus", 100f,
+            CookingXPCustomerBonus = cfg.Bind("Cooking.Experience", "Customer bonus", 150f,
                     "% extra experience when your food is eaten by another person.");
 
             CookingStationTiers = new Dictionary<string, float>();
@@ -1856,22 +1860,23 @@ namespace kingskills
 
             //List of all objects that you can eat and their exp reward
             MiningBXPTable.Add("Stone", 2);
-            MiningBXPTable.Add("CopperOre", 5);
-            MiningBXPTable.Add("Copper", 20);
-            MiningBXPTable.Add("TinOre", 7);
-            MiningBXPTable.Add("Tin", 32);
+            MiningBXPTable.Add("Flint", 10);
+            MiningBXPTable.Add("Coal", 15);
+            MiningBXPTable.Add("CopperOre", 20);
+            MiningBXPTable.Add("Copper", 32);
+            MiningBXPTable.Add("TinOre", 33);
+            MiningBXPTable.Add("Tin", 40);
             MiningBXPTable.Add("Bronze", 60);
-            MiningBXPTable.Add("IronScrap", 33);
-            MiningBXPTable.Add("Iron", 80);
-            MiningBXPTable.Add("Obsidian", 24);
-            MiningBXPTable.Add("SilverOre", 56);
-            MiningBXPTable.Add("Silver", 115);
-            MiningBXPTable.Add("Chitin", 35);
+            MiningBXPTable.Add("IronScrap", 80);
+            MiningBXPTable.Add("Iron", 120);
+            MiningBXPTable.Add("Obsidian", 140);
+            MiningBXPTable.Add("SilverOre", 200);
+            MiningBXPTable.Add("Silver", 245);
+            MiningBXPTable.Add("Chitin", 85);
 
 
-            MiningXPRockTimer = cfg.Bind("Mining.Experience", "Rock Timer", 25f,
+            MiningXPRockTimer = cfg.Bind("Mining.Experience", "Rock Timer", 21f,
                 "How many minutes a rock will last in your belly");
-            MiningXPRockTimer.Value = MiningXPRockTimer.Value * 60f;
 
             //effects
             MiningPickDamagePercentMin = cfg.Bind("Mining.Effect", "Pick Damage Min", 0f,
@@ -1896,6 +1901,10 @@ namespace kingskills
                 "How much extra carrying capacity you get at level 100");
         }
 
+        public static float GetMiningXPRockTimerInSeconds()
+        {
+            return MiningXPRockTimer.Value * 60f;
+        }
         public static float GetMiningDamageMult(float skillFactor)
         {
             return Mathf.Lerp(PerToMult(MiningPickDamagePercentMin),

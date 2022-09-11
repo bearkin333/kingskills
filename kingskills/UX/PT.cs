@@ -10,7 +10,6 @@ namespace kingskills.UX
     //things to be more readable
     class PT
     {
-
         public static string Prettify(float input, float decimals, TType type)
         {
             string color = "";
@@ -22,34 +21,34 @@ namespace kingskills.UX
                 case TType.TextlessPercent:
                     if (input < 0)
                     {
-                        color += CFG.ColorPTRedFF;
+                        color = CFG.ColorPTRedFF;
                         extraColorText = "%";
                     }
                     else if (input > 0)
                     {
-                        color += CFG.ColorPTGreenFF;
+                        color = CFG.ColorPTGreenFF;
                         extraColorText = "%";
                     }
                     else
                     {
-                        color += CFG.ColorPTWhiteFF;
+                        color = CFG.ColorPTWhiteFF;
                         extraColorText = "%";
                     }
                     break;
                 case TType.Percent:
                     if (input < 0)
                     {
-                        color += CFG.ColorPTRedFF;
+                        color+= CFG.ColorPTRedFF;
                         extraColorText = "% less";
                     }
                     else if (input > 0)
                     {
-                        color += CFG.ColorPTGreenFF + "+";
+                        color = CFG.ColorPTGreenFF + "+";
                         extraColorText = "% extra";
                     }
                     else
                     {
-                        color += CFG.ColorPTWhiteFF;
+                        color = CFG.ColorPTWhiteFF;
                         extraColorText = "% extra";
                     }
                     break;

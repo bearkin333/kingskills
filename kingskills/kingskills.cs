@@ -29,8 +29,10 @@ namespace kingskills
 
 
         Harmony harmony = new Harmony(PluginGUID);
-        private ButtonConfig OpenSkillWindowBtn;
-        
+        public ButtonConfig OpenSkillWindowBtn;
+        public ButtonConfig CollapseFoodBtn;
+        public ButtonConfig CombineShortcutBtn;
+
         // Use this class to add your own localization to the game
         public static CustomLocalization Localization = LocalizationManager.Instance.GetLocalization();
 
@@ -59,6 +61,11 @@ namespace kingskills
                 {
                     SkillGUIUpdate.ToggleSkillGUI();
                 }
+                if (ZInput.GetButtonDown(CollapseFoodBtn.Name))
+                {
+                    QuickCombineGUI.CollapseHoveredFood();
+                }
+                CombineGUI.CombineUpdate(CombineShortcutBtn.Name);
             }
 
             OpenPerks.UpdateOpenPerks();
@@ -75,9 +82,26 @@ namespace kingskills
             {
                 Name = "OpenSkillWindow",
                 Key = KeyCode.I,
-                ActiveInCustomGUI = true
+                ActiveInCustomGUI = true,
+                ActiveInGUI = true
             };
             InputManager.Instance.AddButton(PluginGUID, OpenSkillWindowBtn);
+            CollapseFoodBtn = new ButtonConfig
+            {
+                Name = "CollapseFood",
+                Key = KeyCode.Y,
+                ActiveInCustomGUI = true,
+                ActiveInGUI = true
+            };
+            InputManager.Instance.AddButton(PluginGUID, CollapseFoodBtn);
+            CombineShortcutBtn = new ButtonConfig
+            {
+                Name = "CombineShortcut",
+                Key = KeyCode.Return,
+                ActiveInCustomGUI = true,
+                ActiveInGUI = true
+            };
+            InputManager.Instance.AddButton(PluginGUID, CombineShortcutBtn);
         }
     }
 }

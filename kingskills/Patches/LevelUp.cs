@@ -85,6 +85,15 @@ namespace kingskills
             player.m_nview.GetZDO().Set("BXP", false);
         }
 
+        public static void CustomRaiseSkill(Player player, Skills.SkillType skill, float value, bool displayEXP = true)
+        {
+            player.m_nview.GetZDO().Set("Display", displayEXP);
+
+            player.RaiseSkill(skill, value);
+
+            player.m_nview.GetZDO().Set("Display", true);
+        }
+
 
         public static bool KingSkillRaise(Skills.Skill skill, Player player, float factor)
         {
@@ -116,7 +125,8 @@ namespace kingskills
             float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / CFG.MaxSkillLevel.Value);
 
             //Display the in-world text
-            if (factor >= CFG.DisplayExperienceThreshold.Value)
+            if (factor >= CFG.DisplayExperienceThreshold.Value &&
+                player.m_nview.m_zdo.GetBool("Display", true))
             {
                 string skillName = CFG.GetNameFromSkill(skillT);
                 Color msgColor;
@@ -136,13 +146,11 @@ namespace kingskills
                 }
                 else
                 {
-                    msgTxt = "+" + factor.ToString("F1") + " experience\n" + skillName;
+                    msgTxt = "+" + factor.ToString("F1") + " xp\n" + skillName;
                     msgColor = CFG.ColorExperienceYellow;
                     pos = CustomWorldTextManager.GetAboveCharacter(player) +
                         CustomWorldTextManager.GetRandomPosOffset();
                 }
-                if (skill.m_level < CFG.MaxSkillLevel.Value)
-                    msgTxt += "\n" + percent.ToString("F0") + "% to level " + (skill.m_level + 1);
 
                 CustomWorldTextManager.AddCustomWorldText(msgColor, pos, textSize, msgTxt);
             }
@@ -152,8 +160,33 @@ namespace kingskills
 
         public static void OnMaxLevel(Skills.SkillType skill)
         {
-            AscensionManager.isAscendable.Add(skill, true);
+            if (!AscensionManager.isAscendable.ContainsKey(skill))
+                AscensionManager.isAscendable[skill] = true;
+            else
+                AscensionManager.isAscendable.Add(skill, true);
+
             Player.m_localPlayer.ShowTutorial("kingskills_ascend");
+        }
+
+        [HarmonyPatch(typeof(Skills),nameof(Skills.LowerAllSkills))]
+        [HarmonyPostfix]
+        public static void LoseAscendable(Skills __instance)
+        {
+            Dictionary<Skills.SkillType, bool> ascendableChecker = 
+                new Dictionary<Skills.SkillType, bool>(AscensionManager.isAscendable);
+
+            foreach (KeyValuePair<Skills.SkillType, bool> ascendable in ascendableChecker)
+            {
+                if (ascendable.Value)
+                {
+                    Jotunn.Logger.LogMessage($"Since we lost skills, just checking again to see if {ascendable.Key} is still ascendable");
+                    if (__instance.GetSkillLevel(ascendable.Key) < CFG.MaxSkillLevel.Value)
+                    {
+                        Jotunn.Logger.LogMessage("Yup. Not ascendable anymore");
+                        AscensionManager.isAscendable[ascendable.Key] = false;
+                    }
+                }
+            }
         }
 
         public static void LevelUpPing(Player player, Skills.Skill skill)

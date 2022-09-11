@@ -50,6 +50,7 @@ perks:
                 {
 					SaveFoodQuality FQ = itemMade.AddComponent<SaveFoodQuality>();
 					Player player = Player.m_localPlayer;
+					player.ShowTutorial("kingskills_foodQ");
 
 					float timeToCook = 0f;
 					float cookingFinishedTime = 0f;
@@ -482,12 +483,15 @@ perks:
 		{
 			string name = __instance.m_nview.GetPrefabName();
 
-			//Jotunn.Logger.LogMessage($"checked a kitchen, and its name was {name}");
+			//Jotunn.Logger.LogMessage($"checked a bench, and its name was {name}");
 
 			if (CFG.GetCookingIsKitchen(name))
 				return CheckRQ(name, player);
 
-			return false;
+
+			//Jotunn.Logger.LogMessage($"that wasn't a kitchen, so we good");
+
+			return true;
 		}
 
 		[HarmonyPatch(typeof(CookingStation), nameof(CookingStation.OnInteract))]
