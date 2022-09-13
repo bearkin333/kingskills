@@ -68,7 +68,7 @@ namespace kingskills.UX
         public static GameObject ddUpBtn;
         public static GameObject ddDownBtn;
         public static GameObject CloseBtn;
-        public static GameObject StickBtn;
+        public static GameObject PinBtn;
 
         public static GameObject LPTipsTabBtn;
         public static GameObject LPEffectsTabBtn;
@@ -180,8 +180,8 @@ namespace kingskills.UX
             button.onClick.AddListener(SkillGUIUpdate.CloseSkillGUI);
 
             // Create the close button
-            StickBtn = GUIManager.Instance.CreateButton(
-                text: "Stick",
+            PinBtn = GUIManager.Instance.CreateButton(
+                text: "Pin",
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(1f, 1f),
                 anchorMax: new Vector2(1f, 1f),
@@ -190,8 +190,8 @@ namespace kingskills.UX
                 height: 45f);
 
             // Add a listener to the button to close the panel again
-            button = StickBtn.GetComponent<Button>();
-            button.onClick.AddListener(SkillGUIUpdate.StickGUI);
+            button = PinBtn.GetComponent<Button>();
+            button.onClick.AddListener(SkillGUIUpdate.PinGUI);
 
 
             LPEffectsTabBtn = GUIManager.Instance.CreateButton(

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kingskills.Patches
+namespace kingskills.Weapons
 {
     [HarmonyPatch(typeof(Attack))]
     class WeaponStamina

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 
-namespace kingskills
+namespace kingskills.Weapons
 {
     [HarmonyPatch]
     class WeaponDamagePatch

@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using kingskills.Weapons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,11 @@ namespace kingskills
             {
                 return false;
             }
+            if (!WeaponRaiseSkillTakeover.ksOverride &&
+                (WeaponRaiseSkillTakeover.aoeIgnore ||
+                WeaponRaiseSkillTakeover.areaIgnore ||
+                WeaponRaiseSkillTakeover.meleeIgnore)) return false;
+            WeaponRaiseSkillTakeover.ksOverride = false;
 
             Skills.Skill skillActual = __instance.GetSkills().GetSkill(skill);
 
@@ -79,6 +85,7 @@ namespace kingskills
             if (!CFG.IsSkillActive(skill)) return;
 
             player.m_nview.GetZDO().Set("BXP", true);
+            WeaponRaiseSkillTakeover.DoNotIgnore();
 
             player.RaiseSkill(skill, number);
 

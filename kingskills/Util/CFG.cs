@@ -2615,7 +2615,7 @@ namespace kingskills
         public static void InitWeaponEXPConfig(ConfigFile cfg)
         {
             //Weapon Swing Experence
-            WeaponXPSwing = cfg.Bind("Experience.Weapons.Swing", "XP Flat", .25f,
+            WeaponXPSwing = cfg.Bind("Experience.Weapons.Swing", "XP Flat", .3f,
                 "Flat experience to be gained on each swing, regardless of hit.");
 
 
@@ -2630,9 +2630,9 @@ namespace kingskills
 
 
             //Weapon Strike Experience
-            WeaponXPStrikeDamagePercent = cfg.Bind("Experience.Weapons", "XP", 20f,
+            WeaponXPStrikeDamagePercent = cfg.Bind("Experience.Weapons", "XP", 40f,
                 "% modifier to overall experience gained from damage.");
-            WeaponXPStrikeDamageFactor = cfg.Bind("Experience.Weapons", "XP Factor", .24f,
+            WeaponXPStrikeDamageFactor = cfg.Bind("Experience.Weapons", "XP Factor", .36f,
                 "Factor to define the slope of the damage to xp curve.");
             WeaponXPStrikeDestructiblePercent = cfg.Bind("Experience.Weapons", "Destructible", 15f,
                 "% of experience gained when hit target is non living. Should be lover than 100%");
@@ -2649,7 +2649,7 @@ namespace kingskills
 
         
 
-        public static float GetWeaponEXPStrikeDestructibleMod()
+        public static float GetWeaponXPStrikeDestructibleMod()
         {
             return PerToMod(WeaponXPStrikeDestructiblePercent);
         }

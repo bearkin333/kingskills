@@ -123,7 +123,7 @@ namespace kingskills.UX
                 SkillGUI.dd.value--;
             }
         }
-        public static void StickGUI() => GUIManager.BlockInput(false);
+        public static void PinGUI() => GUIManager.BlockInput(false);
         public static void OnEffectsTab() => SetTipsTab(false);
         public static void OnTipsTab() => SetTipsTab(true);
         public static void SetTipsTab(bool isActive)
@@ -141,7 +141,7 @@ namespace kingskills.UX
             SkillGUI.LPEffectsTabBtn.GetComponent<Button>().interactable = interactable;
             SkillGUI.RPAscendedBtn.GetComponent<Button>().interactable = interactable;
             SkillGUI.CloseBtn.GetComponent<Button>().interactable = interactable;
-            SkillGUI.StickBtn.GetComponent<Button>().interactable = interactable;
+            SkillGUI.PinBtn.GetComponent<Button>().interactable = interactable;
             closable = interactable;
         }
 

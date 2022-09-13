@@ -45,6 +45,7 @@ perks:
         {
 			ExtendedItemData.NewExtendedItemData += itemMade =>
 			{
+				/*
                 try
 				{
 					Jotunn.Logger.LogMessage($"This client responsible for creating an extended item. This one's " +
@@ -65,6 +66,7 @@ perks:
 				{
 					Jotunn.Logger.LogMessage($"item has no info");
 				}
+				*/
 				if (!(itemMade.m_shared.m_food > 0 || itemMade.m_shared.m_foodStamina > 0)) return;
 				if (LocalChefCooking.isTrue)
                 {
@@ -207,6 +209,8 @@ perks:
 		[HarmonyPostfix]
 		public static void ReduceCookTime(CookingStation __instance, ref CookingStation.ItemConversion __result)
 		{
+			if (!LocalChefCooking.isTrue) return;
+
 			ZDO zdo = __instance.m_nview.m_zdo;
 			if (zdo == null) return;
 
@@ -216,7 +220,6 @@ perks:
 			string itemName = __result.m_from.name;
 			//Jotunn.Logger.LogMessage($"Checking for item {itemName}");
 
-			float recordedRedux = zdo.GetFloat("Cooking Time Redux for " + itemName, 1f);
 			float recordedSkill = zdo.GetFloat("Cooking Level for " + itemName, 0f);
 			long recordedChefID = zdo.GetLong("Chef for " + itemName, 0);
 			bool conversionChanged = zdo.GetBool(itemName + " changed", false);
@@ -240,11 +243,9 @@ perks:
 
 				Jotunn.Logger.LogMessage($"Cooking station data change!. I had no recorded chef OR the ID didn't " +
 					$"match mine OR the recorded skill is different from ours." +
-					$"\nsetting {"Cooking Time Redux for " + itemName} to {redux}" +
 					$"\nsetting {"Cooking Level for " + itemName} to {user.GetSkillFactor(SkillMan.Cooking)}" +
 					$"\nsetting {"Chef for " + itemName} to {user.GetPlayerID()}");
 
-				zdo.Set("Cooking Time Redux for " + itemName, redux);
 				zdo.Set("Cooking Level for " + itemName, user.GetSkillFactor(SkillMan.Cooking));
 				zdo.Set("Chef for " + itemName, user.GetPlayerID());
 				dataChanged = true;

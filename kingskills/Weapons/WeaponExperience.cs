@@ -9,20 +9,29 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 
-namespace kingskills.WeaponExperience
+namespace kingskills.Weapons
 {
 
     class Manager
     {
         // Patch IDestructible.Damage() to gain experience for player based on damage events.
-        public static void Strike(Player p, HitData hit, float mod=1.0f, bool tool=false)
+        public static void Strike(IDestructible victimD, HitData hit, float mod=1.0f, bool tool=false)
         {
             if (!WeaponDamagePatch.CheckHitGood(hit)) return;
 
             Character attacker = hit.GetAttacker();
-            if (attacker.IsPlayer() && (!attacker.IsPVPEnabled() || !p.IsPVPEnabled())) return;
+            Character victim = null;
+            if (victimD.GetDestructibleType() == DestructibleType.Character)
+                victim = victimD as Character;
 
-            if (hit.m_attacker == p.GetZDOID())
+            //If both parties are players, and either one of them doesn't have PVP enabled, we stop
+            if (victim != null && 
+                (victim.IsPlayer() && attacker.IsPlayer()) &&
+                !(victim.IsPVPEnabled() && attacker.IsPVPEnabled())) return;
+
+            Player p = Player.m_localPlayer;
+
+            if (attacker.GetZDOID() == p.GetZDOID())
             {
                 //Jotunn.Logger.LogMessage($"Player dealt damage to {__instance.GetDestructibleType()}");
                 float damage = hit.m_damage.GetTotalDamage();
@@ -38,6 +47,9 @@ namespace kingskills.WeaponExperience
                 }
                 
                 float final_xp = damage_xp * mod;
+
+                WeaponRaiseSkillTakeover.DoNotIgnore();
+
                 //Jotunn.Logger.LogMessage($"Incrementing {hit.m_skill} by {final_xp} = damage {damage} ^ {ConfigManager.XpDamageDegree} * factor {factor}");
                 p.RaiseSkill(hit.m_skill, final_xp);
             }
@@ -47,7 +59,7 @@ namespace kingskills.WeaponExperience
         {
             if (!CFG.IsSkillActive(skill)) return;
 
-            Jotunn.Logger.LogMessage($"Player swinging with {skill} for {CFG.WeaponXPSwing} XP");
+            //Jotunn.Logger.LogMessage($"Player swinging with {skill} for {CFG.WeaponXPSwing.Value} XP");
             LevelUp.CustomRaiseSkill(p, skill, CFG.WeaponXPSwing.Value, false);
 
             if (skill == Skills.SkillType.Axes)
@@ -104,7 +116,6 @@ namespace kingskills.WeaponExperience
         }
         static void DamageToExp(IDestructible __instance, HitData hit, bool livingTarget)
         {
-            Player playerRef = Player.m_localPlayer;
             bool tool = false;
             float factor = 0f;
 
@@ -122,11 +133,11 @@ namespace kingskills.WeaponExperience
                 if (livingTarget)
                     factor = 1f;
                 else
-                    factor = CFG.GetWeaponEXPStrikeDestructibleMod();
+                    factor = CFG.GetWeaponXPStrikeDestructibleMod();
             }
 
 
-            Manager.Strike(playerRef, hit, factor, tool);
+            Manager.Strike(__instance, hit, factor, tool);
         }
     }
 

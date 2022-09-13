@@ -50,33 +50,6 @@ namespace kingskills
         }
 
 
-        [HarmonyPatch(nameof(Projectile.OnHit))]
-        [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> OnHitTranspile(IEnumerable<CodeInstruction> instructions)
-        {
-            //Jotunn.Logger.LogMessage("The call is replaced here");
-            bool patchDone = false;
-
-            foreach (var instruction in instructions)
-            {
-                if (instruction.Calls(AccessTools.Method(typeof(Character), "RaiseSkill")))
-                  {
-                    instruction.opcode = OpCodes.Call;
-                    instruction.operand = AccessTools.DeclaredMethod(typeof(ProjectilePatch), nameof(ProjectilePatch.RaiseProjectileSkill));
-                    yield return new CodeInstruction(OpCodes.Ldarg_0);
-                    yield return instruction;
-
-                    patchDone = true;
-                } else
-                    yield return instruction;
-            }
-
-            if (!patchDone)
-            {
-                //Jotunn.Logger.LogError("Didn't find the Raise skill during projectile transpile");
-            }
-        }
-
         public static void RaiseProjectileSkill (Character player, Skills.SkillType skill, float useless, Projectile instance)
         {
             ZDO zdo = instance.m_nview.m_zdo;

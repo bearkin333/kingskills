@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using kingskills.WeaponExperience;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace kingskills
+namespace kingskills.Weapons
 {
 
     [HarmonyPatch(typeof(Character))]

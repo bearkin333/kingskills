@@ -110,6 +110,7 @@
     <Compile Include="Weapons\WeaponBonusExperience.cs" />
     <Compile Include="Patches\StatsUpdate.cs" />
     <Compile Include="Weapons\WeaponDamage.cs" />
+    <Compile Include="Weapons\WeaponRaiseSkillTakeover.cs" />
     <Compile Include="Weapons\WeaponStamina.cs" />
     <Compile Include="Perks\Perks.cs" />
     <Compile Include="Perks\SaveLoad.cs" />
