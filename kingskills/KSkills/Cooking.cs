@@ -68,6 +68,10 @@ perks:
 				}
 				*/
 				if (!(itemMade.m_shared.m_food > 0 || itemMade.m_shared.m_foodStamina > 0)) return;
+
+				Jotunn.Logger.LogMessage($"Local chef is cooking: {LocalChefCooking.isTrue}");
+				Jotunn.Logger.LogMessage($"Local chef is cooking from inventory: {LocalChefInvCooking.isTrue}");
+				Jotunn.Logger.LogMessage($"Local picker is picking: {PlayerPickRef.pickingPlayer != null}");
 				if (LocalChefCooking.isTrue)
                 {
 					SaveFoodQuality FQ = itemMade.AddComponent<SaveFoodQuality>();
@@ -249,6 +253,9 @@ perks:
 				zdo.Set("Cooking Level for " + itemName, user.GetSkillFactor(SkillMan.Cooking));
 				zdo.Set("Chef for " + itemName, user.GetPlayerID());
 				dataChanged = true;
+
+				Jotunn.Logger.LogMessage($"owner was {zdo.m_owner}, setting it to {user.GetZDOID().m_userID}");
+				zdo.m_owner = user.GetZDOID().m_userID;
 			}
 
 			//If nothing has changed, there's no need to touch the result

@@ -17,12 +17,16 @@ namespace kingskills
         public static void OnFirstUpdate(Projectile __instance)
         {
             if (__instance.m_didHit == true ||
-                !__instance.m_owner.IsPlayer() ||
-                !__instance.m_nview.IsValid()) return;
+                __instance.m_nview is null ||
+                !__instance.m_nview.IsValid() ||
+                __instance.m_owner is null ||
+                !__instance.m_owner.IsPlayer()) return;
+
+            Jotunn.Logger.LogMessage("");
 
             ZDO zdo = __instance.m_nview.m_zdo;
 
-            if (zdo.GetFloat("Projectile Owner", 0) != 0) return;
+            if (zdo.GetLong("Projectile Owner", 0) != 0) return;
 
             zdo.Set("Projectile Owner", __instance.m_owner.GetZDOID());
             zdo.Set("Start Pos", __instance.transform.position);
