@@ -617,6 +617,7 @@ namespace kingskills.UX
 
         public static GameObject RPFirstPerkLVLThreshold;
         public static GameObject RPSecondPerkLVLThreshold;
+        public static GameObject RPThirdPerkLVLThreshold;
         public static Dictionary<string, GameObject> RPPerkBoxes;
         #endregion var
 
@@ -726,6 +727,27 @@ namespace kingskills.UX
             text = RPSecondPerkLVLThreshold.GetComponent<Text>();
             text.alignment = TextAnchor.MiddleCenter;
             text.text = "Level " + (int)(CFG.PerkTwoLVLThreshold.Value
+                * CFG.MaxSkillLevel.Value);
+
+            // Create perk 3 level text
+            RPThirdPerkLVLThreshold =
+            GUIManager.Instance.CreateText(
+                text: "",
+                parent: RightPanel.transform,
+                anchorMin: new Vector2(0.5f, 1f),
+                anchorMax: new Vector2(0.5f, 1f),
+                position: new Vector2(0f, -400f),
+                font: GUIManager.Instance.AveriaSerifBold,
+                fontSize: 20,
+                color: CFG.ColorWhite,
+                outline: true,
+                outlineColor: Color.black,
+                width: 200f,
+                height: 80f,
+                addContentSizeFitter: false);
+            text = RPThirdPerkLVLThreshold.GetComponent<Text>();
+            text.alignment = TextAnchor.MiddleCenter;
+            text.text = "Level " + (int)(CFG.PerkThreeLVLThreshold.Value
                 * CFG.MaxSkillLevel.Value);
 
 
@@ -863,6 +885,74 @@ namespace kingskills.UX
             image.enabled = false;
             rect = RPPerkBoxes["2bPerk"].GetComponent<RectTransform>();
             rect.SetParent(RPPerkBoxes["2b"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(60f, 60f);
+
+
+            RPPerkBoxes.Add("3a", new GameObject());
+            image = RPPerkBoxes["3a"].AddComponent<Image>();
+            image.sprite = Assets.AssetLoader.perkBoxSprites["perkbox"];
+            rect = RPPerkBoxes["3a"].GetComponent<RectTransform>();
+            rect.SetParent(RightPanel.transform);
+            rect.anchorMin = new Vector2(0.5f, 1f);
+            rect.anchorMax = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(-100f, -400f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+            rect.gameObject.AddComponent<IsPerkBox>();
+
+            RPPerkBoxes.Add("3aTint", new GameObject());
+            image = RPPerkBoxes["3aTint"].AddComponent<Image>();
+            image.sprite = null;
+            image.enabled = false;
+            rect = RPPerkBoxes["3aTint"].GetComponent<RectTransform>();
+            rect.SetParent(RPPerkBoxes["3a"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+
+            RPPerkBoxes.Add("3aPerk", new GameObject());
+            image = RPPerkBoxes["3aPerk"].AddComponent<Image>();
+            image.sprite = null;
+            image.enabled = false;
+            rect = RPPerkBoxes["3aPerk"].GetComponent<RectTransform>();
+            rect.SetParent(RPPerkBoxes["3a"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(60f, 60f);
+
+
+            RPPerkBoxes.Add("3b", new GameObject());
+            image = RPPerkBoxes["3b"].AddComponent<Image>();
+            image.sprite = Assets.AssetLoader.perkBoxSprites["perkbox"];
+            rect = RPPerkBoxes["3b"].GetComponent<RectTransform>();
+            rect.SetParent(RightPanel.transform);
+            rect.anchorMin = new Vector2(0.5f, 1f);
+            rect.anchorMax = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(100f, -400f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+            rect.gameObject.AddComponent<IsPerkBox>();
+
+            RPPerkBoxes.Add("3bTint", new GameObject());
+            image = RPPerkBoxes["3bTint"].AddComponent<Image>();
+            image.sprite = null;
+            image.enabled = false;
+            rect = RPPerkBoxes["3bTint"].GetComponent<RectTransform>();
+            rect.SetParent(RPPerkBoxes["3b"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
+
+            RPPerkBoxes.Add("3bPerk", new GameObject());
+            image = RPPerkBoxes["3bPerk"].AddComponent<Image>();
+            image.sprite = null;
+            image.enabled = false;
+            rect = RPPerkBoxes["3bPerk"].GetComponent<RectTransform>();
+            rect.SetParent(RPPerkBoxes["3b"].transform);
             rect.anchorMin = new Vector2(0.5f, 0.5f);
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);

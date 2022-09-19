@@ -75,42 +75,42 @@ namespace kingskills.Weapons
         [HarmonyPatch(typeof(Character), nameof(Character.Damage))]
         static void Character_Damage(Character __instance, HitData hit)
         {
-            Jotunn.Logger.LogMessage("character hit detected");
+            //Jotunn.Logger.LogMessage("character hit detected");
             DamageToExp(__instance, hit, true);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Destructible), nameof(Destructible.Damage))]
         static void Destructible_Damage(Destructible __instance, HitData hit)
         {
-            Jotunn.Logger.LogMessage("Destructible hit detected");
+            //Jotunn.Logger.LogMessage("Destructible hit detected");
             DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(MineRock), nameof(MineRock.Damage))]
         static void MineRock_Damage(Destructible __instance, HitData hit)
         {
-            Jotunn.Logger.LogMessage("Mine Rock hit detected");
+            //Jotunn.Logger.LogMessage("Mine Rock hit detected");
             DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Damage))]
         static void MineRock5_Damage(Destructible __instance, HitData hit)
         {
-            Jotunn.Logger.LogMessage("Mine Rock 5 hit detected");
+            //Jotunn.Logger.LogMessage("Mine Rock 5 hit detected");
             DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Damage))]
         static void TreeBase_Damage(Destructible __instance, HitData hit)
         {
-            Jotunn.Logger.LogMessage("Tree Base hit detected");
+            //Jotunn.Logger.LogMessage("Tree Base hit detected");
             DamageToExp(__instance, hit, false);
         }
         [HarmonyPostfix]
         [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))]
         static void TreeLog_Damage(Destructible __instance, HitData hit)
         {
-            Jotunn.Logger.LogMessage("Tree Log hit detected");
+            //Jotunn.Logger.LogMessage("Tree Log hit detected");
             //DamageToExp(__instance, hit, false);
             //Redundant with TreeBase
         }

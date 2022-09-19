@@ -68,10 +68,11 @@ perks:
 				}
 				*/
 				if (!(itemMade.m_shared.m_food > 0 || itemMade.m_shared.m_foodStamina > 0)) return;
-
+				/*
 				Jotunn.Logger.LogMessage($"Local chef is cooking: {LocalChefCooking.isTrue}");
 				Jotunn.Logger.LogMessage($"Local chef is cooking from inventory: {LocalChefInvCooking.isTrue}");
 				Jotunn.Logger.LogMessage($"Local picker is picking: {PlayerPickRef.pickingPlayer != null}");
+				*/
 				if (LocalChefCooking.isTrue)
                 {
 					SaveFoodQuality FQ = itemMade.AddComponent<SaveFoodQuality>();
@@ -110,8 +111,8 @@ perks:
 
 					QualityTextDisplayer(newQuality, player);
 
-					Jotunn.Logger.LogMessage($"Showed tutorial and added new FQ components:" +
-						$"{FQ.foodQuality}, ID: {FQ.chefID}");
+					//Jotunn.Logger.LogMessage($"Showed tutorial and added new FQ components:" +
+					//	$"{FQ.foodQuality}, ID: {FQ.chefID}");
 				}
 				else if (LocalChefInvCooking.isTrue)
 				{
@@ -245,16 +246,18 @@ perks:
 			{
 				redux = CFG.GetCookingTimeRedux(user.GetSkillFactor(SkillMan.Cooking));
 
+				/*
 				Jotunn.Logger.LogMessage($"Cooking station data change!. I had no recorded chef OR the ID didn't " +
 					$"match mine OR the recorded skill is different from ours." +
 					$"\nsetting {"Cooking Level for " + itemName} to {user.GetSkillFactor(SkillMan.Cooking)}" +
 					$"\nsetting {"Chef for " + itemName} to {user.GetPlayerID()}");
+				*/
 
 				zdo.Set("Cooking Level for " + itemName, user.GetSkillFactor(SkillMan.Cooking));
 				zdo.Set("Chef for " + itemName, user.GetPlayerID());
 				dataChanged = true;
 
-				Jotunn.Logger.LogMessage($"owner was {zdo.m_owner}, setting it to {user.GetZDOID().m_userID}");
+				//Jotunn.Logger.LogMessage($"owner was {zdo.m_owner}, setting it to {user.GetZDOID().m_userID}");
 				zdo.m_owner = user.GetZDOID().m_userID;
 			}
 

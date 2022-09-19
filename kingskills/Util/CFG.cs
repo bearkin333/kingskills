@@ -2580,12 +2580,12 @@ namespace kingskills
             PerkExplorationOn = cfg.Bind("Perks", "Perk Exploration", true,
                     "Whether or not locked perks are hidden from view");
 
-            PerkOneLVLThreshold = cfg.Bind("Perks", "First Threshold", .5f,
+            PerkOneLVLThreshold = cfg.Bind("Perks", "First Threshold", .3f,
                     "mod of max level before you unlock the first set of perks");
-            PerkTwoLVLThreshold = cfg.Bind("Perks", "Second Threshold", 1f,
+            PerkTwoLVLThreshold = cfg.Bind("Perks", "Second Threshold", .6f,
                     "mod of max level before you unlock the second set of perks");
-            PerkThreeLVLThreshold = cfg.Bind("Perks", "ThirdThreshold", 10f,
-                    "mod of max level before you unlock the third set of perks - NOT IMPLEMENTED");
+            PerkThreeLVLThreshold = cfg.Bind("Perks", "ThirdThreshold", .9f,
+                    "mod of max level before you unlock the third set of perks");
             PerkFourLVLThreshold = cfg.Bind("Perks", "FourthThreshold", 10f,
                     "mod of max level before you unlock the fourth set of perks - NOT IMPLEMENTED");
         }

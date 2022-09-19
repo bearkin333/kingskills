@@ -116,6 +116,23 @@ namespace kingskills.UX
                 //Jotunn.Logger.LogMessage($"just set perk {openedPerks[2].name} to unlearnable, since the other one is learned");
             }
 
+            if (openedPerks[4].learned)
+            {
+                if (!ascended)
+                    openedPerks[5].learnable = false;
+                else
+                    openedPerks[5].learnable = true;
+                //Jotunn.Logger.LogMessage($"just set perk {openedPerks[3].name} to unlearnable, since the other one is learned");
+            }
+
+            else if (openedPerks[5].learned)
+            {
+                if (!ascended)
+                    openedPerks[4].learnable = false;
+                else
+                    openedPerks[4].learnable = true;
+                //Jotunn.Logger.LogMessage($"just set perk {openedPerks[2].name} to unlearnable, since the other one is learned");
+            }
         }
 
 
@@ -138,6 +155,10 @@ namespace kingskills.UX
                         return GetPerkKeyFromBox(2);
                     else if (result.gameObject == SkillGUI.RPPerkBoxes["2b"])
                         return GetPerkKeyFromBox(3);
+                    else if (result.gameObject == SkillGUI.RPPerkBoxes["3a"])
+                        return GetPerkKeyFromBox(4);
+                    else if (result.gameObject == SkillGUI.RPPerkBoxes["3b"])
+                        return GetPerkKeyFromBox(5);
                 }
             }
 
@@ -155,7 +176,8 @@ namespace kingskills.UX
 
         public static void OpenPerksByType(Skills.SkillType skill,
             Perks.PerkType perk1a, Perks.PerkType perk1b,
-            Perks.PerkType perk2a, Perks.PerkType perk2b)
+            Perks.PerkType perk2a, Perks.PerkType perk2b,
+            Perks.PerkType perk3a, Perks.PerkType perk3b)
         {
             openSkill = skill;
             skillLevel = Player.m_localPlayer.GetSkillFactor(openSkill);
@@ -166,14 +188,20 @@ namespace kingskills.UX
             openedPerks.Add(Perks.perkList[perk1b]);
             openedPerks.Add(Perks.perkList[perk2a]);
             openedPerks.Add(Perks.perkList[perk2b]);
+            openedPerks.Add(Perks.perkList[perk3a]);
+            openedPerks.Add(Perks.perkList[perk3b]);
 
             perkClickable.Clear();
             perkClickable.Add(true);
             perkClickable.Add(true);
             perkClickable.Add(true);
             perkClickable.Add(true);
+            perkClickable.Add(true);
+            perkClickable.Add(true);
 
             perkLocked.Clear();
+            perkLocked.Add(false);
+            perkLocked.Add(false);
             perkLocked.Add(false);
             perkLocked.Add(false);
             perkLocked.Add(false);
@@ -185,6 +213,8 @@ namespace kingskills.UX
             SetPerkBox(1, "1b", CFG.PerkOneLVLThreshold.Value);
             SetPerkBox(2, "2a", CFG.PerkTwoLVLThreshold.Value);
             SetPerkBox(3, "2b", CFG.PerkTwoLVLThreshold.Value);
+            SetPerkBox(4, "3a", CFG.PerkThreeLVLThreshold.Value);
+            SetPerkBox(5, "3b", CFG.PerkThreeLVLThreshold.Value);
         }
 
 

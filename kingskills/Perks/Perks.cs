@@ -53,17 +53,33 @@ namespace kingskills
             perkList = new Dictionary<PerkType, Perk>();
             Perk perk;
 
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Agriculture
-            perk = new Perk("Soil Working",
-                "New soil mixing techniques allow you to plant any crop anywhere, regardless of biome limitations.",
+            perk = new Perk("Soil Mixing",
+                "New techniques allow you to plant any crop anywhere, regardless of biome limitations.",
                 "Why go to the biome when you can bring the biome to you?",
-                PerkType.SoilWorking, "Icons/soilworking.png");
+                PerkType.SoilMixing, "Icons/soilworking.png");
             perkList.Add(perk.type, perk);
 
             perk = new Perk("Botany",
-                "Your experience with plants gives you the ability to guesstimate time until completion and total yield.",
-                "Turns out, when you've seen enough plants, you start to understand them.",
+                "Intensive study of the workings of plants has increased your ability read basic information about them, such as time until " +
+                "completion or yield.",
+                "Turns out, when you study plants, you learn things.",
                 PerkType.Botany, "Icons/botany.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Seed Satchel",
+                "You now carry around an extra pouch, accessible from the inventory, which can store an unlimited number of seeds.",
+                "What is a botanist without seeds?",
+                PerkType.SeedSatchel, "Icons/seedsatchel.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Green Thumb",
+                "Your natural talent for growing plants has manifested, giving you an extra insight into information such as time until " +
+                "completion or yield.",
+                "Much better than a yellow foot, which you ought to bring up with your doctor.",
+                PerkType.GreenThumb, "Icons/greenthumb.png");
             perkList.Add(perk.type, perk);
 
             perk = new Perk("Combine Harvester",
@@ -80,10 +96,12 @@ namespace kingskills
                 PerkType.Seeding, "Icons/seeding.png");
             perkList.Add(perk.type, perk);
 
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Axes
-            perk = new Perk("Decapitation Strike", 
-                "Kills with the axe's secondary attack will always drop a trophy.",
-                "For when you don't have enough heads on your wall.",
+            perk = new Perk("Decapitate", 
+                "Trophies can be eaten to gain axe experience.",
+                "My ancestors are smiling at me, imperial. Can you say the same?",
                 PerkType.Decapitation, "Icons/decapitation.png");
             perkList.Add(perk.type, perk);
 
@@ -106,6 +124,20 @@ namespace kingskills
                 PerkType.Throwback, "Icons/throwback.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Cauterize",
+                "You've had the incredible idea of setting all your weapons on fire. You now do 20% extra damage as fire damage.",
+                "Anything is a torch, if you're brave enough.",
+                PerkType.Cauterize, "Icons/cauterize.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Four Stomachs",
+                "You can now throw your axe like a spear. This attack one-shots all trees it hits.",
+                "For when you can't quite reach.",
+                PerkType.FourStomachs, "Icons/fourstomachs.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Blocking
             perk = new Perk("Titan Endurance",
                 "Increases your stagger limit by an additional 20% of your max health.",
@@ -132,6 +164,20 @@ namespace kingskills
                 PerkType.BlackFlash, "Icons/blackflash.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Blocking Expertise",
+                "All forms of damage are now blockable. Yes, even that.",
+                "If it breathes, you can block it.",
+                PerkType.BlockExpert, "Icons/blockexpert.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("That Didn't Even Hurt",
+                "Any creature that deals less than 5 damage to you, while you're not blocking, now gets staggered out of fear.",
+                "Is that all you've got? Pathetic.",
+                PerkType.DidntHurt, "Icons/didnthurt.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Bows
             perk = new Perk("Power Draw",
                 "A special shot that takes much more energy to draw, but fires with incredible speed and damage.",
@@ -147,7 +193,7 @@ namespace kingskills
 
             perk = new Perk("Runed Arrows",
                 "There's a 75% chance for your arrows to automatically return to you - the other 25% disappear.",
-                "It takes pretty long to rune each arrowhead, but luckily, you do that part while you're logged off.",
+                "It takes pretty long to rune each arrowhead, but luckily, that part happens off-screen.",
                 PerkType.RunedArrows, "Icons/runedarrows.png");
             perkList.Add(perk.type, perk);
 
@@ -157,6 +203,20 @@ namespace kingskills
                 PerkType.OfferToUllr, "Icons/ullr.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Spirit Guide",
+                "The ghosts of slain woodland creatures now haunt you, providing an excellent light source while hunting down their children.",
+                "They say you should use every part of the animal, why not the soul?",
+                PerkType.SpiritGuide, "Icons/spiritguide.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Wings of Hraesvelg",
+                "Shots fired will now be accompanied by a pillar of wind, knocking back enemies that have gotten too close as well as yourself.",
+                "The great eagle guides you. Fall damage reduction not included.",
+                PerkType.Hraesvelg, "Icons/hraesvelg.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Building
             perk = new Perk("Structural Engineer",
                 "Advanced knowledge of civil engineering secrets have caused your support pillars" +
@@ -186,7 +246,20 @@ namespace kingskills
                 PerkType.Warehousing, "Icons/warehousing.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Efficiency",
+                "New building techniques allow you to build new constructions at half the cost.",
+                "It's not 'cutting corners'... If those corners were completely unnecessary!",
+                PerkType.Efficiency, "Icons/efficiency.png");
+            perkList.Add(perk.type, perk);
 
+            perk = new Perk("Superfuel",
+                "Constructions you build, such as torches or campfires, no longer require additional fuel to keep running.",
+                "It's even renewable!",
+                PerkType.Superfuel, "Icons/superfuel.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Clubs
             perk = new Perk("Closing The Gap",
                 "Every time you stagger an enemy, you regain 5 stamina and skip towards them.",
@@ -194,10 +267,10 @@ namespace kingskills
                 PerkType.ClosingTheGap, "Icons/closingthegap.png");
             perkList.Add(perk.type, perk);
 
-            perk = new Perk("Thunder Hammer",
-                "All AOEs that you create will have double size.",
-                "Whosoever holds this hammer, if they be worthy, shall possess the power of... you?",
-                PerkType.ThunderHammer, "Icons/thunderhammer.png");
+            perk = new Perk("Blast Wave",
+                "All attacks you inflict that hit an area will have their size doubled.",
+                "It was all reduced to rubble... and then, again, to ash.",
+                PerkType.BlastWave, "Icons/thunderhammer.png");
             perkList.Add(perk.type, perk);
 
             perk = new Perk("Plus Ultra",
@@ -206,12 +279,26 @@ namespace kingskills
                 PerkType.PlusUltra, "Icons/plusultra.png");
             perkList.Add(perk.type, perk);
 
-            perk = new Perk("Troll Smash",
+            perk = new Perk("Giant Smash",
                 "A special attack that ragdolls enemies into the air.",
                 "A power even the dragonborn never mastered.",
-                PerkType.TrollSmash, "Icons/trollsmash.png");
+                PerkType.GiantSmash, "Icons/giantsmash.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Mjolnir",
+                "You deal an additional 20% of damage as lightning damage.",
+                "Whosoever holds this hammer, if they be worthy, shall possess the power of... you?",
+                PerkType.Mjolnir, "Icons/mjolnir.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Log Horizon",
+                "Fallen logs can be picked up to be used as a single use attack, dealing incredible damage.",
+                "You swing the log. The enemy sees the horizon... Now <i>that's</i> living in the database.",
+                PerkType.LogHorizon, "Icons/loghorizon.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Cooking
             perk = new Perk("Spicy and Sweet",
                 "The discovery of several new spices has revolutionized your cooking. You can now" +
@@ -242,6 +329,22 @@ namespace kingskills
                 PerkType.SpiceMaster, "Icons/spicemaster.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Taste Testing",
+                "The simple act of taste testing the food has led you to be able to garner information about a piece of food, " +
+                "such as time until completion.",
+                "Hmmm. Needs more salt.",
+                PerkType.TasteTesting, "Icons/tastetesting.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Keen Nose",
+                "Your nose is so powerful that you can detect what's in a dish without even seeing it. This lets you garner addition information " +
+                "about cooking food, such as time until completion.",
+                "Smells like... Cardamum and basil. And the lightest hint of lime...",
+                PerkType.KeenNose, "Icons/keennose.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Fists
             perk = new Perk("Iron Skin",
                 "While you're not wearing armor, you get armor based on half of your unarmed damage.",
@@ -268,6 +371,21 @@ namespace kingskills
                 PerkType.PressurePoints, "Icons/pressurepoints.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Worldly Existence",
+                "Hours of meditation upon your material lifestyle has lead to an epiphany. You gain timeless wisdom of the ages..." +
+                " and 50% increased experience gain.",
+                "Material gwurl!",
+                PerkType.Worldly, "Icons/worldly.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Attack of Opportunity",
+                "While running and unarmed, you perform a free high-speed kick against any enemy that gets close to you.",
+                "You're already in my range...",
+                PerkType.AttackOfOpportunity, "Icons/attackofopportunity.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Jump
             perk = new Perk("Goomba Stomp",
                 "You now deal damage when landing on an enemy's head.",
@@ -294,7 +412,21 @@ namespace kingskills
                 PerkType.OdinJump, "Icons/odinjump.png");
             perkList.Add(perk.type, perk);
 
-            //Jump
+            perk = new Perk("Air Step",
+                "Allows you to jump one additional time while in the air.",
+                "The laws of physics are nothing to a viking!",
+                PerkType.AirStep, "Icons/airstep.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Heart of the Monkey",
+                "By holding space while in the air, you can now cling to walls such as trees and cliffs. Drains stamina as though you were running.",
+                "The will of D now lives inside you.",
+                PerkType.HeartOfTheMonkey, "Icons/heartofthemonkey.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
+            //Knives
             perk = new Perk("Deadeye",
                 "You can now throw your knives, dealing half backstab damage.",
                 "They don't come back to you, though.",
@@ -320,6 +452,20 @@ namespace kingskills
                 PerkType.DisarmingDefense, "Icons/disarmingsmile.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Gut and Run",
+                "Each attack against an enemy with full health will now cause them to start bleeding.",
+                "Sorry to drop in out of nowhere, but...",
+                PerkType.GutAndRun, "Icons/gutandrun.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Sleight of Hand",
+                "You can now bring certain items through portals.",
+                "With a quick enough hand, you can even trick game devs.",
+                PerkType.SleightOfHand, "Icons/sleightofhand.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Mining
             perk = new Perk("Trench Digger",
                 "Increases the depth and width of your pickaxe strikes on the ground.",
@@ -346,6 +492,21 @@ namespace kingskills
                 PerkType.LodeBearingStone, "Icons/lodebearingstone.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Frag Mine",
+                "If there are any enemies nearby when you break a rock, the stone and ore will first pelt that enemy for great damage before " +
+                "returning to your feet.",
+                "It's not the explosion that gets you, it's the fragmentation.",
+                PerkType.Fragmentation, "Icons/fragmentation.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Magnetic Personality",
+                "You are now magnetic, dramatically increasing your auto-pickup range.",
+                "All that time rubbing metals together has finally affected you. Sure, that's how magnets work, why not?",
+                PerkType.Magnetic, "Icons/magnetic.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Run
             perk = new Perk("Tackle",
                 "Running into an enemy causes a huge knockback effect and causes you to gain a quickly fading " +
@@ -374,6 +535,20 @@ namespace kingskills
                 PerkType.Juggernaut, "Icons/juggernaut.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Mountain Goat",
+                "You can now run up nearly sheer angled surfaces, dramatically increasing your mountain mobility.",
+                "The undisputed GOAT.",
+                PerkType.MountainGoat, "Icons/mountaingoat.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Break My Stride",
+                "Carts now only affect your movespeed 30%.",
+                "Ain't nothing gonna...",
+                PerkType.BreakMyStride, "Icons/breakmystride.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Sailing
             perk = new Perk("Sea Shanty",
                 "All crew members aboard your boat gain increased move speed, damage reduction, and damage.",
@@ -395,12 +570,27 @@ namespace kingskills
                 PerkType.CoupDeBurst, "Icons/coupdeburst.png");
             perkList.Add(perk.type, perk);
 
-            perk = new Perk("Sailing 4th perk",
-                "",
-                "",
-                PerkType.Sailing4, "Icons/seashanty.png");
+            perk = new Perk("Rock Dodger",
+                "Significantly improves several ship manuverability values.",
+                "I am a leaf on the wind.",
+                PerkType.RockDodger, "Icons/rockdodger.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Ramming Speed",
+                "For every 3 seconds that you sail without changing directon, you slowly gain a stacking movespeed increase. The bonus increases " +
+                "multiplicatively and does not have a limit.",
+                "Brace for impact! Does not come with damage reduction.",
+                PerkType.RammingSpeed, "Icons/rammingspeed.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Man Overboard",
+                "While captaining a ship, you can now press B to automatically suck in all nearby players.",
+                "Much better option than everyone jumping ship.",
+                PerkType.ManOverboard, "Icons/manoverboard.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Polearm
             perk = new Perk("Jotunn",
                 "Your overall size increases. You'll have to duck through short doorways now, but your carrying " +
@@ -428,6 +618,21 @@ namespace kingskills
                 PerkType.Asguard, "Icons/asguard.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Massive Stature",
+                "Increases your overall size even more. Your skin toughens like hide, causing you to be resistant to slashing, lightning, " +
+                "and frost damage.",
+                "You're gonna need to build a bigger house.",
+                PerkType.MassiveStature, "Icons/massivestature.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Memories of Ymir",
+                "Tapping into the land's ancient heritage, you gain a 20% extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkType.Ymir, "Icons/ymir.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Sneak
             perk = new Perk("Silent Sprinter",
                 "Adds 30% of your run speed to your sneak speed.",
@@ -453,11 +658,25 @@ namespace kingskills
                 PerkType.CloakOfShadows, "Icons/cloakofshadows.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Vital Study",
+                "Any sneak attack now gains you bonus sneak experience.",
+                "They say the appendix serves no function, but when you rip it out, people die? Think for yourself, sheeple.",
+                PerkType.VitalStudy, "Icons/vitalstudy.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Extrasensory perception",
+                "You can now see lines highlighting enemy sight cones while you're sneaking.",
+                "That, or you're just starting to see things now.",
+                PerkType.ESP, "Icons/esp.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Spear
-            perk = new Perk("Valkyrie's Boon",
+            perk = new Perk("Spearfisher's Boon",
                 "Whenever you throw a spear, a second spear will be thrown automatically towards the nearest enemy.",
-                "Where does the second spear come from? A Valkyrie never tells.",
-                PerkType.ValkyriesBoon, "Icons/valkyriesboon.png");
+                "Where does the second spear come from? A fisherman never tells.",
+                PerkType.FishersBoon, "Icons/fishersboon.png");
             perkList.Add(perk.type, perk);
 
             perk = new Perk("Just a Guy with a Boomerang",
@@ -475,14 +694,28 @@ namespace kingskills
             perk = new Perk("Blessing of the Einherjar",
                 "All of your projectiles now home towards the nearest target.",
                 "Alone no longer.",
-                PerkType.EinherjarsBlessing, "Icons/einherjarsblessing.png");
+                PerkType.Einherjar, "Icons/einherjar.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Flight of the Valkyries",
+                "When you hit with a thrown spear, a mark is formed. Pressing B will teleport you to that mark, consuming it.",
+                "To valhalla leads the way",
+                PerkType.ValkyrieFlight, "Icons/valkyrieflight.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("In Spearit",
+                "Your spear now deals 30% additional spirit damage.",
+                "I'm not sorry.",
+                PerkType.Spearit, "Icons/spearit.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Swim
-            perk = new Perk("Effortless Treading",
+            perk = new Perk("JoJo Pose",
                 "When treading water, you now regenerate stamina.",
                 "Become the kind of man Jotaro Kujo expects you to be",
-                PerkType.Treading, "Icons/sealegs.png");
+                PerkType.JoJoPose, "Icons/jojopose.png");
             perkList.Add(perk.type, perk);
 
             perk = new Perk("Butterfly",
@@ -497,12 +730,28 @@ namespace kingskills
                 PerkType.AlwaysPrepared, "Icons/alwaysprepared.png");
             perkList.Add(perk.type, perk);
 
-            perk = new Perk("Aerodynamic Form",
+            perk = new Perk("Hydrodynamic Form",
                 "You are no longer affected by the 'Wet' Debuff.",
                 "It just... slides right off.",
-                PerkType.Aerodynamic, "Icons/aerodynamic.png");
+                PerkType.Hydrodynamic, "Icons/hydrodynamic.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Aquaman",
+                "As you remain in water, an increasingly larger school of fish will circle you and protect you from any " +
+                "aggressors.",
+                "It may not be laser eyes, but it's an objectively cool power.",
+                PerkType.Aquaman, "Icons/aquaman.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Marathon Swimmer",
+                "While you're swimming in the ocean, you gain a slowly stacking bonus to move speed, damage reduction, and stamina " +
+                "regeneration.",
+                "You're just on a roll.",
+                PerkType.MarathonSwimmer, "Icons/marathonswimmer.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Swords
             perk = new Perk("Perfect Combo",
                 "Each uninterrupted hit now stacks a damage buff. Combo is lost on taking damage.",
@@ -529,6 +778,20 @@ namespace kingskills
                 PerkType.WarriorOfLight, "Icons/warrioroflight.png");
             perkList.Add(perk.type, perk);
 
+            perk = new Perk("Critical Blow",
+                "You have a 10% chance to deal double damage on each hit.",
+                "The kind of hit your DM would be embarassed to narrate.",
+                PerkType.CriticalBlow, "Icons/criticalblow.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Poisoned Blade",
+                "Your attacks deal an additional 40% damage as poison damage.",
+                "The hardest part is remembering to wear gloves when you apply the poison.",
+                PerkType.Toxic, "Icons/toxic.png");
+            perkList.Add(perk.type, perk);
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
             //Woodcutting
             perk = new Perk("Heart of the Forest",
                 "Every hit on a tree stacks up a buff that reduces the stagger damage you take.",
@@ -542,16 +805,31 @@ namespace kingskills
                 PerkType.MasterOfTheLog, "Icons/masterofthelog.png");
             perkList.Add(perk.type, perk);
 
-            perk = new Perk("Heart of the Monkey",
-                "You can now climb trees.",
-                "The will of D now lives inside you.",
-                PerkType.HeartOfTheMonkey, "Icons/heartofthemonkey.png");
+            perk = new Perk("Pandemonium Point",
+                "Standing in place for 20 seconds near a tree will cause a special target to appear. Striking it will cause a " +
+                "shockwave that fells an entire forest.",
+                "You might want to take cover first.",
+                PerkType.PandemoniumPoint, "Icons/pandemoniumpoint.png");
             perkList.Add(perk.type, perk);
 
-            perk = new Perk("Pandemonium Swing",
-                "Every minute, your next hit on an undamaged tree will fell an entire forest.",
-                "You might want to take cover first.",
-                PerkType.PandemoniumSwing, "Icons/pandemoniumswing.png");
+            perk = new Perk("Responsible Lumberjacking",
+                "Stumps now get destroyed in one hit, and if possible, will automatically get replanted as saplings.",
+                "Sustainable farming is the work of the finest lumberjacks!",
+                PerkType.ResponsibleLumberjack, "Icons/responsiblelumberjack.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Controlled Demolition",
+                "Trees will always fall away from you.",
+                "Instructions: Put tree between you and enemy",
+                PerkType.ControlledDemo, "Icons/controlleddemo.png");
+            perkList.Add(perk.type, perk);
+
+            perk = new Perk("Shatterstrike",
+                "You build up stacks every second over time while holding an axe. Each stack increases the damage you deal to the first tree " +
+                "you hit. If you have maximum stacks, 60, hitting a tree will cause it to immediately get turned into wood. There's a 10 second " +
+                "cooldown before the stacks begin building again.",
+                "Be the kind of man Captain America believes you can be.",
+                PerkType.ShatterStrike, "Icons/shatterstrike.png");
             perkList.Add(perk.type, perk);
 
         }
@@ -588,80 +866,61 @@ namespace kingskills
         public enum PerkType
         {
             //Agriculture
-            SoilWorking, Botany,
-            Harvester, Seeding,
+            SoilMixing, Botany, GreenThumb, SeedSatchel, Harvester, Seeding,
 
             //Axe
-            Decapitation, Berserkr,
-            Highlander, Throwback,
+            Decapitation, Berserkr, Highlander, Throwback, Cauterize, FourStomachs,
 
             //Blocking
-            TitanEndurance, SpikedShield,
-            TitanStrength, BlackFlash,
+            TitanEndurance, SpikedShield, TitanStrength, BlackFlash, BlockExpert, DidntHurt,
 
             //Bow
-            PowerDraw, Frugal,
-            RunedArrows, OfferToUllr,
+            PowerDraw, Frugal, RunedArrows, OfferToUllr, SpiritGuide, Hraesvelg,
 
             //Building
-            Engineer, Nailgun,
-            Trapmaster, Warehousing,
+            Engineer, Nailgun, Trapmaster, Warehousing, Superfuel, Efficiency,
 
             //Club
-            ClosingTheGap, ThunderHammer,
-            TrollSmash, PlusUltra,
+            ClosingTheGap, BlastWave, GiantSmash, PlusUltra, Mjolnir, LogHorizon,
 
             //Cooking
-            SpicySweet, Nutrition,
-            FiveStarChef, SpiceMaster,
+            SpicySweet, Nutrition, FiveStarChef, SpiceMaster, TasteTesting, KeenNose,
 
             //Unarmed
-            IronSkin, LightningReflex,
-            FalconKick, PressurePoints,
+            IronSkin, LightningReflex, FalconKick, PressurePoints, AttackOfOpportunity, Worldly,
 
             //Jump
-            GoombaStomp, MarketGardener,
-            MeteorDrop, OdinJump,
+            GoombaStomp, MarketGardener, MeteorDrop, OdinJump, AirStep, HeartOfTheMonkey,
 
             //Knife
-            Deadeye, Iai,
-            LokisGift, DisarmingDefense,
+            Deadeye, Iai, LokisGift, DisarmingDefense, GutAndRun, SleightOfHand,
 
             //Mining
-            TrenchDigger, Stretch,
-            RockHauler, LodeBearingStone,
+            TrenchDigger, Stretch, RockHauler, LodeBearingStone, Fragmentation, Magnetic,
 
             //Run
-            Tackle, HermesBoots,
-            WaterRunning,Juggernaut,
+            Tackle, HermesBoots, WaterRunning, Juggernaut, MountainGoat, BreakMyStride,
 
             //Sailing
-            SeaShanty, FirstMate,
-            CoupDeBurst, Sailing4,
+            SeaShanty, FirstMate,  CoupDeBurst, RockDodger, RammingSpeed, ManOverboard,
 
             //Polearm
-            Jotunn, LivingStone,
-            BigStick, Asguard,
+            Jotunn, LivingStone, BigStick, Asguard, MassiveStature, Ymir,
 
             //Sneak
-            SmokeBomb, SilentSprinter,
-            HideInPlainSight, CloakOfShadows,
+            SmokeBomb, SilentSprinter, HideInPlainSight, CloakOfShadows, ESP, VitalStudy,
 
             //Spear
-            ValkyriesBoon, Boomerang,
-            CouchedLance, EinherjarsBlessing,
+            FishersBoon, Boomerang, CouchedLance, Einherjar, ValkyrieFlight, Spearit,
 
             //Swim
-            Treading, Butterfly,
-            AlwaysPrepared, Aerodynamic,
+            JoJoPose, Butterfly, AlwaysPrepared, Hydrodynamic, Aquaman, MarathonSwimmer,
 
             //Sword
-            PerfectCombo, Meditation,
-            GodSlayingStrike, WarriorOfLight,
+            PerfectCombo, Meditation, GodSlayingStrike, WarriorOfLight, CriticalBlow, Toxic,
 
             //Woodcutting
-            HeartOfTheForest, MasterOfTheLog,
-            HeartOfTheMonkey, PandemoniumSwing
+            HeartOfTheForest, MasterOfTheLog, ResponsibleLumberjack, PandemoniumPoint, ControlledDemo, ShatterStrike
         }
 
         public static void ResetAllPerks()
