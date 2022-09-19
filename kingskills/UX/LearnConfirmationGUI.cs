@@ -89,7 +89,7 @@ namespace kingskills.UX
                 color: GUIManager.Instance.ValheimOrange,
                 outline: true,
                 outlineColor: Color.black,
-                width: 580f,
+                width: 550f,
                 height: 100f,
                 addContentSizeFitter: false);
             Text text = LCPerkDescription.GetComponent<Text>();

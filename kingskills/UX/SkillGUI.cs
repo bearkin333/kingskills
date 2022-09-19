@@ -642,7 +642,7 @@ namespace kingskills.UX
                 parent: RightPanel.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(0f, -50f),
+                position: new Vector2(0f, -35f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 32,
                 color: CFG.ColorTitle,
@@ -694,7 +694,7 @@ namespace kingskills.UX
                 parent: RightPanel.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(0f, -140f),
+                position: new Vector2(0f, -110f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 20,
                 color: CFG.ColorWhite,
@@ -705,7 +705,7 @@ namespace kingskills.UX
                 addContentSizeFitter: false);
             text = RPFirstPerkLVLThreshold.GetComponent<Text>();
             text.alignment = TextAnchor.MiddleCenter;
-            text.text = "Level " + (int)(CFG.PerkOneLVLThreshold.Value
+            text.text = "Level " + Mathf.Floor(CFG.PerkOneLVLThreshold.Value
                 * CFG.MaxSkillLevel.Value);
 
             // Create perk 2 level text
@@ -715,7 +715,7 @@ namespace kingskills.UX
                 parent: RightPanel.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(0f, -310f),
+                position: new Vector2(0f, -200f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 20,
                 color: CFG.ColorWhite,
@@ -726,7 +726,7 @@ namespace kingskills.UX
                 addContentSizeFitter: false);
             text = RPSecondPerkLVLThreshold.GetComponent<Text>();
             text.alignment = TextAnchor.MiddleCenter;
-            text.text = "Level " + (int)(CFG.PerkTwoLVLThreshold.Value
+            text.text = "Level " + Mathf.Floor(CFG.PerkTwoLVLThreshold.Value
                 * CFG.MaxSkillLevel.Value);
 
             // Create perk 3 level text
@@ -736,7 +736,7 @@ namespace kingskills.UX
                 parent: RightPanel.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(0f, -400f),
+                position: new Vector2(0f, -290f),   
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 20,
                 color: CFG.ColorWhite,
@@ -747,7 +747,7 @@ namespace kingskills.UX
                 addContentSizeFitter: false);
             text = RPThirdPerkLVLThreshold.GetComponent<Text>();
             text.alignment = TextAnchor.MiddleCenter;
-            text.text = "Level " + (int)(CFG.PerkThreeLVLThreshold.Value
+            text.text = "Level " + Mathf.Floor(CFG.PerkThreeLVLThreshold.Value
                 * CFG.MaxSkillLevel.Value);
 
 
@@ -761,7 +761,7 @@ namespace kingskills.UX
             rect.SetParent(RightPanel.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(-100f, -140f);
+            rect.anchoredPosition = new Vector2(-100f, -110f);
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
@@ -796,7 +796,7 @@ namespace kingskills.UX
             rect.SetParent(RightPanel.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(100f, -140f);
+            rect.anchoredPosition = new Vector2(100f, -110f);
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
@@ -830,7 +830,7 @@ namespace kingskills.UX
             rect.SetParent(RightPanel.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(-100f, -310f);
+            rect.anchoredPosition = new Vector2(-100f, -200f);
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
@@ -864,7 +864,7 @@ namespace kingskills.UX
             rect.SetParent(RightPanel.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(100f, -310f);
+            rect.anchoredPosition = new Vector2(100f, -200f);
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
@@ -898,7 +898,7 @@ namespace kingskills.UX
             rect.SetParent(RightPanel.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(-100f, -400f);
+            rect.anchoredPosition = new Vector2(-100f, -290f);
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
@@ -932,7 +932,7 @@ namespace kingskills.UX
             rect.SetParent(RightPanel.transform);
             rect.anchorMin = new Vector2(0.5f, 1f);
             rect.anchorMax = new Vector2(0.5f, 1f);
-            rect.anchoredPosition = new Vector2(100f, -400f);
+            rect.anchoredPosition = new Vector2(100f, -290f);
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 

@@ -281,6 +281,7 @@ namespace kingskills.UX
             if (AscensionManager.IsAscendable(skill))
             {
                 SkillGUI.RPAscendedBtn.SetActive(true);
+                Player.m_localPlayer.ShowTutorial("kingskills_ascend");
             }
             else
             {

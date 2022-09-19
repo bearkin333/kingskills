@@ -19,7 +19,7 @@ namespace kingskills.UX
 
         public static void UpdateTooltip(Perk perk){
             if (!PerkTooltipWindow) InitTooltip();
-            if (highlightedPerk == null) NewTooltip(perk);
+            if (highlightedPerk != perk) NewTooltip(perk);
             if (!PerkTooltipWindow.activeSelf) PerkTooltipWindow.SetActive(true);
 
             //do position stuff
@@ -42,9 +42,9 @@ namespace kingskills.UX
             //Jotunn.Logger.LogMessage("Init the perk tooltip window");
             PerkTooltipWindow = GUIManager.Instance.CreateWoodpanel(
                     parent: SkillGUI.RightPanel.transform,
-                    anchorMin: new Vector2(.5f, .5f),
-                    anchorMax: new Vector2(.5f, .5f),
-                    position: new Vector2(0f, 35),
+                    anchorMin: new Vector2(.5f, 1f),
+                    anchorMax: new Vector2(.5f, 1f),
+                    position: new Vector2(0f, -380),
                     width: 320,
                     height: 80,
                     draggable: true);
@@ -55,7 +55,7 @@ namespace kingskills.UX
                 parent: PerkTooltipWindow.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(0f, -10f),
+                position: new Vector2(0f, -25f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 15,
                 color: GUIManager.Instance.ValheimOrange,

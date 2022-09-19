@@ -161,7 +161,7 @@ namespace kingskills
                     (player.GetSkills().GetSkillLevel(skillAcension.Key) >= CFG.MaxSkillLevel.Value))
                 {
                     AscensionManager.isAscendable[skillAcension.Key] = true;
-                    Jotunn.Logger.LogMessage("Regular update found a maxed skill and set it to be ascendable");
+                    //Jotunn.Logger.LogMessage("Regular update found a maxed skill and set it to be ascendable");
                 }
             }
         }

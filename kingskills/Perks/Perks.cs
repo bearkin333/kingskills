@@ -131,8 +131,8 @@ namespace kingskills
             perkList.Add(perk.type, perk);
 
             perk = new Perk("Four Stomachs",
-                "You can now throw your axe like a spear. This attack one-shots all trees it hits.",
-                "For when you can't quite reach.",
+                "All your food decays 25% slower, essentially making it last 50% longer.",
+                "I'm not calling you a cow... But...",
                 PerkType.FourStomachs, "Icons/fourstomachs.png");
             perkList.Add(perk.type, perk);
 

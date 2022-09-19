@@ -1301,7 +1301,7 @@ namespace kingskills.UX
                 $"EAT ROCKS EAT ROCKS EAT ROCKS EAT ROCKS EAT ROCKS";
             SkillGUI.LPTipsTexts[5].GetComponent<Text>().text =
                 $"{CFG.ColorBonusBlueFF}Bonus experience with mining is earned by eating rocks! Rocks will stay in your body " +
-                $"for {CFG.GetMiningXPRockTimerInSeconds().ToString("F0")} minutes, so you'll have to trade off the value of your food slots and the value " +
+                $"for {CFG.MiningXPRockTimer.Value.ToString("F0")} minutes, so you'll have to trade off the value of your food slots and the value " +
                 $"of the rock in question for sizable experience bonuses. Any kind of metal, ore, or rock can be eaten. The " +
                 $"effects screen will show you the experience value for any rock you're currently hovering over. {CFG.ColorEnd}";
         }
