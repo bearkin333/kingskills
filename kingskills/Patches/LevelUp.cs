@@ -129,7 +129,7 @@ namespace kingskills
                 nextLevelRequirement = skill.GetNextLevelRequirement();
             }
 
-            float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / CFG.MaxSkillLevel.Value);
+            //float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / CFG.MaxSkillLevel.Value);
 
             //Display the in-world text
             if (factor >= CFG.DisplayExperienceThreshold.Value &&
@@ -186,23 +186,31 @@ namespace kingskills
             {
                 if (ascendable.Value)
                 {
-                    Jotunn.Logger.LogMessage($"Since we lost skills, just checking again to see if {ascendable.Key} is still ascendable");
+                    //Jotunn.Logger.LogMessage($"Since we lost skills, just checking again to see if {ascendable.Key} is still ascendable");
                     if (__instance.GetSkillLevel(ascendable.Key) < CFG.MaxSkillLevel.Value)
                     {
-                        Jotunn.Logger.LogMessage("Yup. Not ascendable anymore");
+                        //Jotunn.Logger.LogMessage("Yup. Not ascendable anymore");
                         AscensionManager.isAscendable[ascendable.Key] = false;
                     }
                 }
             }
         }
 
-        public static void LevelUpPing(Player player, Skills.Skill skill)
+        public static void LevelUpPing(Player player, Skills.Skill skillS)
         {
-            float level = skill.m_level;
-            player.OnSkillLevelup(skill.m_info.m_skill, level);
+            Skills.SkillType skill = skillS.m_info.m_skill;
+            float level = skillS.m_level;
+            player.OnSkillLevelup(skill, level);
             MessageHud.MessageType type = (((int)level != 0) ? MessageHud.MessageType.TopLeft : MessageHud.MessageType.Center);
-            player.Message(type, "$msg_skillup $skill_" + skill.m_info.m_skill.ToString().ToLower() + ": " + (int)skill.m_level, 0, skill.m_info.m_icon);
-            Gogan.LogEvent("Game", "Levelup", skill.m_info.m_skill.ToString(), (int)skill.m_level);
+            player.Message(type, "$msg_skillup $skill_" + skill.ToString().ToLower() + ": " + (int)skillS.m_level, 0, skillS.m_info.m_icon);
+            Gogan.LogEvent("Game", "Levelup", skill.ToString(), (int)skillS.m_level);
+            if (Mathf.Floor(level) == Mathf.Floor(CFG.PerkOneLVLThreshold.Value) ||
+                Mathf.Floor(level) == Mathf.Floor(CFG.PerkTwoLVLThreshold.Value) ||
+                Mathf.Floor(level) == Mathf.Floor(CFG.PerkThreeLVLThreshold.Value) ||
+                Mathf.Floor(level) == Mathf.Floor(CFG.PerkFourLVLThreshold.Value))
+            {
+                player.Message(MessageHud.MessageType.Center, "Perk unlocked for "+ CFG.GetNameFromSkill(skill) + "!!");
+            }
         }
     }
 }

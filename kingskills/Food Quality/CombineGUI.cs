@@ -219,10 +219,17 @@ namespace kingskills.UX
 			SaveFoodQuality FQAt = itemAt.Extended().GetComponent<SaveFoodQuality>();
 
 			float newQuality;
+			long newChef;
 
 			//We use the smaller quality for the new stacked item
-			if (FQ.foodQuality < FQAt.foodQuality) newQuality = FQ.foodQuality;
-			else newQuality = FQAt.foodQuality;
+			if (FQ.foodQuality < FQAt.foodQuality) {
+				newQuality = FQ.foodQuality;
+				newChef = FQ.chefID;
+			}
+			else {
+				newQuality = FQAt.foodQuality;
+				newChef = FQAt.chefID;
+			}
 
 			int room = itemAt.m_shared.m_maxStackSize - itemAt.m_stack;
 
@@ -238,11 +245,14 @@ namespace kingskills.UX
 
 				ZLog.Log("Added to stack" + itemAt.m_stack + " " + item.m_stack);
 				FQAt.foodQuality = newQuality;
+				FQAt.chefID = newChef;
+				FQAt.flavorText = "This is a collection of packaged foodstuffs.";
 
 				if (item.m_stack <= 0)
 				{
+					Dragging.invRef.m_dragInventory.RemoveItem(item);
 					Dragging.invRef.SetupDragItem(null, null, 0);
-					invReference.RemoveItem(item);
+					//invReference.RemoveItem(item);
 				}
 
 				invReference.Changed();

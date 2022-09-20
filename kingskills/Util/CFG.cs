@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BepInEx.Configuration;
 using UnityEngine;
+using static kingskills.Perks;
 
 namespace kingskills
 {
@@ -173,23 +174,23 @@ namespace kingskills
             ColorPTRed = new Color(0.92f, 0.05f, 0.05f);
 
             MaxSkillLevel = cfg.Bind("Generic", "Max Skill Level", 100f,
-                    "This is the level that all king skills can go up to.");
+                    AdminCD("This is the level that all king skills can go up to.", true));
             DisplayExperienceThreshold = cfg.Bind("Generic", "Experience Display Threshold", .2f,
-                    "Threshold under which experience earned will not display as a message.");
+                    AdminCD("Threshold under which experience earned will not display as a message.", true));
             DropNewItemThreshold = cfg.Bind("Generic", "Drop New Item Threshold", 50f,
-                    "% of 1 item needed to generate before you round up to a full item.");
+                    AdminCD("% of 1 item needed to generate before you round up to a full item."));
 
 
             XPTextScaleMin = cfg.Bind("Generic", "Text Scale Min", 16f,
-                    "Font size of the smallest possible exp text");
+                    AdminCD("Font size of the smallest possible exp text", true));
             XPTextScaleMax = cfg.Bind("Generic", "Text Scale Max", 75f,
-                    "Font size of the largest possible exp text");
+                    AdminCD("Font size of the largest possible exp text", true));
             XPTextValueMin = cfg.Bind("Generic", "Text Value Min", 0.2f,
-                    "Experience value to generate the smallest size exp text");
+                    AdminCD("Experience value to generate the smallest size exp text", true));
             XPTextValueMax = cfg.Bind("Generic", "Text Value Max", 100f,
-                    "Experience value to generate the largest size exp text");
+                    AdminCD("Experience value to generate the largest size exp text", true));
             XPTextCurveFactor = cfg.Bind("Generic", "Text Curve Factor", .6f,
-                    "Factor to define the slope of the curve for exp text scaling");
+                    AdminCD("Factor to define the slope of the curve for exp text scaling", true));
 
         }
 
@@ -204,10 +205,10 @@ namespace kingskills
             float expPercent = (num - XPTextValueMin.Value) / (XPTextValueMax.Value - XPTextValueMin.Value);
             float curveFactor = Mathf.Pow(expPercent, XPTextCurveFactor.Value);
 
-            //Jotunn.Logger.LogMessage($"this exp is {num}, which makes it  {expPercent}% of the max value");
-            //Jotunn.Logger.LogMessage($"I am running {expPercent} to the power of {XPTextCurveFactor.Value}");
-            //Jotunn.Logger.LogMessage($"applying our curve to it causes it to be {curveFactor}%");
-            //Jotunn.Logger.LogMessage($"our final size will be {(int)Mathf.Floor(Mathf.Lerp(XPTextScaleMin.Value, XPTextScaleMax.Value, curveFactor))}");
+            //Jotunn.Logger.LogMessage($"this exp is {num}, which makes it  {expPercent}% of the max value"));
+            //Jotunn.Logger.LogMessage($"I am running {expPercent} to the power of {XPTextCurveFactor.Value}"));
+            //Jotunn.Logger.LogMessage($"applying our curve to it causes it to be {curveFactor}%"));
+            //Jotunn.Logger.LogMessage($"our final size will be {(int)Mathf.Floor(Mathf.Lerp(XPTextScaleMin.Value, XPTextScaleMax.Value, curveFactor))}"));
 
             return (int)Mathf.Floor(Mathf.Lerp(XPTextScaleMin.Value, XPTextScaleMax.Value, curveFactor));
         }
@@ -225,7 +226,7 @@ namespace kingskills
                 mult = 1 - mult;
             else
                 mult++;
-            //Jotunn.Logger.LogMessage($"Reading out {config.Definition.Key} as {mult}");
+            //Jotunn.Logger.LogMessage($"Reading out {config.Definition.Key} as {mult}"));
             return mult;
         }
 
@@ -236,7 +237,7 @@ namespace kingskills
             if (redux)
                 mod = 1 - mod;
 
-            // Jotunn.Logger.LogMessage($"Reading out {config.Definition.Key} as {mod}");
+            // Jotunn.Logger.LogMessage($"Reading out {config.Definition.Key} as {mod}"));
             return mod;
         }
 
@@ -249,7 +250,7 @@ namespace kingskills
             {
                 return x;
             }
-            //Jotunn.Logger.LogMessage($"{x} is being sin curved into {Mathf.Sin(Mathf.Lerp(0f, Mathf.PI / 2, x))}");
+            //Jotunn.Logger.LogMessage($"{x} is being sin curved into {Mathf.Sin(Mathf.Lerp(0f, Mathf.PI / 2, x))}"));
             return Mathf.Sin(Mathf.Lerp(0f, Mathf.PI / 2, x));
         }
 
@@ -304,19 +305,20 @@ namespace kingskills
                 } return Skills.SkillType.None;
             }
 
-        #endregion genericfunc
+        public static ConfigDescription AdminCD(string description, bool browsable = false)
+        {
+            return new ConfigDescription(description, null,
+                new ConfigurationManagerAttributes { IsAdminOnly = true, Browsable = browsable });
+        }
 
+        #endregion genericfunc
 
         ////////////////////////////////////////////////////////////////////////////////////////
         ///                                    Weapons
         ////////////////////////////////////////////////////////////////////////////////////////
         #region weapons
-        ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             WEAPONS
-        ///              
+        ////////////////////////////////////////////////////////////////////////////////////////     
         ///                             Axes
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region axe
         #region configdef
@@ -337,31 +339,31 @@ namespace kingskills
         private static void InitAxeConfigs(ConfigFile cfg)
         {
             ActiveSkillAxe = cfg.Bind("Generic.Active", "Axes", true,
-                    "Whether or not to activate king's skills version of the axes skill");
+                    AdminCD("Whether or not to activate king's skills version of the axes skill", true));
 
             AxeDamagePercentMin = cfg.Bind("Axe.Effect", "Damage Min", 0f,
-                "% extra damage done with axes at level 0");
+                AdminCD("% extra damage done with axes at level 0"));
             AxeDamagePercentMax = cfg.Bind("Axe.Effect", "Damage Max", 200f,
-                "% extra damage done with axes at level 100");
+                AdminCD("% extra damage done with axes at level 100"));
             AxeStaminaReduxMin = cfg.Bind("Axe.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for axes at level 0");
+                AdminCD("% less stamina usage for axes at level 0"));
             AxeStaminaReduxMax = cfg.Bind("Axe.Effect", "Stamina Reduction Max", 60f,
-                "% less stamina usage for axes at level 100");
+                AdminCD("% less stamina usage for axes at level 100"));
             AxeStaminaPerLevel = cfg.Bind("Axe.Effect", "Base Stamina Gain per Level", .44f,
-                "Flat amount of base stamina gained per level in axe");
+                AdminCD("Flat amount of base stamina gained per level in axe"));
             AxeChopDamagePercentMin = cfg.Bind("Axe.Effect", "Woodcutting Damage Min", 0f,
-                "% extra woodcutting damage done at level 0");
+                AdminCD("% extra woodcutting damage done at level 0"));
             AxeChopDamagePercentMax = cfg.Bind("Axe.Effect", "Woodcutting Damage Max", 50f,
-                "% extra woodcutting damage done at level 100");
+                AdminCD("% extra woodcutting damage done at level 100"));
             AxeCarryCapacityMin = cfg.Bind("Axe.Effect", "Carry Capacity Min", 0f,
-                "Flat extra carrying capacity at level 0");
+                AdminCD("Flat extra carrying capacity at level 0"));
             AxeCarryCapacityMax = cfg.Bind("Axe.Effect", "Carry Capacity Max", 250f,
-                "Flat extra carrying capacity at level 100");
+                AdminCD("Flat extra carrying capacity at level 100"));
 
             WeaponBXPAxeTreeAmount = cfg.Bind("Weapon.BonusExperience", "Axe Log", 5f,
-                "Flat BXP gained every time you break down a log");
+                AdminCD("Flat BXP gained every time you break down a log"));
             WeaponBXPAxeRange = cfg.Bind("Weapon.BonusExperience", "Axe Felling Range", 100f,
-                "Distance to check for axe BXP gain");
+                AdminCD("Distance to check for axe BXP gain"));
         }
 
 
@@ -393,11 +395,7 @@ namespace kingskills
         #endregion axe
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             WEAPONS
-        ///              
         ///                             Bows
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region bow
         #region configdef
@@ -419,7 +417,7 @@ namespace kingskills
         public static void InitBowConfigs(ConfigFile cfg)
         {
             ActiveSkillBow = cfg.Bind("Generic.Active", "Bows", true,
-                    "Whether or not to activate king's skills version of the bows skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the bows skill", true)); ;
 
             //List of all object names that count as bow drops
             BowDropTable.Add("LeatherScraps", 0);
@@ -435,31 +433,31 @@ namespace kingskills
 
             //exp
             BowBXPDistanceFactor = cfg.Bind("Weapon.BonusExperience", "Bow Distance Factor", 1.12f,
-                "Factor to define the scale of the distance curve");
+                AdminCD("Factor to define the scale of the distance curve"));
             BowBXPDistanceMod = cfg.Bind("Weapon.BonusExperience", "Bow Distance Mod", .5f,
-                "how much each point of distance is worth base for distance bow bxp");
+                AdminCD("how much each point of distance is worth base for distance bow bxp"));
 
             //effects
             BowDamagePercentMin = cfg.Bind("Bow.Effect", "Damage Min", 0f,
-                "% extra damage done with bows at level 0");
+                AdminCD("% extra damage done with bows at level 0"));
             BowDamagePercentMax = cfg.Bind("Bow.Effect", "Damage Max", 150f,
-                "% extra damage done with bows at level 100");
+                AdminCD("% extra damage done with bows at level 100"));
             BowStaminaReduxMin = cfg.Bind("Bow.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for bows at level 0");
+                AdminCD("% less stamina usage for bows at level 0"));
             BowStaminaReduxMax = cfg.Bind("Bow.Effect", "Stamina Reduction Max", 75f,
-                "% less stamina usage for bows at level 100");
+                AdminCD("% less stamina usage for bows at level 100"));
             BowVelocityPercentMin = cfg.Bind("Bow.Effect", "Velocity Min", 0f,
-                "% extra velocity to fired arrows at level 0");
+                AdminCD("% extra velocity to fired arrows at level 0"));
             BowVelocityPercentMax = cfg.Bind("Bow.Effect", "Velocity Max", 250f,
-                "% extra velocity to fired arrows at level 100");
+                AdminCD("% extra velocity to fired arrows at level 100"));
             //BowDrawSpeedModMin = cfg.Bind("Bow.Effect", "Draw Speed Min", 0f, 
-            //    "% extra bow draw speed at level 0");
+            //    AdminCD("% extra bow draw speed at level 0"));
             //BowDrawSpeedModMax = cfg.Bind("Bow.Effect", "Draw Speed Max", 0f, 
-            //    "% extra bow draw speed at level 100");
+            //    AdminCD("% extra bow draw speed at level 100"));
             BowDropPercentMin = cfg.Bind("Bow.Effect", "Drop rate min", 0f,
-                "% to increase creature drops at level 0");
+                AdminCD("% to increase creature drops at level 0"));
             BowDropPercentMax = cfg.Bind("Bow.Effect", "Drop rate max", 300f,
-                "% to increase creature drops at level 100");
+                AdminCD("% to increase creature drops at level 100"));
 
         }
 
@@ -496,11 +494,7 @@ namespace kingskills
         #endregion bow
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             WEAPONS
-        ///              
         ///                              Clubs
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region club
         #region configdef
@@ -522,33 +516,33 @@ namespace kingskills
         {
 
             ActiveSkillClub = cfg.Bind("Generic.Active", "Clubs", true,
-                    "Whether or not to activate king's skills version of the clubs skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the clubs skill", true)); ;
 
             //exp
             ClubBXPHealthFactor = cfg.Bind("Weapon.BonusExperience", "Club Stagger factor", .1f,
-                "how much each point of max health is worth in exp when staggering an enemy with clubs");
+                AdminCD("how much each point of max health is worth in exp when staggering an enemy with clubs"));
 
             //effects
             ClubDamagePercentMin = cfg.Bind("Club.Effect", "Damage Min", 0f,
-                "% extra damage done with clubs at level 0");
+                AdminCD("% extra damage done with clubs at level 0"));
             ClubDamagePercentMax = cfg.Bind("Club.Effect", "Damage Max", 200f,
-                "% extra damage done with clubs at level 100");
+                AdminCD("% extra damage done with clubs at level 100"));
             ClubStaminaReduxMin = cfg.Bind("Club.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for clubs at level 0");
+                AdminCD("% less stamina usage for clubs at level 0"));
             ClubStaminaReduxMax = cfg.Bind("Club.Effect", "Stamina Reduction Max", 50f,
-                "% less stamina usage for clubs at level 100");
+                AdminCD("% less stamina usage for clubs at level 100"));
             ClubBluntPercentMin = cfg.Bind("Club.Effect", "Generic Blunt Min", 0f,
-                "% extra blunt damage to ALL weapons at level 0");
+                AdminCD("% extra blunt damage to ALL weapons at level 0"));
             ClubBluntPercentMax = cfg.Bind("Club.Effect", "Generic Blunt Max", 40f,
-                "% extra blunt damage to ALL weapons at level 100");
+                AdminCD("% extra blunt damage to ALL weapons at level 100"));
             ClubKnockbackPercentMin = cfg.Bind("Club.Effect", "Generic Knockback Min", 0f,
-                "% extra knockback to ALL weapons at level 0");
+                AdminCD("% extra knockback to ALL weapons at level 0"));
             ClubKnockbackPercentMax = cfg.Bind("Club.Effect", "Generic Knockback Max", 250f,
-                "% extra knockback to ALL weapons at level 100");
+                AdminCD("% extra knockback to ALL weapons at level 100"));
             ClubStaggerPercentMin = cfg.Bind("Club.Effect", "Generic Stagger Min", 0f,
-                "% extra stagger damage to ALL ATTACKS at level 0");
+                AdminCD("% extra stagger damage to ALL ATTACKS at level 0"));
             ClubStaggerPercentMax = cfg.Bind("Club.Effect", "Generic Stagger Max", 100f,
-                "% extra stagger damage to ALL ATTACKS at level 100");
+                AdminCD("% extra stagger damage to ALL ATTACKS at level 100"));
 
         }
 
@@ -586,11 +580,7 @@ namespace kingskills
         #endregion club
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             WEAPONS
-        ///              
         ///                             Fists
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region fist
         #region configdef
@@ -614,35 +604,35 @@ namespace kingskills
         {
 
             ActiveSkillFist = cfg.Bind("Generic.Active", "Fists", true,
-                    "Whether or not to activate king's skills version of the unarmed skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the unarmed skill", true)); ;
 
             //exp
             FistBXPBlockFactor = cfg.Bind("Weapon.BonusExperience", "Unarmed Block", .2f,
-                "mod to multiply fist block bonus exp per damage point");
+                AdminCD("mod to multiply fist block bonus exp per damage point"));
 
             //effects
             FistDamagePercentMin = cfg.Bind("Fist.Effect", "Damage Min", -10f,
-                "% extra damage done with bare fists at level 0");
+                AdminCD("% extra damage done with bare fists at level 0"));
             FistDamagePercentMax = cfg.Bind("Fist.Effect", "Damage Max", 160f,
-                "% extra damage done with bare fists at level 100");
+                AdminCD("% extra damage done with bare fists at level 100"));
             FistStaminaReduxMin = cfg.Bind("Fist.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for fists at level 0");
+                AdminCD("% less stamina usage for fists at level 0"));
             FistStaminaReduxMax = cfg.Bind("Fist.Effect", "Stamina Reduction Max", 80f,
-                "% less stamina usage for fists at level 100");
+                AdminCD("% less stamina usage for fists at level 100"));
             FistDamageFlatMin = cfg.Bind("Fist.Effect", "Flat Damage Min", -3f,
-                "Flat extra damage at level 0");
+                AdminCD("Flat extra damage at level 0"));
             FistDamageFlatMax = cfg.Bind("Fist.Effect", "Flat Damage Max", 32f,
-                "Flat extra damage at level 100");
+                AdminCD("Flat extra damage at level 100"));
             FistDamageFlatFactor = cfg.Bind("Fist.Effect", "Flat Damage Factor", 1.65f,
-                "Curve for fist damage increase over levels");
+                AdminCD("Curve for fist damage increase over levels"));
             FistBlockArmorMin = cfg.Bind("Fist.Effect", "Unarmed Block Armor Flat Min", -5f,
-                "Flat extra unarmed block armor at level 0");
+                AdminCD("Flat extra unarmed block armor at level 0"));
             FistBlockArmorMax = cfg.Bind("Fist.Effect", "Unarmed Block Armor Flat Max", 50f,
-                "Flat extra unarmed block armor at level 100");
+                AdminCD("Flat extra unarmed block armor at level 100"));
             FistMovespeedPercentMin = cfg.Bind("Fist.Effect", "Movespeed Min", 0f,
-                "% movespeed increase at level 0");
+                AdminCD("% movespeed increase at level 0"));
             FistMovespeedPercentMax = cfg.Bind("Fist.Effect", "Movespeed Max", 65f,
-                "% movespeed increase at level 100");
+                AdminCD("% movespeed increase at level 100"));
         }
 
 
@@ -679,11 +669,7 @@ namespace kingskills
         #endregion fist
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             WEAPONS
-        ///              
         ///                             Knives
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region knife
         #region configdef
@@ -704,33 +690,33 @@ namespace kingskills
         public static void InitKnifeConfigs(ConfigFile cfg)
         {
             ActiveSkillKnife = cfg.Bind("Generic.Active", "Knives", true,
-                    "Whether or not to activate king's skills version of the knives skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the knives skill", true)); ;
 
             //exp
             WeaponBXPKnifeBackstab = cfg.Bind("Weapon.BonusExperience", "Knife Backstab", 25f,
-                "Flat BXP gained every time you get a sneak attack using the knife.");
+                AdminCD("Flat BXP gained every time you get a sneak attack using the knife."));
 
             //Knives
             KnifeDamagePercentMin = cfg.Bind("Knife.Effect", "Damage Min", 0f,
-                "% extra damage done with knives at level 0");
+                AdminCD("% extra damage done with knives at level 0"));
             KnifeDamagePercentMax = cfg.Bind("Knife.Effect", "Damage Max", 200f,
-                "% extra damage done with knives at level 100");
+                AdminCD("% extra damage done with knives at level 100"));
             KnifeStaminaReduxMin = cfg.Bind("Knife.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for knives at level 0");
+                AdminCD("% less stamina usage for knives at level 0"));
             KnifeStaminaReduxMax = cfg.Bind("Knife.Effect", "Stamina Reduction Max", 65f,
-                "% less stamina usage for knives at level 100");
+                AdminCD("% less stamina usage for knives at level 100"));
             KnifeBackstabPercentMin = cfg.Bind("Knife.Effect", "Backstab Min", 0f,
-                "% extra sneak attack damage with ALL weapons at level 0");
+                AdminCD("% extra sneak attack damage with ALL weapons at level 0"));
             KnifeBackstabPercentMax = cfg.Bind("Knife.Effect", "Backstab Max", 150f,
-                "% extra sneak attack damage with ALL weapons at level 100");
+                AdminCD("% extra sneak attack damage with ALL weapons at level 100"));
             KnifeMovespeedPercentMin = cfg.Bind("Knife.Effect", "Movementspeed Min", 0f,
-                "% movespeed increase at level 0");
+                AdminCD("% movespeed increase at level 0"));
             KnifeMovespeedPercentMax = cfg.Bind("Knife.Effect", "Movementspeed Max", 45f,
-                "% movespeed increase at level 100");
+                AdminCD("% movespeed increase at level 100"));
             KnifePiercePercentMin = cfg.Bind("Knife.Effect", "Generic Pierce Min", 0f,
-                "% extra pierce damage with ALL weapons at level 0");
+                AdminCD("% extra pierce damage with ALL weapons at level 0"));
             KnifePiercePercentMax = cfg.Bind("Knife.Effect", "Generic Pierce Max", 50f,
-                "% extra pierce damage with ALL weapons at level 0");
+                AdminCD("% extra pierce damage with ALL weapons at level 0"));
         }
 
 
@@ -763,11 +749,7 @@ namespace kingskills
         #endregion knife
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             WEAPONS
-        ///              
         ///                             Polearms
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region polearm
         #region configdef
@@ -788,33 +770,33 @@ namespace kingskills
         public static void InitPolearmConfigs(ConfigFile cfg)
         {
             ActiveSkillPolearm = cfg.Bind("Generic.Active", "Polearms", true,
-                    "Whether or not to activate king's skills version of the polearms skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the polearms skill", true)); ;
 
             //exp
             WeaponBXPPolearmDamageMod = cfg.Bind("Weapon.BonusExperience", "Polearm Damage Mod", .5f,
-                "amount of bonus experience to get for each damage blocked by armor.");
+                AdminCD("amount of bonus experience to get for each damage blocked by armor."));
 
             //effects
             PolearmDamagePercentMin = cfg.Bind("Polearm.Effect", "Damage Min", 0f,
-                "% extra damage done with polearms at level 0");
+                AdminCD("% extra damage done with polearms at level 0"));
             PolearmDamagePercentMax = cfg.Bind("Polearm.Effect", "Damage Max", 150f,
-                "% extra damage done with polearms at level 100");
+                AdminCD("% extra damage done with polearms at level 100"));
             PolearmStaminaReduxMin = cfg.Bind("Polearm.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for polearms at level 0");
+                AdminCD("% less stamina usage for polearms at level 0"));
             PolearmStaminaReduxMax = cfg.Bind("Polearm.Effect", "Stamina Reduction Max", 70f,
-                "% less stamina usage for polearms at level 100");
+                AdminCD("% less stamina usage for polearms at level 100"));
             PolearmRangeMin = cfg.Bind("Polearm.Effect", "Generic Range Min", 0f,
-                "Added units of range to all weapon attacks at level 0");
+                AdminCD("Added units of range to all weapon attacks at level 0"));
             PolearmRangeMax = cfg.Bind("Polearm.Effect", "Generic Range Max", 1f,
-                "Added units of range to all weapon attacks at level 100");
+                AdminCD("Added units of range to all weapon attacks at level 100"));
             PolearmArmorMin = cfg.Bind("Polearm.Effect", "Armor Flat Min", 0f,
-                "Flat armor added to character at level 0");
+                AdminCD("Flat armor added to character at level 0"));
             PolearmArmorMax = cfg.Bind("Polearm.Effect", "Armor Flat Max", 45f,
-                "Flat armor added to character at level 100");
+                AdminCD("Flat armor added to character at level 100"));
             PolearmBlockMin = cfg.Bind("Polearm.Effect", "Block Min", 0f,
-                "Flat block armor added to polearms at level 0");
+                AdminCD("Flat block armor added to polearms at level 0"));
             PolearmBlockMax = cfg.Bind("Polearm.Effect", "Block Max", 43f,
-                "Flat block armor added to polearms at level 100");
+                AdminCD("Flat block armor added to polearms at level 100"));
 
         }
 
@@ -845,11 +827,7 @@ namespace kingskills
         #endregion polearm
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             WEAPONS
-        ///              
         ///                             Spears
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region spear
         #region configdef
@@ -873,35 +851,35 @@ namespace kingskills
         {
 
             ActiveSkillSpear = cfg.Bind("Generic.Active", "Spear", true,
-                    "Whether or not to activate king's skills version of the spear skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the spear skill", true)); ;
 
             //exp
             SpearBXPDistanceFactor = cfg.Bind("Weapon.BonusExperience", "Spear Distance Factor", 1.12f,
-                "Factor to define the scale of the distance curve");
+                AdminCD("Factor to define the scale of the distance curve"));
             SpearBXPDistanceMod = cfg.Bind("Weapon.BonusExperience", "Spear Distance Mod", .5f,
-                "how much each point of distance is worth base for distance spear bxp");
+                AdminCD("how much each point of distance is worth base for distance spear bxp"));
 
             //effect
             SpearDamagePercentMin = cfg.Bind("Spear.Effect", "Damage Min", 0f,
-                "% extra damage done with spears at level 0");
+                AdminCD("% extra damage done with spears at level 0"));
             SpearDamagePercentMax = cfg.Bind("Spear.Effect", "Damage Max", 200f,
-                "% extra damage done with spears at level 100");
+                AdminCD("% extra damage done with spears at level 100"));
             SpearStaminaReduxMin = cfg.Bind("Spear.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for spears at level 0");
+                AdminCD("% less stamina usage for spears at level 0"));
             SpearStaminaReduxMax = cfg.Bind("Spear.Effect", "Stamina Reduction Max", 70f,
-                "% less stamina usage for spears at level 100");
+                AdminCD("% less stamina usage for spears at level 100"));
             SpearVelocityPercentMin = cfg.Bind("Spear.Effect", "Thrown Velocity Min", 0f,
-                "% extra velocity on thrown weapons at level 0");
+                AdminCD("% extra velocity on thrown weapons at level 0"));
             SpearVelocityPercentMax = cfg.Bind("Spear.Effect", "Thrown Velocity Max", 300f,
-                "% extra velocity on thrown weapons at level 100");
+                AdminCD("% extra velocity on thrown weapons at level 100"));
             SpearProjectileDamagePercentMin = cfg.Bind("Spear.Effect", "Thrown Damage Percent Min", 0f,
-                "% extra damage done with thrown weapons at level 0");
+                AdminCD("% extra damage done with thrown weapons at level 0"));
             SpearProjectilePercentMax = cfg.Bind("Spear.Effect", "Thrown Damage Percent Max", 200f,
-                "% extra damage done with thrown weapons at level 100");
+                AdminCD("% extra damage done with thrown weapons at level 100"));
             SpearBlockArmorMin = cfg.Bind("Spear.Effect", "Generic Block Armor Min", 0f,
-                "Flat block armor always applied at level 0");
+                AdminCD("Flat block armor always applied at level 0"));
             SpearBlockArmorMax = cfg.Bind("Spear.Effect", "Generic Block Armor Max", 40f,
-                "Flat block armor always applied at level 100");
+                AdminCD("Flat block armor always applied at level 100"));
         }
 
         public static float GetSpearBXPDistance(float distance)
@@ -936,11 +914,7 @@ namespace kingskills
         #endregion spear
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             WEAPONS
-        ///              
         ///                             Swords
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region sword
         #region configdef
@@ -962,33 +936,33 @@ namespace kingskills
         {
 
             ActiveSkillSword = cfg.Bind("Generic.Active", "Swords", true,
-                    "Whether or not to activate king's skills version of the swords skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the swords skill", true)); ;
             //exp
             WeaponBXPSwordStagger = cfg.Bind("Weapon.BonusExperience", "Sword Parry Hit", 3f,
-                "Flat BXP gained every time you hit a staggered enemy with a sword");
+                AdminCD("Flat BXP gained every time you hit a staggered enemy with a sword"));
 
 
             //effects
             SwordDamagePercentMin = cfg.Bind("Sword.Effect", "Damage Min", 0f,
-                "% extra damage done with swords at level 0");
+                AdminCD("% extra damage done with swords at level 0"));
             SwordDamagePercentMax = cfg.Bind("Sword.Effect", "Damage Max", 200f,
-                "% extra damage done with swords at level 100");
+                AdminCD("% extra damage done with swords at level 100"));
             SwordStaminaReduxMin = cfg.Bind("Sword.Effect", "Stamina Reduction Min", 0f,
-                "% less stamina usage for swords at level 0");
+                AdminCD("% less stamina usage for swords at level 0"));
             SwordStaminaReduxMax = cfg.Bind("Sword.Effect", "Stamina Reduction Max", 60f,
-                "% less stamina usage for swords at level 100");
+                AdminCD("% less stamina usage for swords at level 100"));
             SwordParryPercentMin = cfg.Bind("Sword.Effect", "Generic Parry Min", 0f,
-                "% extra parry bonus for ALL weapons at level 0");
+                AdminCD("% extra parry bonus for ALL weapons at level 0"));
             SwordParryPercentMax = cfg.Bind("Sword.Effect", "Generic Parry Max", 100f,
-                "% extra parry bonus for ALL weapons at level 100");
+                AdminCD("% extra parry bonus for ALL weapons at level 100"));
             SwordSlashPercentMin = cfg.Bind("Sword.Effect", "Generic Slash Min", 0f,
-                "% extra slash damage for ALL weapons at level 0");
+                AdminCD("% extra slash damage for ALL weapons at level 0"));
             SwordSlashPercentMax = cfg.Bind("Sword.Effect", "Generic Slash Max", 65f,
-                "% extra slash damage for ALL weapons at level 100");
+                AdminCD("% extra slash damage for ALL weapons at level 100"));
             SwordDodgeStaminaReduxMin = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Min", 0f,
-                "% less stamina cost to dodge roll at level 0");
+                AdminCD("% less stamina cost to dodge roll at level 0"));
             SwordDodgeStaminaReduxMax = cfg.Bind("Sword.Effect", "Dodgeroll Stamina Reduction Max", 40f,
-                "% less stamina cost to dodge roll at level 0");
+                AdminCD("% less stamina cost to dodge roll at level 0"));
         }
 
 
@@ -1028,11 +1002,7 @@ namespace kingskills
         #region skills
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             SKILLS
-        ///              
         ///                             Agriculture
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region botany
         #region configdef
@@ -1056,7 +1026,7 @@ namespace kingskills
         private static void InitBotanyConfig(ConfigFile cfg)
         {
             ActiveSkillBotany = cfg.Bind("Generic.Active", "Agriculture", true,
-                    "Whether or not to allow King's agriculture");
+                    AdminCD("Whether or not to allow King's agriculture"));
 
             //list of plant experience bounties here
             AgriculturePickableRewards = new Dictionary<string, float>();
@@ -1089,29 +1059,29 @@ namespace kingskills
 
             //exp
             AgricultureXPPlantFlat = cfg.Bind("Agriculture.Experience", "Plant", 1f,
-            "Amount of experience gained per plant planted");
+            AdminCD("Amount of experience gained per plant planted"));
 
             //effects
             AgricultureYieldMin = cfg.Bind("Agriculture.Effect", "Yield Min", 0f,
-            "% increase to yield of plants at level 0");
+            AdminCD("% increase to yield of plants at level 0"));
             AgricultureYieldMax = cfg.Bind("Agriculture.Effect", "Yield Max", 450f,
-            "% increase to yield of plants at level 100");
+            AdminCD("% increase to yield of plants at level 100"));
             AgricultureGrowReduxMin = cfg.Bind("Agriculture.Effect", "Grow Time Reduction Min", -10f,
-            "% less time on plant grow timers after you pick or plant at level 0");
+            AdminCD("% less time on plant grow timers after you pick or plant at level 0"));
             AgricultureGrowReduxMax = cfg.Bind("Agriculture.Effect", "Grow Time Reduction Max", 85f,
-            "% less time on plant grow timers after you pick or plant at level 100");
+            AdminCD("% less time on plant grow timers after you pick or plant at level 100"));
             AgricultureAvgFQMin = cfg.Bind("Agriculture.Effect", "Food Quality Min", -10f,
-            "% average food quality of harvested plants at level 0");
+            AdminCD("% average food quality of harvested plants at level 0"));
             AgricultureAvgFQMax = cfg.Bind("Agriculture.Effect", "Food Quality Max", 60f,
-            "% average food quality of harvested plants at level 100");
+            AdminCD("% average food quality of harvested plants at level 100"));
             AgricultureFQRangeMin = cfg.Bind("Agriculture.Effect", "Food Quality Range Min", 20f,
-            "spread of possible food quality values at level 0");
+            AdminCD("spread of possible food quality values at level 0"));
             AgricultureFQRangeMax = cfg.Bind("Agriculture.Effect", "Food Quality Range Max", 50f,
-            "spread of possible food quality values at level 100");
+            AdminCD("spread of possible food quality values at level 100"));
             AgricultureHealthRegainMin = cfg.Bind("Agriculture.Effect", "Health Regain Min", 0f,
-            "Amount of health regained each time you harvest a plant at level 0");
+            AdminCD("Amount of health regained each time you harvest a plant at level 0"));
             AgricultureHealthRegainMax = cfg.Bind("Agriculture.Effect", "Health Regain Max", 10f,
-            "Amount of health regained each time you harvest a plant at levle 100");
+            AdminCD("Amount of health regained each time you harvest a plant at levle 100"));
 
         }
 
@@ -1195,7 +1165,7 @@ namespace kingskills
             //Jotunn.Logger.LogMessage($"Our extra yield will be multiplied by {yieldMult}" +
             //    $"\nOur base case scenario, since the base is {baseYield}, is {bestCase}" +
             //    $"\nthe modifier, or half the extra yield, ended up as {modifier}" +
-            //    $"\nwe're returning {Mathf.FloorToInt(bestCase + modifier)}");
+            //    $"\nwe're returning {Mathf.FloorToInt(bestCase + modifier)}"));
             if (modifier - Mathf.Floor(modifier) > 0.5f) modifier++;
 
             return Mathf.FloorToInt(bestCase + modifier);
@@ -1223,11 +1193,7 @@ namespace kingskills
         #endregion botany
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             Skills
-        ///              
         ///                             Blocking
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region block
         #region configdef
@@ -1246,29 +1212,29 @@ namespace kingskills
         public static void InitBlockConfigs(ConfigFile cfg)
         {
             ActiveSkillBlock = cfg.Bind("Generic.Active", "Blocking", true,
-                    "Whether or not to activate king's skills version of the blocking skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the blocking skill", true)); ;
 
             //experience
             BlockXPPercent = cfg.Bind("Block.Experience", "XP", 15f,
-                "% of damage blocked that turns into experience");
+                AdminCD("% of damage blocked that turns into experience"));
             BlockXPParryPercent = cfg.Bind("Block.Experience", "Parry", 200f,
-                "% extra experience earned when parrying an attack");
+                AdminCD("% extra experience earned when parrying an attack"));
 
             //effects
             BlockFlatPowerMin = cfg.Bind("Block.Effect", "Block Armor Flat Min", 0f,
-                "This flat value is added to block armor at level 0");
+                AdminCD("This flat value is added to block armor at level 0"));
             BlockFlatPowerMax = cfg.Bind("Block.Effect", "Block Armor Flat Max", 50f,
-                "This flat value is added to block armor at level 100");
+                AdminCD("This flat value is added to block armor at level 100"));
             BlockPowerPercentMin = cfg.Bind("Block.Effect", "Block Armor Min", -25f,
-                "% change in total block armor at level 0");
+                AdminCD("% change in total block armor at level 0"));
             BlockPowerPercentMax = cfg.Bind("Block.Effect", "Block Armor Max", 100f,
-                "% change in total block armor at level 100");
+                AdminCD("% change in total block armor at level 100"));
             BlockStaminaReduxMin = cfg.Bind("Block.Effect", "Stamina Reduction Min", -10f,
-                "% less stamina to block at level 0");
+                AdminCD("% less stamina to block at level 0"));
             BlockStaminaReduxMax = cfg.Bind("Block.Effect", "Stamina Reduction Max", 50f,
-                "% less stamina to block at level 100");
+                AdminCD("% less stamina to block at level 100"));
             BlockHealthPerLevel = cfg.Bind("Block.Effect", "Health", .8f,
-                "flat increase to max health per level of block");
+                AdminCD("flat increase to max health per level of block"));
         }
 
 
@@ -1307,11 +1273,7 @@ namespace kingskills
         #endregion block
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             SKILLS
-        ///              
         ///                             Building
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region build
         #region configdef
@@ -1341,49 +1303,49 @@ namespace kingskills
         private static void InitBuildConfig(ConfigFile cfg)
         {
             ActiveSkillBuild = cfg.Bind("Generic.Active", "Building", true,
-                    "Whether or not to allow King's building");
+                    AdminCD("Whether or not to allow King's building"));
 
             BuildXPPerPiece = cfg.Bind("Build.Experience", "Per Piece", .5f,
-                    "How much experience for placed build piece");
+                    AdminCD("How much experience for placed build piece"));
             BuildXPRepairMod = cfg.Bind("Build.Experience", "Repair Mod", .05f,
-                    "Amount of experience for each point of repaired damage");
+                    AdminCD("Amount of experience for each point of repaired damage"));
             BuildXPDamageTakenMod = cfg.Bind("Build.Experience", "Damage Taken Mod", .2f,
-                    "Amount of experience for each point of damage taken by buildings");
+                    AdminCD("Amount of experience for each point of damage taken by buildings"));
             BuildXPDamageDoneMod = cfg.Bind("Build.Experience", "Damage Done Mod", .9f,
-                    "Amount of experience for each point of damage done by buildings");
+                    AdminCD("Amount of experience for each point of damage done by buildings"));
 
             BuildHealthMin = cfg.Bind("Build.Effect", "Health Min", 0f,
-                    "% increase to building health at level 0");
+                    AdminCD("% increase to building health at level 0"));
             BuildHealthMax = cfg.Bind("Build.Effect", "Health Max", 200f,
-                    "% increase to building health at level 100");
+                    AdminCD("% increase to building health at level 100"));
             BuildStabilityMin = cfg.Bind("Build.Effect", "Stability Min", -15f,
-                    "% increase to building stability at level 0");
+                    AdminCD("% increase to building stability at level 0"));
             BuildStabilityMax = cfg.Bind("Build.Effect", "Stability Max", 100f,
-                    "% increase to building stability at level 100");
+                    AdminCD("% increase to building stability at level 100"));
             BuildStabilityLossReduxMin = cfg.Bind("Build.Effect", "Stability Loss Reduction Min", -10f,
-                    "% reduction to loss of support at level 0");
+                    AdminCD("% reduction to loss of support at level 0"));
             BuildStabilityLossReduxMax = cfg.Bind("Build.Effect", "Stability Loss Reduction  Max", 45f,
-                    "% reduction to loss of support at level 100");
+                    AdminCD("% reduction to loss of support at level 100"));
             BuildDamageMin = cfg.Bind("Build.Effect", "Damage Min", 0f,
-                    "% increase to building damage at level 0");
+                    AdminCD("% increase to building damage at level 0"));
             BuildDamageMax = cfg.Bind("Build.Effect", "Damage Max", 400f,
-                    "% increase to building damage at level 0");
+                    AdminCD("% increase to building damage at level 0"));
             BuildWNTReduxMin = cfg.Bind("Build.Effect", "WNT Redux Min", 0f,
-                    "% less damage taken by buildings from wear and tear at level 0");
+                    AdminCD("% less damage taken by buildings from wear and tear at level 0"));
             BuildWNTReduxMax = cfg.Bind("Build.Effect", "WNT Redux Max", 75f,
-                    "% less damage taken by buildings from wear and tear at level 100");
+                    AdminCD("% less damage taken by buildings from wear and tear at level 100"));
             BuildFreeChanceMin = cfg.Bind("Build.Effect", "Free Chance Min", 0f,
-                    "% chance to build a piece for free at minimum level");
+                    AdminCD("% chance to build a piece for free at minimum level"));
             BuildFreeChanceMax = cfg.Bind("Build.Effect", "Free Chance Max", 35f,
-                    "% chance to build a piece for free at level 100");
+                    AdminCD("% chance to build a piece for free at level 100"));
             BuildFreeChanceFactor = cfg.Bind("Build.Effect", "Free Chance Factor", 2.5f,
-                    "Factor for defining the slope of the free chance curve.");
+                    AdminCD("Factor for defining the slope of the free chance curve."));
             BuildFreeChanceMinLevel = cfg.Bind("Build.Effect", "Free Chance Level", 20f,
-                    "Smallest level at which free chance curve begins");
+                    AdminCD("Smallest level at which free chance curve begins"));
             BuildStaminaReduxMin = cfg.Bind("Build.Effect", "Stamina Redux Min", -20f,
-                    "% reduction in stamina costs at level 0");
+                    AdminCD("% reduction in stamina costs at level 0"));
             BuildStaminaReduxMax = cfg.Bind("Build.Effect", "Stamina Redux Max", 82f,
-                    "% reduction in stamina costs at level 100");
+                    AdminCD("% reduction in stamina costs at level 100"));
         }
 
 
@@ -1430,7 +1392,7 @@ namespace kingskills
         {
             float rand = UnityEngine.Random.Range(0f, 1f);
             float skill = GetBuildingFreeMod(skillFactor);
-            //Jotunn.Logger.LogMessage($"rolled a random number of {rand} against {skill}");
+            //Jotunn.Logger.LogMessage($"rolled a random number of {rand} against {skill}"));
             return rand < skill;
         }
         public static float GetBuildingStaminaRedux(float skillFactor)
@@ -1452,11 +1414,7 @@ namespace kingskills
         #endregion build
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             SKILLS
-        ///              
         ///                             Cooking
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region cook
         #region configdef
@@ -1493,19 +1451,19 @@ namespace kingskills
         private static void InitCookConfig(ConfigFile cfg)
         {
             ActiveSkillCook = cfg.Bind("Generic.Active", "Cooking", true,
-                    "Whether or not to allow King's cooking");
+                    AdminCD("Whether or not to allow King's cooking"));
 
 
             CookingXPStart = cfg.Bind("Cooking.Experience", "Start", 1.5f,
-                    "How much experience for a started project");
-            CookingXPFinish = cfg.Bind("Cooking.Experience", "Finish", 4f,
-                    "How much experience for successfully cooking a project");
+                    AdminCD("How much experience for a started project"));
+            CookingXPFinish = cfg.Bind("Cooking.Experience", "Finish", 3f,
+                    AdminCD("How much experience for successfully cooking a project"));
             CookingXPTierBonus = cfg.Bind("Cooking.Experience", "Tier Bonus", 50f,
-                    "% increase in exp gained per tier level of cooking machine");
-            CookingXPStatMod = cfg.Bind("Cooking.Experience", "Stat Mod", .11f,
-                    "Amount of experience gained per health and stamina of eaten food.");
-            CookingXPCustomerBonus = cfg.Bind("Cooking.Experience", "Customer bonus", 150f,
-                    "% extra experience when your food is eaten by another person.");
+                    AdminCD("% increase in exp gained per tier level of cooking machine"));
+            CookingXPStatMod = cfg.Bind("Cooking.Experience", "Stat Mod", .08f,
+                    AdminCD("Amount of experience gained per health and stamina of eaten food."));
+            CookingXPCustomerBonus = cfg.Bind("Cooking.Experience", "Customer bonus", 100f,
+                    AdminCD("% extra experience when your food is eaten by another person."));
 
             CookingStationTiers = new Dictionary<string, float>();
             CookingStationLevelRQs = new Dictionary<string, float>();
@@ -1523,32 +1481,32 @@ namespace kingskills
             CookingStationLevelRQs.Add("piece_fermenter", 44);
 
             CookingAverageFQMin = cfg.Bind("Cooking.Effect", "Average FQ Min", 0f,
-                    "% of average food quality at level 0");
+                    AdminCD("% of average food quality at level 0"));
             CookingAverageFQMax = cfg.Bind("Cooking.Effect", "Average FQ Max", 150f,
-                    "% of average food quality at level 100");
+                    AdminCD("% of average food quality at level 100"));
             CookingFQRangeMin = cfg.Bind("Cooking.Effect", "FQ Range Min", 60f,
-                    "% range of possible food quality values at level 0");
+                    AdminCD("% range of possible food quality values at level 0"));
             CookingFQRangeMax = cfg.Bind("Cooking.Effect", "FQ Range Max", 20f,
-                    "% range of possible food quality values at level 100");
+                    AdminCD("% range of possible food quality values at level 100"));
             CookingFQRangeTimingPercent = cfg.Bind("Cooking.Effect", "FQ Range From Timing", 50f,
-                    "% of the range that can be controlled with timing. the rest is random based on skill level");
+                    AdminCD("% of the range that can be controlled with timing. the rest is random based on skill level"));
             CookingFQRangeFactor = cfg.Bind("Cooking.Effect", "Cook! FQ Range Factor", 0.67f,
-                    "factor for defining the 1-x squared parabola of the quality calcs");
+                    AdminCD("factor for defining the 1-x squared parabola of the quality calcs"));
 
             CookingTimeReduxMin = cfg.Bind("Cooking.Effect", "Time Redux Min", -20f,
-                    "% reduction in cooking times at level 0");
+                    AdminCD("% reduction in cooking times at level 0"));
             CookingTimeReduxMax = cfg.Bind("Cooking.Effect", "Time Redux Max", 70f,
-                    "% reduction in cooking times at level 100");
+                    AdminCD("% reduction in cooking times at level 100"));
             CookingTimeGuessMinLevel = cfg.Bind("Cooking.Effect", "Time Guess Min Level", 20f,
-                    "Level at which you start being able to see how long food will take");
+                    AdminCD("Level at which you start being able to see how long food will take"));
             CookingTimeGuessMin = cfg.Bind("Cooking.Effect", "Time Guess Min", 50f,
-                    "% the represents your uncertainty in your ability to guess how long food will take at minimum level");
+                    AdminCD("% the represents your uncertainty in your ability to guess how long food will take at minimum level"));
             CookingTimeGuessMax = cfg.Bind("Cooking.Effect", "Time Guess Max", 0f,
-                    "% the represents your uncertainty in your ability to guess how long food will take at maximum level");
+                    AdminCD("% the represents your uncertainty in your ability to guess how long food will take at maximum level"));
             CookingFermentTimeReduxMin = cfg.Bind("Cooking.Effect", "Fermentation Redux Min", 0f,
-                    "% reduction in fermentation times at level 0");
+                    AdminCD("% reduction in fermentation times at level 0"));
             CookingFermentTimeReduxMax = cfg.Bind("Cooking.Effect", "Fermentation Redux Max", 85f,
-                    "% reduction in fermentation times at level 100");
+                    AdminCD("% reduction in fermentation times at level 100"));
 
         }
 
@@ -1569,7 +1527,7 @@ namespace kingskills
         }
         public static float GetCookingXPTier(string cook)
         {
-            //Jotunn.Logger.LogMessage($"Comparing {cook}");
+            //Jotunn.Logger.LogMessage($"Comparing {cook}"));
             if (CookingStationTiers.ContainsKey(cook))
                 return CookingStationTiers[cook];
 
@@ -1617,14 +1575,14 @@ namespace kingskills
             //get middle values than otherwise.
 
             //Jotunn.Logger.LogMessage($"Since the effect of Timing was {timingPercent.ToString("F2")} and the effect of randomness was {randomFactor.ToString("F2")}," +
-            //    $"the final result is a combination at {timingAndRandom.ToString("F2")}");
+            //    $"the final result is a combination at {timingAndRandom.ToString("F2")}"));
             //Jotunn.Logger.LogMessage($"Applying our curve gives us {curvedQualityChange.ToString("F2")}, and then inversing it gives us " +
-            //    $"{goodCurve.ToString("F2")}");
+            //    $"{goodCurve.ToString("F2")}"));
 
             //(timingPercent * timingMod) + randomFactor * (1f - timingMod)
-            //Jotunn.Logger.LogMessage($"Base quality is {baseQ}, and half of the range is {range}");
-            //Jotunn.Logger.LogMessage($"The random quality was {randomFactor}");
-            //Jotunn.Logger.LogMessage($"I clamped timing, and now it is {timing}");
+            //Jotunn.Logger.LogMessage($"Base quality is {baseQ}, and half of the range is {range}"));
+            //Jotunn.Logger.LogMessage($"The random quality was {randomFactor}"));
+            //Jotunn.Logger.LogMessage($"I clamped timing, and now it is {timing}"));
 
 
             float qualityChange = Mathf.Lerp(-range, range, goodCurve);
@@ -1706,11 +1664,7 @@ namespace kingskills
         #endregion cook
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             SKILLS
-        ///              
         ///                             Jumping
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region jump
         #region configdef
@@ -1733,40 +1687,40 @@ namespace kingskills
         public static void InitJumpConfigs(ConfigFile cfg)
         {
             ActiveSkillJump = cfg.Bind("Generic.Active", "Jump", true,
-                    "Whether or not to activate king's skills version of the jump skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the jump skill", true)); ;
 
             //Jump Experience
             JumpXPPercent = cfg.Bind("Jump.Experience", "Jump Experience Mod", 43f,
-                "% of fall damage that becomes experience");
+                AdminCD("% of fall damage that becomes experience"));
 
             //Jump Effects
             JumpFallDamageThresholdMin = cfg.Bind("Jump.Effect", "Fall Damage Threshold Min", 4f,
-                "meters to fall before you start calculating fall damage at level 0");
+                AdminCD("meters to fall before you start calculating fall damage at level 0"));
             JumpFallDamageThresholdMax = cfg.Bind("Jump.Effect", "Fall Damage Threshold Max", 30f,
-                "meters to fall before you start calculating fall damage at level 100");
+                AdminCD("meters to fall before you start calculating fall damage at level 100"));
             JumpFallDamageReduxMin = cfg.Bind("Jump.Effect", "Fall Damage Reduction Min", -25f,
-                "% less fall damage to take at level 0");
+                AdminCD("% less fall damage to take at level 0"));
             JumpFallDamageReduxMax = cfg.Bind("Jump.Effect", "Fall Damage Reduction Max", 85f,
-                "% less fall damage to take at level 100");
+                AdminCD("% less fall damage to take at level 100"));
             JumpForcePercentMin = cfg.Bind("Jump.Effect", "Vertical Force Min", -10f,
-                "% extra vertical jump force at level 0");
+                AdminCD("% extra vertical jump force at level 0"));
             JumpForcePercentMax = cfg.Bind("Jump.Effect", "Vertical Force Max", 160f,
-                "% extra vertical jump force at level 100");
+                AdminCD("% extra vertical jump force at level 100"));
             JumpForwardForcePercentMin = cfg.Bind("Jump.Effect", "Horizontal Force Min", 0f,
-                "% extra horizontal jump force at level 0");
+                AdminCD("% extra horizontal jump force at level 0"));
             JumpForwardForcePercentMax = cfg.Bind("Jump.Effect", "Horizontal Force Max", 310f,
-                "% extra horizontal jump force at level 100");
+                AdminCD("% extra horizontal jump force at level 100"));
             //May not actually be used or be different from jump force
             JumpStaminaReduxMin = cfg.Bind("Jump.Effect", "Stamina Cost Min", 0f,
-                "% less stamina cost to jump at level 0");
+                AdminCD("% less stamina cost to jump at level 0"));
             JumpStaminaReduxMax = cfg.Bind("Jump.Effect", "Stamina Cost Max", 80f,
-                "% less stamina cost to jump at level 100");
+                AdminCD("% less stamina cost to jump at level 100"));
             JumpTiredModMin = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Min", 0f,
-                "% jump force added to the base game's tired factor, which " +
-                "reduces your jump force when out of stamina, at level 0");
+                AdminCD("% jump force added to the base game's tired factor, which " +
+                "reduces your jump force when out of stamina, at level 0"));
             JumpTiredModMax = cfg.Bind("Jump.Effect", "Tired Stamina Reduction Max", 30f,
-                "% jump force added to the base game's tired factor, which " +
-                "reduces your jump force when out of stamina, at level 100");
+                AdminCD("% jump force added to the base game's tired factor, which " +
+                "reduces your jump force when out of stamina, at level 100"));
 
         }
 
@@ -1799,7 +1753,7 @@ namespace kingskills
                 $"and {JumpStaminaReduxMax.Value}. Using PerToMult on both gives me" +
                 $"{PerToMult(JumpStaminaReduxMin, true)} to {PerToMult(JumpStaminaReduxMax, true)}." +
                 $"Based on that, my LERP is returning this number as " +
-                $"{Mathf.Lerp(PerToMult(JumpStaminaReduxMin, true),PerToMult(JumpStaminaReduxMax, true), skillFactor)}");
+                $"{Mathf.Lerp(PerToMult(JumpStaminaReduxMin, true),PerToMult(JumpStaminaReduxMax, true), skillFactor)}"));
             */
             return Mathf.Lerp(PerToMult(JumpStaminaReduxMin, true),
                 PerToMult(JumpStaminaReduxMax, true), skillFactor);
@@ -1817,11 +1771,7 @@ namespace kingskills
         #endregion jump
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             SKILLS
-        ///              
         ///                             Mining
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region mine
         #region configdef
@@ -1846,7 +1796,7 @@ namespace kingskills
         public static void InitMineConfigs(ConfigFile cfg)
         {
             ActiveSkillMine = cfg.Bind("Generic.Active", "Mining", true,
-                    "Whether or not to activate king's skills version of the mining skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the mining skill", true)); ;
 
             //List of all object names that count as mining drops
             MiningDropTable.Add("CopperOre", 0);
@@ -1876,29 +1826,29 @@ namespace kingskills
 
 
             MiningXPRockTimer = cfg.Bind("Mining.Experience", "Rock Timer", 21f,
-                "How many minutes a rock will last in your belly");
+                AdminCD("How many minutes a rock will last in your belly"));
 
             //effects
             MiningPickDamagePercentMin = cfg.Bind("Mining.Effect", "Pick Damage Min", 0f,
-                "% increase to pick damage at level 0");
+                AdminCD("% increase to pick damage at level 0"));
             MiningPickDamagePercentMax = cfg.Bind("Mining.Effect", "Pick Damage Max", 200f,
-                "% increase to pick damage at level 100");
+                AdminCD("% increase to pick damage at level 100"));
             MiningStaminaRebateMin = cfg.Bind("Mining.Effect", "Stamina Rebate Min", 0f,
-                "Flat stamina rebate on each hit of a rock at level 0");
+                AdminCD("Flat stamina rebate on each hit of a rock at level 0"));
             MiningStaminaRebateMax = cfg.Bind("Mining.Effect", "Stamina Rebate Max", 7f,
-                "Flat stamina rebate on each hit of a rock at level 100");
+                AdminCD("Flat stamina rebate on each hit of a rock at level 100"));
             MiningDropPercentMin = cfg.Bind("Mining.Effect", "Drop rate Min", 0f,
-                "% increase to ore drops at level 0");
+                AdminCD("% increase to ore drops at level 0"));
             MiningDropPercentMax = cfg.Bind("Mining.Effect", "Drop rate Max", 100f,
-                "% increase to ore drops at level 100");
+                AdminCD("% increase to ore drops at level 100"));
             MiningRegenHealthMin = cfg.Bind("Mining.Effect", "Regen Timer Reduction Min", 0f,
-                "How many seconds to reduce the health regeneration timer at level 0");
+                AdminCD("How many seconds to reduce the health regeneration timer at level 0"));
             MiningRegenHealthMax = cfg.Bind("Mining.Effect", "Regen Timer Reduction Max", 3f,
-                "How many seconds to reduce the health regeneration timer at level 100");
+                AdminCD("How many seconds to reduce the health regeneration timer at level 100"));
             MiningCarryCapacityMin = cfg.Bind("Mining.Effect", "Carry Capacity Min", 0f,
-                "How much extra carrying capacity you get at level 0");
+                AdminCD("How much extra carrying capacity you get at level 0"));
             MiningCarryCapacityMax = cfg.Bind("Mining.Effect", "Carry Capacity Max", 120f,
-                "How much extra carrying capacity you get at level 100");
+                AdminCD("How much extra carrying capacity you get at level 100"));
         }
 
         public static float GetMiningXPRockTimerInSeconds()
@@ -1944,11 +1894,7 @@ namespace kingskills
         #endregion mine
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             SKILLS
-        ///              
         ///                             Running
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region run
         #region configdef
@@ -1990,80 +1936,80 @@ namespace kingskills
         public static void InitRunConfigs(ConfigFile cfg)
         {
             ActiveSkillRun = cfg.Bind("Generic.Active", "Run", true,
-                    "Whether or not to activate king's skills version of the run skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the run skill", true)); ;
 
 
             //Run Absolute Weight Experience
             RunAbsoluteWeightMinWeight = cfg.Bind("Run.Experience.AbsoluteWeight", "Minimum Weight", 100f,
-                "The lowest weight you will get an experience bonus for carrying");
+                AdminCD("The lowest weight you will get an experience bonus for carrying"));
             RunAbsoluteWeightMaxWeight = cfg.Bind("Run.Experience.AbsoluteWeight", "Maximum Weight", 1800f,
-                "The heighest weight you will get an experience bonus for carrying");
+                AdminCD("The heighest weight you will get an experience bonus for carrying"));
             RunAbsoluteWeightFactor = cfg.Bind("Run.Experience.AbsoluteWeight", "Factor", .6f,
-                "Factor to define the slope of the absolute weight curve");
+                AdminCD("Factor to define the slope of the absolute weight curve"));
             RunXPAbsoluteWeightPercent = cfg.Bind("Run.Experience.AbsoluteWeight", "XP", 400f,
-                "% modifier for how much experience you get from absolute weight");
+                AdminCD("% modifier for how much experience you get from absolute weight"));
 
 
             //Run Relative Weight Experience
             RunRelativeWeightLight = cfg.Bind("Run.Experience.RelativeWeight", "Light Threshold", 33f,
-                "Threshold for being at 'light' encumberance");
+                AdminCD("Threshold for being at 'light' encumberance"));
             RunRelativeWeightLightPercent = cfg.Bind("Run.Experience.RelativeWeight", "Light XP", -25f,
-                "Experience Bonus for being at 'light' encumberance");
+                AdminCD("Experience Bonus for being at 'light' encumberance"));
             RunRelativeWeightMed = cfg.Bind("Run.Experience.RelativeWeight", "Medium Threshold", 50f,
-                "Threshold for being at 'medium' encumberance");
+                AdminCD("Threshold for being at 'medium' encumberance"));
             RunRelativeWeightMedPercent = cfg.Bind("Run.Experience.RelativeWeight", "Medium XP", 0f,
-                "Experience Bonus for being at 'medium' encumberance");
+                AdminCD("Experience Bonus for being at 'medium' encumberance"));
             RunRelativeWeightHighMed = cfg.Bind("Run.Experience.RelativeWeight", "High Threshold", 66f,
-                "Threshold for being at 'high' encumberance");
+                AdminCD("Threshold for being at 'high' encumberance"));
             RunRelativeWeightHighMedPercent = cfg.Bind("Run.Experience.RelativeWeight", "High XP", 25f,
-                "Experience Bonus for being at 'high' encumberance");
+                AdminCD("Experience Bonus for being at 'high' encumberance"));
             RunRelativeWeightHeavy = cfg.Bind("Run.Experience.RelativeWeight", "Heavy Threshold", 80f,
-                "Threshold for being at 'heavy' encumberance");
+                AdminCD("Threshold for being at 'heavy' encumberance"));
             RunRelativeWeightHeavyPercent = cfg.Bind("Run.Experience.RelativeWeight", "Heavy XP", 50f,
-                "Experience Bonus for being at 'heavy' encumberance");
+                AdminCD("Experience Bonus for being at 'heavy' encumberance"));
             RunRelativeWeightFull = cfg.Bind("Run.Experience.RelativeWeight", "Full Threshold", 100f,
-                "Threshold for being at 'full' encumberance");
+                AdminCD("Threshold for being at 'full' encumberance"));
             RunRelativeWeightFullPercent = cfg.Bind("Run.Experience.RelativeWeight", "Full XP", 80f,
-                "Experience Bonus for being at 'full' encumberance");
+                AdminCD("Experience Bonus for being at 'full' encumberance"));
             RunRelativeWeightOverPercent = cfg.Bind("Run.Experience.RelativeWeight", "Overweight XP", 200f,
-                "Experience Bonus for being overencumbered");
+                AdminCD("Experience Bonus for being overencumbered"));
             RunXPRelativeWeightPercent = cfg.Bind("Run.Experience.RelativeWeight", "Overall XP", 100f,
-                "% modifier for how much experience you get from relative weight");
+                AdminCD("% modifier for how much experience you get from relative weight"));
 
 
             //Run Experience
             RunXPSpeedPercent = cfg.Bind("Run.Experience", "XP", 5f,
-                "% of extra experience gained from run speed");
+                AdminCD("% of extra experience gained from run speed"));
 
 
 
             //Run Effects
             RunSpeedPercentMin = cfg.Bind("Run.Effect", "Speed Min", 0f,
-                "% extra run speed at level 0");
+                AdminCD("% extra run speed at level 0"));
             RunSpeedPercentMax = cfg.Bind("Run.Effect", "Speed Max", 200f,
-                "% extra run speed at level 100");
+                AdminCD("% extra run speed at level 100"));
             RunEquipmentReduxMin = cfg.Bind("Run.Effect", "Equipment Reduction Min", -20f,
-                "% less movespeed reduction from equipment at level 0");
+                AdminCD("% less movespeed reduction from equipment at level 0"));
             RunEquipmentReduxMax = cfg.Bind("Run.Effect", "Equipment Reduction Max", 60f,
-                "% less movespeed reduction from equipment at level 100");
+                AdminCD("% less movespeed reduction from equipment at level 100"));
 
             RunEncumberancePercentMin = cfg.Bind("Run.Effect", "Encumberance Min", 0f,
-                "% less run speed when your inventory is empty");
+                AdminCD("% less run speed when your inventory is empty"));
             RunEncumberancePercentMax = cfg.Bind("Run.Effect", "Encumberance Max", 50f,
-                "% less run speed when your inventory is full");
+                AdminCD("% less run speed when your inventory is full"));
             RunEncumberanceCurveFactor = cfg.Bind("Run.Effect", "Encumberance Curve", 1.8f,
-                "Factor for the curve of encumberance");
+                AdminCD("Factor for the curve of encumberance"));
             RunEncumberanceReduxMin = cfg.Bind("Run.Effect", "Encumberance Reduction Min", -15f,
-                "% less effect from encumberance at level 0");
+                AdminCD("% less effect from encumberance at level 0"));
             RunEncumberanceReduxMax = cfg.Bind("Run.Effect", "Encumberance Reduction Max", 75f,
-                "% less effect from encumberance at level 100");
+                AdminCD("% less effect from encumberance at level 100"));
 
             RunStaminaReduxMin = cfg.Bind("Run.Effect", "Stamina Reduction Min", -25f,
-                "% less stamina cost to run at level 100");
+                AdminCD("% less stamina cost to run at level 100"));
             RunStaminaReduxMax = cfg.Bind("Run.Effect", "Stamina Reduction Max", 80f,
-                "% less stamina cost to run at level 100");
+                AdminCD("% less stamina cost to run at level 100"));
             RunStaminaPerLevel = cfg.Bind("Run.Effect", "Stamina Flat", .44f,
-                "How much base stamina is added per level of run");
+                AdminCD("How much base stamina is added per level of run"));
         }
 
         public static float GetRunSpeedMult(float skillFactor)
@@ -2085,7 +2031,7 @@ namespace kingskills
             Jotunn.Logger.LogMessage($"Generating the encumberance factor: encumberance percent is apparently {encumberancePercent}\n" +
                 $"Min to max is read as {RunEncumberanceModMin.Value} - {RunEncumberanceModMax.Value}\n" +
                 $"Using PerToMult, they are displayed as {runEncMin} - {runEncMax}\n" +
-                $"running through my sin curve, I am returning {result}");
+                $"running through my sin curve, I am returning {result}"));
             return result;*/
         }
         public static float GetEncumberanceRedux(float skillFactor)
@@ -2095,7 +2041,7 @@ namespace kingskills
             /*
             Jotunn.Logger.LogMessage($"Encumberance redux: Config values are {RunEncumberanceReduxMin} to {RunEncumberanceReduxMax}\n" +
                 $"PerToMult reads those values as {PerToMult(RunEncumberanceReduxMin, true)} to {PerToMult(RunEncumberanceReduxMax, true)}\n" +
-                $"because I'm given {skillFactor}, I'm going to put out {answer}");
+                $"because I'm given {skillFactor}, I'm going to put out {answer}"));
             return answer;*/
         }
         public static float GetEquipmentRedux(float skillFactor)
@@ -2118,12 +2064,12 @@ namespace kingskills
             Jotunn.Logger.LogMessage($"Absolute weight exp mod: I was given {weightPercent} as weight percent\n" +
                 $"The overall exp mod is {RunAbsoluteWeightExpMod.Value}, which I've converted to {PerToMult(RunAbsoluteWeightExpMod)}\n" +
                 $"I just multiply that by my exponent curve, which is {weightPercent}^{RunAbsoluteWeightFactor.Value}," +
-                $"giving me {Mathf.Pow(weightPercent+1f, RunAbsoluteWeightFactor.Value)}");*/
+                $"giving me {Mathf.Pow(weightPercent+1f, RunAbsoluteWeightFactor.Value)}"));*/
         }
         public static float GetRelativeWeightStageMult(float weightMod)
         {
             float mult = 1f;
-            //Jotunn.Logger.LogMessage($"Relative weight: I'm given a percent of {weightPercent}\n");
+            //Jotunn.Logger.LogMessage($"Relative weight: I'm given a percent of {weightPercent}\n"));
 
             if (weightMod <= PerToMod(RunRelativeWeightLight))
                 mult = PerToMult(RunRelativeWeightLightPercent);
@@ -2143,7 +2089,7 @@ namespace kingskills
             else
                 mult = PerToMult(RunRelativeWeightOverPercent);
 
-            //Jotunn.Logger.LogMessage($"Which means the multiplier I'm returning is {mult} times {PerToMult(RunRelativeWeightExpMod)}\n");
+            //Jotunn.Logger.LogMessage($"Which means the multiplier I'm returning is {mult} times {PerToMult(RunRelativeWeightExpMod)}\n"));
 
             return mult * PerToMod(RunXPRelativeWeightPercent);
         }
@@ -2165,11 +2111,7 @@ namespace kingskills
         #endregion run
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             SKILLS
-        ///              
         ///                             Sailing
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region sail
         #region configdef
@@ -2215,25 +2157,25 @@ namespace kingskills
         private static void InitSailConfig(ConfigFile cfg)
         {
             ActiveSkillSail = cfg.Bind("Generic.Active", "Sailing", true,
-                    "Whether or not to allow King's sailing");
+                    AdminCD("Whether or not to allow King's sailing"));
 
 
             SailXPCrewBase = cfg.Bind("Sailing.Experience", "Crew Base", .2f,
-                    "Base rate while swimming or standing on board.");
+                    AdminCD("Base rate while swimming or standing on board."));
             SailXPCaptainBase = cfg.Bind("Sailing.Experience", "Captain Base", .45f,
-                    "Base rate while captaining a ship.");
+                    AdminCD("Base rate while captaining a ship."));
             SailXPWindMin = cfg.Bind("Sailing.Experience", "Wind Min", 0f,
-                    "% experience bonus when wind is totally against you");
+                    AdminCD("% experience bonus when wind is totally against you"));
             SailXPWindMax = cfg.Bind("Sailing.Experience", "Wind Max", 70f,
-                    "% experience bonus when wind is totally in the sails");
+                    AdminCD("% experience bonus when wind is totally in the sails"));
             SailXPSpeedMod = cfg.Bind("Sailing.Experience", "Speed", .25f,
-                    "Amount of experience each speed unit is worth");
+                    AdminCD("Amount of experience each speed unit is worth"));
             SailXPTierBonus = cfg.Bind("Sailing.Experience", "Ship Tier", 66f,
-                    "% of extra experience for each tier of ship after the first");
+                    AdminCD("% of extra experience for each tier of ship after the first"));
             SailXPCrewBonus = cfg.Bind("Sailing.Experience", "Crew", 33f,
-                    "% extra experience for each crew member on board past the first");
+                    AdminCD("% extra experience for each crew member on board past the first"));
             SailXPTimerLength = cfg.Bind("Sailing.Experience", "Timer", 2f,
-                    "Number of seconds for each sailing experience bundle");
+                    AdminCD("Number of seconds for each sailing experience bundle"));
 
             SailShipDefs = new Dictionary<string, ShipDef>();
 
@@ -2242,31 +2184,31 @@ namespace kingskills
             SailShipDefs.Add("Longship", new ShipDef(50, 2));
 
             SailSpeedMin = cfg.Bind("Sailing.Effect", "Speed Min", 0f,
-                    "% of extra sailing speed at level 0");
+                    AdminCD("% of extra sailing speed at level 0"));
             SailSpeedMax = cfg.Bind("Sailing.Effect", "Speed Max", 200f,
-                    "% of extra sailing speed at level 100");
+                    AdminCD("% of extra sailing speed at level 100"));
             SailWindNudgeMin = cfg.Bind("Sailing.Effect", "Wind Nudge Min", -15f,
-                    "% of nudge towards favorable winds at level 0");
+                    AdminCD("% of nudge towards favorable winds at level 0"));
             SailWindNudgeMax = cfg.Bind("Sailing.Effect", "Wind Nudge Max", 30f,
-                    "% of nudge towards favorable winds at level 100");
+                    AdminCD("% of nudge towards favorable winds at level 100"));
             SailExploreRangeMin = cfg.Bind("Sailing.Effect", "Explore Range Min", 0f,
-                    "extra units of explore range at level 0");
+                    AdminCD("extra units of explore range at level 0"));
             SailExploreRangeMax = cfg.Bind("Sailing.Effect", "Explore Range Max", 25f,
-                    "extra units of explore range at level 100");
+                    AdminCD("extra units of explore range at level 100"));
             SailPaddleSpeedMin = cfg.Bind("Sailing.Effect", "Paddle Speed Min", -25f,
-                    "% extra paddling speed at level 0");
+                    AdminCD("% extra paddling speed at level 0"));
             SailPaddleSpeedMax = cfg.Bind("Sailing.Effect", "Paddle Speed Max", 100f,
-                    "% extra paddling speed at level 100");
+                    AdminCD("% extra paddling speed at level 100"));
             SailRudderSpeedMin = cfg.Bind("Sailing.Effect", "Rudder Speed Min", -5f,
-                    "% extra rudder turning speed at level 0");
+                    AdminCD("% extra rudder turning speed at level 0"));
             SailRudderSpeedMax = cfg.Bind("Sailing.Effect", "Rudder Speed Max", 80f,
-                    "% extra rudder turning speed at level 100");
+                    AdminCD("% extra rudder turning speed at level 100"));
             SailControlTimer = cfg.Bind("Sailing.Effect", "Control Timer", 1.5f,
-                    "seconds between each update of the sail controls");
+                    AdminCD("seconds between each update of the sail controls"));
             SailDamageReduxMin = cfg.Bind("Sailing.Effect", "Damage Redux Min", -20f,
-                    "% less damage taken by the boat at level 0");
+                    AdminCD("% less damage taken by the boat at level 0"));
             SailDamageReduxMax = cfg.Bind("Sailing.Effect", "Damage Redux Max", 60f,
-                    "% less damage taken by the boat at level 0");
+                    AdminCD("% less damage taken by the boat at level 0"));
         }
 
 
@@ -2330,11 +2272,7 @@ namespace kingskills
         #endregion sail
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             SKILLS
-        ///              
         ///                             Sneaking
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region sneak
         #region configdef
@@ -2350,19 +2288,19 @@ namespace kingskills
         {
 
             ActiveSkillSneak = cfg.Bind("Generic.Active", "Sneak", true,
-                    "Whether or not to activate king's skills version of the sneak skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the sneak skill", true)); ;
 
             //effects
             SneakXPThreatPercent = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 1f,
-                    "Determines how much each 'point of danger' is worth in sneak exp");
+                    AdminCD("Determines how much each 'point of danger' is worth in sneak exp"));
             SneakStaminaDrainMin = cfg.Bind("Sneak.Effect", "Stamina Drain Min", 10f,
-                    "Amount of stamina drain per second while sneaking at level 0");
+                    AdminCD("Amount of stamina drain per second while sneaking at level 0"));
             SneakStaminaDrainMax = cfg.Bind("Sneak.Effect", "Stamina Drain Max", 1.0f,
-                    "Amount of stamina drain per second while sneaking at level 100");
+                    AdminCD("Amount of stamina drain per second while sneaking at level 100"));
             SneakSpeedPercentMin = cfg.Bind("Sneak.Effect", "Speed Min", 0f,
-                    "% speed increase while sneaking at level 0");
+                    AdminCD("% speed increase while sneaking at level 0"));
             SneakSpeedPercentMax = cfg.Bind("Sneak.Effect", "Speed Max", 350f,
-                    "% speed increase while sneaking at level 100");
+                    AdminCD("% speed increase while sneaking at level 100"));
         }
 
         public static float GetSneakXPMult()
@@ -2390,11 +2328,7 @@ namespace kingskills
         #endregion sneak
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             SKILLS
-        ///              
         ///                             Swimming
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region swim
         #region configdef
@@ -2413,29 +2347,29 @@ namespace kingskills
         public static void InitSwimConfigs(ConfigFile cfg)
         {
             ActiveSkillSwim = cfg.Bind("Generic.Active", "Swim", true,
-                    "Whether or not to activate king's skills version of the swim skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the swim skill", true)); ;
 
             //Swim Experience
             SwimXPSpeedPercent = cfg.Bind("Swim.Experience", "XP", 10f,
-                "% of swim speed that becomes bonus experience gain");
+                AdminCD("% of swim speed that becomes bonus experience gain"));
 
             //Swim effects
             SwimSpeedPercentMin = cfg.Bind("Swim.Effect", "Speed Min", 0f,
-                "% to increase swim speed at level 0");
+                AdminCD("% to increase swim speed at level 0"));
             SwimSpeedPercentMax = cfg.Bind("Swim.Effect", "Speed Max", 350f,
-                "% to increase swim speed at level 100");
+                AdminCD("% to increase swim speed at level 100"));
             SwimAccelPercentMin = cfg.Bind("Swim.Effect", "Acceleration Min", 0f,
-                "% to increase swim acceleration at level 0");
+                AdminCD("% to increase swim acceleration at level 0"));
             SwimAccelPercentMax = cfg.Bind("Swim.Effect", "Acceleration Max", 350f,
-                "% to increase swim acceleration at level 100");
+                AdminCD("% to increase swim acceleration at level 100"));
             SwimTurnPercentMin = cfg.Bind("Swim.Effect", "Turn Speed Min", 0f,
-                "% to increase swim turn speed at level 0");
+                AdminCD("% to increase swim turn speed at level 0"));
             SwimTurnPercentMax = cfg.Bind("Swim.Effect", "Turn Speed Max", 500f,
-                "% to increase swim turn speed at level 100");
+                AdminCD("% to increase swim turn speed at level 100"));
             SwimStaminaPerSecMin = cfg.Bind("Swim.Effect", "Stamina cost min", 5f,
-                "How much stamina swimming will take per second at level 0");
+                AdminCD("How much stamina swimming will take per second at level 0"));
             SwimStaminaPerSecMax = cfg.Bind("Swim.Effect", "Stamina cost max", .5f,
-                "How much stamina swimming will take per second at level 100");
+                AdminCD("How much stamina swimming will take per second at level 100"));
         }
 
 
@@ -2467,11 +2401,7 @@ namespace kingskills
         #endregion swim
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                             SKILLS
-        ///              
         ///                             Woodcutting
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region wood
         #region configdef
@@ -2494,7 +2424,7 @@ namespace kingskills
         public static void InitWoodConfigs(ConfigFile cfg)
         {
             ActiveSkillWood = cfg.Bind("Generic.Active", "Woodcutting", true,
-                    "Whether or not to activate king's skills version of the woodcutting skill"); ;
+                    AdminCD("Whether or not to activate king's skills version of the woodcutting skill", true)); ;
 
             //List of all object names that count as woodcutting drops
             WoodcuttingDropTable.Add("BeechSeeds", 0);
@@ -2507,29 +2437,29 @@ namespace kingskills
 
 
             ToolBXPWoodStubReward = cfg.Bind("Experience.Tools", "Woodcutting BXP for Stump", 20f,
-                "The amount of experience you get for breaking a stump");
+                AdminCD("The amount of experience you get for breaking a stump"));
 
             //effects
             WoodcuttingChopDamagePercentMin = cfg.Bind("Wood.Effect", "Chop Damage Min", 0f,
-                "% increase to chop damage at level 0");
+                AdminCD("% increase to chop damage at level 0"));
             WoodcuttingChopDamagePercentMax = cfg.Bind("Wood.Effect", "Chop Damage Max", 200f,
-                "% increase to chop damage at level 100");
+                AdminCD("% increase to chop damage at level 100"));
             WoodcuttingStaminaRebateMin = cfg.Bind("Wood.Effect", "Stamina Rebate Min", 0f,
-                "Flat stamina rebate on each hit of a tree at level 0");
+                AdminCD("Flat stamina rebate on each hit of a tree at level 0"));
             WoodcuttingStaminaRebateMax = cfg.Bind("Wood.Effect", "Stamina Rebate Max", 9f,
-                "Flat stamina rebate on each hit of a tree at level 100");
+                AdminCD("Flat stamina rebate on each hit of a tree at level 100"));
             WoodcuttingDropPercentMin = cfg.Bind("Wood.Effect", "Drop rate min", 0f,
-                "% increase to wood drops at level 0");
+                AdminCD("% increase to wood drops at level 0"));
             WoodcuttingDropPercentMax = cfg.Bind("Wood.Effect", "Drop rate max", 250f,
-                "% increase to wood drops at level 100");
+                AdminCD("% increase to wood drops at level 100"));
             WoodcuttingRegenStaminaMin = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", -.1f,
-                    "Amount of seconds to take off the stamina regeneration timer at level 0. Base value in vanilla is 1s");
+                AdminCD("Amount of seconds to take off the stamina regeneration timer at level 0. Base value in vanilla is 1s"));
             WoodcuttingRegenStaminaMax = cfg.Bind("Wood.Effect", "Regen Timer Reduction Min", .7f,
-                    "Amount of seconds to take off the stamina regeneration timer at level 100");
+                AdminCD("Amount of seconds to take off the stamina regeneration timer at level 100"));
             WoodcuttingCarryCapacityMin = cfg.Bind("Wood.Effect", "Carry Capacity Min", 0f,
-                "How much extra carrying capacity you get at level 0");
+                AdminCD("How much extra carrying capacity you get at level 0"));
             WoodcuttingCarryCapacityMax = cfg.Bind("Wood.Effect", "Carry Capacity Max", 120f,
-                "How much extra carrying capacity you get at level 100");
+                AdminCD("How much extra carrying capacity you get at level 100"));
         }
 
         public static float GetWoodcuttingDamageMod(float skillFactor)
@@ -2567,6 +2497,11 @@ namespace kingskills
         ///                                    Perks
         ////////////////////////////////////////////////////////////////////////////////////////
         #region perks
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                Generic Perks
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region genericperks
         #region configdef
         public static ConfigEntry<bool> PerkExplorationOn;
         public static ConfigEntry<float> PerkOneLVLThreshold;
@@ -2574,26 +2509,3031 @@ namespace kingskills
         public static ConfigEntry<float> PerkThreeLVLThreshold;
         public static ConfigEntry<float> PerkFourLVLThreshold;
         #endregion configdef
-
         public static void InitPerkConfig(ConfigFile cfg)
         {
             PerkExplorationOn = cfg.Bind("Perks", "Perk Exploration", true,
-                    "Whether or not locked perks are hidden from view");
+                    AdminCD("Whether or not locked perks are hidden from view", true));
 
             PerkOneLVLThreshold = cfg.Bind("Perks", "First Threshold", .3f,
-                    "mod of max level before you unlock the first set of perks");
+                    AdminCD("mod of max level before you unlock the first set of perks", true));
             PerkTwoLVLThreshold = cfg.Bind("Perks", "Second Threshold", .6f,
-                    "mod of max level before you unlock the second set of perks");
+                    AdminCD("mod of max level before you unlock the second set of perks", true));
             PerkThreeLVLThreshold = cfg.Bind("Perks", "ThirdThreshold", .9f,
-                    "mod of max level before you unlock the third set of perks");
+                    AdminCD("mod of max level before you unlock the third set of perks", true));
             PerkFourLVLThreshold = cfg.Bind("Perks", "FourthThreshold", 10f,
-                    "mod of max level before you unlock the fourth set of perks - NOT IMPLEMENTED");
+                    AdminCD("mod of max level before you unlock the fourth set of perks - NOT IMPLEMENTED"));
+
+            InitAllPerkConfigs(cfg);
+        }
+
+        public static void InitAllPerkConfigs(ConfigFile cfg)
+        {
+            InitAirStepConfigs(cfg);
+            InitAlwaysPreparedConfigs(cfg);
+            InitAquamanConfigs(cfg);
+            InitAsguardConfigs(cfg);
+            InitAttackOfOpportunityConfigs(cfg);
+            InitBerserkrConfigs(cfg);
+            InitBigStickConfigs(cfg);
+            InitBlackFlashConfigs(cfg);
+            InitBlastWaveConfigs(cfg);
+            InitBlockExpertConfigs(cfg);
+            InitBoomerangConfigs(cfg);
+            InitBotanyConfigs(cfg);
+            InitBreakMyStrideConfigs(cfg);
+            InitButterflyConfigs(cfg);
+            InitCloakOfShadowsConfigs(cfg);
+            InitClosingTheGapConfigs(cfg);
+            InitControlledDemoConfigs(cfg);
+            InitCouchedLanceConfigs(cfg);
+            InitCoupDeBurstConfigs(cfg);
+            InitCriticalBlowConfigs(cfg);
+            InitDeadeyeConfigs(cfg);
+            InitDecapitationConfigs(cfg);
+            InitDidntHurtConfigs(cfg);
+            InitDisarmingDefenseConfigs(cfg);
+            InitESPConfigs(cfg);
+            InitEfficiencyConfigs(cfg);
+            InitEinherjarConfigs(cfg);
+            InitEngineerConfigs(cfg);
+            InitFalconKickConfigs(cfg);
+            InitFirstMateConfigs(cfg);
+            InitFishersBoonConfigs(cfg);
+            InitFiveStarChefConfigs(cfg);
+            InitFourStomachsConfigs(cfg);
+            InitFragmentationConfigs(cfg);
+            InitFrugalConfigs(cfg);
+            InitGiantSmashConfigs(cfg);
+            InitGodSlayingStrikeConfigs(cfg);
+            InitGoombaStompConfigs(cfg);
+            InitGreenThumbConfigs(cfg);
+            InitGutAndRunConfigs(cfg);
+            InitHarvesterConfigs(cfg);
+            InitHeartOfTheForestConfigs(cfg);
+            InitHeartOfTheMonkeyConfigs(cfg);
+            InitHermesBootsConfigs(cfg);
+            InitHideInPlainSightConfigs(cfg);
+            InitHighlanderConfigs(cfg);
+            InitHraesvelgConfigs(cfg);
+            InitHydrodynamicConfigs(cfg);
+            InitIaiConfigs(cfg);
+            InitIronSkinConfigs(cfg);
+            InitJoJoPoseConfigs(cfg);
+            InitJotunnConfigs(cfg);
+            InitJuggernautConfigs(cfg);
+            InitKeenNoseConfigs(cfg);
+            InitLightningReflexConfigs(cfg);
+            InitLivingStoneConfigs(cfg);
+            InitLodeBearingStoneConfigs(cfg);
+            InitLogHorizonConfigs(cfg);
+            InitLokisGiftConfigs(cfg);
+            InitMagneticConfigs(cfg);
+            InitManOverboardConfigs(cfg);
+            InitMarathonSwimmerConfigs(cfg);
+            InitMarketGardenerConfigs(cfg);
+            InitMassiveStatureConfigs(cfg);
+            InitMasterOfTheLogConfigs(cfg);
+            InitMeditationConfigs(cfg);
+            InitMeteorDropConfigs(cfg);
+            InitMjolnirConfigs(cfg);
+            InitMountainGoatConfigs(cfg);
+            InitNailgunConfigs(cfg);
+            InitNutritionConfigs(cfg);
+            InitOdinJumpConfigs(cfg);
+            InitOfferToUllrConfigs(cfg);
+            InitPandemoniumPointConfigs(cfg);
+            InitPerfectComboConfigs(cfg);
+            InitPlusUltraConfigs(cfg);
+            InitPowerDrawConfigs(cfg);
+            InitPressurePointsConfigs(cfg);
+            InitRammingSpeedConfigs(cfg);
+            InitResponsibleLumberjackConfigs(cfg);
+            InitRockDodgerConfigs(cfg);
+            InitRockHaulerConfigs(cfg);
+            InitRunedArrowsConfigs(cfg);
+            InitSeaShantyConfigs(cfg);
+            InitSeedSatchelConfigs(cfg);
+            InitSeedingConfigs(cfg);
+            InitShatterStrikeConfigs(cfg);
+            InitSilentSprinterConfigs(cfg);
+            InitSleightOfHandConfigs(cfg);
+            InitSmokeBombConfigs(cfg);
+            InitSoilMixingConfigs(cfg);
+            InitSpearitConfigs(cfg);
+            InitSpiceMasterConfigs(cfg);
+            InitSpicySweetConfigs(cfg);
+            InitSpikedShieldConfigs(cfg);
+            InitSpiritGuideConfigs(cfg);
+            InitStretchConfigs(cfg);
+            InitSuperfuelConfigs(cfg);
+            InitTackleConfigs(cfg);
+            InitTasteTestingConfigs(cfg);
+            InitThrowbackConfigs(cfg);
+            InitTitanEnduranceConfigs(cfg);
+            InitTitanStrengthConfigs(cfg);
+            InitToxicConfigs(cfg);
+            InitTrapmasterConfigs(cfg);
+            InitTrenchDiggerConfigs(cfg);
+            InitValkyrieFlightConfigs(cfg);
+            InitVitalStudyConfigs(cfg);
+            InitWarehousingConfigs(cfg);
+            InitWarriorOfLightConfigs(cfg);
+            InitWaterRunningConfigs(cfg);
+            InitWorldlyConfigs(cfg);
+            InitYmirConfigs(cfg);
+        }
+
+        #endregion genericperks
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Air Step
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region airstep
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitAirStepConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkAirStep()
+        {
+            return new Perk("Air Step",
+                "Allows you to jump one additional time while in the air.",
+                "The laws of physics are nothing to a viking!",
+                Perks.PerkType.AirStep, "Icons/airstep.png");
         }
 
 
 
-        #endregion perks
 
+        #endregion airstep
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Always Preapred
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region alwaysprepared
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitAlwaysPreparedConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkAlwaysPrepared()
+        {
+            return new Perk("Always Prepared",
+                "Entering water no longer causes you to put your weapons or tools away.",
+                "Breaking news: man literally too angry to swim",
+                Perks.PerkType.AlwaysPrepared, "Icons/alwaysprepared.png");
+        }
+
+
+
+
+        #endregion alwaysprepared
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Aquaman
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region aquaman
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitAquamanConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkAquaman()
+        {
+            return new Perk("Aquaman",
+                "As you remain in water, an increasingly larger school of fish will circle you and protect you from any " +
+                "aggressors.",
+                "It may not be laser eyes, but it's an objectively cool power.",
+                PerkType.Aquaman, "Icons/aquaman.png");
+        }
+
+
+
+
+        #endregion aquaman
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Asguard
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region asguard
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitAsguardConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkAsguard()
+        {
+            return new Perk("Asguard",
+                "You now block in all directions while blocking - but you can only get a perfect block when " +
+                "properly facing the attack.",
+                "Are all the stars in the sky my enemy?",
+                PerkType.Asguard, "Icons/asguard.png");
+        }
+
+
+
+
+        #endregion asguard
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 AttackOfOpportunity
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region attackofopportunity
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitAttackOfOpportunityConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkAttackOfOpportunity()
+        {
+            return new Perk("Attack of Opportunity",
+                "While you are running and unarmed, any enemy that comes close to you" +
+                " gets automatically hit with a high-speed kick. Has a 2s cooldown.",
+                "You're already in my range...",
+                Perks.PerkType.AttackOfOpportunity, "Icons/attackofopportunity.png");
+        }
+
+
+
+
+        #endregion attackofopportunity
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Berserkr
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region berserkr
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBerserkrConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBerserkr()
+        {
+            return new Perk("Berserkr",
+                "When you take damage, there's a small chance to enter a berserker rage, which increases" +
+                " your damage, reduces stamina costs, and increases your movespeed.",
+                "That's my secret, Cap. I'm always angry.",
+                PerkType.Berserkr, "Icons/berserkr.png");
+        }
+
+
+
+
+        #endregion berserkr
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 BigStick
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region BigStick
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBigStickConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBigStick()
+        {
+            return new Perk("Big Stick",
+                "Your equipped weapon increases in size, costing more stamina but also dealing more damage.",
+                "Unfortunately, does nothing for the softness of your voice.",
+                PerkType.BigStick, "Icons/bigstick.png");
+        }
+
+
+
+
+        #endregion BigStick
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 BlackFlash
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region BlackFlash
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBlackFlashConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBlackFlash()
+        {
+            return new Perk("Black Flash",
+                "Perfect blocks will now cause explosions, dealing damage in an area based on your block armor" +
+                " and parry bonus.",
+                "'There's a sense of omnipotence, like everything else revolves around them.'",
+                PerkType.BlackFlash, "Icons/blackflash.png");
+        }
+
+
+
+
+        #endregion BlackFlash
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 BlastWave
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region BlastWave
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBlastWaveConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBlastWave()
+        {
+            return new Perk("Blast Wave",
+                "All attacks you inflict that hit an area will have their size doubled.",
+                "It was all reduced to rubble... and then, again, to ash.",
+                PerkType.BlastWave, "Icons/thunderhammer.png");
+        }
+
+
+
+
+        #endregion BlastWave
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 BlockExpert
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region BlockExpert
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBlockExpertConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBlockExpert()
+        {
+            return new Perk("Blocking Expertise",
+                "All forms of damage are now blockable. Yes, even that.",
+                "If it breathes, you can block it.",
+                PerkType.BlockExpert, "Icons/blockexpert.png");
+        }
+
+
+
+
+        #endregion BlockExpert
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Boomerang
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Boomerang
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBoomerangConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBoomerang()
+        {
+            return new Perk("Just a Guy with a Boomerang",
+                "Spears now automatically return to you after they're thrown.",
+                "I didn't ask for all this flying and magic!",
+                PerkType.Boomerang, "Icons/boomerang.png");
+        }
+
+
+
+
+        #endregion Boomerang
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Botany
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Botany
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBotanyConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBotany()
+        {
+            return new Perk("Botany",
+                "Intensive study of the workings of plants has increased your ability read basic information about them, such as time until " +
+                "completion or yield.",
+                "Turns out, when you study plants, you learn things.",
+                PerkType.Botany, "Icons/botany.png");
+        }
+
+
+
+
+        #endregion Botany
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 BreakMyStride
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region BreakMyStride
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBreakMyStrideConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBreakMyStride()
+        {
+            return new Perk("Break My Stride",
+                "Carts now only affect your movespeed 30%.",
+                "Ain't nothing gonna...",
+                PerkType.BreakMyStride, "Icons/breakmystride.png");
+        }
+
+
+
+
+        #endregion BreakMyStride
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Butterfly
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Butterfly
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitButterflyConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkButterfly()
+        {
+            return new Perk("Butterfly",
+                "You can now jump while in water.",
+                "Beautiful form!",
+                PerkType.Butterfly, "Icons/butterfly.png");
+        }
+
+
+
+
+        #endregion Butterfly
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Cauterize
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Cauterize
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCauterizeConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCauterize()
+        {
+            return new Perk("Cauterize",
+                "You've had the incredible idea of setting all your weapons on fire. You now do 20% extra damage as fire damage.",
+                "Anything is a torch, if you're brave enough.",
+                PerkType.Cauterize, "Icons/cauterize.png");
+        }
+
+
+
+
+        #endregion Cauterize
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 CloakOfShadows
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region CloakOfShadows
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCloakOfShadowsConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCloakOfShadows()
+        {
+            return new Perk("Cloak of Shadows",
+                "While sneaking, you now passively regenerate a percentage of your max health per second.",
+                "You have no ally but the darkness.",
+                PerkType.CloakOfShadows, "Icons/cloakofshadows.png");
+        }
+
+
+
+
+        #endregion CloakOfShadows
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 ClosingTheGap
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region ClosingTheGap
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitClosingTheGapConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkClosingTheGap()
+        {
+            return new Perk("Closing The Gap",
+                "Every time you stagger an enemy, you regain 5 stamina and skip towards them.",
+                "Perfect for when your flight reflex is broken.",
+                PerkType.ClosingTheGap, "Icons/closingthegap.png");
+        }
+
+
+
+
+        #endregion ClosingTheGap
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 ControlledDemo
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region ControlledDemo
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitControlledDemoConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkControlledDemo()
+        {
+            return new Perk("Controlled Demolition",
+                "Trees will always fall away from you.",
+                "Instructions: Put tree between you and enemy",
+                PerkType.ControlledDemo, "Icons/controlleddemo.png");
+        }
+
+
+
+
+        #endregion ControlledDemo
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 CouchedLance
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region CouchedLance
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCouchedLanceConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCouchedLance()
+        {
+            return new Perk("Couched Lance",
+                "After standing still for several seconds, you now gain a large boost to damage.",
+                "Usually for charging cavalry, now for stampeding Loxes.",
+                PerkType.CouchedLance, "Icons/couchedlance.png");
+        }
+
+
+
+
+        #endregion CouchedLance
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 CoupDeBurst
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region CoupDeBurst
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCoupDeBurstConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCoupDeBurst()
+        {
+            return new Perk("Coup De Burst",
+                "You can now activate a huge explosion, sending your ship flying through the air. Better" +
+                " hold on!",
+                "And so men set sights on the Grand Line, in pursuit of their dreams.",
+                PerkType.CoupDeBurst, "Icons/coupdeburst.png");
+        }
+
+
+
+
+        #endregion CoupDeBurst
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 CriticalBlow
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region CriticalBlow
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCriticalBlowConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCriticalBlow()
+        {
+            return new Perk("Critical Blow",
+                "You have a 10% chance to deal double damage on each hit.",
+                "The kind of hit your DM would be embarassed to narrate.",
+                PerkType.CriticalBlow, "Icons/criticalblow.png");
+        }
+
+
+
+
+        #endregion CriticalBlow
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Deadeye
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Deadeye
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitDeadeyeConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkDeadeye()
+        {
+            return new Perk("Deadeye",
+                "You can now throw your knives, dealing half backstab damage.",
+                "They don't come back to you, though.",
+                PerkType.Deadeye, "Icons/deadeye.png");
+        }
+
+
+
+
+        #endregion Deadeye
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Decapitation
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Decapitation
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitDecapitationConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkDecapitation()
+        {
+            return new Perk("Decapitate",
+                "Trophies can be eaten to gain axe experience.",
+                "My ancestors are smiling at me, imperial. Can you say the same?",
+                PerkType.Decapitation, "Icons/decapitation.png");
+        }
+
+
+
+
+        #endregion Decapitation
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 DidntHurt
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region DidntHurt
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitDidntHurtConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkDidntHurt()
+        {
+            return new Perk("That Didn't Even Hurt",
+                "Any creature that deals less than 5 damage to you, while you're not blocking, now gets staggered out of fear.",
+                "Is that all you've got? Pathetic.",
+                PerkType.DidntHurt, "Icons/didnthurt.png");
+        }
+
+
+
+
+        #endregion DidntHurt
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 DisarmingDefense
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region DisarmingDefense
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitDisarmingDefenseConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkDisarmingDefense()
+        {
+            return new Perk("Disarming Smile",
+                "Knives now use their backstab bonus instead of their parry bonus for parrying.",
+                "No better defense than an alarmingly quick offense.",
+                PerkType.DisarmingDefense, "Icons/disarmingsmile.png");
+        }
+
+
+
+
+        #endregion DisarmingDefense
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 ESP
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region ESP
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitESPConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkESP()
+        {
+            return new Perk("Extrasensory perception",
+                "You can now see lines highlighting enemy sight cones while you're sneaking.",
+                "That, or you're just starting to see things now.",
+                PerkType.ESP, "Icons/esp.png");
+        }
+
+
+
+
+        #endregion ESP
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Efficiency
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Efficiency
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitEfficiencyConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkEfficiency()
+        {
+            return new Perk("Efficiency",
+                "New building techniques allow you to build new constructions at half the cost.",
+                "It's not 'cutting corners'... If those corners were completely unnecessary!",
+                PerkType.Efficiency, "Icons/efficiency.png");
+        }
+
+
+
+
+        #endregion Efficiency
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Einherjar
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Einherjar
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitEinherjarConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkEinherjar()
+        {
+            return new Perk("Blessing of the Einherjar",
+                "All of your projectiles now home towards the nearest target.",
+                "Alone no longer.",
+                PerkType.Einherjar, "Icons/einherjar.png");
+        }
+
+
+
+
+        #endregion Einherjar
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Engineer
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Engineer
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitEngineerConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkEngineer()
+        {
+            return new Perk("Structural Engineer",
+                "Advanced knowledge of civil engineering secrets have caused your support pillars" +
+                " and beams to become almost three times as sturdy as usual.",
+                "It's triangles all the way down.",
+                PerkType.Engineer, "Icons/engineer.png");
+        }
+
+
+
+
+        #endregion Engineer
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 FalconKick
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region FalconKick
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFalconKickConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFalconKick()
+        {
+            return new Perk("Falcon Kick",
+                "Your kick now causes you to backflip into the air, and sends enemies flying.",
+                "K.O.!",
+                PerkType.FalconKick, "Icons/falconkick.png");
+        }
+
+
+
+
+        #endregion FalconKick
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 FirstMate
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region FirstMate
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFirstMateConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFirstMate()
+        {
+            return new Perk("First Mate",
+                "Whenever you are on a ship, but not the captain, a portion of your sailing level is added to" +
+                " the captain's when determining sailing buffs.",
+                "Every man does their part.",
+                PerkType.FirstMate, "Icons/firstmate.png");
+        }
+
+
+
+
+        #endregion FirstMate
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 FishersBoon
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region FishersBoon
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFishersBoonConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFishersBoon()
+        {
+            return new Perk("Spearfisher's Boon",
+                "Whenever you throw a spear, a second spear will be thrown automatically towards the nearest enemy.",
+                "Where does the second spear come from? A fisherman never tells.",
+                PerkType.FishersBoon, "Icons/fishersboon.png");
+        }
+
+
+
+
+        #endregion FishersBoon
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 FiveStarChef
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region FiveStarChef
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFiveStarChefConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFiveStarChef()
+        {
+            return new Perk("Five Star Chef",
+                "Hours of experimentation have led you to understanding what works and what doesn't. " +
+                "You have come up with several new recipes, both tasty and healthy.",
+                "Now you can call your compatriots idiot sandwiches and they can't complain.",
+                PerkType.FiveStarChef, "Icons/fivestarchef.png");
+        }
+
+
+
+
+        #endregion FiveStarChef
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 FourStomachs
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region FourStomachs
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFourStomachsConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFourStomachs()
+        {
+            return new Perk("Four Stomachs",
+                "All your food decays 25% slower, essentially making it last 50% longer.",
+                "I'm not calling you a cow... But...",
+                PerkType.FourStomachs, "Icons/fourstomachs.png");
+        }
+
+
+
+
+        #endregion FourStomachs
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Fragmentation
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Fragmentation
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFragmentationConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFragmentation()
+        {
+            return new Perk("Frag Mine",
+                "When you break a rock, if there are any enemies nearby, the rocks " +
+                "and ore first pelt them for sizable damage before returning to your feet.",
+                "It's not the explosion that gets you, it's the fragments.",
+                Perks.PerkType.Fragmentation, "Icons/fragmentation.png");
+        }
+
+
+
+
+        #endregion Fragmentation
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Frugal
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Frugal
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFrugalConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFrugal()
+        {
+            return new Perk("Frugal",
+                "You have a 50% chance not to expend ammo.",
+                "For the eco-friendly viking warrior.",
+                PerkType.Frugal, "Icons/frugal.png");
+        }
+
+
+
+
+        #endregion Frugal
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 GiantSmash
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region GiantSmash
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitGiantSmashConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkGiantSmash()
+        {
+            return new Perk("Giant Smash",
+                "A special attack that ragdolls enemies into the air.",
+                "A power even the dragonborn never mastered.",
+                PerkType.GiantSmash, "Icons/giantsmash.png");
+        }
+
+
+
+
+        #endregion GiantSmash
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 GodSlayingStrike
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region GodSlayingStrike
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitGodSlayingStrikeConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkGodSlayingStrike()
+        {
+            return new Perk("God Slayer",
+                "Damage dealt to bosses is now increased by 50%.",
+                "A god, are you? Good. I was just thinking there was an empty wall above my hearth.",
+                PerkType.GodSlayingStrike, "Icons/godslayer.png");
+        }
+
+
+
+
+        #endregion GodSlayingStrike
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 GoombaStomp
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region GoombaStomp
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitGoombaStompConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkGoombaStomp()
+        {
+            return new Perk("Goomba Stomp",
+                "You now deal damage when landing on an enemy's head.",
+                "Yahoo!",
+                PerkType.GoombaStomp, "Icons/goombastomp.png");
+        }
+
+
+
+
+        #endregion GoombaStomp
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 GreenThumb
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region GreenThumb
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitGreenThumbConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkGreenThumb()
+        {
+            return new Perk("Green Thumb",
+                "Your natural talent for growing plants has manifested, giving you an extra insight into information such as time until " +
+                "completion or yield.",
+                "Much better than a yellow foot, which you ought to bring up with your doctor.",
+                PerkType.GreenThumb, "Icons/greenthumb.png");
+        }
+
+
+
+
+        #endregion GreenThumb
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 GutAndRun
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region GutAndRun
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitGutAndRunConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkGutAndRun()
+        {
+            return new Perk("Gut and Run",
+                "Each attack against an enemy with full health will now cause them to start bleeding.",
+                "Sorry to drop in out of nowhere, but...",
+                PerkType.GutAndRun, "Icons/gutandrun.png");
+        }
+
+
+
+
+        #endregion GutAndRun
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Harvester
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Harvester
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitHarvesterConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkHarvester()
+        {
+            return new Perk("Combine Harvester",
+                "You have gotten so experienced that entire fields will seem to pick themselves before your very eyes. " +
+                "You now harvest in a large radius.",
+                "The botanical version of strip mining.",
+                PerkType.Harvester, "Icons/harvester.png");
+        }
+
+
+
+
+        #endregion Harvester
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 HeartOfTheForest
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region HeartOfTheForest
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitHeartOfTheForestConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkHeartOfTheForest()
+        {
+            return new Perk("Heart of the Forest",
+                "Every hit on a tree stacks up a buff that reduces the stagger damage you take.",
+                "For when you literally can't be bothered to entertain the greydwarves swarming you.",
+                PerkType.HeartOfTheForest, "Icons/heartoftheforest.png");
+        }
+
+
+
+
+        #endregion HeartOfTheForest
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 HeartOfTheMonkey
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region HeartOfTheMonkey
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitHeartOfTheMonkeyConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkHeartOfTheMonkey()
+        {
+            return new Perk("Heart of the Monkey",
+                "By holding space while in the air, you can now cling to walls such as trees and cliffs. Drains stamina as though you were running.",
+                "The will of D now lives inside you.",
+                PerkType.HeartOfTheMonkey, "Icons/heartofthemonkey.png");
+        }
+
+
+
+
+        #endregion HeartOfTheMonkey
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 HermesBoots
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region HermesBoots
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitHermesBootsConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkHermesBoots()
+        {
+            return new Perk("Hermes' Boots",
+                "Running for an extended period of time without interruption will cause you to slowly accelerate " +
+                "up to a point.",
+                "Your world has been blessed with Speed!",
+                PerkType.HermesBoots, "Icons/hermesboots.png");
+        }
+
+
+
+
+        #endregion HermesBoots
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 HideInPlainSight
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region HideInPlainSight
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitHideInPlainSightConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkHideInPlainSight()
+        {
+            return new Perk("Hide in Plain Sight",
+                "No matter the light conditions, you are always considered to be in pitch blackness.",
+                "Much more effective than burying your head.",
+                PerkType.HideInPlainSight, "Icons/hideinplainsight.png");
+        }
+
+
+
+
+        #endregion HideInPlainSight
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Highlander
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Highlander
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitHighlanderConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkHighlander()
+        {
+            return new Perk("Highlander",
+                "Increases your max health by 100.",
+                "There can only be one - and it will be you.",
+                PerkType.Highlander, "Icons/highlander.png");
+        }
+
+
+
+
+        #endregion Highlander
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Hraesvelg
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Hraesvelg
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitHraesvelgConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkHraesvelg()
+        {
+            return new Perk("Wings of Hraesvelg",
+                "Shots fired will now be accompanied by a pillar of wind, knocking back enemies that have gotten too close as well as yourself.",
+                "The great eagle guides you. Fall damage reduction not included.",
+                PerkType.Hraesvelg, "Icons/hraesvelg.png");
+        }
+
+
+
+
+        #endregion Hraesvelg
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Hydrodynamic
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Hydrodynamic
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitHydrodynamicConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkHydrodynamic()
+        {
+            return new Perk("Hydrodynamic Form",
+                "You are no longer affected by the 'Wet' Debuff.",
+                "It just... slides right off.",
+                PerkType.Hydrodynamic, "Icons/hydrodynamic.png");
+        }
+
+
+
+
+        #endregion Hydrodynamic
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Iai
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Iai
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitIaiConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkIai()
+        {
+            return new Perk("Iai",
+                "When you dodgeroll through an enemy, they take damage as though you backstabbed them. Has a " +
+                "20 second cooldown.",
+                "Lion song.",
+                PerkType.Iai, "Icons/iai.png");
+        }
+
+
+
+
+        #endregion Iai
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 IronSkin
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region IronSkin
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitIronSkinConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkIronSkin()
+        {
+            return new Perk("Iron Skin",
+                "While you're not wearing armor, you get armor based on half of your unarmed damage.",
+                "Breaking all those boards finally paid off.",
+                PerkType.IronSkin, "Icons/ironskin.png");
+        }
+
+
+
+
+        #endregion IronSkin
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 JoJoPose
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region JoJoPose
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitJoJoPoseConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkJoJoPose()
+        {
+            return new Perk("JoJo Pose",
+                "When treading water, you now regenerate stamina.",
+                "Become the kind of man Jotaro Kujo expects you to be",
+                PerkType.JoJoPose, "Icons/jojopose.png");
+        }
+
+
+
+
+        #endregion JoJoPose
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Jotunn
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Jotunn
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitJotunnConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkJotunn()
+        {
+            return new Perk("Jotunn",
+                "Your overall size increases. You'll have to duck through short doorways now, but your carrying " +
+                "capacity and health will increase.",
+                "What's the weather like up there?",
+                PerkType.Jotunn, "Icons/jotunn.png");
+        }
+
+
+
+
+        #endregion Jotunn
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Juggernaut
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Juggernaut
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitJuggernautConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkJuggernaut()
+        {
+            return new Perk("I'm the Juggernaut",
+                "Running into obstacles like trees and rocks will simply cause them to get obliterated " +
+                "rather than slowing you down.",
+                "Now you just need to find an immovable object.",
+                PerkType.Juggernaut, "Icons/juggernaut.png");
+        }
+
+
+
+
+        #endregion Juggernaut
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 KeenNose
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region KeenNose
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitKeenNoseConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkKeenNose()
+        {
+            return new Perk("Keen Nose",
+                "Your nose is so powerful that you can detect what's in a dish without even seeing it. This lets you garner addition information " +
+                "about cooking food, such as time until completion.",
+                "Smells like... Cardamum and basil. And the lightest hint of lime...",
+                PerkType.KeenNose, "Icons/keennose.png");
+        }
+
+
+
+
+        #endregion KeenNose
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 LightningReflex
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region LightningReflex
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitLightningReflexConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkLightningReflex()
+        {
+            return new Perk("Lightning Reflexes",
+                "Automatically catch arrows and rocks that enter your range of attack.",
+                "Nothing goes over my head. My reflexes are too fast. I would catch it.",
+                PerkType.LightningReflex, "Icons/lightningreflex.png");
+        }
+
+
+
+
+        #endregion LightningReflex
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 LivingStone
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region LivingStone
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitLivingStoneConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkLivingStone()
+        {
+            return new Perk("Living Stone",
+                "All knockback effects on you are greatly reduced, and you gain 10 flat armor.",
+                "Now you just need to find an unstoppable force.",
+                PerkType.LivingStone, "Icons/livingstone.png");
+        }
+
+
+
+
+        #endregion LivingStone
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 LodeBearingStone
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region LodeBearingStone
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitLodeBearingStoneConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkLodeBearingStone()
+        {
+            return new Perk("Lode (Bearing) Stone",
+                "When you start hitting an ore vein, a point of light appears. Hitting this point of light will " +
+                "cause the entire vein to take full damage.",
+                "Copper veins, watch out. I'm coming.",
+                PerkType.LodeBearingStone, "Icons/lodebearingstone.png");
+        }
+
+
+
+
+        #endregion LodeBearingStone
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 LogHorizon
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region LogHorizon
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitLogHorizonConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkLogHorizon()
+        {
+            return new Perk("Log Horizon",
+                "Fallen logs can be picked up to be used as a single use attack, dealing incredible damage.",
+                "You swing the log. The enemy sees the horizon... Now <i>that's</i> living in the database.",
+                PerkType.LogHorizon, "Icons/loghorizon.png");
+        }
+
+
+
+
+        #endregion LogHorizon
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 LokisGift
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region LokisGift
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitLokisGiftConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkLokisGift()
+        {
+            return new Perk("Loki's Gift",
+                "Teleport to a target's back, backstabbing them immediately. Distance scales on sneak skill.",
+                "Burdened with glorious purpose.",
+                PerkType.LokisGift, "Icons/lokisgift.png");
+        }
+
+
+
+
+        #endregion LokisGift
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Magnetic
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Magnetic
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitMagneticConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkMagnetic()
+        {
+            return new Perk("Magnetic Personality",
+                "You are now magnetic, dramatically increasing your auto-pickup range.",
+                "All that time rubbing metals together has finally affected you. Sure, that's how magnets work, why not?",
+                PerkType.Magnetic, "Icons/magnetic.png");
+        }
+
+
+
+
+        #endregion Magnetic
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 ManOverboard
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region ManOverboard
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitManOverboardConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkManOverboard()
+        {
+            return new Perk("Man Overboard",
+                "While captaining a ship, you can now press B to automatically suck in all nearby players.",
+                "Much better option than everyone jumping ship.",
+                PerkType.ManOverboard, "Icons/manoverboard.png");
+        }
+
+
+
+
+        #endregion ManOverboard
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 MarathonSwimmer
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region MarathonSwimmer
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitMarathonSwimmerConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkMarathonSwimmer()
+        {
+            return new Perk("Marathon Swimmer",
+                "While you're swimming in the ocean, you gain a slowly stacking bonus to move speed, damage reduction, and stamina " +
+                "regeneration.",
+                "You're just on a roll.",
+                PerkType.MarathonSwimmer, "Icons/marathonswimmer.png");
+        }
+
+
+
+
+        #endregion MarathonSwimmer
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 MarketGardener
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region MarketGardener
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitMarketGardenerConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkMarketGardener()
+        {
+            return new Perk("The Market Gardener",
+                "You now do 50% extra damage to enemies while in the air.",
+                "Screamin' Eagles!",
+                PerkType.MarketGardener, "Icons/marketgardener.png");
+        }
+
+
+
+
+        #endregion MarketGardener
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 MassiveStature
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region MassiveStature
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitMassiveStatureConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkMassiveStature()
+        {
+            return new Perk("Massive Stature",
+                "Increases your overall size even more. Your skin toughens like hide, causing you to be resistant to slashing, lightning, " +
+                "and frost damage.",
+                "You're gonna need to build a bigger house.",
+                PerkType.MassiveStature, "Icons/massivestature.png");
+        }
+
+
+
+
+        #endregion MassiveStature
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 MasterOfTheLog
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region MasterOfTheLog
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitMasterOfTheLogConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkMasterOfTheLog()
+        {
+            return new Perk("Master of the Log",
+                "You are now immune to falling logs.",
+                "You will be the last figure standing when the smoke clears.",
+                PerkType.MasterOfTheLog, "Icons/masterofthelog.png");
+        }
+
+
+
+
+        #endregion MasterOfTheLog
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Meditation
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Meditation
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitMeditationConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkMeditation()
+        {
+            return new Perk("I Studied the Blade",
+                "Meditate by using the /sit emote shortly after battle to massively increase your " +
+                "experience gain.",
+                "Perfect for use while all your peers are partying.",
+                PerkType.Meditation, "Icons/meditation.png");
+        }
+
+
+
+
+        #endregion Meditation
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 MeteorDrop
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region MeteorDrop
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitMeteorDropConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkMeteorDrop()
+        {
+            return new Perk("Meteor Drop",
+                "When you fall far enough, you make a huge crater and send a shockwave that deals damage " +
+                "based on how far you fell.",
+                "No promises that you'll survive it.",
+                PerkType.MeteorDrop, "Icons/meteordrop.png");
+        }
+
+
+
+
+        #endregion MeteorDrop
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Mjolnir
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Mjolnir
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitMjolnirConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkMjolnir()
+        {
+            return new Perk("Mjolnir",
+                "You deal an additional 20% of damage as lightning damage.",
+                "Whosoever holds this hammer, if they be worthy, shall possess the power of... you?",
+                PerkType.Mjolnir, "Icons/mjolnir.png");
+        }
+
+
+
+
+        #endregion Mjolnir
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 MountainGoat
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region MountainGoat
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitMountainGoatConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkMountainGoat()
+        {
+            return new Perk("Mountain Goat",
+                "You can now run up nearly sheer angled surfaces, dramatically increasing your mountain mobility.",
+                "The undisputed GOAT.",
+                PerkType.MountainGoat, "Icons/mountaingoat.png");
+        }
+
+
+
+
+        #endregion MountainGoat
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Nailgun
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Nailgun
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitNailgunConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkNailgun()
+        {
+            return new Perk("Ye Olde Nailgune",
+                "Your strength and precision have caused your repair efforts to accelerate rapidly. You now " +
+                "repair in a large radius with every swing of the hammer.",
+                "When all you have is a hammer...",
+                PerkType.Nailgun, "Icons/nailgun.png");
+        }
+
+
+
+
+        #endregion Nailgun
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Nutrition
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Nutrition
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitNutritionConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkNutrition()
+        {
+            return new Perk("High Nutritional Content",
+                "You've created a new form of cooking that packs tons of healthy nutrients into the " +
+                "dish. You can now imbue your dishes with resistances to blunt, slashing, and piercing, " +
+                "or move speed.",
+                "The taste, however...",
+                PerkType.Nutrition, "Icons/nutrition.png");
+        }
+
+
+
+
+        #endregion Nutrition
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 OdinJump
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region OdinJump
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitOdinJumpConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkOdinJump()
+        {
+            return new Perk("Odin's Jump",
+                "After concentration, you safely leap thousands of meters forwards.",
+                "Now possible without getting hit by a giant first!",
+                PerkType.OdinJump, "Icons/odinjump.png");
+        }
+
+
+
+
+        #endregion OdinJump
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 OfferToUllr
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region OfferToUllr
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitOfferToUllrConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkOfferToUllr()
+        {
+            return new Perk("Offering to Ullr",
+                "Regular offerings to Ullr have blessed your luck, causing monsters to drop better items.",
+                "The norse god of the hunt recognizes your skill.",
+                PerkType.OfferToUllr, "Icons/ullr.png");
+        }
+
+
+
+
+        #endregion OfferToUllr
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 PandemoniumPoint
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region PandemoniumPoint
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitPandemoniumPointConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkPandemoniumPoint()
+        {
+            return new Perk("Pandemonium Point",
+                "Standing in place for 20 seconds near a tree will cause a special target to appear. Striking it will cause a " +
+                "shockwave that fells an entire forest.",
+                "You might want to take cover first.",
+                PerkType.PandemoniumPoint, "Icons/pandemoniumpoint.png");
+        }
+
+
+
+
+        #endregion PandemoniumPoint
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 PerfectCombo
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region PerfectCombo
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitPerfectComboConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkPerfectCombo()
+        {
+            return new Perk("Perfect Combo",
+                "Each uninterrupted hit now stacks a damage buff. Combo is lost on taking damage.",
+                "C-C-COMBO BREAKER!",
+                PerkType.PerfectCombo, "Icons/perfectcombo.png");
+        }
+
+
+
+
+        #endregion PerfectCombo
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 PlusUltra
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region PlusUltra
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitPlusUltraConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkPlusUltra()
+        {
+            return new Perk("Plus Ultra",
+                "Enemies can no longer be resistant to blunt damage.",
+                "What do you do when punching something isn't working? Just punch it harder, obviously.",
+                PerkType.PlusUltra, "Icons/plusultra.png");
+        }
+
+
+
+
+        #endregion PlusUltra
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 PowerDraw
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region PowerDraw
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitPowerDrawConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkPowerDraw()
+        {
+            return new Perk("Power Draw",
+                "A special shot that takes much more energy to draw, but fires with incredible speed and damage.",
+                "For when you absolutely need that deer gone.",
+                PerkType.PowerDraw, "Icons/powerdraw.png");
+        }
+
+
+
+
+        #endregion PowerDraw
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 PressurePoints
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region PressurePoints
+        #region configdef
+        #endregion configdef
+
+        public static void InitPressurePointsConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkPressurePoints()
+        {
+            return new Perk("Pressure Points",
+                "Each attack against an enemy causes a stacking debuff, slowing them and decreasing" +
+                " their damage dealt.",
+                "Like acupuncture, with significantly less medical benefit.",
+                PerkType.PressurePoints, "Icons/pressurepoints.png");
+        }
+
+
+
+
+        #endregion PressurePoints
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 RammingSpeed
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region RammingSpeed
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitRammingSpeedConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkRammingSpeed()
+        {
+            return new Perk("Ramming Speed",
+                "For every 3 seconds that you sail without changing directon, you slowly gain a stacking movespeed increase. The bonus increases " +
+                "multiplicatively and does not have a limit.",
+                "Brace for impact! Does not come with damage reduction.",
+                PerkType.RammingSpeed, "Icons/rammingspeed.png");
+        }
+
+
+
+
+        #endregion RammingSpeed
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 ResponsibleLumberjack
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region ResponsibleLumberjack
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitResponsibleLumberjackConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkResponsibleLumberjack()
+        {
+            return new Perk("Responsible Lumberjacking",
+                "Stumps now get destroyed in one hit, and if possible, will automatically get replanted as saplings.",
+                "Sustainable farming is the work of the finest lumberjacks!",
+                PerkType.ResponsibleLumberjack, "Icons/responsiblelumberjack.png");
+        }
+
+
+
+
+        #endregion ResponsibleLumberjack
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 RockDodger
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region RockDodger
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitRockDodgerConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkRockDodger()
+        {
+            return new Perk("Rock Dodger",
+                "Significantly improves several ship manuverability values.",
+                "I am a leaf on the wind.",
+                PerkType.RockDodger, "Icons/rockdodger.png");
+        }
+
+
+
+
+        #endregion RockDodger
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 RockHauler
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region RockHauler
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitRockHaulerConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkRockHauler()
+        {
+            return new Perk("Rock Hauler",
+                "Rocks and metals now weigh 80% less.",
+                "When you've handled so many, they all just sorta phase together.",
+                PerkType.RockHauler, "Icons/rockhauler.png");
+        }
+
+
+
+
+        #endregion RockHauler
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 RunedArrows
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region RunedArrows
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitRunedArrowsConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkRunedArrows()
+        {
+            return new Perk("Runed Arrows",
+                "There's a 75% chance for your arrows to automatically return to you - the other 25% disappear.",
+                "It takes pretty long to rune each arrowhead, but luckily, that part happens off-screen.",
+                PerkType.RunedArrows, "Icons/runedarrows.png");
+        }
+
+
+
+
+        #endregion RunedArrows
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 SeaShanty
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region SeaShanty
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSeaShantyConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSeaShanty()
+        {
+            return new Perk("Sea Shanty",
+                "All crew members aboard your boat gain increased move speed, damage reduction, and damage.",
+                "Anyone who boards your vessel will have a belly full of mead and a throat full of song.",
+                PerkType.SeaShanty, "Icons/seashanty.png");
+        }
+
+
+
+
+        #endregion SeaShanty
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 SeedSatchel
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region SeedSatchel
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSeedSatchelConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSeedSatchel()
+        {
+            return new Perk("Seed Satchel",
+                "You now carry around an extra pouch, accessible from the inventory, which can store an unlimited number of seeds.",
+                "What is a botanist without seeds?",
+                PerkType.SeedSatchel, "Icons/seedsatchel.png");
+        }
+
+
+
+
+        #endregion SeedSatchel
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Seeding
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Seeding
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSeedingConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSeeding()
+        {
+            return new Perk("Mass Seeding",
+                "Pre-dug holes allow you to sprinkle seeds and vastly improve your planting rate. You now plant" +
+                " in a large radius.",
+                "Gaia ain't got nothing on you.",
+                PerkType.Seeding, "Icons/seeding.png");
+        }
+
+
+
+
+        #endregion Seeding
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 ShatterStrike
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region ShatterStrike
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitShatterStrikeConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkShatterStrike()
+        {
+            return new Perk("Shatterstrike",
+                "You build up stacks every second over time while holding an axe. Each stack increases the damage you deal to the first tree " +
+                "you hit. If you have maximum stacks, 60, hitting a tree will cause it to immediately get turned into wood. There's a 10 second " +
+                "cooldown before the stacks begin building again.",
+                "Be the kind of man Captain America believes you can be.",
+                PerkType.ShatterStrike, "Icons/shatterstrike.png");
+        }
+
+
+
+
+        #endregion ShatterStrike
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 SilentSprinter
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region SilentSprinter
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSilentSprinterConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSilentSprinter()
+        {
+            return new Perk("Silent Sprinter",
+                "Adds 30% of your run speed to your sneak speed.",
+                "Get back here, you goddamn boar -",
+                PerkType.SilentSprinter, "Icons/silentsprinter.png");
+        }
+
+
+
+
+        #endregion SilentSprinter
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 SleightOfHand
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region SleightOfHand
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSleightOfHandConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSleightOfHand()
+        {
+            return new Perk("Sleight of Hand",
+                "You can now bring certain items through portals.",
+                "With a quick enough hand, you can even trick game devs.",
+                PerkType.SleightOfHand, "Icons/sleightofhand.png");
+        }
+
+
+
+
+        #endregion SleightOfHand
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 SmokeBomb
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region SmokeBomb
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSmokeBombConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSmokeBomb()
+        {
+            return new Perk("Smoke Bomb",
+                "When you enter stealth, all enemies will lose track of you momentarily. Has a 20 second cooldown.",
+                "Where'd he go? Must have been the wind.",
+                PerkType.SmokeBomb, "Icons/smokebomb.png");
+        }
+
+
+
+
+        #endregion SmokeBomb
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 SoilMixing
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region SoilMixing
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSoilMixingConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSoilMixing()
+        {
+            return new Perk("Soil Mixing",
+                "New techniques allow you to plant any crop anywhere, regardless of biome limitations.",
+                "Why go to the biome when you can bring the biome to you?",
+                PerkType.SoilMixing, "Icons/soilworking.png");
+        }
+
+
+
+
+        #endregion SoilMixing
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Spearit
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Spearit
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSpearitConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSpearit()
+        {
+            return new Perk("In Spearit",
+                "Your spear now deals 30% additional spirit damage.",
+                "I'm not sorry.",
+                PerkType.Spearit, "Icons/spearit.png");
+        }
+
+
+
+
+        #endregion Spearit
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 SpiceMaster
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region SpiceMaster
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSpiceMasterConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSpiceMaster()
+        {
+            return new Perk("Spice Master",
+                "Your mastery of spices has entered a legendarily gourmet realm. You can now " +
+                "imbue your food with extra damage, experience gain, and damage reduction.",
+                "A power even the dragonborn never mastered.",
+                PerkType.SpiceMaster, "Icons/spicemaster.png");
+        }
+
+
+
+
+        #endregion SpiceMaster
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 SpicySweet
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region SpicySweet
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSpicySweetConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSpicySweet()
+        {
+            return new Perk("Spicy and Sweet",
+                "The discovery of several new spices has revolutionized your cooking. You can now" +
+                " imbue your dishes with resistances to fire, cold, lightning, or poison.",
+                "Cornerstones of any refined chef's palate.",
+                PerkType.SpicySweet, "Icons/spicysweet.png");
+        }
+
+
+
+
+        #endregion SpicySweet
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 SpikedShield
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region SpikedShield
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSpikedShieldConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSpikedShield()
+        {
+            return new Perk("Spiked Shield",
+                "Whenever you block an attack, you reflect 50% of the blocked damage to the attacker.",
+                "Who needs a sword?",
+                PerkType.SpikedShield, "Icons/spikedshield.png");
+        }
+
+
+
+
+        #endregion SpikedShield
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 SpiritGuide
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region SpiritGuide
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSpiritGuideConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSpiritGuide()
+        {
+            return new Perk("Spirit Guide",
+                "The ghosts of slain woodland creatures now haunt you, providing an excellent light source while hunting down their children.",
+                "They say you should use every part of the animal, why not the soul?",
+                PerkType.SpiritGuide, "Icons/spiritguide.png");
+        }
+
+
+
+
+        #endregion SpiritGuide
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Stretch
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Stretch
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitStretchConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkStretch()
+        {
+            return new Perk("Stretch",
+                "Increases the range of your pickaxe swings by 50%.",
+                "When you just barely can't reach that last rock.",
+                PerkType.Stretch, "Icons/stretch.png");
+        }
+
+
+
+
+        #endregion Stretch
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Superfuel
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Superfuel
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitSuperfuelConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkSuperfuel()
+        {
+            return new Perk("Superfuel",
+                "Constructions you build, such as torches or campfires, no longer require additional fuel to keep running.",
+                "It's even renewable!",
+                PerkType.Superfuel, "Icons/superfuel.png");
+        }
+
+
+
+
+        #endregion Superfuel
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Tackle
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Tackle
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitTackleConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkTackle()
+        {
+            return new Perk("Tackle",
+                "Running into an enemy causes a huge knockback effect and causes you to gain a quickly fading " +
+                "burst of movespeed.",
+                "Outta the way, I'm walkin' here!",
+                PerkType.Tackle, "Icons/tackle.png");
+        }
+
+
+
+
+        #endregion Tackle
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 TasteTesting
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region TasteTesting
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitTasteTestingConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkTasteTesting()
+        {
+            return new Perk("Taste Testing",
+                "The simple act of taste testing the food has led you to be able to garner information about a piece of food, " +
+                "such as time until completion.",
+                "Hmmm. Needs more salt.",
+                PerkType.TasteTesting, "Icons/tastetesting.png");
+        }
+
+
+
+
+        #endregion TasteTesting
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Throwback
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Throwback
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitThrowbackConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkThrowback()
+        {
+            return new Perk("Throwback",
+                "You can now throw your axe like a spear. This attack one-shots all trees it hits.",
+                "For when you can't quite reach.",
+                PerkType.Throwback, "Icons/throwback.png");
+        }
+
+
+
+
+        #endregion Throwback
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 TitanEndurance
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region TitanEndurance
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitTitanEnduranceConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkTitanEndurance()
+        {
+            return new Perk("Titan Endurance",
+                "Increases your stagger limit by an additional 20% of your max health.",
+                "On that day, mankind receieved a grim reminder...",
+                PerkType.TitanEndurance, "Icons/titanendurance.png");
+        }
+
+
+
+
+        #endregion TitanEndurance
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 TitanStrength
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region TitanStrength
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitTitanStrengthConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkTitanStrength()
+        {
+            return new Perk("Titan Strength",
+                "You are no longer encumbered by shields.",
+                "If you win, you live. If you lose, you die. If you don't fight, you can't win!",
+                PerkType.TitanStrength, "Icons/titanstrength.png");
+        }
+
+
+
+
+        #endregion TitanStrength
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Toxic
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Toxic
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitToxicConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkToxic()
+        {
+            return new Perk("Poisoned Blade",
+                "Your attacks deal an additional 40% damage as poison damage.",
+                "The hardest part is remembering to wear gloves when you apply the poison.",
+                PerkType.Toxic, "Icons/toxic.png");
+        }
+
+
+
+
+        #endregion Toxic
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Trapmaster
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Trapmaster
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitTrapmasterConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkTrapmaster()
+        {
+            return new Perk("Trapmaster",
+                "Your cunning has resulted in several new inventive blueprints of death. Adds several " +
+                "new traps to your arsenal.",
+                "Some people think it's either building or combat. Why not both?",
+                PerkType.Trapmaster, "Icons/trapmaster.png");
+        }
+
+
+
+
+        #endregion Trapmaster
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 TrenchDigger
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region TrenchDigger
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitTrenchDiggerConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkTrenchDigger()
+        {
+            return new Perk("Trench Digger",
+                "Increases the depth and width of your pickaxe strikes on the ground.",
+                "We both know why you're here.",
+                PerkType.TrenchDigger, "Icons/trenchdigger.png");
+        }
+
+
+
+
+        #endregion TrenchDigger
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 ValkyrieFlight
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region ValkyrieFlight
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitValkyrieFlightConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkValkyrieFlight()
+        {
+            return new Perk("Flight of the Valkyries",
+                "When you hit with a thrown spear, a mark is formed. Pressing B will teleport you to that mark, consuming it.",
+                "To valhalla leads the way",
+                PerkType.ValkyrieFlight, "Icons/valkyrieflight.png");
+        }
+
+
+
+
+        #endregion ValkyrieFlight
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 VitalStudy
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region VitalStudy
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitVitalStudyConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkVitalStudy()
+        {
+            return new Perk("Vital Study",
+                "Any sneak attack now gains you bonus sneak experience.",
+                "They say the appendix serves no function, but when you rip it out, people die? Think for yourself, sheeple.",
+                PerkType.VitalStudy, "Icons/vitalstudy.png");
+        }
+
+
+
+
+        #endregion VitalStudy
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Warehousing
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Warehousing
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitWarehousingConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkWarehousing()
+        {
+            return new Perk("Warehousing Techniques",
+                "Your constructions are so sturdy and precise that you've managed to squeeze an extra few" +
+                " inventory spaces into almost all forms of storage.",
+                "Master of time and space. Well, space, at least.",
+                PerkType.Warehousing, "Icons/warehousing.png");
+        }
+
+
+
+
+        #endregion Warehousing
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 WarriorOfLight
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region WarriorOfLight
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitWarriorOfLightConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkWarriorOfLight()
+        {
+            return new Perk("Warrior of Light",
+                "You take less damage based on how much light you are in.",
+                "Now you truly do have the power of god and anime on your side.",
+                PerkType.WarriorOfLight, "Icons/warrioroflight.png");
+        }
+
+
+
+
+        #endregion WarriorOfLight
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 WaterRunning
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region WaterRunning
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitWaterRunningConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkWaterRunning()
+        {
+            return new Perk("Water Running",
+                "You can now run on water.",
+                "When you don't want to wait for the boat.",
+                PerkType.WaterRunning, "Icons/waterrunning.png");
+        }
+
+
+
+
+        #endregion WaterRunning
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Worldly
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Worldly
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitWorldlyConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkWorldly()
+        {
+            return new Perk("Worldly Existence",
+                "Hours of meditation upon your material lifestyle has lead to an epiphany. You gain timeless wisdom of the ages..." +
+                " and 50% increased experience gain.",
+                "Material gwurl!",
+                PerkType.Worldly, "Icons/worldly.png");
+        }
+
+
+
+
+        #endregion Worldly
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Ymir
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Ymir
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitYmirConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkYmir()
+        {
+            return new Perk("Memories of Ymir",
+                "Tapping into the land's ancient heritage, you gain a 20% extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkType.Ymir, "Icons/ymir.png");
+        }
+
+
+
+
+        #endregion Ymir
+
+        #endregion perks
 
         ////////////////////////////////////////////////////////////////////////////////////////
         ///                      Generic Weapon->Damage Experience
@@ -2616,35 +5556,35 @@ namespace kingskills
         {
             //Weapon Swing Experence
             WeaponXPSwing = cfg.Bind("Experience.Weapons.Swing", "XP Flat", .3f,
-                "Flat experience to be gained on each swing, regardless of hit.");
+                AdminCD("Flat experience to be gained on each swing, regardless of hit.", true));
 
 
             //Weapon Hold Experience
             WeaponXPHoldPerTick = cfg.Bind("Experience.Weapons.Hold", "XP/s", .04f,
-                "Flat experience to be gained every second holding any weapon.");
+                AdminCD("Flat experience to be gained every second holding any weapon.", true));
             WeaponXPHoldTickLength = cfg.Bind("Experience.Weapons.Hold", "Timer", 1.0f,
-                "Seconds between ticks of hold experience.");
+                AdminCD("Seconds between ticks of hold experience."));
             WeaponXPHoldUnarmedPercent = cfg.Bind("Experience.Weapons.Hold", "Unarmed", 25f,
-                "% of normal hold experience to unarmed when holding nothing. Should be lower than 100% " +
-                "to account for how often a regular player is holding nothing.");
+                AdminCD("% of normal hold experience to unarmed when holding nothing. Should be lower than 100% " +
+                "to account for how often a regular player is holding nothing.", true));
 
 
             //Weapon Strike Experience
             WeaponXPStrikeDamagePercent = cfg.Bind("Experience.Weapons", "XP", 40f,
-                "% modifier to overall experience gained from damage.");
+                AdminCD("% modifier to overall experience gained from damage.", true));
             WeaponXPStrikeDamageFactor = cfg.Bind("Experience.Weapons", "XP Factor", .36f,
-                "Factor to define the slope of the damage to xp curve.");
+                AdminCD("Factor to define the slope of the damage to xp curve. Only change if you know what you're doing.", true));
             WeaponXPStrikeDestructiblePercent = cfg.Bind("Experience.Weapons", "Destructible", 15f,
-                "% of experience gained when hit target is non living. Should be lover than 100%");
+                AdminCD("% of experience gained when hit target is non living. Should be lover than 100%", true));
 
 
 
             //Tool experience
-            ToolXPStrikeDamagePercent = cfg.Bind("Experience.Tools", "Tool Damage", 25f,
-                "% of damage done to resources that becomes experience for gathering skills " +
-                "(Woodcutting, Mining)");
-            ToolXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .24f,
-                "Factor to define the slope of the damage to xp curve");
+            ToolXPStrikeDamagePercent = cfg.Bind("Experience.Tools", "Tool Damage", 55f,
+                AdminCD("% of damage done to resources that becomes experience for gathering skills " +
+                "(Woodcutting, Mining)", true));
+            ToolXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .8f,
+                AdminCD("Factor to define the slope of the damage to xp curve. Only change if you know what you're doing.", true));
         }
 
         
@@ -2677,7 +5617,7 @@ namespace kingskills
          
         /////////////////////////// config entry
 
-        public static ConfigEntry<bool> ActiveSkillSail;
+        public static ConfigEntry<bool> ;
 
 
 
@@ -2694,17 +5634,13 @@ namespace kingskills
         //////////////////////////// config setting
 
         x = cfg.Bind("g", "t", 0f, 
-                    "d");
+                    AdminCD("d"));
 
 
         /////////////////////////// new section
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        /// 
-        ///                           template section
-        ///              
         ///                              template
-        /// 
         ////////////////////////////////////////////////////////////////////////////////////////
         #region a
         #region configdef
@@ -2717,6 +5653,33 @@ namespace kingskills
 
         #endregion a
 
+        
+        /////////////////////////// new perk
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 P
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region 
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerk()
+        {
+            return new Perk("P",
+                "Allows you to jump one additional time while in the air.",
+                "The laws of physics are nothing to a viking!",
+                Perks.PerkType., "Icons/.png");
+        }
+
+
+
+
+        #endregion 
         */
         #endregion templates
     }

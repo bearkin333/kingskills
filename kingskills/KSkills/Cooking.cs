@@ -412,7 +412,7 @@ perks:
 					if (__instance.GetZDOID().m_userID != FQ.chefID)
 						chefXPReward *= CFG.GetCookingXPCustomerMult();
 
-					chef.RaiseSkill(SkillMan.Cooking, chefXPReward);
+					LevelUp.BXP(chef, SkillMan.Cooking, chefXPReward);
                 }
 			}
 		}

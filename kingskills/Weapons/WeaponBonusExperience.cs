@@ -87,7 +87,7 @@ namespace kingskills.Weapons
         private static void OnBackstab(Player attacker)
         {
             if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
-                LevelUp.BXP(attacker, Skills.SkillType.Swords, CFG.WeaponBXPKnifeBackstab.Value);
+                LevelUp.BXP(attacker, Skills.SkillType.Knives, CFG.WeaponBXPKnifeBackstab.Value);
         }
     }
 

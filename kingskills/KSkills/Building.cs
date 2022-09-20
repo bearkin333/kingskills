@@ -249,41 +249,33 @@ perks:
 
         //I hate this caret, but it is just a space efficient way of doing {  }
         [HarmonyPrefix]
-        public static void StartRepair() => 
-            isTrue = true;
+        public static void StartRepair(Player __instance) => __instance.m_nview.m_zdo.Set("Is Repairing", true);
 
         [HarmonyFinalizer]
-        public static void FinishRepair() => 
-            isTrue = false;
+        public static void FinishRepair(Player __instance) => __instance.m_nview.m_zdo.Set("Is Repairing", false);
     }
 
 
     [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.Repair))]
     public class RepairTracker
     {
-        public static Player playerRef = null;
-        [HarmonyPrefix]
-        public static void OnRepair()
-        {
-            if (LocalPlayerRepairing.isTrue)
-                playerRef = Player.m_localPlayer;
-            else
-                playerRef = null;
-        }
-
         [HarmonyPatch(nameof(WearNTear.RPC_Repair))]
         [HarmonyPrefix]
         public static void OnRPCRepair(WearNTear __instance)
         {
-            if (playerRef != null)
+            if (!__instance.m_nview.IsValid() || !__instance.m_nview.IsOwner()) return;
+            Player playerRef = null;
+            foreach (Player player in Player.GetAllPlayers())
             {
-                if (!__instance.m_nview.IsValid() || !__instance.m_nview.IsOwner()) return;
-
-                float healthChange = __instance.m_health - __instance.m_nview.GetZDO().GetFloat("health", __instance.m_health);
-                if (healthChange < 0) healthChange = 0;
-
-                playerRef.RaiseSkill(SkillMan.Building, CFG.BuildXPRepairMod.Value * healthChange);
+                if (player.m_nview.m_zdo.GetBool("Is Repairing", false))
+                    playerRef = player;
             }
+            if (playerRef is null) return;
+
+            float healthChange = __instance.m_health - __instance.m_nview.GetZDO().GetFloat("health", __instance.m_health);
+            if (healthChange < 0) healthChange = 0;
+
+            playerRef.RaiseSkill(SkillMan.Building, CFG.BuildXPRepairMod.Value * healthChange);
         }
     }
 
@@ -294,7 +286,7 @@ perks:
         [HarmonyPrefix]
         public static void BeforeCost(Player __instance, ref float v)
         {
-            if (LocalPlayerRepairing.isTrue || LocalPlayerPlacing.isTrue)
+            if (Player.m_localPlayer.m_nview.m_zdo.GetBool("Is Repairing", false) || LocalPlayerPlacing.isTrue)
                 v *= CFG.GetBuildingStaminaRedux(Player.m_localPlayer.GetSkillFactor(SkillMan.Building));
         }
     }
