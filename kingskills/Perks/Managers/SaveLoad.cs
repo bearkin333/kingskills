@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using kingskills.Patches;
+using kingskills.UX;
 
 namespace kingskills.Perks
 {
@@ -35,21 +36,29 @@ namespace kingskills.Perks
             //Write all of our parseable information to a package
             if (PerkMan.loaded)
             {
-                Dictionary<int, bool> savePerkFlags = new Dictionary<int, bool>();
-                Dictionary<int, bool> saveSkillAscendedFlags = new Dictionary<int, bool>();
+                Dictionary<int, bool> savePerkLearned = new Dictionary<int, bool>();
+                Dictionary<int, bool> savePerkDeactivated = new Dictionary<int, bool>();
+                Dictionary<int, bool> saveSkillAscended = new Dictionary<int, bool>();
 
                 foreach (KeyValuePair<PerkMan.PerkType, bool> datum in PerkMan.perkLearned)
                 {
-                    savePerkFlags.Add((int)datum.Key, datum.Value);
+                    savePerkLearned.Add((int)datum.Key, datum.Value);
+                }
+
+                foreach (KeyValuePair<PerkMan.PerkType, bool> datum in PerkMan.perkDeactivated)
+                {
+                    savePerkDeactivated.Add((int)datum.Key, datum.Value);
                 }
 
                 foreach (KeyValuePair<Skills.SkillType, bool> datum in PerkMan.skillAscended)
                 {
-                    saveSkillAscendedFlags.Add((int)datum.Key, datum.Value);
+                    saveSkillAscended.Add((int)datum.Key, datum.Value);
                 }
 
-                SaveFlagsToZPackage(ref zPackage, savePerkFlags);
-                SaveFlagsToZPackage(ref zPackage, saveSkillAscendedFlags);
+                SaveFlagsToZPackage(ref zPackage, savePerkLearned);
+                SaveFlagsToZPackage(ref zPackage, savePerkDeactivated);
+                SaveFlagsToZPackage(ref zPackage, saveSkillAscended);
+                zPackage.Write(CombineGUI.ask);
             }
             else
             {
@@ -101,17 +110,24 @@ namespace kingskills.Perks
 
 
                 //handle the new data from the zpackage
-                Dictionary<int, bool> loadPerkFlags = new Dictionary<int, bool>();
-                Dictionary<int, bool> loadSkillAscendedFlags = new Dictionary<int, bool>();
+                Dictionary<int, bool> loadPerkLearned = new Dictionary<int, bool>();
+                Dictionary<int, bool> loadPerkDeactivated = new Dictionary<int, bool>();
+                Dictionary<int, bool> loadSkillAscended = new Dictionary<int, bool>();
 
-                loadPerkFlags = LoadFlagsFromZPackage(zPackage);
-                loadSkillAscendedFlags = LoadFlagsFromZPackage(zPackage);
+                loadPerkLearned = LoadFlagsFromZPackage(zPackage);
+                loadPerkDeactivated = LoadFlagsFromZPackage(zPackage);
+                loadSkillAscended = LoadFlagsFromZPackage(zPackage);
+                CombineGUI.savedAsk = zPackage.ReadBool();
 
-                foreach (KeyValuePair<int, bool> datum in loadPerkFlags)
+                foreach (KeyValuePair<int, bool> datum in loadPerkLearned)
                 {
                     PerkMan.perkLearned.Add((PerkMan.PerkType)datum.Key, datum.Value);
                 }
-                foreach (KeyValuePair<int, bool> datum in loadSkillAscendedFlags)
+                foreach (KeyValuePair<int, bool> datum in loadPerkDeactivated)
+                {
+                    PerkMan.perkDeactivated.Add((PerkMan.PerkType)datum.Key, datum.Value);
+                }
+                foreach (KeyValuePair<int, bool> datum in loadSkillAscended)
                 {
                     PerkMan.skillAscended[(Skills.SkillType)datum.Key] = datum.Value;
                     //Jotunn.Logger.LogMessage($"Set {((Skills.SkillType)datum.Key).ToString()} to {datum.Value}");

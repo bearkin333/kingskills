@@ -256,26 +256,25 @@ namespace kingskills.UX
             data.oTips();
             data.AddTipBreaks();
 
-            if (data.isOutsideFactors())
+            List<string> perkEffects = OpenPerks.GetActivePerkEffectTips();
+            if (perkEffects.Count > 0)
             {
-                SkillGUI.LPEffectsTexts["other"].GetComponent<Text>().text =
-                    "Outside Factors:";
+                UpdatePerkEffects(perkEffects);
+                SetPerkTexts(true);
             }
             else
-            {
-                SkillGUI.LPEffectsTexts["other"].GetComponent<Text>().text =
-                    "";
-            }
+                SetPerkTexts(false);
+
+            if (data.isOutsideFactors())
+                SetOtherTexts(true);
+            else
+                SetOtherTexts(false);
 
 
             if (PerkMan.IsSkillAscended(skill))
-            {
-                SkillGUI.RPAscendedText.GetComponent<Text>().text = "Ascended";
-            }
+                SkillGUI.RPAscendedText.GetComponent<Text>().enabled = true;
             else
-            {
-                SkillGUI.RPAscendedText.GetComponent<Text>().text = "";
-            }
+                SkillGUI.RPAscendedText.GetComponent<Text>().enabled = false;
 
             //Jotunn.Logger.LogMessage($"{skill} is ascendable: {AscensionManager.IsAscendable(skill)}");
             
@@ -285,28 +284,65 @@ namespace kingskills.UX
                 Player.m_localPlayer.ShowTutorial("kingskills_ascend");
             }
             else
-            {
                 SkillGUI.RPAscendedBtn.SetActive(false);
-            }
+
             //Jotunn.Logger.LogMessage($"{Perks.IsSkillAscended(skill).ToString()}");
         }
 
         public static void ResetText()
         {
-            SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text = "";
-            SkillGUI.LPEffectsTexts["x2"].GetComponent<Text>().text = "";
-            SkillGUI.LPEffectsTexts["x3"].GetComponent<Text>().text = "";
+            for (int i = 1; i <= SkillGUI.LPNumEffectsTexts; i++)
+            {
+                SkillGUI.LPEffectsTexts["f"+i].GetComponent<Text>().text = "";
+            }
 
-            SkillGUI.LPEffectsTexts["f1"].GetComponent<Text>().text = "";
-            SkillGUI.LPEffectsTexts["f2"].GetComponent<Text>().text = "";
-            SkillGUI.LPEffectsTexts["f3"].GetComponent<Text>().text = "";
-            SkillGUI.LPEffectsTexts["f4"].GetComponent<Text>().text = "";
-            SkillGUI.LPEffectsTexts["f5"].GetComponent<Text>().text = "";
-            SkillGUI.LPEffectsTexts["f6"].GetComponent<Text>().text = "";
+            for (int i = 1; i <= SkillGUI.LPNumPerkTexts; i++)
+            {
+                SkillGUI.LPEffectsTexts["p" + i].GetComponent<Text>().text = "";
+            }
+
+            for (int i = 1; i <= SkillGUI.LPNumOtherTexts; i++)
+            {
+                SkillGUI.LPEffectsTexts["x" + i].GetComponent<Text>().text = "";
+            }
+
 
             for (int i = 1; i <= SkillGUI.NumTipParagraphs; i++)
             {
                 SkillGUI.LPTipsTexts[i].GetComponent<Text>().text = "";
+            }
+        }
+
+        public static void SetPerkTexts(bool enabled)
+        {
+            if (SkillGUI.LPEffectsTexts["P"].GetComponent<Text>().enabled == enabled) return;
+            SkillGUI.LPEffectsTexts["P"].GetComponent<Text>().enabled = enabled;
+            for (int i = 1; i <= SkillGUI.LPNumPerkTexts; i++)
+            {
+                SkillGUI.LPEffectsTexts["p" + i].GetComponent<Text>().enabled = enabled;
+            }
+        }
+        public static void SetOtherTexts(bool enabled)
+        {
+            if (SkillGUI.LPEffectsTexts["X"].GetComponent<Text>().enabled == enabled) return;
+            SkillGUI.LPEffectsTexts["X"].GetComponent<Text>().enabled = enabled;
+            for (int i = 1; i <= SkillGUI.LPNumOtherTexts; i++)
+            {
+                SkillGUI.LPEffectsTexts["x" + i].GetComponent<Text>().enabled = enabled;
+            }
+        }
+
+        public static void UpdatePerkEffects(List<string> effectsTexts)
+        {
+            if (effectsTexts.Count > SkillGUI.LPNumPerkTexts)
+            {
+                Jotunn.Logger.LogWarning("There were more perks active than perk texts");
+                return;
+            }
+            for (int i = 0; i < effectsTexts.Count; i++)
+            {
+                int j = i + 1;
+                SkillGUI.LPEffectsTexts["p" + j].GetComponent<Text>().text = "+" + effectsTexts[i];
             }
         }
     }

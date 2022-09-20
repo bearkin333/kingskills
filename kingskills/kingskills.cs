@@ -32,7 +32,9 @@ namespace kingskills
         Harmony harmony = new Harmony(PluginGUID);
         public ButtonConfig OpenSkillWindowBtn;
         public ButtonConfig CollapseFoodBtn;
-        public ButtonConfig CombineShortcutBtn;
+        public ButtonConfig ConfirmShortcutBtn;
+        public ButtonConfig ExitSkillGUIBtn;
+        public ButtonConfig DetailedPerkBtn;
 
         // Use this class to add your own localization to the game
         public static CustomLocalization Localization = LocalizationManager.Instance.GetLocalization();
@@ -42,12 +44,7 @@ namespace kingskills
             Jotunn.Logger.LogInfo("King's skills HAS COME!");
             InitConfig();
             InitExtendedItem.Init();
-            CommandManager.Instance.AddConsoleCommand(new TestSkillCommand());
-            CommandManager.Instance.AddConsoleCommand(new SkillUpdateCommand());
-            CommandManager.Instance.AddConsoleCommand(new TestSkillsCommand());
-            CommandManager.Instance.AddConsoleCommand(new ResetPerksCommand());
-            CommandManager.Instance.AddConsoleCommand(new ResetAscensionsCommand());
-            CommandManager.Instance.AddConsoleCommand(new TestExperienceCommand());
+            InitCommands();
             SkillMan.AddSkills();
             Assets.AssetLoader.InitAssets();
             AddInputs();
@@ -66,10 +63,10 @@ namespace kingskills
                 {
                     QuickCombineGUI.CollapseHoveredFood();
                 }
-                CombineGUI.CombineUpdate(CombineShortcutBtn.Name);
+                CombineGUI.CombineUpdate(ConfirmShortcutBtn.Name);
             }
 
-            OpenPerks.UpdateOpenPerks();
+            OpenPerks.UpdateOpenPerks(DetailedPerkBtn.Name);
         }
 
         private void InitConfig()
@@ -82,7 +79,7 @@ namespace kingskills
             OpenSkillWindowBtn = new ButtonConfig
             {
                 Name = "OpenSkillWindow",
-                Key = KeyCode.I,
+                Config = CFG.KeyBindingSkillGUI,
                 ActiveInCustomGUI = true,
                 ActiveInGUI = true
             };
@@ -90,19 +87,45 @@ namespace kingskills
             CollapseFoodBtn = new ButtonConfig
             {
                 Name = "CollapseFood",
-                Key = KeyCode.Y,
+                Config = CFG.KeyBindingCollapseFood,
                 ActiveInCustomGUI = true,
                 ActiveInGUI = true
             };
             InputManager.Instance.AddButton(PluginGUID, CollapseFoodBtn);
-            CombineShortcutBtn = new ButtonConfig
+            ConfirmShortcutBtn = new ButtonConfig
             {
-                Name = "CombineShortcut",
-                Key = KeyCode.Return,
+                Name = "ConfirmShortcut",
+                Config = CFG.KeyBindingConfirmShortcut,
                 ActiveInCustomGUI = true,
                 ActiveInGUI = true
             };
-            InputManager.Instance.AddButton(PluginGUID, CombineShortcutBtn);
+            InputManager.Instance.AddButton(PluginGUID, ConfirmShortcutBtn);
+            ExitSkillGUIBtn = new ButtonConfig
+            {
+                Name = "ExitShortcut",
+                Config = CFG.KeyBindingSkillGUIExit,
+                ActiveInCustomGUI = true,
+                ActiveInGUI = true
+            };
+            InputManager.Instance.AddButton(PluginGUID, ExitSkillGUIBtn);
+            DetailedPerkBtn = new ButtonConfig
+            {
+                Name = "DetailedPerkHover",
+                Config = CFG.KeyBindingDetailedPerkTooltip,
+                ActiveInCustomGUI = true,
+                ActiveInGUI = true
+            };
+            InputManager.Instance.AddButton(PluginGUID, DetailedPerkBtn);
+        }
+
+        private void InitCommands()
+        {
+            CommandManager.Instance.AddConsoleCommand(new TestSkillCommand());
+            CommandManager.Instance.AddConsoleCommand(new SkillUpdateCommand());
+            CommandManager.Instance.AddConsoleCommand(new TestSkillsCommand());
+            CommandManager.Instance.AddConsoleCommand(new ResetPerksCommand());
+            CommandManager.Instance.AddConsoleCommand(new ResetAscensionsCommand());
+            CommandManager.Instance.AddConsoleCommand(new TestExperienceCommand());
         }
     }
 }

@@ -13,6 +13,7 @@ namespace kingskills
     //ConfigManager. I saved over 3,000 characters across the entire
     //mod by shortening the name, so... oh well. Makes things more readable.
     //Actually stands for Cool Fucking Game
+    //Currently 773 references throughout the code. high score!
     class CFG
     {
         /*
@@ -148,6 +149,13 @@ namespace kingskills
         public static ConfigEntry<float> XPTextValueMax;
         public static ConfigEntry<float> XPTextCurveFactor;
 
+        public static ConfigEntry<KeyCode> KeyBindingSkillGUI;
+        public static ConfigEntry<KeyCode> KeyBindingSkillGUIExit;
+        public static ConfigEntry<KeyCode> KeyBindingCollapseFood;
+        public static ConfigEntry<KeyCode> KeyBindingConfirmShortcut;
+        public static ConfigEntry<KeyCode> KeyBindingMeteorDrop;
+        public static ConfigEntry<KeyCode> KeyBindingDetailedPerkTooltip;
+
         public static Color ColorBonusBlue;
         public static Color ColorAscendedGreen;
         public static Color ColorExperienceYellow;
@@ -156,6 +164,7 @@ namespace kingskills
         public static Color ColorKingSkills;
         public static Color ColorPTGreen;
         public static Color ColorPTRed;
+        public static Color ColorKingBlurbs;
 
         public static string ColorBonusBlueFF = "<color=#33E0EDFF>";
         public static string ColorAscendedGreenFF = "<color=#73EA52FF>";
@@ -182,6 +191,7 @@ namespace kingskills
             ColorKingSkills = new Color(0.77f, 0.23f, 0.99f);
             ColorPTGreen = new Color(0.48f, 0.95f, 0.40f);
             ColorPTRed = new Color(0.92f, 0.05f, 0.05f);
+            ColorKingBlurbs = new Color(0.6f, 0.3f, 0.61f);
 
             MaxSkillLevel = cfg.Bind("Generic", "Max Skill Level", 100f,
                     AdminCD("This is the level that all king skills can go up to.", true));
@@ -201,6 +211,20 @@ namespace kingskills
                     AdminCD("Experience value to generate the largest size exp text", true));
             XPTextCurveFactor = cfg.Bind("Generic", "Text Curve Factor", .6f,
                     AdminCD("Factor to define the slope of the curve for exp text scaling", true));
+
+
+            KeyBindingSkillGUI = cfg.Bind("Generic.Bindings", "Toggle Skill GUI", KeyCode.I,
+                    "Button to open and close the King Skills GUI");
+            KeyBindingSkillGUIExit = cfg.Bind("Generic.Bindings", "Exit Skill GUI", KeyCode.Escape,
+                    UnbrowsableCD("Shortcut to close the King Skills GUI. Shouldn't be changed."));
+            KeyBindingCollapseFood = cfg.Bind("Generic.Bindings", "Collapse Food", KeyCode.Y,
+                    "Button to collapse all food of the hovered type in inventory.");
+            KeyBindingConfirmShortcut = cfg.Bind("Generic.Bindings", "Confirm Shortcut", KeyCode.Return,
+                    UnbrowsableCD("Shortcut to hitting 'Yes' on confirmation windows. Probably shouldn't be changed."));
+            KeyBindingMeteorDrop = cfg.Bind("Generic.Bindings", "Meteor Drop", KeyCode.C,
+                    "Button to press for the Meteor Drop Perk");
+            KeyBindingDetailedPerkTooltip = cfg.Bind("Generic.Bindings", "Detailed Perk Tooltip", KeyCode.LeftShift,
+                    UnbrowsableCD("Button to hold to show the detailed perk tooltip"));
 
         }
 
@@ -323,6 +347,12 @@ namespace kingskills
                 new ConfigurationManagerAttributes { IsAdminOnly = true, Browsable = browsable });
         }
 
+        public static ConfigDescription UnbrowsableCD(string description)
+        {
+            return new ConfigDescription(description, null,
+                new ConfigurationManagerAttributes { Browsable = false });
+        }
+
         public static bool CheckPlayerAndActive(Character player, PerkMan.PerkType perk)
         {
             if (player == null ||
@@ -330,13 +360,14 @@ namespace kingskills
                 !(player.GetZDOID() == Player.m_localPlayer.GetZDOID())) return false;
 
 
-            if (!PerkMan.IsPerkActive(PerkMan.PerkType.AlwaysPrepared)) return false;
+            if (!PerkMan.IsPerkActive(perk)) return false;
             return true;
         }
 
         public static bool SetZDOVariable(Character player, PerkMan.PerkType perk, string var, bool value)
         {
             if (!CheckPlayerAndActive(player, perk)) return false;
+            //Jotunn.Logger.LogMessage("perk active and valid, changing ZDO value");
 
             ZDO zdo = player.m_nview.m_zdo;
             zdo.Set(var, value);
@@ -2695,11 +2726,17 @@ namespace kingskills
         public static Perk GetPerkAirStep()
         {
             string times = "time";
-            if (GetAirStepExtraJumps() > 1) times += "s";
+            string jumps = "jump";
+            if (GetAirStepExtraJumps() > 1)
+            {
+                times += "s";
+                jumps += "s";
+            }
             return new Perk("Air Step",
                 $"Allows you to jump {GetAirStepExtraJumps()} additional {times} while in the air.",
                 "The laws of physics are nothing to a viking!",
-                PerkMan.PerkType.AirStep, "Icons/airstep.png");
+                PerkMan.PerkType.AirStep, "Icons/airstep.png",
+                $"{GetAirStepExtraJumps()} extra {jumps}");
         }
 
         public static int GetAirStepExtraJumps()
@@ -2728,7 +2765,8 @@ namespace kingskills
             return new Perk("Always Prepared",
                 "Entering water no longer causes you to put your weapons or tools away.",
                 "Breaking news: man literally too angry to swim",
-                Perks.PerkMan.PerkType.AlwaysPrepared, "Icons/alwaysprepared.png");
+                PerkMan.PerkType.AlwaysPrepared, "Icons/alwaysprepared.png",
+                "Equip and Attack underwater");
         }
 
 
@@ -2755,7 +2793,7 @@ namespace kingskills
 
         public static void InitAquamanConfigs(ConfigFile cfg)
         {
-            AquamanTimerStart = cfg.Bind("Perks.Aquaman", "Timer to Start", 1f,
+            AquamanTimerStart = cfg.Bind("Perks.Aquaman", "Timer to Start", 10f,
                     AdminCD("seconds before Aquman starts happening"));
             AquamanDamageMin = cfg.Bind("Perks.Aquaman", "Min Damage", 5f,
                     AdminCD("damage dealt per hit at the minimum"));
@@ -2784,7 +2822,8 @@ namespace kingskills
                 $"aggressors. It takes {AquamanTimerStart.Value} seconds to start, and charges up in size and damage over the following " +
                 $"{AquamanTimeTilMax.Value} seconds.",
                 "It may not be laser eyes, but it's still an objectively cool power.",
-                PerkMan.PerkType.Aquaman, "Icons/aquaman.png");
+                PerkMan.PerkType.Aquaman, "Icons/aquaman.png",
+                "Fish attack nearby units while in water");
         }
 
         public static float GetAquamanTimerPercent(float time)
@@ -2822,7 +2861,8 @@ namespace kingskills
                 "You now block in all directions while blocking - but you can only get a perfect block when " +
                 "properly facing the attack.",
                 "Are all the stars in the sky my enemy?",
-                PerkMan.PerkType.Asguard, "Icons/asguard.png");
+                PerkMan.PerkType.Asguard, "Icons/asguard.png",
+                "Omnidirectional Block");
         }
 
 
@@ -2950,7 +2990,7 @@ namespace kingskills
             return new Perk("Blast Wave",
                 "All attacks you inflict that hit an area will have their size doubled.",
                 "It was all reduced to rubble... and then, again, to ash.",
-                PerkMan.PerkType.BlastWave, "Icons/thunderhammer.png");
+                PerkMan.PerkType.BlastWave, "Icons/blastwave.png");
         }
 
 

@@ -12,7 +12,7 @@ namespace kingskills.Perks
     public static class PerkMan
     {
         public static Dictionary<PerkType, bool> perkLearned;
-        public static Dictionary<PerkType, bool> perkDeactive;
+        public static Dictionary<PerkType, bool> perkDeactivated;
         public static Dictionary<Skills.SkillType, bool> skillAscended;
         public static Dictionary<PerkType, Perk> perkList;
         public static bool loaded = false;
@@ -20,7 +20,7 @@ namespace kingskills.Perks
         public static void Awake()
         {
             perkLearned = new Dictionary<PerkType, bool>();
-            perkDeactive = new Dictionary<PerkType, bool>();
+            perkDeactivated = new Dictionary<PerkType, bool>();
             skillAscended = new Dictionary<Skills.SkillType, bool>();
             InitSkillAscensions();
             InitPerkList();
@@ -494,8 +494,13 @@ namespace kingskills.Perks
             {
                 if (perkLearned.TryGetValue(perk, out bool value))
                 {
-                    if (perkDeactive.TryGetValue(perk, out bool deactiveValue)) 
-                        return value && !deactiveValue;
+                    if (perkDeactivated.TryGetValue(perk, out bool deactiveValue))
+                    {
+                        //Jotunn.Logger.LogMessage($"checked perk {perk}, which is learned:{value} and deactivated{deactiveValue}" +
+                        //    $"\nthe logic statement is: IsPerkActive returns ({value} && {!deactiveValue})");
+                        return (value && !deactiveValue);
+
+                    }
 
                     return value;
                 }
@@ -506,6 +511,27 @@ namespace kingskills.Perks
                 Jotunn.Logger.LogWarning("perks haven't been loaded!");
                 return false;
             }
+        }
+
+        public static bool IsPerkDeactivated(PerkType perk)
+        {
+            if (loaded)
+            {
+                if (perkDeactivated.TryGetValue(perk, out bool deactivated))
+                    return deactivated;
+                return false;
+            }
+            else
+            {
+                Jotunn.Logger.LogWarning("deactivated perks haven't been loaded!");
+                return false;
+            }
+        }
+
+        public static void SetDeactivatedPerk(PerkType perk, bool value)
+        {
+            if (perkDeactivated.ContainsKey(perk)) perkDeactivated[perk] = value;
+            else perkDeactivated.Add(perk, value);
         }
 
         public enum PerkType
@@ -589,21 +615,23 @@ namespace kingskills.Perks
     {
         public string name;
         public string description;
-        public string tooltip;
+        public string blurb;
+        public string effects;
         public bool learned;
         public bool learnable;
         public PerkMan.PerkType type;
         public Sprite icon;
 
-        public Perk(string nName, string nDescription, string nTooltip, PerkMan.PerkType nType, string nIcon)
+        public Perk(string nName, string nDescription, string nTooltip, PerkMan.PerkType nType, string nIcon, string nEffects = "")
         {
             name = nName;
             description = nDescription;
-            tooltip = nTooltip;
+            blurb = nTooltip;
             learned = false;
             learnable = true;
             type = nType;
             icon = Assets.AssetLoader.LoadSpriteFromFilename(nIcon);
+            effects = nEffects;
         }
 
     }

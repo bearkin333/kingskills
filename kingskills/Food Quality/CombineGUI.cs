@@ -35,10 +35,11 @@ namespace kingskills.UX
 		public static int invY;
 		public static Inventory invReference;
 		public static bool ask;
+		public static bool savedAsk = true; 
 
-		public static void Init(bool askSetting = true)
+		public static void Init()
 		{
-			ask = askSetting;
+			ask = savedAsk;
 
 			CombineWindow = GUIManager.Instance.CreateWoodpanel(
 					parent: GUIManager.CustomGUIFront.transform,
@@ -275,6 +276,7 @@ namespace kingskills.UX
 		public static void DontAsk()
 		{
 			Jotunn.Logger.LogMessage("Jeez, I'm just trying to help. No need to shout");
+			ask = false;
 		}
 
 		public static void OpenWindow(Inventory inv, ItemDrop.ItemData nitem, int nItemAmount, ItemDrop.ItemData nitemAt)

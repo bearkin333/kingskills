@@ -300,6 +300,9 @@ namespace kingskills.UX
         #region var
         public static GameObject LeftPanelEffectsTab;
         public static Dictionary<string, GameObject> LPEffectsTexts;
+        public const int LPNumEffectsTexts = 6;
+        public const int LPNumPerkTexts = 6;
+        public const int LPNumOtherTexts = 3;
 
         public static GameObject LPEffectsScroll;
         #endregion var
@@ -380,8 +383,8 @@ namespace kingskills.UX
 
 
             //Create the Experience Title in the left panel
-            LPEffectsTexts.Add("effects", GUIManager.Instance.CreateText(
-                text: "Skill Effects",
+            LPEffectsTexts.Add("F", GUIManager.Instance.CreateText(
+                text: "Skill Effects:",
                 parent: scrollVert.transform,
                 anchorMin: new Vector2(0f, 1f),
                 anchorMax: new Vector2(0f, 1f),
@@ -394,7 +397,7 @@ namespace kingskills.UX
                 width: 300f,
                 height: 70f,
                 addContentSizeFitter: false));
-            text = LPEffectsTexts["effects"].GetComponent<Text>();
+            text = LPEffectsTexts["F"].GetComponent<Text>();
             text.verticalOverflow = VerticalWrapMode.Overflow;
             text.alignment = TextAnchor.UpperCenter;
 
@@ -417,25 +420,16 @@ namespace kingskills.UX
             text.verticalOverflow = VerticalWrapMode.Overflow;
             text.alignment = TextAnchor.UpperLeft;
 
-            LPEffectsTexts.Add("f2", UnityEngine.Object.Instantiate(LPEffectsTexts["f1"]));
-            LPEffectsTexts["f2"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
-
-            LPEffectsTexts.Add("f3", UnityEngine.Object.Instantiate(LPEffectsTexts["f1"]));
-            LPEffectsTexts["f3"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
-
-            LPEffectsTexts.Add("f4", UnityEngine.Object.Instantiate(LPEffectsTexts["f1"]));
-            LPEffectsTexts["f4"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
-
-            LPEffectsTexts.Add("f5", UnityEngine.Object.Instantiate(LPEffectsTexts["f1"]));
-            LPEffectsTexts["f5"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
-
-            LPEffectsTexts.Add("f6", UnityEngine.Object.Instantiate(LPEffectsTexts["f1"]));
-            LPEffectsTexts["f6"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+            for(int i = 2; i <= LPNumEffectsTexts; i++)
+            {
+                LPEffectsTexts.Add("f"+i, UnityEngine.Object.Instantiate(LPEffectsTexts["f1"]));
+                LPEffectsTexts["f"+i].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+            }
 
 
-            //Create the Effects Title in the left panel
-            LPEffectsTexts.Add("other", GUIManager.Instance.CreateText(
-                text: "Outside Factors",
+            //Create the Perk Effects Title in the left panel
+            LPEffectsTexts.Add("P", GUIManager.Instance.CreateText(
+                text: "Perks:",
                 parent: scrollVert.transform,
                 anchorMin: new Vector2(0f, 1f),
                 anchorMax: new Vector2(0f, 1f),
@@ -448,12 +442,60 @@ namespace kingskills.UX
                 width: 300f,
                 height: 70f,
                 addContentSizeFitter: false));
-            text = LPEffectsTexts["other"].GetComponent<Text>();
+            text = LPEffectsTexts["P"].GetComponent<Text>();
             text.verticalOverflow = VerticalWrapMode.Overflow;
             text.alignment = TextAnchor.UpperCenter;
 
 
-            //Create the variable Experience text in the left panel
+            //Create the variable perk effects texts in the left panel
+            LPEffectsTexts.Add("p1", GUIManager.Instance.CreateText(
+                text: "p1",
+                parent: scrollVert.transform,
+                anchorMin: new Vector2(1f, 1f),
+                anchorMax: new Vector2(1f, 1f),
+                position: new Vector2(0f, 0f),
+                font: GUIManager.Instance.AveriaSerifBold,
+                fontSize: 16,
+                color: CFG.ColorKingBlurbs,
+                outline: true,
+                outlineColor: Color.black,
+                width: 300f,
+                height: 30f,
+                addContentSizeFitter: false));
+            text = LPEffectsTexts["p1"].GetComponent<Text>();
+            text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.alignment = TextAnchor.UpperLeft;
+
+
+            for (int i = 2; i <= LPNumPerkTexts; i++)
+            {
+                LPEffectsTexts.Add("p" + i, UnityEngine.Object.Instantiate(LPEffectsTexts["p1"]));
+                LPEffectsTexts["p" + i].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+            }
+
+
+
+            //Create the outside factors Title in the left panel
+            LPEffectsTexts.Add("X", GUIManager.Instance.CreateText(
+                text: "Outside Factors:",
+                parent: scrollVert.transform,
+                anchorMin: new Vector2(0f, 1f),
+                anchorMax: new Vector2(0f, 1f),
+                position: new Vector2(50f, 0f),
+                font: GUIManager.Instance.AveriaSerifBold,
+                fontSize: 30,
+                color: CFG.ColorTitle,
+                outline: true,
+                outlineColor: Color.black,
+                width: 300f,
+                height: 70f,
+                addContentSizeFitter: false));
+            text = LPEffectsTexts["X"].GetComponent<Text>();
+            text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.alignment = TextAnchor.UpperCenter;
+
+
+            //Create the variable other texts in the left panel
             LPEffectsTexts.Add("x1", GUIManager.Instance.CreateText(
                 text: "x1",
                 parent: scrollVert.transform,
@@ -472,12 +514,11 @@ namespace kingskills.UX
             text.verticalOverflow = VerticalWrapMode.Overflow;
             text.alignment = TextAnchor.UpperLeft;
 
-            LPEffectsTexts.Add("x2", UnityEngine.Object.Instantiate(LPEffectsTexts["x1"]));
-            LPEffectsTexts["x2"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
-
-            LPEffectsTexts.Add("x3", UnityEngine.Object.Instantiate(LPEffectsTexts["x1"]));
-            LPEffectsTexts["x3"].GetComponent<RectTransform>().SetParent(scrollVert.transform);
-
+            for (int i = 2; i <= LPNumOtherTexts; i++)
+            {
+                LPEffectsTexts.Add("x" + i, UnityEngine.Object.Instantiate(LPEffectsTexts["x1"]));
+                LPEffectsTexts["x" + i].GetComponent<RectTransform>().SetParent(scrollVert.transform);
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -766,17 +807,6 @@ namespace kingskills.UX
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
-            RPPerkBoxes.Add("1aTint", new GameObject());
-            image = RPPerkBoxes["1aTint"].AddComponent<Image>();
-            image.sprite = null;
-            image.enabled = false;
-            rect = RPPerkBoxes["1aTint"].GetComponent<RectTransform>();
-            rect.SetParent(RPPerkBoxes["1a"].transform);
-            rect.anchorMin = new Vector2(0.5f, 0.5f);
-            rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = new Vector2(0f, 0f);
-            rect.sizeDelta = new Vector2(80f, 80f);
-
             RPPerkBoxes.Add("1aPerk", new GameObject());
             image = RPPerkBoxes["1aPerk"].AddComponent<Image>();
             image.sprite = null;
@@ -787,6 +817,17 @@ namespace kingskills.UX
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);
             rect.sizeDelta = new Vector2(60f, 60f);
+
+            RPPerkBoxes.Add("1aTint", new GameObject());
+            image = RPPerkBoxes["1aTint"].AddComponent<Image>();
+            image.sprite = null;
+            image.enabled = false;
+            rect = RPPerkBoxes["1aTint"].GetComponent<RectTransform>();
+            rect.SetParent(RPPerkBoxes["1a"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
 
 
 
@@ -801,17 +842,6 @@ namespace kingskills.UX
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
-            RPPerkBoxes.Add("1bTint", new GameObject());
-            image = RPPerkBoxes["1bTint"].AddComponent<Image>();
-            image.sprite = null;
-            image.enabled = false;
-            rect = RPPerkBoxes["1bTint"].GetComponent<RectTransform>();
-            rect.SetParent(RPPerkBoxes["1b"].transform);
-            rect.anchorMin = new Vector2(0.5f, 0.5f);
-            rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = new Vector2(0f, 0f);
-            rect.sizeDelta = new Vector2(80f, 80f);
-
             RPPerkBoxes.Add("1bPerk", new GameObject());
             image = RPPerkBoxes["1bPerk"].AddComponent<Image>();
             image.sprite = null;
@@ -822,6 +852,17 @@ namespace kingskills.UX
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);
             rect.sizeDelta = new Vector2(60f, 60f);
+
+            RPPerkBoxes.Add("1bTint", new GameObject());
+            image = RPPerkBoxes["1bTint"].AddComponent<Image>();
+            image.sprite = null;
+            image.enabled = false;
+            rect = RPPerkBoxes["1bTint"].GetComponent<RectTransform>();
+            rect.SetParent(RPPerkBoxes["1b"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
 
 
             RPPerkBoxes.Add("2a", new GameObject());
@@ -835,17 +876,6 @@ namespace kingskills.UX
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
-            RPPerkBoxes.Add("2aTint", new GameObject());
-            image = RPPerkBoxes["2aTint"].AddComponent<Image>();
-            image.sprite = null;
-            image.enabled = false;
-            rect = RPPerkBoxes["2aTint"].GetComponent<RectTransform>();
-            rect.SetParent(RPPerkBoxes["2a"].transform);
-            rect.anchorMin = new Vector2(0.5f, 0.5f);
-            rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = new Vector2(0f, 0f);
-            rect.sizeDelta = new Vector2(80f, 80f);
-
             RPPerkBoxes.Add("2aPerk", new GameObject());
             image = RPPerkBoxes["2aPerk"].AddComponent<Image>();
             image.sprite = null;
@@ -856,6 +886,17 @@ namespace kingskills.UX
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);
             rect.sizeDelta = new Vector2(60f, 60f);
+
+            RPPerkBoxes.Add("2aTint", new GameObject());
+            image = RPPerkBoxes["2aTint"].AddComponent<Image>();
+            image.sprite = null;
+            image.enabled = false;
+            rect = RPPerkBoxes["2aTint"].GetComponent<RectTransform>();
+            rect.SetParent(RPPerkBoxes["2a"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
 
 
             RPPerkBoxes.Add("2b", new GameObject());
@@ -869,17 +910,6 @@ namespace kingskills.UX
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
-            RPPerkBoxes.Add("2bTint", new GameObject());
-            image = RPPerkBoxes["2bTint"].AddComponent<Image>();
-            image.sprite = null;
-            image.enabled = false;
-            rect = RPPerkBoxes["2bTint"].GetComponent<RectTransform>();
-            rect.SetParent(RPPerkBoxes["2b"].transform);
-            rect.anchorMin = new Vector2(0.5f, 0.5f);
-            rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = new Vector2(0f, 0f);
-            rect.sizeDelta = new Vector2(80f, 80f);
-
             RPPerkBoxes.Add("2bPerk", new GameObject());
             image = RPPerkBoxes["2bPerk"].AddComponent<Image>();
             image.sprite = null;
@@ -890,6 +920,17 @@ namespace kingskills.UX
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);
             rect.sizeDelta = new Vector2(60f, 60f);
+
+            RPPerkBoxes.Add("2bTint", new GameObject());
+            image = RPPerkBoxes["2bTint"].AddComponent<Image>();
+            image.sprite = null;
+            image.enabled = false;
+            rect = RPPerkBoxes["2bTint"].GetComponent<RectTransform>();
+            rect.SetParent(RPPerkBoxes["2b"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
 
 
             RPPerkBoxes.Add("3a", new GameObject());
@@ -903,17 +944,6 @@ namespace kingskills.UX
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
-            RPPerkBoxes.Add("3aTint", new GameObject());
-            image = RPPerkBoxes["3aTint"].AddComponent<Image>();
-            image.sprite = null;
-            image.enabled = false;
-            rect = RPPerkBoxes["3aTint"].GetComponent<RectTransform>();
-            rect.SetParent(RPPerkBoxes["3a"].transform);
-            rect.anchorMin = new Vector2(0.5f, 0.5f);
-            rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = new Vector2(0f, 0f);
-            rect.sizeDelta = new Vector2(80f, 80f);
-
             RPPerkBoxes.Add("3aPerk", new GameObject());
             image = RPPerkBoxes["3aPerk"].AddComponent<Image>();
             image.sprite = null;
@@ -924,6 +954,17 @@ namespace kingskills.UX
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);
             rect.sizeDelta = new Vector2(60f, 60f);
+
+            RPPerkBoxes.Add("3aTint", new GameObject());
+            image = RPPerkBoxes["3aTint"].AddComponent<Image>();
+            image.sprite = null;
+            image.enabled = false;
+            rect = RPPerkBoxes["3aTint"].GetComponent<RectTransform>();
+            rect.SetParent(RPPerkBoxes["3a"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
 
 
             RPPerkBoxes.Add("3b", new GameObject());
@@ -937,17 +978,6 @@ namespace kingskills.UX
             rect.sizeDelta = new Vector2(80f, 80f);
             rect.gameObject.AddComponent<IsPerkBox>();
 
-            RPPerkBoxes.Add("3bTint", new GameObject());
-            image = RPPerkBoxes["3bTint"].AddComponent<Image>();
-            image.sprite = null;
-            image.enabled = false;
-            rect = RPPerkBoxes["3bTint"].GetComponent<RectTransform>();
-            rect.SetParent(RPPerkBoxes["3b"].transform);
-            rect.anchorMin = new Vector2(0.5f, 0.5f);
-            rect.anchorMax = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = new Vector2(0f, 0f);
-            rect.sizeDelta = new Vector2(80f, 80f);
-
             RPPerkBoxes.Add("3bPerk", new GameObject());
             image = RPPerkBoxes["3bPerk"].AddComponent<Image>();
             image.sprite = null;
@@ -958,6 +988,17 @@ namespace kingskills.UX
             rect.anchorMax = new Vector2(0.5f, 0.5f);
             rect.anchoredPosition = new Vector2(0f, 0f);
             rect.sizeDelta = new Vector2(60f, 60f);
+
+            RPPerkBoxes.Add("3bTint", new GameObject());
+            image = RPPerkBoxes["3bTint"].AddComponent<Image>();
+            image.sprite = null;
+            image.enabled = false;
+            rect = RPPerkBoxes["3bTint"].GetComponent<RectTransform>();
+            rect.SetParent(RPPerkBoxes["3b"].transform);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, 0f);
+            rect.sizeDelta = new Vector2(80f, 80f);
 
 
 

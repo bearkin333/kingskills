@@ -29,6 +29,8 @@ namespace kingskills.Assets
             perkBoxSprites.Add("perkboxLocked", LoadSpriteFromFilename("perkboxLocked.png"));
             perkBoxSprites.Add("graytint", LoadSpriteFromFilename("graytint.png"));
             perkBoxSprites.Add("goldtint", LoadSpriteFromFilename("goldtint.png"));
+            perkBoxSprites.Add("deactivated", LoadSpriteFromFilename("deactivated.png"));
+
             skillIconSprites.Add("Agriculture", LoadSpriteFromFilename("SkillIcons/Agriculture.png"));
             skillIconSprites.Add("Axes", LoadSpriteFromFilename("SkillIcons/Axes.png"));
             skillIconSprites.Add("Blocking", LoadSpriteFromFilename("SkillIcons/Blocking.png"));

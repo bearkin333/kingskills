@@ -33,7 +33,7 @@ namespace kingskills.Perks
         }
 
 
-        public static void UpdateOpenPerks()
+        public static void UpdateOpenPerks(string DetailedHoverButtonName)
         {
             if (openedPerks == null) return;
             if (SkillGUI.SkillGUIWindow == null) return;
@@ -50,13 +50,32 @@ namespace kingskills.Perks
                 return;
             }
 
-            PerkTooltipGUI.UpdateTooltip(openedPerks[hoveredPerkKey]);
+            PerkTooltipGUI.UpdateTooltip(openedPerks[hoveredPerkKey], DetailedHoverButtonName);
+
+            //Jotunn.Logger.LogMessage($"Hovered skill is learned: {openedPerks[hoveredPerkKey].learned}");
 
             //and then check for learning
-            if (perkClickable[hoveredPerkKey] && Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
-                LearnConfirmationGUI.OpenLearnConfirmation(hoveredPerkKey);
+                if (perkClickable[hoveredPerkKey])
+                {
+                    LearnConfirmationGUI.OpenLearnConfirmation(hoveredPerkKey);
+                }
+                else if (openedPerks[hoveredPerkKey].learned)
+                {
+                    ToggleDeactivated(hoveredPerkKey);
+                }
             }
+        }
+
+        public static void ToggleDeactivated(int perkKey)
+        {
+            PerkMan.PerkType perk = openedPerks[perkKey].type;
+            bool deactivated = PerkMan.IsPerkDeactivated(perk);
+            PerkMan.SetDeactivatedPerk(perk, !deactivated);
+
+            SkillGUIUpdate.GUICheck();
+            PerkTooltipGUI.NewTooltip(openedPerks[perkKey]);
         }
 
 
@@ -218,6 +237,23 @@ namespace kingskills.Perks
             SetPerkBox(5, "3b", CFG.PerkThreeLVLThreshold.Value);
         }
 
+        public static List<string> GetActivePerkEffectTips()
+        {
+            List<string> tips = new List<string>();
+            for (int i = 0; i < openedPerks.Count; i++)
+            {
+                Perk perk = openedPerks[i];
+                if (PerkMan.IsPerkActive(perk.type))
+                {
+                    if (perk.effects != "")
+                    {
+                        tips.Add(perk.effects);
+                    }
+                }
+            }
+            return tips;
+        }
+
 
         public static void SetPerkBox(int perk, string perkBoxString, float skillThreshold)
         {
@@ -229,9 +265,18 @@ namespace kingskills.Perks
             if (PerkMan.IsSkillAscended(openSkill) && openedPerks[perk].learned)
             {
                 perkClickable[perk] = false;
-                tintImg.enabled = false;
                 perkImage.sprite = openedPerks[perk].icon;
                 perkImage.enabled = true;
+
+                if (PerkMan.IsPerkDeactivated(openedPerks[perk].type))
+                {
+                    tintImg.sprite = Assets.AssetLoader.perkBoxSprites["deactivated"];
+                    tintImg.enabled = true;
+                }
+                else
+                {
+                    tintImg.enabled = false;
+                }
 
                 SkillGUI.RPPerkBoxes[perkBoxString].GetComponent<Image>().sprite =
                     Assets.AssetLoader.perkBoxSprites["perkbox"];
@@ -270,10 +315,17 @@ namespace kingskills.Perks
                 //If it's learned, it has no tint, and isn't clickable.
                 if (openedPerks[perk].learned)
                 {
-                    //Jotunn.Logger.LogMessage($"{perk} is learned. making gold");
-
                     perkClickable[perk] = false;
-                    tintImg.enabled = false;
+
+                    if (PerkMan.IsPerkDeactivated(openedPerks[perk].type))
+                    {
+                        tintImg.sprite = Assets.AssetLoader.perkBoxSprites["deactivated"];
+                        tintImg.enabled = true;
+                    }
+                    else
+                    {
+                        tintImg.enabled = false;
+                    }
                 }
                 //If it's learnable, and not learned, it has a gold tint, and it's clickable.
                 else if (openedPerks[perk].learnable)

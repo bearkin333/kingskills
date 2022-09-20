@@ -73,7 +73,7 @@ namespace kingskills.Perks
 
             ZDO zdo = __instance.m_nview.m_zdo;
 
-            if (!PerkMan.IsPerkActive(PerkMan.PerkType.AirStep)) return;
+            //if (!PerkMan.IsPerkActive(PerkMan.PerkType.AirStep)) return;
             //Jotunn.Logger.LogMessage($"This is a player's jump call. Increasing number of jumps from");
 
             int currentJumps = zdo.GetInt(NumJumps, 0);

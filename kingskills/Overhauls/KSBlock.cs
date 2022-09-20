@@ -16,8 +16,6 @@ namespace kingskills
     [HarmonyPatch(typeof(Humanoid), "BlockAttack")]
     class KSBlock : Humanoid
     {
-        public static bool asguardCheck = false;
-
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             bool sawBlockPower = false;
@@ -28,11 +26,18 @@ namespace kingskills
 
             foreach (var instruction in instructions)
             {
-                if (!patchedAsguard && asguardCheck)
+                if (!patchedAsguard)
                 {
-                    if (instruction.Calls(AccessTools.Method(typeof(Vector3), "Dot", new Type[] { typeof(float) })))
+                    if (instruction.Calls(AccessTools.Method(typeof(Vector3), "Dot", new Type[] { typeof(Vector3), typeof(Vector3)})))
                     {
                         patchedAsguard = true;
+                        yield return new CodeInstruction(OpCodes.Ldarg_0); // Humanoid this (blocker)
+                        yield return new CodeInstruction(OpCodes.Call, 
+                            AccessTools.DeclaredMethod(typeof(Asguard), "BlockDirectionPatch"));
+                    }
+                    else
+                    {
+                        yield return instruction;
                     }
                 }
                 else if (!patchedBlockPower)

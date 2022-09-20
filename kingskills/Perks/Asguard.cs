@@ -4,17 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HarmonyLib;
+using UnityEngine;
 
 namespace kingskills.Perks
 {
     [HarmonyPatch(typeof(Humanoid))]
     class Asguard
     {
-        [HarmonyPatch(nameof(Humanoid.BlockAttack))]
-        [HarmonyPrefix]
-        public static void CheckAsguard(Humanoid __instance)
+        public static float BlockDirectionPatch(Vector3 hitdir, Vector3 player_forward, Humanoid player)
         {
-            KSBlock.asguardCheck = CFG.CheckPlayerAndActive(__instance, PerkMan.PerkType.Asguard);
+            Jotunn.Logger.LogMessage($"Asguard check");
+            Jotunn.Logger.LogMessage($"Asguard is active:{PerkMan.IsPerkActive(PerkMan.PerkType.Asguard)}");
+            if (CFG.CheckPlayerAndActive(player, PerkMan.PerkType.Asguard))
+            {
+                Jotunn.Logger.LogMessage($"Successfully Asguarded");
+                return 0f;
+            }
+            else
+            {
+                return Vector3.Dot(hitdir, player_forward);
+            }
         }
 
 
