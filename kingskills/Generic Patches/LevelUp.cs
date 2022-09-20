@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using kingskills.Perks;
 
-namespace kingskills
+namespace kingskills.Patches
 {
     [HarmonyPatch(typeof(Player))]
     class LevelUp
@@ -167,10 +168,10 @@ namespace kingskills
 
         public static void OnMaxLevel(Skills.SkillType skill)
         {
-            if (!AscensionManager.isAscendable.ContainsKey(skill))
-                AscensionManager.isAscendable[skill] = true;
+            if (!AscensionMan.isAscendable.ContainsKey(skill))
+                AscensionMan.isAscendable[skill] = true;
             else
-                AscensionManager.isAscendable.Add(skill, true);
+                AscensionMan.isAscendable.Add(skill, true);
 
             Player.m_localPlayer.ShowTutorial("kingskills_ascend");
         }
@@ -180,7 +181,7 @@ namespace kingskills
         public static void LoseAscendable(Skills __instance)
         {
             Dictionary<Skills.SkillType, bool> ascendableChecker = 
-                new Dictionary<Skills.SkillType, bool>(AscensionManager.isAscendable);
+                new Dictionary<Skills.SkillType, bool>(AscensionMan.isAscendable);
 
             foreach (KeyValuePair<Skills.SkillType, bool> ascendable in ascendableChecker)
             {
@@ -190,7 +191,7 @@ namespace kingskills
                     if (__instance.GetSkillLevel(ascendable.Key) < CFG.MaxSkillLevel.Value)
                     {
                         //Jotunn.Logger.LogMessage("Yup. Not ascendable anymore");
-                        AscensionManager.isAscendable[ascendable.Key] = false;
+                        AscensionMan.isAscendable[ascendable.Key] = false;
                     }
                 }
             }

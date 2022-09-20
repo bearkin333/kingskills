@@ -103,6 +103,54 @@ namespace kingskills
                     skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Sailing"];
             }
         }
+
+        public static void NameUpdate(Skills skills)
+        {
+            foreach (Skills.SkillDef skillDef in skills.m_skills)
+            {
+                switch (skillDef.m_skill)
+                {
+                    case Skills.SkillType.Axes:
+                        break;
+                    case Skills.SkillType.Blocking:
+                        break;
+                    case Skills.SkillType.Bows:
+                        break;
+                    case Skills.SkillType.Clubs:
+                        break;
+                    case Skills.SkillType.Jump:
+                        break;
+                    case Skills.SkillType.Knives:
+                        break;
+                    case Skills.SkillType.Pickaxes:
+                        break;
+                    case Skills.SkillType.Polearms:
+                        break;
+                    case Skills.SkillType.Run:
+                        break;
+                    case Skills.SkillType.Sneak:
+                        break;
+                    case Skills.SkillType.Spears:
+                        break;
+                    case Skills.SkillType.Swim:
+                        break;
+                    case Skills.SkillType.Swords:
+                        break;
+                    case Skills.SkillType.Unarmed:
+                        break;
+                    case Skills.SkillType.WoodCutting:
+                        break;
+                }
+
+                //if (skillDef.m_skill == Agriculture)
+
+                //else if (skillDef.m_skill == Building)
+
+                //else if (skillDef.m_skill == Cooking)
+
+                //else if (skillDef.m_skill == Sailing)
+            }
+        }
     }
 
     [HarmonyPatch(typeof(Skills))]

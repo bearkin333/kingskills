@@ -7,6 +7,8 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using kingskills.Patches;
+using kingskills.Perks;
 
 namespace kingskills
 {
@@ -14,16 +16,26 @@ namespace kingskills
     [HarmonyPatch(typeof(Humanoid), "BlockAttack")]
     class KSBlock : Humanoid
     {
+        public static bool asguardCheck = false;
+
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             bool sawBlockPower = false;
             bool patchedBlockPower = false;
+            bool patchedAsguard = false;
             CodeInstruction storeBlockPower = new CodeInstruction(OpCodes.Nop);
             CodeInstruction loadParryFlag = new CodeInstruction(OpCodes.Nop);
 
             foreach (var instruction in instructions)
             {
-                if (!patchedBlockPower)
+                if (!patchedAsguard && asguardCheck)
+                {
+                    if (instruction.Calls(AccessTools.Method(typeof(Vector3), "Dot", new Type[] { typeof(float) })))
+                    {
+                        patchedAsguard = true;
+                    }
+                }
+                else if (!patchedBlockPower)
                 {
                     if (instruction.Calls(AccessTools.Method(typeof(ItemDrop.ItemData), "GetBlockPower", new Type[] { typeof(float) })))
                     {

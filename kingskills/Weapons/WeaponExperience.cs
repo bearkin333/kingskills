@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using kingskills.Patches;
 
 namespace kingskills.Weapons
 {

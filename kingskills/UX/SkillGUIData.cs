@@ -7,6 +7,7 @@ using kingskills.Patches;
 using kingskills.UX;
 using UnityEngine;
 using UnityEngine.UI;
+using kingskills.Perks;
 
 namespace kingskills.UX
 {
@@ -85,14 +86,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Axes,
                 //perk 1
-                Perks.PerkType.Decapitation,
-                Perks.PerkType.FourStomachs,
+                PerkMan.PerkType.Decapitation,
+                PerkMan.PerkType.FourStomachs,
                 //perk 2
-                Perks.PerkType.Cauterize,
-                Perks.PerkType.Highlander,
+                PerkMan.PerkType.Cauterize,
+                PerkMan.PerkType.Highlander,
                 //perk 3
-                Perks.PerkType.Berserkr,
-                Perks.PerkType.Throwback);
+                PerkMan.PerkType.Berserkr,
+                PerkMan.PerkType.Throwback);
         }
 
         public override void oTips()
@@ -173,14 +174,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Bows,
                 //perk 1
-                Perks.PerkType.Frugal,
-                Perks.PerkType.PowerDraw,
+                PerkMan.PerkType.Frugal,
+                PerkMan.PerkType.PowerDraw,
                 //perk 2
-                Perks.PerkType.SpiritGuide,
-                Perks.PerkType.RunedArrows,
+                PerkMan.PerkType.SpiritGuide,
+                PerkMan.PerkType.RunedArrows,
                 //perk 3
-                Perks.PerkType.Hraesvelg,
-                Perks.PerkType.OfferToUllr);
+                PerkMan.PerkType.Hraesvelg,
+                PerkMan.PerkType.OfferToUllr);
         }
 
         public override void oTips()
@@ -260,14 +261,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Clubs,
                 //perk 1
-                Perks.PerkType.ClosingTheGap,
-                Perks.PerkType.BlastWave,
+                PerkMan.PerkType.ClosingTheGap,
+                PerkMan.PerkType.BlastWave,
                 //perk 2
-                Perks.PerkType.Mjolnir,
-                Perks.PerkType.GiantSmash,
+                PerkMan.PerkType.Mjolnir,
+                PerkMan.PerkType.GiantSmash,
                 //perk 3
-                Perks.PerkType.LogHorizon,
-                Perks.PerkType.PlusUltra);
+                PerkMan.PerkType.LogHorizon,
+                PerkMan.PerkType.PlusUltra);
         }
 
         public override void oTips()
@@ -349,14 +350,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Unarmed,
                 //perk 1
-                Perks.PerkType.IronSkin,
-                Perks.PerkType.PressurePoints,
+                PerkMan.PerkType.IronSkin,
+                PerkMan.PerkType.PressurePoints,
                 //perk 2
-                Perks.PerkType.LightningReflex,
-                Perks.PerkType.Worldly,
+                PerkMan.PerkType.LightningReflex,
+                PerkMan.PerkType.Worldly,
                 //perk 3
-                Perks.PerkType.AttackOfOpportunity,
-                Perks.PerkType.FalconKick);
+                PerkMan.PerkType.AttackOfOpportunity,
+                PerkMan.PerkType.FalconKick);
         }
 
         public override void oTips()
@@ -438,14 +439,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Knives,
                 //perk 1
-                Perks.PerkType.Deadeye,
-                Perks.PerkType.DisarmingDefense,
+                PerkMan.PerkType.Deadeye,
+                PerkMan.PerkType.DisarmingDefense,
                 //perk 2
-                Perks.PerkType.LokisGift,
-                Perks.PerkType.GutAndRun,
+                PerkMan.PerkType.LokisGift,
+                PerkMan.PerkType.GutAndRun,
                 //perk 3
-                Perks.PerkType.SleightOfHand,
-                Perks.PerkType.Iai);
+                PerkMan.PerkType.SleightOfHand,
+                PerkMan.PerkType.Iai);
         }
 
         public override void oTips()
@@ -532,14 +533,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Polearms,
                 //perk 1
-                Perks.PerkType.LivingStone,
-                Perks.PerkType.Jotunn,
+                PerkMan.PerkType.LivingStone,
+                PerkMan.PerkType.Jotunn,
                 //perk 2
-                Perks.PerkType.Ymir,
-                Perks.PerkType.BigStick,
+                PerkMan.PerkType.Ymir,
+                PerkMan.PerkType.BigStick,
                 //perk 3
-                Perks.PerkType.Asguard,
-                Perks.PerkType.MassiveStature);
+                PerkMan.PerkType.Asguard,
+                PerkMan.PerkType.MassiveStature);
         }
 
         public override void oTips()
@@ -627,14 +628,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Spears,
                 //perk 1
-                Perks.PerkType.Boomerang,
-                Perks.PerkType.FishersBoon,
+                PerkMan.PerkType.Boomerang,
+                PerkMan.PerkType.FishersBoon,
                 //perk 2
-                Perks.PerkType.Spearit,
-                Perks.PerkType.CouchedLance,
+                PerkMan.PerkType.Spearit,
+                PerkMan.PerkType.CouchedLance,
                 //perk 3
-                Perks.PerkType.Einherjar,
-                Perks.PerkType.ValkyrieFlight);
+                PerkMan.PerkType.Einherjar,
+                PerkMan.PerkType.ValkyrieFlight);
         }
 
         public override void oTips()
@@ -719,14 +720,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Swords,
                 //perk 1
-                Perks.PerkType.WarriorOfLight,
-                Perks.PerkType.Meditation,
+                PerkMan.PerkType.WarriorOfLight,
+                PerkMan.PerkType.Meditation,
                 //perk 2
-                Perks.PerkType.Toxic,
-                Perks.PerkType.CriticalBlow,
+                PerkMan.PerkType.Toxic,
+                PerkMan.PerkType.CriticalBlow,
                 //perk 3
-                Perks.PerkType.PerfectCombo,
-                Perks.PerkType.GodSlayingStrike);
+                PerkMan.PerkType.PerfectCombo,
+                PerkMan.PerkType.GodSlayingStrike);
         }
 
         public override void oTips()
@@ -818,14 +819,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(SkillMan.Agriculture,
                 //perk 1
-                Perks.PerkType.GreenThumb,
-                Perks.PerkType.SoilMixing,
+                PerkMan.PerkType.GreenThumb,
+                PerkMan.PerkType.SoilMixing,
                 //perk 2
-                Perks.PerkType.Botany,
-                Perks.PerkType.SeedSatchel,
+                PerkMan.PerkType.Botany,
+                PerkMan.PerkType.SeedSatchel,
                 //perk 3
-                Perks.PerkType.Harvester,
-                Perks.PerkType.Seeding);
+                PerkMan.PerkType.Harvester,
+                PerkMan.PerkType.Seeding);
         }
 
         public override void oTips()
@@ -905,14 +906,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Blocking,
                 //perk 1
-                Perks.PerkType.TitanEndurance,
-                Perks.PerkType.SpikedShield,
+                PerkMan.PerkType.TitanEndurance,
+                PerkMan.PerkType.SpikedShield,
                 //perk 2
-                Perks.PerkType.BlockExpert,
-                Perks.PerkType.TitanStrength,
+                PerkMan.PerkType.BlockExpert,
+                PerkMan.PerkType.TitanStrength,
                 //perk 3
-                Perks.PerkType.BlackFlash,
-                Perks.PerkType.DidntHurt);
+                PerkMan.PerkType.BlackFlash,
+                PerkMan.PerkType.DidntHurt);
         }
 
         public override void oTips()
@@ -987,14 +988,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(SkillMan.Building,
                 //perk 1
-                Perks.PerkType.Engineer,
-                Perks.PerkType.Superfuel,
+                PerkMan.PerkType.Engineer,
+                PerkMan.PerkType.Superfuel,
                 //perk 2
-                Perks.PerkType.Nailgun,
-                Perks.PerkType.Warehousing,
+                PerkMan.PerkType.Nailgun,
+                PerkMan.PerkType.Warehousing,
                 //perk 3
-                Perks.PerkType.Trapmaster,
-                Perks.PerkType.Efficiency);
+                PerkMan.PerkType.Trapmaster,
+                PerkMan.PerkType.Efficiency);
         }
 
         public override void oTips()
@@ -1065,14 +1066,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(SkillMan.Cooking,
                 //perk 1
-                Perks.PerkType.SpicySweet,
-                Perks.PerkType.TasteTesting,
+                PerkMan.PerkType.SpicySweet,
+                PerkMan.PerkType.TasteTesting,
                 //perk 2
-                Perks.PerkType.Nutrition,
-                Perks.PerkType.KeenNose,
+                PerkMan.PerkType.Nutrition,
+                PerkMan.PerkType.KeenNose,
                 //perk 3
-                Perks.PerkType.SpiceMaster,
-                Perks.PerkType.FiveStarChef);
+                PerkMan.PerkType.SpiceMaster,
+                PerkMan.PerkType.FiveStarChef);
         }
 
         public override void oTips()
@@ -1164,14 +1165,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Jump,
                 //perk 1
-                Perks.PerkType.GoombaStomp,
-                Perks.PerkType.MeteorDrop,
+                PerkMan.PerkType.GoombaStomp,
+                PerkMan.PerkType.MeteorDrop,
                 //perk 2
-                Perks.PerkType.AirStep,
-                Perks.PerkType.MarketGardener,
+                PerkMan.PerkType.AirStep,
+                PerkMan.PerkType.MarketGardener,
                 //perk 3
-                Perks.PerkType.HeartOfTheMonkey,
-                Perks.PerkType.OdinJump);
+                PerkMan.PerkType.HeartOfTheMonkey,
+                PerkMan.PerkType.OdinJump);
         }
 
         public override void oTips()
@@ -1251,14 +1252,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Pickaxes,
                 //perk 1
-                Perks.PerkType.TrenchDigger,
-                Perks.PerkType.Magnetic,
+                PerkMan.PerkType.TrenchDigger,
+                PerkMan.PerkType.Magnetic,
                 //perk 2
-                Perks.PerkType.Fragmentation,
-                Perks.PerkType.Stretch,
+                PerkMan.PerkType.Fragmentation,
+                PerkMan.PerkType.Stretch,
                 //perk 3
-                Perks.PerkType.LodeBearingStone,
-                Perks.PerkType.RockHauler);
+                PerkMan.PerkType.LodeBearingStone,
+                PerkMan.PerkType.RockHauler);
         }
 
         public override void oTips()
@@ -1387,14 +1388,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Run,
                 //perk 1
-                Perks.PerkType.HermesBoots,
-                Perks.PerkType.Tackle,
+                PerkMan.PerkType.HermesBoots,
+                PerkMan.PerkType.Tackle,
                 //perk 2
-                Perks.PerkType.BreakMyStride,
-                Perks.PerkType.MountainGoat,
+                PerkMan.PerkType.BreakMyStride,
+                PerkMan.PerkType.MountainGoat,
                 //perk 3
-                Perks.PerkType.Juggernaut,
-                Perks.PerkType.WaterRunning);
+                PerkMan.PerkType.Juggernaut,
+                PerkMan.PerkType.WaterRunning);
         }
 
         public override void oTips()
@@ -1507,14 +1508,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(SkillMan.Sailing,
                 //perk 1
-                Perks.PerkType.RockDodger,
-                Perks.PerkType.FirstMate,
+                PerkMan.PerkType.RockDodger,
+                PerkMan.PerkType.FirstMate,
                 //perk 2
-                Perks.PerkType.SeaShanty,
-                Perks.PerkType.ManOverboard,
+                PerkMan.PerkType.SeaShanty,
+                PerkMan.PerkType.ManOverboard,
                 //perk 3
-                Perks.PerkType.RammingSpeed,
-                Perks.PerkType.CoupDeBurst);
+                PerkMan.PerkType.RammingSpeed,
+                PerkMan.PerkType.CoupDeBurst);
         }
 
         public override void oTips()
@@ -1597,14 +1598,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Sneak,
                 //perk 1
-                Perks.PerkType.SilentSprinter,
-                Perks.PerkType.VitalStudy,
+                PerkMan.PerkType.SilentSprinter,
+                PerkMan.PerkType.VitalStudy,
                 //perk 2
-                Perks.PerkType.CloakOfShadows,
-                Perks.PerkType.ESP,
+                PerkMan.PerkType.CloakOfShadows,
+                PerkMan.PerkType.ESP,
                 //perk 3
-                Perks.PerkType.HideInPlainSight,
-                Perks.PerkType.SmokeBomb);
+                PerkMan.PerkType.HideInPlainSight,
+                PerkMan.PerkType.SmokeBomb);
         }
 
         public override void oTips()
@@ -1684,14 +1685,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Swim,
                 //perk 1
-                Perks.PerkType.JoJoPose,
-                Perks.PerkType.Butterfly,
+                PerkMan.PerkType.JoJoPose,
+                PerkMan.PerkType.Butterfly,
                 //perk 2
-                Perks.PerkType.Hydrodynamic,
-                Perks.PerkType.MarathonSwimmer,
+                PerkMan.PerkType.Hydrodynamic,
+                PerkMan.PerkType.MarathonSwimmer,
                 //perk 3
-                Perks.PerkType.Aquaman,
-                Perks.PerkType.AlwaysPrepared);
+                PerkMan.PerkType.Aquaman,
+                PerkMan.PerkType.AlwaysPrepared);
         }
 
         public override void oTips()
@@ -1765,14 +1766,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.WoodCutting,
                 //perk 1
-                Perks.PerkType.HeartOfTheForest,
-                Perks.PerkType.ControlledDemo,
+                PerkMan.PerkType.HeartOfTheForest,
+                PerkMan.PerkType.ControlledDemo,
                 //perk 2
-                Perks.PerkType.ResponsibleLumberjack,
-                Perks.PerkType.MasterOfTheLog,
+                PerkMan.PerkType.ResponsibleLumberjack,
+                PerkMan.PerkType.MasterOfTheLog,
                 //perk 3
-                Perks.PerkType.ShatterStrike,
-                Perks.PerkType.PandemoniumPoint);
+                PerkMan.PerkType.ShatterStrike,
+                PerkMan.PerkType.PandemoniumPoint);
         }
 
         public override void oTips()

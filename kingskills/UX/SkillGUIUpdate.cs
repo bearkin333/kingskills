@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using kingskills.Perks;
 
 namespace kingskills.UX
 {
@@ -267,7 +268,7 @@ namespace kingskills.UX
             }
 
 
-            if (Perks.IsSkillAscended(skill))
+            if (PerkMan.IsSkillAscended(skill))
             {
                 SkillGUI.RPAscendedText.GetComponent<Text>().text = "Ascended";
             }
@@ -278,7 +279,7 @@ namespace kingskills.UX
 
             //Jotunn.Logger.LogMessage($"{skill} is ascendable: {AscensionManager.IsAscendable(skill)}");
             
-            if (AscensionManager.IsAscendable(skill))
+            if (AscensionMan.IsAscendable(skill))
             {
                 SkillGUI.RPAscendedBtn.SetActive(true);
                 Player.m_localPlayer.ShowTutorial("kingskills_ascend");

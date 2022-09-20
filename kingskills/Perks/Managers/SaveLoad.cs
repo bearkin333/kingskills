@@ -6,8 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using kingskills.Patches;
 
-namespace kingskills
+namespace kingskills.Perks
 {
     [HarmonyPatch(typeof(PlayerProfile))]
     public static class SaveLoad
@@ -32,17 +33,17 @@ namespace kingskills
             //Jotunn.Logger.LogWarning($"old save path is {oldSavePath}\n now saving in {newSavePath}");
 
             //Write all of our parseable information to a package
-            if (Perks.loaded)
+            if (PerkMan.loaded)
             {
                 Dictionary<int, bool> savePerkFlags = new Dictionary<int, bool>();
                 Dictionary<int, bool> saveSkillAscendedFlags = new Dictionary<int, bool>();
 
-                foreach (KeyValuePair<Perks.PerkType, bool> datum in Perks.perkFlags)
+                foreach (KeyValuePair<PerkMan.PerkType, bool> datum in PerkMan.perkLearned)
                 {
                     savePerkFlags.Add((int)datum.Key, datum.Value);
                 }
 
-                foreach (KeyValuePair<Skills.SkillType, bool> datum in Perks.skillAscendedFlags)
+                foreach (KeyValuePair<Skills.SkillType, bool> datum in PerkMan.skillAscended)
                 {
                     saveSkillAscendedFlags.Add((int)datum.Key, datum.Value);
                 }
@@ -86,7 +87,7 @@ namespace kingskills
         [HarmonyPostfix]
         public static void LoadKSPerks(PlayerProfile __instance)
         {
-            Perks.Awake();
+            PerkMan.Awake();
 
             try
             {
@@ -108,23 +109,23 @@ namespace kingskills
 
                 foreach (KeyValuePair<int, bool> datum in loadPerkFlags)
                 {
-                    Perks.perkFlags.Add((Perks.PerkType)datum.Key, datum.Value);
+                    PerkMan.perkLearned.Add((PerkMan.PerkType)datum.Key, datum.Value);
                 }
                 foreach (KeyValuePair<int, bool> datum in loadSkillAscendedFlags)
                 {
-                    Perks.skillAscendedFlags[(Skills.SkillType)datum.Key] = datum.Value;
+                    PerkMan.skillAscended[(Skills.SkillType)datum.Key] = datum.Value;
                     //Jotunn.Logger.LogMessage($"Set {((Skills.SkillType)datum.Key).ToString()} to {datum.Value}");
                 }
 
-                Perks.UpdatePerkList();
-                AscensionManager.InitAscendables();
+                PerkMan.UpdatePerkList();
+                AscensionMan.InitAscendables();
             }
             catch
             {
                 Jotunn.Logger.LogWarning("Didn't load from King Skills");
                 return;
             }
-            Perks.UpdatePerkList();
+            PerkMan.UpdatePerkList();
 
         }
 

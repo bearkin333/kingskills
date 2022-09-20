@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
 
-namespace kingskills
+namespace kingskills.Patches
 {
     [HarmonyPatch(typeof(Projectile))]
     class ProjectilePatch

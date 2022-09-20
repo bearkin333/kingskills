@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using kingskills.Perks;
 
-namespace kingskills
+namespace kingskills.Patches
 {
     [HarmonyPatch(typeof(Player))]
     class StatsUpdate
@@ -154,13 +155,13 @@ namespace kingskills
         }
         public static void CheckMaxLevel(Player player)
         {
-            Dictionary<Skills.SkillType, bool> temp = new Dictionary<Skills.SkillType, bool>(Perks.skillAscendedFlags);
+            Dictionary<Skills.SkillType, bool> temp = new Dictionary<Skills.SkillType, bool>(PerkMan.skillAscended);
             foreach (KeyValuePair<Skills.SkillType, bool> skillAcension in temp)
             {
-                if (!Perks.skillAscendedFlags[skillAcension.Key] && 
+                if (!PerkMan.skillAscended[skillAcension.Key] && 
                     (player.GetSkills().GetSkillLevel(skillAcension.Key) >= CFG.MaxSkillLevel.Value))
                 {
-                    AscensionManager.isAscendable[skillAcension.Key] = true;
+                    AscensionMan.isAscendable[skillAcension.Key] = true;
                     //Jotunn.Logger.LogMessage("Regular update found a maxed skill and set it to be ascendable");
                 }
             }

@@ -34,11 +34,11 @@ namespace kingskills.Weapons
             {
                 Player player = (Player)charac;
 
-                Jotunn.Logger.LogMessage($"This attack begins as having {hit.m_damage.GetTotalDamage()} damage");
+                //Jotunn.Logger.LogMessage($"This attack begins as having {hit.m_damage.GetTotalDamage()} damage");
                 //First, we add the randomness back in
                 hit.m_damage.Modify(GetRandomAttackMod());
 
-                Jotunn.Logger.LogMessage($"After randomness, it's {hit.m_damage.GetTotalDamage()} damage");
+                //Jotunn.Logger.LogMessage($"After randomness, it's {hit.m_damage.GetTotalDamage()} damage");
                 //Now, we increase damage based on what kind of attack it is.
                 //Their solution was more elegant, but unfortunately, if we want to have any
                 //attack bonus be different from another one, we're gonna have to iterate through all
@@ -84,7 +84,7 @@ namespace kingskills.Weapons
                     }
                 }
 
-                Jotunn.Logger.LogMessage($"Now, thanks to the skill, it's {hit.m_damage.GetTotalDamage()} damage");
+                //Jotunn.Logger.LogMessage($"Now, thanks to the skill, it's {hit.m_damage.GetTotalDamage()} damage");
 
                 //Jotunn.Logger.LogMessage($"Sneak attack bonus was {hit.m_backstabBonus}");
                 //Increase sneak attack damage for knife skill
@@ -115,7 +115,7 @@ namespace kingskills.Weapons
                     hit.m_staggerMultiplier *=
                         CFG.GetClubStaggerMult(player.GetSkillFactor(Skills.SkillType.Clubs));
                 }
-                Jotunn.Logger.LogMessage($"Now, thanks to the b/p/s bonuses, the damage is {hit.m_damage.GetTotalDamage()}");
+                //Jotunn.Logger.LogMessage($"Now, thanks to the b/p/s bonuses, the damage is {hit.m_damage.GetTotalDamage()}");
 
                 //Jotunn.Logger.LogMessage($"To {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
 

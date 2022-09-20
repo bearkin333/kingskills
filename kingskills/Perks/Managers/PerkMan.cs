@@ -7,50 +7,55 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace kingskills
+namespace kingskills.Perks
 {
-    public static class Perks
+    public static class PerkMan
     {
-        public static Dictionary<PerkType, bool> perkFlags;
-        public static Dictionary<Skills.SkillType, bool> skillAscendedFlags;
+        public static Dictionary<PerkType, bool> perkLearned;
+        public static Dictionary<PerkType, bool> perkDeactive;
+        public static Dictionary<Skills.SkillType, bool> skillAscended;
         public static Dictionary<PerkType, Perk> perkList;
         public static bool loaded = false;
 
         public static void Awake()
         {
-            perkFlags = new Dictionary<PerkType, bool>();
-            skillAscendedFlags = new Dictionary<Skills.SkillType, bool>();
+            perkLearned = new Dictionary<PerkType, bool>();
+            perkDeactive = new Dictionary<PerkType, bool>();
+            skillAscended = new Dictionary<Skills.SkillType, bool>();
             InitSkillAscensions();
             InitPerkList();
 
+            //Jotunn.Logger.LogMessage("Awakened perk lists ");
             loaded = true;
         }
         public static void InitSkillAscensions()
         {
-            skillAscendedFlags.Add(SkillMan.Agriculture, false);
-            skillAscendedFlags.Add(Skills.SkillType.Axes, false);
-            skillAscendedFlags.Add(Skills.SkillType.Blocking, false);
-            skillAscendedFlags.Add(Skills.SkillType.Bows, false);
-            skillAscendedFlags.Add(SkillMan.Building, false);
-            skillAscendedFlags.Add(Skills.SkillType.Clubs, false);
-            skillAscendedFlags.Add(SkillMan.Cooking, false);
-            skillAscendedFlags.Add(Skills.SkillType.Jump, false);
-            skillAscendedFlags.Add(Skills.SkillType.Knives, false);
-            skillAscendedFlags.Add(Skills.SkillType.Pickaxes, false);
-            skillAscendedFlags.Add(Skills.SkillType.Polearms, false);
-            skillAscendedFlags.Add(Skills.SkillType.Run, false);
-            skillAscendedFlags.Add(SkillMan.Sailing, false);
-            skillAscendedFlags.Add(Skills.SkillType.Sneak, false);
-            skillAscendedFlags.Add(Skills.SkillType.Spears, false);
-            skillAscendedFlags.Add(Skills.SkillType.Swim, false);
-            skillAscendedFlags.Add(Skills.SkillType.Swords, false);
-            skillAscendedFlags.Add(Skills.SkillType.Unarmed, false);
-            skillAscendedFlags.Add(Skills.SkillType.WoodCutting, false);
+            skillAscended.Add(SkillMan.Agriculture, false);
+            skillAscended.Add(Skills.SkillType.Axes, false);
+            skillAscended.Add(Skills.SkillType.Blocking, false);
+            skillAscended.Add(Skills.SkillType.Bows, false);
+            skillAscended.Add(SkillMan.Building, false);
+            skillAscended.Add(Skills.SkillType.Clubs, false);
+            skillAscended.Add(SkillMan.Cooking, false);
+            skillAscended.Add(Skills.SkillType.Jump, false);
+            skillAscended.Add(Skills.SkillType.Knives, false);
+            skillAscended.Add(Skills.SkillType.Pickaxes, false);
+            skillAscended.Add(Skills.SkillType.Polearms, false);
+            skillAscended.Add(Skills.SkillType.Run, false);
+            skillAscended.Add(SkillMan.Sailing, false);
+            skillAscended.Add(Skills.SkillType.Sneak, false);
+            skillAscended.Add(Skills.SkillType.Spears, false);
+            skillAscended.Add(Skills.SkillType.Swim, false);
+            skillAscended.Add(Skills.SkillType.Swords, false);
+            skillAscended.Add(Skills.SkillType.Unarmed, false);
+            skillAscended.Add(Skills.SkillType.WoodCutting, false);
         }
 
         public static void InitPerkList()
         {
-            perkList = new Dictionary<PerkType, Perk>();
+            if (perkList == null) perkList = new Dictionary<PerkType, Perk>();
+            else perkList.Clear();
+
             Perk perk;
 
 
@@ -456,12 +461,12 @@ namespace kingskills
 
         public static void UpdatePerkList()
         {
-            foreach (KeyValuePair<PerkType, bool> flaggedPerk in perkFlags)
+            foreach (KeyValuePair<PerkType, bool> activePerk in perkLearned)
             {
-                if (flaggedPerk.Value)
+                if (activePerk.Value)
                 {
-                    perkList[flaggedPerk.Key].learned = true;
-                    perkList[flaggedPerk.Key].learnable = false;
+                    perkList[activePerk.Key].learned = true;
+                    perkList[activePerk.Key].learnable = false;
                     //Jotunn.Logger.LogMessage($"Freshly loaded, just set perk {flaggedPerk.Key} to learned and unlearnable because it was in the data");
                 }
             }
@@ -472,13 +477,33 @@ namespace kingskills
         {
             if (loaded)
             {
-                bool contains = skillAscendedFlags.TryGetValue(skill, out bool value);
-                if (contains) return value;
-                else return contains;
+                if (skillAscended.TryGetValue(skill, out bool value)) 
+                    return value;
+                return false;
             }
             else
             {
                 Jotunn.Logger.LogWarning("skill ascensions haven't been loaded!");
+                return false;
+            }
+        }
+
+        public static bool IsPerkActive(PerkType perk)
+        {
+            if (loaded)
+            {
+                if (perkLearned.TryGetValue(perk, out bool value))
+                {
+                    if (perkDeactive.TryGetValue(perk, out bool deactiveValue)) 
+                        return value && !deactiveValue;
+
+                    return value;
+                }
+                return false;
+            }
+            else
+            {
+                Jotunn.Logger.LogWarning("perks haven't been loaded!");
                 return false;
             }
         }
@@ -546,7 +571,7 @@ namespace kingskills
         public static void ResetAllPerks()
         {
             //Jotunn.Logger.LogMessage($"Every perk in the perklist is now learnable and not learned");
-            foreach (KeyValuePair<Perks.PerkType, Perk> perk in perkList)
+            foreach (KeyValuePair<PerkType, Perk> perk in perkList)
             {
                 perk.Value.learnable = true;
                 perk.Value.learned = false;
@@ -555,7 +580,7 @@ namespace kingskills
 
         public static void ResetAscensions()
         {
-            skillAscendedFlags = new Dictionary<Skills.SkillType, bool>();
+            skillAscended = new Dictionary<Skills.SkillType, bool>();
             InitSkillAscensions();
         }
     }
@@ -567,10 +592,10 @@ namespace kingskills
         public string tooltip;
         public bool learned;
         public bool learnable;
-        public Perks.PerkType type;
+        public PerkMan.PerkType type;
         public Sprite icon;
 
-        public Perk(string nName, string nDescription, string nTooltip, Perks.PerkType nType, string nIcon)
+        public Perk(string nName, string nDescription, string nTooltip, PerkMan.PerkType nType, string nIcon)
         {
             name = nName;
             description = nDescription;

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using kingskills.Perks;
 
 namespace kingskills.UX
 {
@@ -682,7 +683,7 @@ namespace kingskills.UX
 
             // Add a listener to the button to close the panel again
             Button button = RPAscendedBtn.GetComponent<Button>();
-            button.onClick.AddListener(AscensionManager.OnAscendButton);
+            button.onClick.AddListener(AscensionMan.OnAscendButton);
             RPAscendedBtn.SetActive(false);
 
             RPAscendedText.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;

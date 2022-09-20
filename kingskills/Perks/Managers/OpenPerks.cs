@@ -8,8 +8,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Jotunn.Managers;
+using kingskills.UX;
 
-namespace kingskills.UX
+namespace kingskills.Perks
 {
 
     public class OpenPerks
@@ -66,8 +67,8 @@ namespace kingskills.UX
 
             openedPerks[perk].learned = true;
             openedPerks[perk].learnable = false;
-            //Jotunn.Logger.LogMessage($"{openedPerks[perk].name} just got learned, making it now unlearnable.");
-            Perks.perkFlags.Add(openedPerks[perk].type, true);
+            Jotunn.Logger.LogMessage($"{openedPerks[perk].name} just got learned, making it now unlearnable.");
+            PerkMan.perkLearned.Add(openedPerks[perk].type, true);
 
             UpdateLearnables();
             SkillGUIUpdate.GUICheck();
@@ -77,7 +78,7 @@ namespace kingskills.UX
         public static void UpdateLearnables()
         {
             if (openedPerks == null) return;
-            bool ascended = Perks.IsSkillAscended(openSkill);
+            bool ascended = PerkMan.IsSkillAscended(openSkill);
 
 
             if (openedPerks[0].learned)
@@ -175,21 +176,21 @@ namespace kingskills.UX
 
 
         public static void OpenPerksByType(Skills.SkillType skill,
-            Perks.PerkType perk1a, Perks.PerkType perk1b,
-            Perks.PerkType perk2a, Perks.PerkType perk2b,
-            Perks.PerkType perk3a, Perks.PerkType perk3b)
+            PerkMan.PerkType perk1a, PerkMan.PerkType perk1b,
+            PerkMan.PerkType perk2a, PerkMan.PerkType perk2b,
+            PerkMan.PerkType perk3a, PerkMan.PerkType perk3b)
         {
             openSkill = skill;
             skillLevel = Player.m_localPlayer.GetSkillFactor(openSkill);
             if (openedPerks == null) Init();
 
             openedPerks.Clear();
-            openedPerks.Add(Perks.perkList[perk1a]);
-            openedPerks.Add(Perks.perkList[perk1b]);
-            openedPerks.Add(Perks.perkList[perk2a]);
-            openedPerks.Add(Perks.perkList[perk2b]);
-            openedPerks.Add(Perks.perkList[perk3a]);
-            openedPerks.Add(Perks.perkList[perk3b]);
+            openedPerks.Add(PerkMan.perkList[perk1a]);
+            openedPerks.Add(PerkMan.perkList[perk1b]);
+            openedPerks.Add(PerkMan.perkList[perk2a]);
+            openedPerks.Add(PerkMan.perkList[perk2b]);
+            openedPerks.Add(PerkMan.perkList[perk3a]);
+            openedPerks.Add(PerkMan.perkList[perk3b]);
 
             perkClickable.Clear();
             perkClickable.Add(true);
@@ -225,7 +226,7 @@ namespace kingskills.UX
             GameObject tint = SkillGUI.RPPerkBoxes[perkBoxString + "Tint"];
             Image tintImg = tint.GetComponent<Image>();
 
-            if (Perks.IsSkillAscended(openSkill) && openedPerks[perk].learned)
+            if (PerkMan.IsSkillAscended(openSkill) && openedPerks[perk].learned)
             {
                 perkClickable[perk] = false;
                 tintImg.enabled = false;

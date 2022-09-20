@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using UnityEngine;
 
-namespace kingskills
+namespace kingskills.Patches
 {
     [HarmonyPatch(typeof(Player))]
     class MovePatch

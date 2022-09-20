@@ -5,16 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace kingskills
+namespace kingskills.Perks
 {
-    class AscensionManager
+    class AscensionMan
     {
         public static Dictionary<Skills.SkillType, bool> isAscendable;
 
         public static void InitAscendables()
         {
             Init();
-            foreach (KeyValuePair<Skills.SkillType, bool> ascendedSkill in Perks.skillAscendedFlags)
+            foreach (KeyValuePair<Skills.SkillType, bool> ascendedSkill in PerkMan.skillAscended)
             {
                 isAscendable.Add(ascendedSkill.Key, false);
             }
@@ -36,10 +36,10 @@ namespace kingskills
         {
             Skills.SkillType skill = AscendConfirmGUI.skill;
 
-            if (Perks.skillAscendedFlags.ContainsKey(skill))
-                Perks.skillAscendedFlags[skill] = true;
+            if (PerkMan.skillAscended.ContainsKey(skill))
+                PerkMan.skillAscended[skill] = true;
             else
-                Perks.skillAscendedFlags.Add(skill, true);
+                PerkMan.skillAscended.Add(skill, true);
 
             if (isAscendable.ContainsKey(skill))
                 isAscendable[skill] = false;

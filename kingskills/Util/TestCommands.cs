@@ -5,6 +5,8 @@ using BepInEx;
 using Jotunn.Entities;
 using Jotunn.Managers;
 using kingskills;
+using kingskills.Perks;
+using kingskills.Patches;
 
 namespace kingskills
 {
@@ -59,7 +61,7 @@ namespace kingskills
                 return;
             }
 
-            Perks.ResetAllPerks();
+            PerkMan.ResetAllPerks();
         }
     }
 
@@ -76,7 +78,7 @@ namespace kingskills
                 return;
             }
 
-            Perks.ResetAscensions();
+            PerkMan.ResetAscensions();
         }
     }
 

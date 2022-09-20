@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using kingskills.Perks;
 
 namespace kingskills.UX
 {
@@ -145,7 +146,7 @@ namespace kingskills.UX
 
         public static void OnConfirmClick()
         {
-            AscensionManager.Ascend();
+            AscensionMan.Ascend();
             CloseAscendWindow();
         }
 

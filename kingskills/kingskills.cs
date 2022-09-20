@@ -12,6 +12,7 @@ using Jotunn.Entities;
 using Jotunn.Managers;
 using kingskills.KSkills;
 using kingskills.UX;
+using kingskills.Perks;
 using System.IO;
 using UnityEngine;
 
