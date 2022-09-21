@@ -17,31 +17,24 @@ namespace kingskills.Weapons
         public static bool meleeIgnore = false;
         public static bool ksOverride = false;
 
-        [HarmonyPatch(typeof(Aoe), nameof(Aoe.OnHit))]
-        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Aoe), nameof(Aoe.OnHit))] [HarmonyPrefix]
         public static void AoeOnHitIgnore() => aoeIgnore = true;
-        [HarmonyPatch(typeof(Aoe), nameof(Aoe.OnHit))]
-        [HarmonyFinalizer]
+        [HarmonyPatch(typeof(Aoe), nameof(Aoe.OnHit))] [HarmonyFinalizer]
         public static void AoeCleanup() => aoeIgnore = false;
 
-        [HarmonyPatch(typeof(Attack), nameof(Attack.DoAreaAttack))]
-        [HarmonyPrefix]
+
+        [HarmonyPatch(typeof(Attack), nameof(Attack.DoAreaAttack))] [HarmonyPrefix]
         public static void AreaDoIgnore() => areaIgnore = true;
-        [HarmonyPatch(typeof(Attack), nameof(Attack.DoAreaAttack))]
-        [HarmonyFinalizer]
+        [HarmonyPatch(typeof(Attack), nameof(Attack.DoAreaAttack))] [HarmonyFinalizer]
         public static void AreaCleanup() => areaIgnore = false;
 
-        [HarmonyPatch(typeof(Attack), nameof(Attack.DoMeleeAttack))]
-        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Attack), nameof(Attack.DoMeleeAttack))] [HarmonyPrefix]
         public static void MeleeDoIgnore() => meleeIgnore = true;
-        [HarmonyPatch(typeof(Attack), nameof(Attack.DoMeleeAttack))]
-        [HarmonyFinalizer]
+        [HarmonyPatch(typeof(Attack), nameof(Attack.DoMeleeAttack))] [HarmonyFinalizer]
         public static void MeleeCleanup() => meleeIgnore = false;
 
-        public static void DoNotIgnore()
-        {
+        public static void DoNotIgnore() =>
             ksOverride = true;
-        }
 
 
         [HarmonyPatch(typeof(Projectile),nameof(Projectile.OnHit))]

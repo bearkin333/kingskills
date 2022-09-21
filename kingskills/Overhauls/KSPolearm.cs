@@ -57,7 +57,7 @@ namespace kingskills.Patches
                 (__instance.IsBlocking() && hit.m_blockable)) 
                 return;
             Character attacker = hit.GetAttacker();
-            if ((hit.HaveAttacker() && attacker == null) || 
+            if (!hit.HaveAttacker() || attacker == null || 
                 !__instance.IsPVPEnabled() && attacker != null && attacker.IsPlayer())
                 return;
 

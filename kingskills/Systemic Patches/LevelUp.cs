@@ -35,7 +35,7 @@ namespace kingskills.Patches
 
         [HarmonyPatch(nameof(Player.OnSkillLevelup))]
         [HarmonyPostfix]
-        public static void SkillLevelup(Player __instance, Skills.SkillType skill)
+        public static void KSLevelupStatUpdate(Player __instance, Skills.SkillType skill)
         {
             StatsUpdate.UpdateStats(__instance, true, skill);
         }
@@ -82,27 +82,6 @@ namespace kingskills.Patches
             return false;
         }
 
-        public static void BXP(Player player, Skills.SkillType skill, float number){
-            if (!CFG.IsSkillActive(skill)) return;
-
-            player.m_nview.GetZDO().Set("BXP", true);
-            WeaponRaiseSkillTakeover.DoNotIgnore();
-
-            player.RaiseSkill(skill, number);
-
-            player.m_nview.GetZDO().Set("BXP", false);
-        }
-
-        public static void CustomRaiseSkill(Player player, Skills.SkillType skill, float value, bool displayEXP = true)
-        {
-            player.m_nview.GetZDO().Set("Display", displayEXP);
-
-            player.RaiseSkill(skill, value);
-
-            player.m_nview.GetZDO().Set("Display", true);
-        }
-
-
         public static bool KingSkillRaise(Skills.Skill skill, Player player, float factor)
         {
             if (skill.m_level >= CFG.MaxSkillLevel.Value)
@@ -117,10 +96,11 @@ namespace kingskills.Patches
             {
                 skill.m_level += 1f;
                 skill.m_level = Mathf.Clamp(skill.m_level, 0f, CFG.MaxSkillLevel.Value);
+                skill.m_level = Mathf.Floor(skill.m_level);
                 LevelUpPing(player, skill);
 
                 skill.m_accumulator -= nextLevelRequirement;
-                if (skill.m_level >= CFG.MaxSkillLevel.Value)
+                if (Mathf.Floor(skill.m_level) >= CFG.MaxSkillLevel.Value)
                 {
                     OnMaxLevel(skillT);
                     player.Message(MessageHud.MessageType.Center, "MAX LEVEL!");
@@ -166,6 +146,29 @@ namespace kingskills.Patches
             return false;
         }
 
+
+        public static void BXP(Player player, Skills.SkillType skill, float number)
+        {
+            if (!CFG.IsSkillActive(skill)) return;
+
+            player.m_nview.GetZDO().Set("BXP", true);
+            WeaponRaiseSkillTakeover.DoNotIgnore();
+
+            player.RaiseSkill(skill, number);
+
+            player.m_nview.GetZDO().Set("BXP", false);
+        }
+
+        public static void CustomRaiseSkill(Player player, Skills.SkillType skill, float value, bool displayEXP = true)
+        {
+            player.m_nview.GetZDO().Set("Display", displayEXP);
+
+            player.RaiseSkill(skill, value);
+
+            player.m_nview.GetZDO().Set("Display", true);
+        }
+
+
         public static void OnMaxLevel(Skills.SkillType skill)
         {
             if (!AscensionMan.isAscendable.ContainsKey(skill))
@@ -202,13 +205,15 @@ namespace kingskills.Patches
             Skills.SkillType skill = skillS.m_info.m_skill;
             float level = skillS.m_level;
             player.OnSkillLevelup(skill, level);
-            MessageHud.MessageType type = (((int)level != 0) ? MessageHud.MessageType.TopLeft : MessageHud.MessageType.Center);
-            player.Message(type, "$msg_skillup $skill_" + skill.ToString().ToLower() + ": " + (int)skillS.m_level, 0, skillS.m_info.m_icon);
+            MessageHud.MessageType type = (int)level != 0 ? MessageHud.MessageType.TopLeft : MessageHud.MessageType.Center;
+            player.Message(type, "$msg_skillup $skill_" + 
+                CFG.GetNameFromSkill(skillS.m_info.m_skill).ToLower() + ": " + Mathf.Floor(level), 0, skillS.m_info.m_icon);
             Gogan.LogEvent("Game", "Levelup", skill.ToString(), (int)skillS.m_level);
-            if (Mathf.Floor(level) == Mathf.Floor(CFG.PerkOneLVLThreshold.Value) ||
-                Mathf.Floor(level) == Mathf.Floor(CFG.PerkTwoLVLThreshold.Value) ||
-                Mathf.Floor(level) == Mathf.Floor(CFG.PerkThreeLVLThreshold.Value) ||
-                Mathf.Floor(level) == Mathf.Floor(CFG.PerkFourLVLThreshold.Value))
+
+            if (Mathf.Floor(level) == Mathf.Floor(CFG.PerkOneLVLThreshold.Value * CFG.MaxSkillLevel.Value) ||
+                Mathf.Floor(level) == Mathf.Floor(CFG.PerkTwoLVLThreshold.Value * CFG.MaxSkillLevel.Value) ||
+                Mathf.Floor(level) == Mathf.Floor(CFG.PerkThreeLVLThreshold.Value * CFG.MaxSkillLevel.Value) ||
+                Mathf.Floor(level) == Mathf.Floor(CFG.PerkFourLVLThreshold.Value * CFG.MaxSkillLevel.Value))
             {
                 player.Message(MessageHud.MessageType.Center, "Perk unlocked for "+ CFG.GetNameFromSkill(skill) + "!!");
             }

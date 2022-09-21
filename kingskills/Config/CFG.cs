@@ -179,6 +179,9 @@ namespace kingskills
 
         public const string ColorEnd = "</color>";
 
+        public const string ZDOKiller = "Attacking Player";
+        public const string ZDOStaggerFlag = "Player Hit";
+
         #endregion configdef
 
         public static void InitGenericConfigs(ConfigFile cfg)
@@ -600,7 +603,7 @@ namespace kingskills
                     AdminCD("Whether or not to activate king's skills version of the clubs skill", true)); ;
 
             //exp
-            ClubBXPHealthFactor = cfg.Bind("Weapon.BonusExperience", "Club Stagger factor", .1f,
+            ClubBXPHealthFactor = cfg.Bind("Weapon.BonusExperience", "Club Stagger factor", .23f,
                 AdminCD("how much each point of max health is worth in exp when staggering an enemy with clubs"));
 
             //effects
@@ -1386,13 +1389,13 @@ namespace kingskills
             ActiveSkillBuild = cfg.Bind("Generic.Active", "Building", true,
                     AdminCD("Whether or not to allow King's building"));
 
-            BuildXPPerPiece = cfg.Bind("Build.Experience", "Per Piece", .5f,
+            BuildXPPerPiece = cfg.Bind("Build.Experience", "Per Piece", 2.2f,
                     AdminCD("How much experience for placed build piece"));
-            BuildXPRepairMod = cfg.Bind("Build.Experience", "Repair Mod", .05f,
+            BuildXPRepairMod = cfg.Bind("Build.Experience", "Repair Mod", .01f,
                     AdminCD("Amount of experience for each point of repaired damage"));
             BuildXPDamageTakenMod = cfg.Bind("Build.Experience", "Damage Taken Mod", .2f,
                     AdminCD("Amount of experience for each point of damage taken by buildings"));
-            BuildXPDamageDoneMod = cfg.Bind("Build.Experience", "Damage Done Mod", .9f,
+            BuildXPDamageDoneMod = cfg.Bind("Build.Experience", "Damage Done Mod", 1f,
                     AdminCD("Amount of experience for each point of damage done by buildings"));
 
             BuildHealthMin = cfg.Bind("Build.Effect", "Health Min", 0f,
@@ -2431,7 +2434,7 @@ namespace kingskills
                     AdminCD("Whether or not to activate king's skills version of the swim skill", true)); ;
 
             //Swim Experience
-            SwimXPSpeedPercent = cfg.Bind("Swim.Experience", "XP", 10f,
+            SwimXPSpeedPercent = cfg.Bind("Swim.Experience", "XP", 2f,
                 AdminCD("% of swim speed that becomes bonus experience gain"));
 
             //Swim effects
@@ -5730,9 +5733,9 @@ namespace kingskills
 
 
             //Weapon Strike Experience
-            WeaponXPStrikeDamagePercent = cfg.Bind("Experience.Weapons", "XP", 40f,
+            WeaponXPStrikeDamagePercent = cfg.Bind("Experience.Weapons", "XP", 60f,
                 AdminCD("% modifier to overall experience gained from damage.", true));
-            WeaponXPStrikeDamageFactor = cfg.Bind("Experience.Weapons", "XP Factor", .36f,
+            WeaponXPStrikeDamageFactor = cfg.Bind("Experience.Weapons", "XP Factor", .44f,
                 AdminCD("Factor to define the slope of the damage to xp curve. Only change if you know what you're doing.", true));
             WeaponXPStrikeDestructiblePercent = cfg.Bind("Experience.Weapons", "Destructible", 15f,
                 AdminCD("% of experience gained when hit target is non living. Should be lover than 100%", true));
@@ -5743,7 +5746,7 @@ namespace kingskills
             ToolXPStrikeDamagePercent = cfg.Bind("Experience.Tools", "Tool Damage", 55f,
                 AdminCD("% of damage done to resources that becomes experience for gathering skills " +
                 "(Woodcutting, Mining)", true));
-            ToolXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .8f,
+            ToolXPStrikeDamageFactor = cfg.Bind("Experience.Tools", "Tool Damage Factor", .65f,
                 AdminCD("Factor to define the slope of the damage to xp curve. Only change if you know what you're doing.", true));
         }
 
@@ -5831,9 +5834,10 @@ namespace kingskills
         public static Perk GetPerk()
         {
             return new Perk("P",
-                "Allows you to jump one additional time while in the air.",
-                "The laws of physics are nothing to a viking!",
-                Perks.PerkMan.PerkType., "Icons/.png");
+                "",
+                "",
+                Perks.PerkMan.PerkType., "Icons/.png",
+                "");
         }
 
 

@@ -1,9 +1,0 @@
-﻿{
-  "name": "King's Skills",
-  "description": "A total rework of Valheim's skill system by Bearking.'",
-  "version_number": "1.0.0",
-  "website_url": "",
-  "dependencies": [
-    "ValheimModding-Jotunn-2.6.1",
-  ]
-}

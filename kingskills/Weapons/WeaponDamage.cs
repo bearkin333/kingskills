@@ -14,10 +14,9 @@ namespace kingskills.Weapons
     [HarmonyPatch]
     class WeaponDamagePatch
     {
-        [HarmonyPatch(typeof(Character))]
-        [HarmonyPatch(nameof(Character.Damage))]
+        [HarmonyPatch(typeof(Character), nameof(Character.Damage))]
         [HarmonyPrefix]
-        public static void PreDamageHitPatch(Character __instance, ref HitData hit)
+        public static void ModifyCharacterDamage(Character __instance, ref HitData hit)
         {
             //Jotunn.Logger.LogMessage($"Damage function running");
 
@@ -33,6 +32,11 @@ namespace kingskills.Weapons
             if (charac.IsPlayer() && charac.GetZDOID() == Player.m_localPlayer.GetZDOID())
             {
                 Player player = (Player)charac;
+
+                ZNetView nview = __instance.m_nview;
+                if (!nview.IsOwner()) nview.ClaimOwnership();
+                nview.m_zdo.Set(CFG.ZDOKiller, player.GetPlayerID());
+                nview.m_zdo.Set(CFG.ZDOStaggerFlag, true);
 
                 //Jotunn.Logger.LogMessage($"This attack begins as having {hit.m_damage.GetTotalDamage()} damage");
                 //First, we add the randomness back in
@@ -124,44 +128,43 @@ namespace kingskills.Weapons
             //Or if the attacked is the local player
             else if (__instance.IsPlayer() && __instance.GetZDOID() == Player.m_localPlayer.GetZDOID())
             {
-                Player player = (Player)__instance;
+                //Player player = (Player)__instance;
 
                 //Jotunn.Logger.LogMessage($"Player got hit");
                 //We can do stuff here probably. Will we need to? Who knows.
             }
 
+            WeaponMan.DamageToExp(__instance, hit, false);
         }
 
+        [HarmonyPatch(typeof(MineRock), nameof(MineRock.Damage))] [HarmonyPrefix]
+        static void MineRockDamage(MineRock __instance, ref HitData hit) => 
+            ModifyResourceDamage(__instance, __instance.m_nview, ref hit);
+       
+        [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Damage))] [HarmonyPrefix]
+        static void MineRock5Damage(MineRock5 __instance, ref HitData hit) =>
+            ModifyResourceDamage(__instance, __instance.m_nview, ref hit);
+        
+        [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Damage))] [HarmonyPrefix]
+        static void TreeBaseDamage(TreeBase __instance, ref HitData hit) =>
+            ModifyResourceDamage(__instance, __instance.m_nview, ref hit);
+        
+        [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))] [HarmonyPrefix]
+        static void TreeLogDamage(TreeLog __instance, ref HitData hit) =>
+            ModifyResourceDamage(__instance, __instance.m_nview, ref hit);
+        
+        [HarmonyPatch(typeof(Destructible), nameof(Destructible.Damage))] [HarmonyPrefix]
+        static void DestructibleDamage(Destructible __instance, ref HitData hit) =>
+            ModifyResourceDamage(__instance, __instance.m_nview, ref hit);
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(MineRock), nameof(MineRock.Damage))]
-        static void MineRock_Damage(Destructible __instance, ref HitData hit)
-        {
-            ResourceDamagePatch(__instance, ref hit);
-        }
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Damage))]
-        static void MineRock5_Damage(Destructible __instance, ref HitData hit)
-        {
-            ResourceDamagePatch(__instance, ref hit);
-        }
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Damage))]
-        static void TreeBase_Damage(Destructible __instance, ref HitData hit)
-        {
-            ResourceDamagePatch(__instance, ref hit);
-        }
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))]
-        static void TreeLog_Damage(Destructible __instance, ref HitData hit)
-        {
-            ResourceDamagePatch(__instance, ref hit);
-        }
-
-        public static void ResourceDamagePatch(Destructible __instance, ref HitData hit)
+        public static void ModifyResourceDamage(IDestructible resource, ZNetView nview, ref HitData hit)
         {
             //Jotunn.Logger.LogMessage("Hitting a resource patch detected!");
             if (!CheckHitGood(hit)) return;
+
+            //Jotunn.Logger.LogMessage($"setting killerID to {((Player)hit.GetAttacker()).GetPlayerID()}");
+            nview.ClaimOwnership();
+            nview.m_zdo.Set(CFG.ZDOKiller, ((Player)hit.GetAttacker()).GetPlayerID());
 
             if (hit.m_attacker == Player.m_localPlayer.GetZDOID())
             {
@@ -195,12 +198,12 @@ namespace kingskills.Weapons
 
                     //Jotunn.Logger.LogMessage($"Now it's {hit.m_damage.m_pickaxe}! I also added some stamina");
                 }
+
+                WeaponMan.DamageToExp(resource, hit, false);
             }
         }
 
-        [HarmonyPatch(typeof(Character))]
-        [HarmonyPatch(nameof(Character.GetRandomSkillFactor))]
-        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Character), nameof(Character.GetRandomSkillFactor))] [HarmonyPrefix]
         public static bool PlayerDisarmPatch(Player __instance, ref float __result)
         {
             //This piece of code stops the player from generating a random amount of damage based on their
@@ -227,6 +230,10 @@ namespace kingskills.Weapons
                 return false;
             }
             if (hit.GetAttacker() == null)
+            {
+                return false;
+            }
+            if (!hit.GetAttacker().IsPlayer())
             {
                 return false;
             }

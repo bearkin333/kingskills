@@ -91,11 +91,12 @@
     <Compile Include="KSkills\Cooking.cs" />
     <Compile Include="KSkills\Sailing.cs" />
     <Compile Include="KSkills\SkillMan.cs" />
+    <Compile Include="Network\RPC.cs" />
     <Compile Include="Overhauls\KSBlock.cs" />
     <Compile Include="Overhauls\KSJump.cs" />
     <Compile Include="Overhauls\KSMining.cs" />
-    <Compile Include="Generic Patches\LevelUp.cs" />
-    <Compile Include="Generic Patches\LootDropPatch.cs" />
+    <Compile Include="Systemic Patches\LevelUp.cs" />
+    <Compile Include="Systemic Patches\LootDropPatch.cs" />
     <Compile Include="Overhauls\KSPolearm.cs" />
     <Compile Include="Overhauls\KSSneak.cs" />
     <Compile Include="Perks\AlwaysPrepared.cs" />
@@ -113,7 +114,7 @@
     <Compile Include="UX\SkillGUIData.cs" />
     <Compile Include="UX\Tutorials.cs" />
     <Compile Include="Weapons\WeaponBonusExperience.cs" />
-    <Compile Include="Generic Patches\StatsUpdate.cs" />
+    <Compile Include="Systemic Patches\StatsUpdate.cs" />
     <Compile Include="Weapons\WeaponDamage.cs" />
     <Compile Include="Weapons\WeaponRaiseSkillTakeover.cs" />
     <Compile Include="Weapons\WeaponStamina.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="Util\Utilities.cs" />
     <Compile Include="Util\TestCommands.cs" />
     <Compile Include="Config\CFG.cs" />
-    <Compile Include="Generic Patches\ProjectilePatch.cs" />
+    <Compile Include="Systemic Patches\ProjectilePatch.cs" />
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
     <Compile Include="kingskills.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -132,7 +133,7 @@
     <Compile Include="Perks\Managers\OpenPerks.cs" />
     <Compile Include="UX\SkillGUI.cs" />
     <Compile Include="Weapons\WeaponExperience.cs" />
-    <Compile Include="Generic Patches\MovePatch.cs" />
+    <Compile Include="Systemic Patches\MovePatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

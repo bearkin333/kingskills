@@ -79,7 +79,7 @@ namespace kingskills.Patches
 					__instance.m_lastStealthPosition = __instance.transform.position;
 					float skillFactor = __instance.GetSkillFactor(Skills.SkillType.Sneak);
 					float lightFactor = StealthSystem.instance.GetLightFactor(__instance.GetCenterPoint());
-					Jotunn.Logger.LogMessage($"Your light factor is currently {lightFactor}");
+					//Jotunn.Logger.LogMessage($"Your light factor is currently {lightFactor}");
 					__instance.m_stealthFactorTarget = CFG.GetSneakFactor(skillFactor, lightFactor);
 					__instance.m_stealthFactorTarget = Mathf.Clamp01(__instance.m_stealthFactorTarget);
 					__instance.m_seman.ModifyStealth(__instance.m_stealthFactorTarget, ref __instance.m_stealthFactorTarget);
@@ -121,7 +121,7 @@ namespace kingskills.Patches
             }
 			if (strongest != null)
 			{
-				Jotunn.Logger.LogMessage($"Strongest enemy in sight was {strongest.m_name}");
+				//Jotunn.Logger.LogMessage($"Strongest enemy in sight was {strongest.m_name}");
 			}
 			return strongest;
         }

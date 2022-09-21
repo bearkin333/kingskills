@@ -13,7 +13,7 @@ using kingskills.Patches;
 namespace kingskills.Weapons
 {
 
-    class Manager
+    class WeaponMan
     {
         // Patch IDestructible.Damage() to gain experience for player based on damage events.
         public static void Strike(IDestructible victimD, HitData hit, float mod=1.0f, bool tool=false)
@@ -66,56 +66,8 @@ namespace kingskills.Weapons
             if (skill == Skills.SkillType.Axes)
                 LevelUp.CustomRaiseSkill(p, Skills.SkillType.WoodCutting, CFG.WeaponXPSwing.Value, false);
         }
-    }
 
-    [HarmonyPatch]
-    class WeaponStrikeDetection
-    {
-        //Damage patch rerouting
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Character), nameof(Character.Damage))]
-        static void Character_Damage(Character __instance, HitData hit)
-        {
-            //Jotunn.Logger.LogMessage("character hit detected");
-            DamageToExp(__instance, hit, true);
-        }
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Destructible), nameof(Destructible.Damage))]
-        static void Destructible_Damage(Destructible __instance, HitData hit)
-        {
-            //Jotunn.Logger.LogMessage("Destructible hit detected");
-            DamageToExp(__instance, hit, false);
-        }
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(MineRock), nameof(MineRock.Damage))]
-        static void MineRock_Damage(Destructible __instance, HitData hit)
-        {
-            //Jotunn.Logger.LogMessage("Mine Rock hit detected");
-            DamageToExp(__instance, hit, false);
-        }
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Damage))]
-        static void MineRock5_Damage(Destructible __instance, HitData hit)
-        {
-            //Jotunn.Logger.LogMessage("Mine Rock 5 hit detected");
-            DamageToExp(__instance, hit, false);
-        }
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Damage))]
-        static void TreeBase_Damage(Destructible __instance, HitData hit)
-        {
-            //Jotunn.Logger.LogMessage("Tree Base hit detected");
-            DamageToExp(__instance, hit, false);
-        }
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))]
-        static void TreeLog_Damage(Destructible __instance, HitData hit)
-        {
-            //Jotunn.Logger.LogMessage("Tree Log hit detected");
-            //DamageToExp(__instance, hit, false);
-            //Redundant with TreeBase
-        }
-        static void DamageToExp(IDestructible __instance, HitData hit, bool livingTarget)
+        public static void DamageToExp(IDestructible __instance, HitData hit, bool livingTarget)
         {
             bool tool = false;
             float factor = 0f;
@@ -137,10 +89,10 @@ namespace kingskills.Weapons
                     factor = CFG.GetWeaponXPStrikeDestructibleMod();
             }
 
-
-            Manager.Strike(__instance, hit, factor, tool);
+            Strike(__instance, hit, factor, tool);
         }
     }
+
 
     [HarmonyPatch]
     class WeaponSwingDetection
@@ -151,7 +103,7 @@ namespace kingskills.Weapons
         {
             if (__result && __instance is Player && __instance == Player.m_localPlayer)
             {
-                Manager.Swing(__instance as Player, __instance.GetCurrentWeapon().m_shared.m_skillType);
+                WeaponMan.Swing(__instance as Player, __instance.GetCurrentWeapon().m_shared.m_skillType);
             }
         }
 
@@ -161,7 +113,7 @@ namespace kingskills.Weapons
         {
             if (__instance.m_pickaxeSpecial && __instance.m_character is Player)
             {
-                Manager.Swing(__instance.m_character as Player, Skills.SkillType.Pickaxes);
+                WeaponMan.Swing(__instance.m_character as Player, Skills.SkillType.Pickaxes);
             }
         }
     }

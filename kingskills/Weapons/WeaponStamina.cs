@@ -15,7 +15,7 @@ namespace kingskills.Weapons
         public static bool StaminaUsePatch(Attack __instance, ref float __result)
         {
             Skills.SkillType skillT = __instance.m_weapon.m_shared.m_skillType;
-            if (!CFG.IsSkillActive(skillT)) return true;
+            if (!CFG.IsSkillActive(skillT)) return CFG.DontSkipOriginal;
 
             float stamina = __instance.m_attackStamina;
             float skillFactor = __instance.m_character.GetSkillFactor(skillT);
@@ -63,7 +63,7 @@ namespace kingskills.Weapons
 
             __result = stamina;
 
-            return false;
+            return CFG.SkipOriginal;
         }
 
         [HarmonyPatch(typeof(ItemDrop.ItemData))]
@@ -72,7 +72,7 @@ namespace kingskills.Weapons
         public static bool StaminaHoldPatch(ItemDrop.ItemData __instance, ref float __result)
         {
             Skills.SkillType skillT = __instance.m_shared.m_skillType;
-            if (!CFG.IsSkillActive(skillT)) return true;
+            if (!CFG.IsSkillActive(skillT)) return CFG.DontSkipOriginal;
 
             float stamina = __instance.m_shared.m_holdStaminaDrain;
             float skillFactor = Player.m_localPlayer.GetSkillFactor(skillT);
@@ -88,7 +88,7 @@ namespace kingskills.Weapons
 
             __result = stamina;
 
-            return false;
+            return CFG.SkipOriginal;
         }
     }
 }

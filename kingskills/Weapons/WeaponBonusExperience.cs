@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using kingskills.Patches;
+using kingskills.RPC;
 
 namespace kingskills.Weapons
 {
@@ -14,115 +15,117 @@ namespace kingskills.Weapons
     [HarmonyPatch(typeof(Character))]
     class StaggerWatch
     {
-        //For transferring stagger experience check
-        static Player playerRef = null;
-
         [HarmonyPatch(nameof(Character.ApplyDamage))]
-        [HarmonyPrefix]
-        private static void OnDamageTrigger(Character __instance, HitData hit)
+        [HarmonyPostfix]
+        private static void CheckForStaggerHit(Character __instance, HitData hit)
         {
-            if (Player.m_localPlayer == null) return;
-            ZDOID player = hit.m_attacker;
+            Character player = hit.GetAttacker();
+            if (player == null || !player.IsPlayer()) return;
 
-            //Jotunn.Logger.LogMessage($"An apply damage function has run, and I'm catching a hit. the hit says");
-            //Jotunn.Logger.LogMessage($"{player.ToString()} is the one perpetrating this attack");
-
-            if (Player.m_localPlayer.GetZDOID().Equals(player))
-            {
-                //Jotunn.Logger.LogMessage($"A player hit someone");
-                playerRef = Player.m_localPlayer;
-
-                if (__instance.IsStaggering())
-                {
-                    __instance.m_nview.GetZDO().Set("Local Player Staggered Me", true);
-                    OnStaggerHurt(playerRef);
-                }
-                else
-                {
-                    __instance.m_nview.GetZDO().Set("Local Player Staggered Me", false);
-                }
-
-            }
+            if (__instance.IsStaggering())
+                RPC.RPC.SendEXPRPC(player.m_nview,
+                    CFG.WeaponBXPSwordStagger.Value, Skills.SkillType.Swords, true, true);
         }
 
         [HarmonyPatch(nameof(Character.RPC_Damage))]
         [HarmonyPrefix]
-        private static void OnDamageRPCCall(Character __instance, long sender, HitData hit)
+        private static void CheckForBackstab(Character __instance, long sender, HitData hit)
         {
-            ZDOID player = hit.m_attacker;
+            Character player = hit.GetAttacker();
+            if (player == null || !player.IsPlayer()) return;
 
-            if (Player.m_localPlayer.GetZDOID().Equals(player))
+            if (__instance.m_baseAI != null &&
+                    !__instance.m_baseAI.IsAlerted() &&
+                     hit.m_backstabBonus > 1f &&
+                     Time.time - __instance.m_backstabTime > 300f)
             {
-                Player attacker = Player.m_localPlayer;
-
-                if (__instance.m_baseAI != null)
-                {
-                    if (!__instance.m_baseAI.IsAlerted() && hit.m_backstabBonus > 1f && Time.time - __instance.m_backstabTime > 300f)
-                    {
-                        //Jotunn.Logger.LogMessage($"I am pretty sure I just got backstabbed");
-                        OnBackstab(attacker);
-                    }
-                }
+                RPC.RPC.SendEXPRPC(player.m_nview,
+                    CFG.WeaponBXPKnifeBackstab.Value, Skills.SkillType.Knives, true, true);
             }
+            
         }
 
         [HarmonyPatch(nameof(Character.RPC_Stagger))]
         [HarmonyPostfix]
-        private static void StaggerPostFix(Character __instance)
+        private static void CheckForStaggeredByPlayer(Character __instance)
         {
-            if (__instance.m_nview.m_zdo.GetBool("Local Player Staggered Me", false))
+            ZNetView nview = __instance.m_nview;
+            if (!nview.IsOwner()) nview.ClaimOwnership();
+            if  (nview.m_zdo.GetBool(CFG.ZDOStaggerFlag, false))
             {
-                if (Util.GetPlayerWeapon(playerRef).m_shared.m_skillType == Skills.SkillType.Clubs)
-                    LevelUp.BXP(playerRef, Skills.SkillType.Clubs, CFG.GetClubBXPStagger(__instance.GetMaxHealth()));
+                nview.m_zdo.Set(CFG.ZDOStaggerFlag, false);
 
-                __instance.m_nview.m_zdo.Set("Local Player Staggered Me", false);
+                Player attacker = Player.GetPlayer(nview.m_zdo.GetLong(CFG.ZDOKiller, 0));
+                if (attacker is null) return;
+
+                RPC.RPC.SendEXPRPC(attacker.m_nview,
+                    CFG.GetClubBXPStagger(__instance.GetMaxHealth()), Skills.SkillType.Clubs, true, true);
             }
-        }
-
-        private static void OnStaggerHurt(Player attacker)
-        {
-            if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Swords)
-                LevelUp.BXP(attacker, Skills.SkillType.Swords, CFG.WeaponBXPSwordStagger.Value);
-        }
-
-        private static void OnBackstab(Player attacker)
-        {
-            if (Util.GetPlayerWeapon(attacker).m_shared.m_skillType == Skills.SkillType.Knives)
-                LevelUp.BXP(attacker, Skills.SkillType.Knives, CFG.WeaponBXPKnifeBackstab.Value);
         }
     }
 
-    [HarmonyPatch(typeof(TreeLog))]
-    class AxeLogWatch
+    [HarmonyPatch]
+    class TreeWatch
     {
-        [HarmonyPatch(nameof(TreeLog.Destroy))]
-        [HarmonyPrefix]
-        public static void TreeLogDestroyPatch(TreeLog __instance)
+        [HarmonyPatch(typeof(MineRock), nameof(MineRock.AllDestroyed))] [HarmonyPostfix]
+        static void MineRock_Destroy(MineRock __instance, bool __result)
         {
-            if (!CFG.IsSkillActive(Skills.SkillType.Axes)) return;
-
-            //Jotunn.Logger.LogMessage($"This log is killed. Closest player's getting the exp");
-            Player closestPlayer = Player.GetClosestPlayer(__instance.m_body.transform.position, 
-                CFG.WeaponBXPAxeRange.Value);
-
-            if (closestPlayer != null)
-                if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
-                    LevelUp.BXP(closestPlayer, Skills.SkillType.Axes, CFG.WeaponBXPAxeTreeAmount.Value);
+            if (!__result) return;
+            ResourceDestroyed(__instance, __instance.m_nview);
         }
 
-        [HarmonyPatch(typeof(Destructible),nameof(Destructible.Destroy))]
-        [HarmonyPrefix]
-        public static void StubDestroyPatch(Destructible __instance)
+        [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.AllDestroyed))] [HarmonyPostfix]
+        static void MineRock5_Destroy(MineRock5 __instance, bool __result)
         {
-            if (!CFG.IsSkillActive(Skills.SkillType.WoodCutting)) return;
-            if (!__instance.gameObject.name.Contains("Stub")) return;
+            if (!__result) return;
+            ResourceDestroyed(__instance, __instance.m_nview);
+        }
+        /*
+        [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Destroy))]
+        [HarmonyPrefix]
+        static void TreeBase_Destroy(TreeBase __instance)
+        {
+            Jotunn.Logger.LogMessage($"{__instance.gameObject.name} was destroyed");
+            ResourceDestroyed(__instance, __instance.m_nview);
+        }
+        */
+        [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Destroy))] [HarmonyPrefix]
+        static void TreeLog_Destroy(TreeLog __instance)
+        {
+            ResourceDestroyed(__instance, __instance.m_nview);
+        }
 
-            Player closestPlayer = Player.GetClosestPlayer(__instance.gameObject.transform.position, 
-                CFG.WeaponBXPAxeRange.Value);
+        [HarmonyPatch(typeof(Destructible), nameof(Destructible.Destroy))] [HarmonyPrefix]
+        static void Destructible_Destroy(Destructible __instance)
+        {
+            ResourceDestroyed(__instance, __instance.m_nview, __instance.gameObject.name);
+        }
 
-            if (closestPlayer != null)
-                if (Util.GetPlayerWeapon(closestPlayer).m_shared.m_skillType == Skills.SkillType.Axes)
-                    LevelUp.BXP(closestPlayer, Skills.SkillType.WoodCutting, CFG.ToolBXPWoodStubReward.Value);
+        public static void ResourceDestroyed(IDestructible __instance, ZNetView nview, string name = "")
+        {
+            Jotunn.Logger.LogMessage($"{name} was destroyed");
+
+            long killingPlayer = nview.m_zdo.GetLong(CFG.ZDOKiller, 0);
+            Jotunn.Logger.LogMessage($"killer was {killingPlayer}");
+            Player killer = Player.GetPlayer(killingPlayer);
+            if (killer == null)
+            {
+                Jotunn.Logger.LogMessage($"no killer");
+                return;
+            }
+
+            Jotunn.Logger.LogMessage($"killer was found as a player {killer.GetPlayerName()}");
+
+            if (name.Contains("Stub"))
+            {
+                RPC.RPC.SendEXPRPC(killer.m_nview,
+                    CFG.ToolBXPWoodStubReward.Value, Skills.SkillType.WoodCutting, true, true);
+            }
+            else if (__instance.GetType() == typeof(TreeLog))
+            {
+                RPC.RPC.SendEXPRPC(killer.m_nview,
+                    CFG.WeaponBXPAxeTreeAmount.Value, Skills.SkillType.Axes, true, true);
+            }
         }
     }
 }

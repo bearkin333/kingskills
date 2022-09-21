@@ -96,7 +96,7 @@ namespace kingskills.Patches
                     {
                         for (int i = 1; i < Mathf.Floor(dropBonus); dropBonus--)
                         {
-                            Jotunn.Logger.LogMessage($"Adding an extra drop, making drop bonus {dropBonus}");
+                            //Jotunn.Logger.LogMessage($"Adding an extra drop, making drop bonus {dropBonus}");
                             newDrops.Add(drop);
                         }
 

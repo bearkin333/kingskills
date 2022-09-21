@@ -534,6 +534,12 @@ namespace kingskills.Perks
             else perkDeactivated.Add(perk, value);
         }
 
+        public static void SetLearnedPerk(PerkType perk, bool value)
+        {
+            if (perkLearned.ContainsKey(perk)) perkLearned[perk] = value;
+            else perkLearned.Add(perk, value);
+        }
+
         public enum PerkType
         {
             //Agriculture
@@ -601,6 +607,7 @@ namespace kingskills.Perks
             {
                 perk.Value.learnable = true;
                 perk.Value.learned = false;
+                SetLearnedPerk(perk.Key, false);
             }
         }
 
