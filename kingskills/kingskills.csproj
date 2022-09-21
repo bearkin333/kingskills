@@ -101,6 +101,7 @@
     <Compile Include="Perks\AlwaysPrepared.cs" />
     <Compile Include="Perks\Aquaman.cs" />
     <Compile Include="Perks\Asguard.cs" />
+    <Compile Include="Perks\AttackOfOpportunity.cs" />
     <Compile Include="Perks\Managers\AscensionMan.cs" />
     <Compile Include="Perks\AirStep.cs" />
     <Compile Include="Util\CustomTextMan.cs" />

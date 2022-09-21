@@ -374,6 +374,23 @@ namespace kingskills
             return true;
         }
 
+        public static HitData CreateHitFromWeapon(ItemDrop.ItemData weapon, Player attacker)
+        {
+            HitData hitData = new HitData();
+            hitData.m_toolTier = weapon.m_shared.m_toolTier;
+            if (weapon.m_shared.m_attackStatusEffect)
+                hitData.m_statusEffect = weapon.m_shared.m_attackStatusEffect.m_name;
+            hitData.m_pushForce = weapon.m_shared.m_attackForce;
+            hitData.m_backstabBonus = weapon.m_shared.m_backstabBonus;
+            hitData.m_staggerMultiplier = 1f;
+            hitData.m_dodgeable = weapon.m_shared.m_dodgeable;
+            hitData.m_blockable = weapon.m_shared.m_blockable;
+            hitData.m_skill = weapon.m_shared.m_skillType;
+            hitData.m_damage = weapon.GetDamage();
+            hitData.SetAttacker(attacker);
+            return hitData;
+        }
+
 
         #endregion genericfunc
 
@@ -2875,11 +2892,22 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region attackofopportunity
         #region configdef
-
+        public static ConfigEntry<float> AOOPCooldown;
+        public static ConfigEntry<float> AOOPDamageMod;
+        public static ConfigEntry<float> AOOPRange;
+        public static ConfigEntry<float> AOOPPushForceMod;
         #endregion configdef
 
         public static void InitAttackOfOpportunityConfigs(ConfigFile cfg)
         {
+            AOOPCooldown = cfg.Bind("Perks.AttackOfOpportunity", "Cooldown", 2f,
+                    AdminCD("Seconds between possible AOOP hits"));
+            AOOPDamageMod = cfg.Bind("Perks.AttackOfOpportunity", "Damage Mod", 40f,
+                    AdminCD("% of regular damage dealt by an AOOP"));
+            AOOPRange = cfg.Bind("Perks.AttackOfOpportunity", "Range", 1f,
+                    AdminCD("unit radius of your AOOP range"));
+            AOOPPushForceMod = cfg.Bind("Perks.AttackOfOpportunity", "Push Force", 120f,
+                    AdminCD("% of regular knockback dealt by AOOP"));
         }
 
         public static Perk GetPerkAttackOfOpportunity()
@@ -2888,9 +2916,18 @@ namespace kingskills
                 "While you are running and unarmed, any enemy that comes close to you" +
                 " gets automatically hit with a high-speed kick. Has a 2s cooldown.",
                 "You're already in my range...",
-                Perks.PerkMan.PerkType.AttackOfOpportunity, "Icons/attackofopportunity.png");
+                PerkMan.PerkType.AttackOfOpportunity, "Icons/attackofopportunity.png",
+                "Free hits while running");
         }
 
+        public static float GetAOOPDamageMod()
+        {
+            return PerToMod(AOOPDamageMod);
+        }
+        public static float GetAOOPPushForceMod()
+        {
+            return PerToMod(AOOPPushForceMod);
+        }
 
 
 

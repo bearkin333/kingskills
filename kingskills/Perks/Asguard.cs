@@ -13,11 +13,11 @@ namespace kingskills.Perks
     {
         public static float BlockDirectionPatch(Vector3 hitdir, Vector3 player_forward, Humanoid player)
         {
-            Jotunn.Logger.LogMessage($"Asguard check");
-            Jotunn.Logger.LogMessage($"Asguard is active:{PerkMan.IsPerkActive(PerkMan.PerkType.Asguard)}");
+            //Jotunn.Logger.LogMessage($"Asguard check");
+            //Jotunn.Logger.LogMessage($"Asguard is active:{PerkMan.IsPerkActive(PerkMan.PerkType.Asguard)}");
             if (CFG.CheckPlayerAndActive(player, PerkMan.PerkType.Asguard))
             {
-                Jotunn.Logger.LogMessage($"Successfully Asguarded");
+                //Jotunn.Logger.LogMessage($"Successfully Asguarded");
                 return 0f;
             }
             else
