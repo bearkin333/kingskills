@@ -117,7 +117,7 @@ namespace kingskills.Perks
                 loadPerkLearned = LoadFlagsFromZPackage(zPackage);
                 loadPerkDeactivated = LoadFlagsFromZPackage(zPackage);
                 loadSkillAscended = LoadFlagsFromZPackage(zPackage);
-                CombineGUI.savedAsk = zPackage.ReadBool();
+                CombineGUI.LoadAskSetting(zPackage.ReadBool());
 
                 foreach (KeyValuePair<int, bool> datum in loadPerkLearned)
                 {

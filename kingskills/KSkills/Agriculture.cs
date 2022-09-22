@@ -43,11 +43,17 @@ perks:
         public static void TreeGrowing(Plant __instance)
         {
             if (__instance.m_status != 0) return;
-            if (__instance.m_nview.m_zdo.GetLong("Current Botanist", 0) != Player.m_localPlayer.GetPlayerID()) return;
+
+            long botanistID = __instance.m_nview.m_zdo.GetLong("Current Botanist", 0);
+            if (botanistID == 0) return;
+
             float reward = CFG.GetAgricultureTreeReward(__instance);
             if (reward == 0) return;
 
-            Player.m_localPlayer.RaiseSkill(SkillMan.Agriculture, reward);
+            Player botanist = Player.GetPlayer(botanistID);
+            if (botanist is null) return;
+
+            RPC.RPC.SendEXPRPC(botanist.m_nview, reward, SkillMan.Agriculture);
         }
     }
 
@@ -61,6 +67,19 @@ perks:
         [HarmonyFinalizer]
         private static void AfterPlacement() => isTrue = false;
     }
+
+    //This class grabs a reference to the player interacting
+    // every time a player interacts
+    [HarmonyPatch(typeof(Player), nameof(Player.Interact))]
+    public static class LocalPlayerInteracting
+    {
+        public static bool isTrue = false;
+        [HarmonyPrefix]
+        private static void BeforeInteract() => isTrue = true;
+        [HarmonyFinalizer]
+        private static void AfterInteract() => isTrue = false;
+    }
+
 
     [HarmonyPatch(typeof(Plant), nameof(Plant.Awake))]
     public class SaveSkillLevel
@@ -94,39 +113,32 @@ perks:
         }
     }
 
-
-
-    //This class grabs a reference to the player interacting
-    // every time a player interacts
-    [HarmonyPatch(typeof(Player),nameof(Player.Interact))]
-    public static class PlayerPickRef
+    [HarmonyPatch(typeof(Pickable), nameof(Pickable.Interact))]
+    public static class PickableInteractionSwitch
     {
-        public static ZDOID? pickingPlayer = null;
         [HarmonyPrefix]
-        public static void RegisterPlayer(Player __instance)
+        public static void BeforeInteract(Pickable __instance)
         {
-            pickingPlayer = __instance.GetZDOID();
-        }
-        [HarmonyFinalizer]
-        public static void CleanUp()
-        {
-            pickingPlayer = null;
+            if (!__instance.m_nview.IsValid()) return;
+            __instance.m_nview.ClaimOwnership();
+            Jotunn.Logger.LogMessage("claiming ownership of this pickable");
         }
     }
-
 
     [HarmonyPatch(typeof(Pickable), nameof(Pickable.RPC_Pick))]
     public static class PickItem
     {
         [HarmonyPrefix]
-        public static void BeforePick(Pickable __instance)
+        public static void BeforePick(Pickable __instance, long sender)
         {
-            if ((PlayerPickRef.pickingPlayer == null) || 
-               (!CFG.GetAgricultureIsPlant(__instance)) ||
-               (!__instance.m_nview.IsOwner() || __instance.m_picked))
+            if (!LocalPlayerInteracting.isTrue ||
+                !__instance.m_nview.IsOwner() ||
+                !CFG.GetAgricultureIsPlant(__instance) ||
+               __instance.m_picked)
                return;
 
-            Player player = ZNetScene.instance.FindInstance((ZDOID)PlayerPickRef.pickingPlayer).GetComponent<Player>();
+
+            Player player = Player.m_localPlayer;
 
             float skillF = player.GetSkillFactor(SkillMan.Agriculture);
 

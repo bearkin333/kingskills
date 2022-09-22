@@ -16,10 +16,8 @@ namespace kingskills.Patches
 
         [HarmonyPatch(nameof(Player.GetSkillFactor))]
         [HarmonyPrefix]
-        public static bool GetMySkillFactor(Player __instance, ref float __result, Skills.SkillType skill)
+        public static bool KSGetSkillFactor(Player __instance, ref float __result, Skills.SkillType skill)
         {
-            //Jotunn.Logger.LogMessage("Checking skill");
-            
             if (skill == Skills.SkillType.None) __result = 0f;
 
             //Ascended skills will always act as though at max level
@@ -42,7 +40,7 @@ namespace kingskills.Patches
 
         [HarmonyPatch(nameof(Player.RaiseSkill))]
         [HarmonyPrefix]
-        public static bool RaiseMySkills(Player __instance, Skills.SkillType skill, float value = 1f)
+        public static bool KSRaiseSkill(Player __instance, Skills.SkillType skill, float value = 1f)
         {
             //Largely stolen from the game
             if (skill == Skills.SkillType.None)

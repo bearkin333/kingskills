@@ -136,8 +136,8 @@ namespace kingskills
             float skillFactor,
             bool isParry,
             Humanoid instance,
-            HitData hit,
-            Character attacker
+            HitData _,
+            Character __
             )
         {
             //Jotunn.Logger.LogMessage($"block power of {currentBlocker.GetBlockPower(skillFactor)} is now mine, also am I parrying? {isParry}");

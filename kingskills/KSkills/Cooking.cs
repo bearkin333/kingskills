@@ -139,7 +139,7 @@ perks:
 
 					QualityTextDisplayer(newQuality, player);
 				}
-				else if (PlayerPickRef.pickingPlayer != null)
+				else if (LocalPlayerInteracting.isTrue)
 				{
 					SaveFoodQuality FQ = itemMade.AddComponent<SaveFoodQuality>();
 					Player player = Player.m_localPlayer;
@@ -202,6 +202,8 @@ perks:
 			ZDO zdo = __instance.m_nview.m_zdo;
 			if (zdo == null) return;
 
+			if (!__instance.m_nview.IsOwner()) __instance.m_nview.ClaimOwnership();
+
 			//Jotunn.Logger.LogMessage($" recording the player's cooking skill as {(user as Player).GetSkillFactor(SkillMan.Cooking)}");
 
 			zdo.Set("Cooking Skill", (user as Player).GetSkillFactor(SkillMan.Cooking));
@@ -220,15 +222,16 @@ perks:
 			ZDO zdo = __instance.m_nview.m_zdo;
 			if (zdo == null) return;
 
-			Player user = Player.m_localPlayer;
-			if (user == null) return;
+			Player player = Player.m_localPlayer;
+			if (player == null) return;
+
+			if (!__instance.m_nview.IsOwner()) __instance.m_nview.ClaimOwnership();
 
 			string itemName = __result.m_from.name;
 			//Jotunn.Logger.LogMessage($"Checking for item {itemName}");
 
 			float recordedSkill = zdo.GetFloat("Cooking Level for " + itemName, 0f);
 			long recordedChefID = zdo.GetLong("Chef for " + itemName, 0);
-			bool conversionChanged = zdo.GetBool(itemName + " changed", false);
 			bool conversionRecorded = zdo.GetBool(itemName + " recorded", false);
 			bool dataChanged = false;
 
@@ -242,51 +245,24 @@ perks:
 
 			//If this conversion hasn't recorded a player yet, we claim it
 			if (recordedChefID == 0 || 
-				recordedChefID != user.GetPlayerID() ||
-				user.GetSkillFactor(SkillMan.Cooking) != recordedSkill)
+				recordedChefID != player.GetPlayerID() ||
+				player.GetSkillFactor(SkillMan.Cooking) != recordedSkill)
 			{
-				redux = CFG.GetCookingTimeRedux(user.GetSkillFactor(SkillMan.Cooking));
+				redux = CFG.GetCookingTimeRedux(player.GetSkillFactor(SkillMan.Cooking));
 
-				/*
-				Jotunn.Logger.LogMessage($"Cooking station data change!. I had no recorded chef OR the ID didn't " +
-					$"match mine OR the recorded skill is different from ours." +
-					$"\nsetting {"Cooking Level for " + itemName} to {user.GetSkillFactor(SkillMan.Cooking)}" +
-					$"\nsetting {"Chef for " + itemName} to {user.GetPlayerID()}");
-				*/
 
-				zdo.Set("Cooking Level for " + itemName, user.GetSkillFactor(SkillMan.Cooking));
-				zdo.Set("Chef for " + itemName, user.GetPlayerID());
+				zdo.Set("Cooking Level for " + itemName, player.GetSkillFactor(SkillMan.Cooking));
+				zdo.Set("Chef for " + itemName, player.GetPlayerID());
 				dataChanged = true;
 
-				//Jotunn.Logger.LogMessage($"owner was {zdo.m_owner}, setting it to {user.GetZDOID().m_userID}");
-				zdo.m_owner = user.GetZDOID().m_userID;
 			}
 
 			//If nothing has changed, there's no need to touch the result
 			if (!dataChanged) return;
 
-			//Jotunn.Logger.LogMessage($"This station's data for this item conversion has changed.");
-			//if we haven't touched this particular item conversion yet
-			if (!conversionChanged)
-			{
-				//Jotunn.Logger.LogMessage($"This item conversion hasn't been changed before, so we're changing it from " +
-				//	$"{__result.m_cookTime} to {__result.m_cookTime * redux}.");
-				__result.m_cookTime *= redux;
+			__result.m_cookTime = zdo.GetFloat(itemName + " base time", 1.2266f);
 
-				zdo.Set(itemName + " changed", true);
-			}
-			//but if it's been changed before, we need to fix it
-            else
-			{
-				//Jotunn.Logger.LogMessage($"This item conversion HAS been changed before, so we're " +
-				//	$"grabbing the base value, {zdo.GetFloat(itemName + " base time", 25.1337f)}");
-
-				__result.m_cookTime = zdo.GetFloat(itemName + " base time", 25.1337f);
-
-				//Jotunn.Logger.LogMessage($"And then from {__result.m_cookTime} to {__result.m_cookTime * redux}.");
-
-				__result.m_cookTime *= redux;
-			}
+			__result.m_cookTime *= redux;
 		}
 
 
@@ -298,35 +274,41 @@ perks:
 			ZDO zdo = __instance.m_nview.m_zdo;
 			if (zdo == null) return;
 
-			float recordedRedux = zdo.GetFloat("Ferment Redux", 0f);
+			if (!__instance.m_nview.IsOwner()) __instance.m_nview.ClaimOwnership();
+
+
 			float recordedSkill = zdo.GetFloat("Cooking Level", 0f);
 			long recordedChefID = zdo.GetLong("Current Chef", 0);
+			bool conversionRecorded = zdo.GetBool("time recorded", false);
+			Player player = (Player)user;
 
-			//If no one has claimed it yet, we apply their time reduction to the process.
-			if (recordedChefID == 0)
-            {
-				float redux = CFG.GetCookingFermentTimeRedux(user.GetSkillFactor(SkillMan.Cooking));
-				__instance.m_fermentationDuration *= redux;
+			float redux = 1f;
+			bool dataChanged = false;
 
-				zdo.Set("Ferment Redux", redux);
-				zdo.Set("Cooking Level", user.GetSkillFactor(SkillMan.Cooking));
-				zdo.Set("Current Chef", user.GetZDOID().m_userID);
-			}
-			//If another player besides us has claimed it, we overwrite them.
-			//Or if our chef skill has changed.
-			//We have to undo the previous reduction first, though.
-			else if (recordedChefID != user.GetZDOID().m_userID ||
-				user.GetSkillFactor(SkillMan.Cooking) != recordedSkill)
+			if (!conversionRecorded)
 			{
-				__instance.m_fermentationDuration /= zdo.GetFloat("Ferment Redux", 0f);
-
-				float redux = CFG.GetCookingFermentTimeRedux(user.GetSkillFactor(SkillMan.Cooking));
-				__instance.m_fermentationDuration *= redux;
-
-				zdo.Set("Ferment Redux", redux);
-				zdo.Set("Cooking Level", user.GetSkillFactor(SkillMan.Cooking));
-				zdo.Set("Current Chef", user.GetZDOID().m_userID);
+				zdo.Set("time changed", true);
+				zdo.Set("base time", __instance.m_fermentationDuration);
 			}
+
+			//If our stats are different than the recorded stats at all
+			if (recordedChefID == 0 ||
+				recordedChefID != player.GetPlayerID() ||
+				player.GetSkillFactor(SkillMan.Cooking) != recordedSkill)
+			{
+				redux = CFG.GetCookingFermentTimeRedux(player.GetSkillFactor(SkillMan.Cooking));
+
+				zdo.Set("Cooking Level", player.GetSkillFactor(SkillMan.Cooking));
+				zdo.Set("Current Chef", player.GetPlayerID());
+
+				dataChanged = true;
+			}
+			//If nothing has changed, there's no need to touch the result
+			if (!dataChanged) return;
+
+			__instance.m_fermentationDuration = zdo.GetFloat("base time", 1.2266f);
+
+			__instance.m_fermentationDuration *= redux;
 		}
 	}
 
@@ -355,6 +337,7 @@ perks:
 
 					if (LocalChefCooking.isTrue)
 					{
+						Jotunn.Logger.LogMessage($"Local player was cooking when that piece got removed from the oven");
 						Player player = Player.m_localPlayer;
 
 						player.RaiseSkill(SkillMan.Cooking, 

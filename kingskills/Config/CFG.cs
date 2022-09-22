@@ -2375,7 +2375,7 @@ namespace kingskills
                     AdminCD("Whether or not to activate king's skills version of the sneak skill", true)); ;
 
             //effects
-            SneakXPThreatPercent = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 1f,
+            SneakXPThreatPercent = cfg.Bind("Sneak.Experience", "Experience Bonus per Danger", 1.2f,
                     AdminCD("Determines how much each 'point of danger' is worth in sneak exp"));
             SneakStaminaDrainMin = cfg.Bind("Sneak.Effect", "Stamina Drain Min", 10f,
                     AdminCD("Amount of stamina drain per second while sneaking at level 0"));

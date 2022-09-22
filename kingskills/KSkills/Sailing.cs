@@ -62,6 +62,7 @@ perks:
 
             ZDO zdo = __instance?.m_nview?.GetZDO();
             if (zdo == null) return;
+            if (!__instance.m_nview.IsOwner()) {Jotunn.Logger.LogMessage($"I don't own this boat! don't ask me"); return; }
 
             float baseRudderSpeed = zdo.GetFloat("Base Rudder Speed", 0);
             float basePaddleSpeed = zdo.GetFloat("Base Paddle Speed", 0);

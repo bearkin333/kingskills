@@ -18,28 +18,15 @@ namespace kingskills.Patches
         public static bool GetRunSpeedPatch(Player __instance, ref float __result)
         {
             if (!CFG.IsSkillActive(Skills.SkillType.Run))
-            {
-                return true;
-            }
+                return CFG.DontSkipOriginal;
 
             //This function provides a number to multiply the base run speed by
             float runSkillFactor = CFG.GetRunSpeedMult(__instance.m_skills.GetSkillFactor(Skills.SkillType.Run));
 
             float runSpeed = runSkillFactor * GetGenericMovespeedAdjustments(__instance);
             __result = runSpeed;
-            /*
-            Jotunn.Logger.LogMessage($"Skill factor was {skillFactor},\n" +
-                $"runSkill factor was {runSkillFactor},\n" +
-                $"equipment malus redux was {equipmentMalusRedux},\n" +
-                $"equipment factor was {equipmentFactor},\n" +
-                $"encumberance percent was {encumberancePercent},\n" +
-                $"encumberance percent curved was {encumberancePercentCurved},\n" +
-                $"skill encumberance redux was {skillEncumberanceRedux},\n" +
-                $"encumberance factor was {encumberanceFactor},\n" +
-                $"total run speed was was {runSpeed},\n");*/
 
-            //Returning false skips the original implementation of GetRunSpeedFactor
-            return false;
+            return CFG.SkipOriginal;
         }
 
         [HarmonyPatch(nameof(Player.GetJogSpeedFactor))]
@@ -47,7 +34,7 @@ namespace kingskills.Patches
         public static bool GetJogSpeedPatch(Player __instance, ref float __result)
         {
             __result = GetGenericMovespeedAdjustments(__instance);
-            return false;
+            return CFG.SkipOriginal;
         }
 
         [HarmonyPatch(nameof(Player.UpdateMovementModifier))]
@@ -55,7 +42,7 @@ namespace kingskills.Patches
         public static bool UpdateEquipmentModOverride(Player __instance)
         {
             //Another override of the original with mostly copied code.
-            if (!CFG.IsSkillActive(Skills.SkillType.Run)) return true;
+            if (!CFG.IsSkillActive(Skills.SkillType.Run)) return CFG.DontSkipOriginal;
 
             float equipmentMalusRedux = CFG.GetEquipmentRedux(__instance.GetSkillFactor(Skills.SkillType.Run));
             float m;
@@ -104,7 +91,7 @@ namespace kingskills.Patches
                 __instance.m_equipmentMovementModifier += m;
             }
 
-            return false;
+            return CFG.SkipOriginal;
         }
 
         public static float GetGenericMovespeedAdjustments(Player player){

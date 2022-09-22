@@ -42,8 +42,9 @@ perks:
         {
             if (LocalPlayerPlacing.isTrue)
             {
-                ZDO zdo = __instance.GetComponent<ZNetView>().GetZDO();
+                ZDO zdo = __instance.m_nview.m_zdo; 
                 if (zdo == null) return;
+                if (!__instance.m_nview.IsOwner()) __instance.m_nview.ClaimOwnership();
 
                 Player player = Player.m_localPlayer;
                 float skill = player.GetSkillFactor(SkillMan.Building);
@@ -98,10 +99,10 @@ perks:
     [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.Awake))]
     public class NewGameHealthCheck
     {
-        [HarmonyPrefix]
+        [HarmonyPostfix]
         private static void BeforeAwaken(WearNTear __instance)
         {
-            ZDO zdo = __instance.GetComponent<ZNetView>().GetZDO();
+            ZDO zdo = __instance.m_nview?.m_zdo;
             if (zdo == null) return;
 
             float skill = zdo.GetFloat("Building Level", 0f);
@@ -120,7 +121,7 @@ perks:
         private static void GetMyMaterialProps(WearNTear __instance,
             ref float maxSupport, ref float minSupport, ref float horizontalLoss, ref float verticalLoss)
         {
-            ZDO zdo = __instance.GetComponent<ZNetView>().GetZDO();
+            ZDO zdo = __instance.m_nview.m_zdo;
             if (zdo == null) return;
 
             float skill;
@@ -245,8 +246,6 @@ perks:
     [HarmonyPatch(typeof(Player), nameof(Player.Repair))]
     public class LocalPlayerRepairing
     {
-        public static bool isTrue = false;
-
         //I hate this caret, but it is just a space efficient way of doing {  }
         [HarmonyPrefix]
         public static void StartRepair(Player __instance) => __instance.m_nview.m_zdo.Set("Is Repairing", true);
@@ -272,10 +271,10 @@ perks:
             }
             if (playerRef is null) return;
 
-            float healthChange = __instance.m_health - __instance.m_nview.GetZDO().GetFloat("health", __instance.m_health);
+            float healthChange = __instance.m_health - __instance.m_nview.m_zdo.GetFloat("health", __instance.m_health);
             if (healthChange < 0) healthChange = 0;
 
-            playerRef.RaiseSkill(SkillMan.Building, CFG.BuildXPRepairMod.Value * healthChange);
+            RPC.RPC.SendEXPRPC(playerRef.m_nview, CFG.BuildXPRepairMod.Value * healthChange, SkillMan.Building);
         }
     }
 

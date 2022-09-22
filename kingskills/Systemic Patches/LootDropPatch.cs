@@ -16,7 +16,7 @@ namespace kingskills.Patches
         [HarmonyPostfix]
         public static void DropTableFix(ref DropTable __instance, ref List<GameObject> __result, int amount)
         {
-            //Jotunn.Logger.LogMessage("drop table fix running");
+            Jotunn.Logger.LogMessage("I think we're responsible for this kill, so I'm running the drop table change");
             Player playerRef = Player.m_localPlayer;
             
             //Check for player and do player stuff here
@@ -81,7 +81,7 @@ namespace kingskills.Patches
             float dropRate, GameObject drop, ref List<GameObject> newDrops, 
             bool lastResult)
         {
-            float dropBonus = 0;
+            float dropBonus;
 
             foreach (KeyValuePair<string, float> item in dropCheckList)
             {
@@ -94,7 +94,7 @@ namespace kingskills.Patches
                     //Jotunn.Logger.LogMessage($"Increased that key's value to {dropBonus}");
                     if (dropBonus >= 1f)
                     {
-                        for (int i = 1; i < Mathf.Floor(dropBonus); dropBonus--)
+                        for (int i = 0; i < Mathf.Floor(dropBonus); dropBonus--)
                         {
                             //Jotunn.Logger.LogMessage($"Adding an extra drop, making drop bonus {dropBonus}");
                             newDrops.Add(drop);

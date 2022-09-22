@@ -56,17 +56,18 @@ namespace kingskills
             if (ZInput.instance != null)
             {
                 if (ZInput.GetButtonDown(OpenSkillWindowBtn.Name))
-                {
                     SkillGUIUpdate.ToggleSkillGUI();
-                }
+
                 if (ZInput.GetButtonDown(CollapseFoodBtn.Name))
-                {
                     QuickCombineGUI.CollapseHoveredFood();
-                }
+
+                if (ZInput.GetButtonDown(ExitSkillGUIBtn.Name))
+                    SkillGUIUpdate.CloseSkillGUI();
+
                 CombineGUI.CombineUpdate(ConfirmShortcutBtn.Name);
+                OpenPerks.UpdateOpenPerks(DetailedPerkBtn.Name);
             }
 
-            OpenPerks.UpdateOpenPerks(DetailedPerkBtn.Name);
         }
 
         private void InitConfig()

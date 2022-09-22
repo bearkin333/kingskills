@@ -11,8 +11,7 @@ namespace kingskills.Patches
     [HarmonyPatch]
     class KSPolearm
     {
-        [HarmonyPatch(typeof(Player))]
-        [HarmonyPatch(nameof(Player.GetBodyArmor))]
+        [HarmonyPatch(typeof(Player), nameof(Player.GetBodyArmor))]
         [HarmonyPostfix]
         public static void ArmorPatch(Player __instance, ref float __result)
         {
@@ -27,8 +26,7 @@ namespace kingskills.Patches
             }
         }
 
-        [HarmonyPatch(typeof(Attack))]
-        [HarmonyPatch(nameof(Attack.OnAttackTrigger))]
+        [HarmonyPatch(typeof(Attack), nameof(Attack.OnAttackTrigger))]
         [HarmonyPrefix]
         public static void RangePatch(Attack __instance)
         {
@@ -53,7 +51,6 @@ namespace kingskills.Patches
         {
             if (!CFG.IsSkillActive(Skills.SkillType.Polearms) ||
                 !__instance.IsPlayer() ||
-                Util.GetPlayerWeapon((Player)__instance).m_shared.m_skillType != Skills.SkillType.Polearms ||
                 (__instance.IsBlocking() && hit.m_blockable)) 
                 return;
             Character attacker = hit.GetAttacker();
@@ -67,8 +64,9 @@ namespace kingskills.Patches
             float damageBlocked = hit.GetTotalDamage() - sampleHit.GetTotalDamage();
 
             //Jotunn.Logger.LogMessage($"Just blocked {damageBlocked} damage with armor.");
-            __instance.RaiseSkill(Skills.SkillType.Polearms,
-                damageBlocked * CFG.WeaponBXPPolearmDamageMod.Value);
+
+            RPC.RPC.SendEXPRPC(__instance.m_nview,
+                damageBlocked * CFG.WeaponBXPPolearmDamageMod.Value, Skills.SkillType.Polearms, true, true);
         }
     }
 }

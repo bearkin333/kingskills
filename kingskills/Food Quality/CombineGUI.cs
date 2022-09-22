@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using kingskills;
+using HarmonyLib;
 
 namespace kingskills.UX
 {
@@ -35,11 +36,13 @@ namespace kingskills.UX
 		public static int invY;
 		public static Inventory invReference;
 		public static bool ask;
-		public static bool savedAsk = true; 
+		public static bool loadedAsk = false;
+
+		public static bool quickConfirm = false;
 
 		public static void Init()
 		{
-			ask = savedAsk;
+			if (!loadedAsk) ask = true;
 
 			CombineWindow = GUIManager.Instance.CreateWoodpanel(
 					parent: GUIManager.CustomGUIFront.transform,
@@ -208,10 +211,18 @@ namespace kingskills.UX
 			if (!CombineGUI.CombineWindow.activeSelf) return;
 			if (ZInput.instance == null) return;
 
-			if (ZInput.GetButtonDown(buttonName))
+			if (ZInput.GetButtonDown(buttonName) || quickConfirm)
 			{
+				quickConfirm = false;
 				OnConfirmClick();
 			}
+		}
+
+		public static void LoadAskSetting(bool nAsk)
+        {
+			loadedAsk = true;
+			ask = nAsk;
+			Jotunn.Logger.LogMessage($"Loaded dont ask me again as {!nAsk}");
 		}
 
 		public static void OnConfirmClick()
@@ -254,6 +265,7 @@ namespace kingskills.UX
 					Dragging.invRef.m_dragInventory.RemoveItem(item);
 					Dragging.invRef.SetupDragItem(null, null, 0);
 					//invReference.RemoveItem(item);
+
 				}
 
 				invReference.Changed();
@@ -279,6 +291,7 @@ namespace kingskills.UX
 			ask = false;
 		}
 
+
 		public static void OpenWindow(Inventory inv, ItemDrop.ItemData nitem, int nItemAmount, ItemDrop.ItemData nitemAt)
 		{
 			if (CombineWindow == null) Init();
@@ -299,7 +312,7 @@ namespace kingskills.UX
 
 			if (!ask)
 			{
-				OnConfirmClick();
+				quickConfirm = true;
 			}
 			{
 				ItemImg.GetComponent<Image>().sprite = item.GetIcon();
@@ -319,4 +332,27 @@ namespace kingskills.UX
 
 		}
 	}
+
+	/*
+	//I have to do this because when you combine without asking, the inventory processes an extra click and gets very confused
+	//about the lack of the item that was just there... and I'm stupid xD
+	//or maybe I just can't fix it this way LOL
+	[HarmonyPatch(typeof(InventoryGrid), nameof(InventoryGrid.OnLeftClick))]
+	public static class InventoryLeftClickErasure
+    {
+		[HarmonyPrefix]
+		public static bool StopClick()
+        {
+			if (CombineGUI.ignoreClick)
+			{
+				Jotunn.Logger.LogMessage("Ignored evil click");
+				CombineGUI.ignoreClick = false;
+				return CFG.SkipOriginal;
+			}
+			Jotunn.Logger.LogMessage("click went through");
+
+			return CFG.DontSkipOriginal;
+        }
+    }
+	*/
 }
