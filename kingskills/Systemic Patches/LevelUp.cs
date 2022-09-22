@@ -45,15 +45,16 @@ namespace kingskills.Patches
             //Largely stolen from the game
             if (skill == Skills.SkillType.None)
             {
-                return false;
+                return CFG.DontSkipOriginal;
             }
             if (!WeaponRaiseSkillTakeover.ksOverride &&
                 (WeaponRaiseSkillTakeover.aoeIgnore ||
                 WeaponRaiseSkillTakeover.areaIgnore ||
-                WeaponRaiseSkillTakeover.meleeIgnore)) return false;
+                WeaponRaiseSkillTakeover.meleeIgnore)) return CFG.DontSkipOriginal;
             WeaponRaiseSkillTakeover.ksOverride = false;
 
             Skills.Skill skillActual = __instance.GetSkills().GetSkill(skill);
+
 
             //Allow status effects to modify exp gain rate
             __instance.m_seman.ModifyRaiseSkill(skill, ref value);
@@ -77,16 +78,16 @@ namespace kingskills.Patches
                 if (__instance.GetSkills().m_useSkillCap)
                     __instance.GetSkills().RebalanceSkills(skill);
 
-            return false;
+            return CFG.SkipOriginal;
         }
 
         public static bool KingSkillRaise(Skills.Skill skill, Player player, float factor)
         {
-            if (skill.m_level >= CFG.MaxSkillLevel.Value)
+            if (Mathf.Floor(skill.m_level) >= CFG.MaxSkillLevel.Value)
                 return false;
 
-            float num = skill.m_info.m_increseStep * factor;
-            skill.m_accumulator += num;
+            factor *= skill.m_info.m_increseStep;
+            skill.m_accumulator += factor;
             Skills.SkillType skillT = skill.m_info.m_skill;
 
             float nextLevelRequirement = skill.GetNextLevelRequirement();
@@ -96,6 +97,7 @@ namespace kingskills.Patches
                 skill.m_level = Mathf.Clamp(skill.m_level, 0f, CFG.MaxSkillLevel.Value);
                 skill.m_level = Mathf.Floor(skill.m_level);
                 LevelUpPing(player, skill);
+                Jotunn.Logger.LogMessage($"That's a levelup. increasing level by 1, making it {skill.m_level}");
 
                 skill.m_accumulator -= nextLevelRequirement;
                 if (Mathf.Floor(skill.m_level) >= CFG.MaxSkillLevel.Value)
@@ -110,6 +112,7 @@ namespace kingskills.Patches
 
             //float percent = skill.m_accumulator / (skill.GetNextLevelRequirement() / CFG.MaxSkillLevel.Value);
 
+
             //Display the in-world text
             if (factor >= CFG.DisplayExperienceThreshold.Value &&
                 player.m_nview.m_zdo.GetBool("Display", true))
@@ -119,6 +122,7 @@ namespace kingskills.Patches
                 string msgTxt;
                 Vector3 pos;
                 int textSize = CFG.GetXPTextScaledSize(factor);
+
 
                 //When we do bonus experience, we run through a function that automatically sets
                 //BXP to true. Using this, we can get information into this function - even though
@@ -204,8 +208,8 @@ namespace kingskills.Patches
             float level = skillS.m_level;
             player.OnSkillLevelup(skill, level);
             MessageHud.MessageType type = (int)level != 0 ? MessageHud.MessageType.TopLeft : MessageHud.MessageType.Center;
-            player.Message(type, "$msg_skillup $skill_" + 
-                CFG.GetNameFromSkill(skillS.m_info.m_skill).ToLower() + ": " + Mathf.Floor(level), 0, skillS.m_info.m_icon);
+            player.Message(type, "$msg_skillup " + 
+                CFG.GetNameFromSkill(skillS.m_info.m_skill) + ": " + Mathf.Floor(level), 0, skillS.m_info.m_icon);
             Gogan.LogEvent("Game", "Levelup", skill.ToString(), (int)skillS.m_level);
 
             if (Mathf.Floor(level) == Mathf.Floor(CFG.PerkOneLVLThreshold.Value * CFG.MaxSkillLevel.Value) ||

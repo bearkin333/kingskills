@@ -53,7 +53,7 @@ perks:
             Player botanist = Player.GetPlayer(botanistID);
             if (botanist is null) return;
 
-            RPC.RPC.SendEXPRPC(botanist.m_nview, reward, SkillMan.Agriculture);
+            RPC.RPCMan.SendXP_RPC(botanist.m_nview, reward, SkillMan.Agriculture);
         }
     }
 
@@ -116,14 +116,35 @@ perks:
     [HarmonyPatch(typeof(Pickable), nameof(Pickable.Interact))]
     public static class PickableInteractionSwitch
     {
+        [HarmonyPatch(typeof(Pickable), nameof(Pickable.Awake))]
+        [HarmonyPostfix]
+        public static void RegisterKSRPCS(Pickable __instance)
+        {
+            if (!__instance.m_nview) return;
+
+            __instance.m_nview.Register<long, ZDOID>("RPC_RequestPickable", RPC_RequestPickable);
+        }
+
+
+        [HarmonyPatch(typeof(Pickable), nameof(Pickable.Interact))]
         [HarmonyPrefix]
         public static void BeforeInteract(Pickable __instance)
         {
-            if (!__instance.m_nview.IsValid()) return;
-            __instance.m_nview.ClaimOwnership();
-            Jotunn.Logger.LogMessage("claiming ownership of this pickable");
+            ZNetView nview = __instance.m_nview;
+            if (!nview.IsValid()) return;
+            if (nview.IsOwner()) return;
+            nview.InvokeRPC("RPC_RequestPickable", Game.instance.GetPlayerProfile().GetPlayerID(), 
+                __instance.m_nview.m_zdo.m_uid);
+        }
+
+        public static void RPC_RequestPickable(long uid, long playerID, ZDOID pickableZDOID)
+        {
+            ZDOMan.instance.ForceSendZDO(uid, pickableZDOID);
+            ZNetScene.instance.FindInstance(pickableZDOID).GetComponent<ZNetView>().m_zdo.SetOwner(uid);
         }
     }
+
+    
 
     [HarmonyPatch(typeof(Pickable), nameof(Pickable.RPC_Pick))]
     public static class PickItem

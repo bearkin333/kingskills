@@ -91,10 +91,11 @@
     <Compile Include="KSkills\Cooking.cs" />
     <Compile Include="KSkills\Sailing.cs" />
     <Compile Include="KSkills\SkillMan.cs" />
-    <Compile Include="Network\RPC.cs" />
+    <Compile Include="Network\RPCMan.cs" />
     <Compile Include="Overhauls\KSBlock.cs" />
     <Compile Include="Overhauls\KSJump.cs" />
     <Compile Include="Overhauls\KSMining.cs" />
+    <Compile Include="SE\SE_RestedChange.cs" />
     <Compile Include="Systemic Patches\LevelUp.cs" />
     <Compile Include="Systemic Patches\LootDropPatch.cs" />
     <Compile Include="Overhauls\KSPolearm.cs" />

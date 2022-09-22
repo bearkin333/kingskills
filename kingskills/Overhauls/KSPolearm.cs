@@ -65,7 +65,7 @@ namespace kingskills.Patches
 
             //Jotunn.Logger.LogMessage($"Just blocked {damageBlocked} damage with armor.");
 
-            RPC.RPC.SendEXPRPC(__instance.m_nview,
+            RPC.RPCMan.SendXP_RPC(__instance.m_nview,
                 damageBlocked * CFG.WeaponBXPPolearmDamageMod.Value, Skills.SkillType.Polearms, true, true);
         }
     }

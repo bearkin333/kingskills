@@ -34,9 +34,8 @@ namespace kingskills.Weapons
                 Player player = (Player)charac;
 
                 ZNetView nview = __instance.m_nview;
-                if (!nview.IsOwner()) nview.ClaimOwnership();
-                nview.m_zdo.Set(CFG.ZDOKiller, player.GetPlayerID());
-                nview.m_zdo.Set(CFG.ZDOStaggerFlag, true);
+
+                IAmKiller_RPC(nview);
 
                 //Jotunn.Logger.LogMessage($"This attack begins as having {hit.m_damage.GetTotalDamage()} damage");
                 //First, we add the randomness back in
@@ -139,32 +138,32 @@ namespace kingskills.Weapons
 
         [HarmonyPatch(typeof(MineRock), nameof(MineRock.Damage))] [HarmonyPrefix]
         static void MineRockDamage(MineRock __instance, ref HitData hit) => 
-            ModifyResourceDamage(__instance, __instance.m_nview, ref hit);
+            ModifyResourceDamage(__instance, __instance.m_nview, __instance.m_minToolTier, ref hit);
        
         [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Damage))] [HarmonyPrefix]
         static void MineRock5Damage(MineRock5 __instance, ref HitData hit) =>
-            ModifyResourceDamage(__instance, __instance.m_nview, ref hit);
+            ModifyResourceDamage(__instance, __instance.m_nview, __instance.m_minToolTier, ref hit);
         
         [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Damage))] [HarmonyPrefix]
         static void TreeBaseDamage(TreeBase __instance, ref HitData hit) =>
-            ModifyResourceDamage(__instance, __instance.m_nview, ref hit);
+            ModifyResourceDamage(__instance, __instance.m_nview, __instance.m_minToolTier, ref hit);
         
         [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Damage))] [HarmonyPrefix]
         static void TreeLogDamage(TreeLog __instance, ref HitData hit) =>
-            ModifyResourceDamage(__instance, __instance.m_nview, ref hit);
+            ModifyResourceDamage(__instance, __instance.m_nview, __instance.m_minToolTier, ref hit);
         
         [HarmonyPatch(typeof(Destructible), nameof(Destructible.Damage))] [HarmonyPrefix]
         static void DestructibleDamage(Destructible __instance, ref HitData hit) =>
-            ModifyResourceDamage(__instance, __instance.m_nview, ref hit);
+            ModifyResourceDamage(__instance, __instance.m_nview, __instance.m_minToolTier, ref hit);
 
-        public static void ModifyResourceDamage(IDestructible resource, ZNetView nview, ref HitData hit)
+        public static void ModifyResourceDamage(IDestructible resource, ZNetView nview, int minToolTier, ref HitData hit)
         {
             //Jotunn.Logger.LogMessage("Hitting a resource patch detected!");
             if (!CheckHitGood(hit)) return;
 
-            //Jotunn.Logger.LogMessage($"setting killerID to {((Player)hit.GetAttacker()).GetPlayerID()}");
-            nview.ClaimOwnership();
-            nview.m_zdo.Set(CFG.ZDOKiller, ((Player)hit.GetAttacker()).GetPlayerID());
+            if (hit.m_toolTier < minToolTier) return;
+
+            IAmKiller_RPC(nview);
 
             if (hit.m_attacker == Player.m_localPlayer.GetZDOID())
             {
@@ -240,6 +239,26 @@ namespace kingskills.Weapons
             return true;
         }
 
+        public static void IAmKiller_RPC(ZNetView nview)
+        {
+            if (!nview.m_functions.ContainsKey("RPC_SetKiller".GetStableHashCode()))
+                nview.Register<long, ZDOID>("RPC_SetKiller", RPC_SetKiller);
+
+            nview.InvokeRPC("RPC_SetKiller", Game.instance.GetPlayerProfile().GetPlayerID(), nview.m_zdo.m_uid);
+        }
+
+        public static void RPC_SetKiller(long sender, long playerID, ZDOID nviewID)
+        {
+            Jotunn.Logger.LogMessage($"sender is {sender}");
+            Jotunn.Logger.LogMessage($"player is {playerID}");
+            Jotunn.Logger.LogMessage($"nview ZDOID is {nviewID}");
+            ZNetView nview = ZNetScene.instance.FindInstance(nviewID).GetComponent<ZNetView>();
+            nview.m_zdo.Set(CFG.ZDOKiller, playerID);
+            nview.m_zdo.Set(CFG.ZDOStaggerFlag, true);
+
+            ZDOMan.instance.ForceSendZDO(sender, nviewID);
+            nview.m_zdo.SetOwner(sender);
+        }
     }
     
 

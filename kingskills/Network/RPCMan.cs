@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace kingskills.RPC
 {
     [HarmonyPatch]
-    class RPC
+    class RPCMan
     {
         [HarmonyPatch(typeof(Player), nameof(Player.Awake))]
         [HarmonyPostfix]
@@ -20,9 +20,9 @@ namespace kingskills.RPC
             __instance.m_nview.Register<ZPackage>("RPC_RaiseSkill", RPC_RaiseSkill);
         }
 
-        public static void SendEXPRPC(ZNetView player, float factor, Skills.SkillType skill, bool BXP = false, bool weaponRequired = false)
+        public static void SendXP_RPC(ZNetView player, float factor, Skills.SkillType skill, bool BXP = false, bool weaponRequired = false)
         {
-            Jotunn.Logger.LogMessage($"sending an rpc to {player}");
+            //Jotunn.Logger.LogMessage($"sending an rpc to {player}");
             if (player.IsValid())
             {
                 ZPackage data = new ZPackage();
@@ -46,15 +46,17 @@ namespace kingskills.RPC
             bool BXP = data.ReadBool();
             bool WeaponRequired = data.ReadBool();
 
-            Jotunn.Logger.LogMessage($"Just got a call from the server to raise my skill, {skill}. If you say so, buddy!");
             Player player = Player.m_localPlayer;
 
             if (player is null) return;
+            if (!player.m_nview.IsOwner()) player.m_nview.ClaimOwnership();
             if (WeaponRequired && Util.GetPlayerWeapon(player).m_shared.m_skillType != skill) return;
+
+            Jotunn.Logger.LogMessage($"Just got a successfull call from the server to raise my skill {skill}. If you say so, buddy!");
 
             if (BXP)
             {
-                LevelUp.BXP(player, (Skills.SkillType)skill, factor);
+                LevelUp.BXP(player, skill, factor);
             }
             else
             {

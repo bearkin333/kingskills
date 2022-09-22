@@ -330,14 +330,22 @@ perks:
 				{
 					throwing = true;
 					cookingFinishedTime = timing;
-					timeToCook = __instance.GetItemConversion(itemName).m_cookTime;
+					CookingStation.ItemConversion itemConv = __instance.GetItemConversion(itemName);
+					if (itemConv is null)
+                    {
+						timeToCook = 50f;
+                    }
+                    else
+					{
+						timeToCook = itemConv.m_cookTime;
+					}
 
 					//Jotunn.Logger.LogMessage($"Grabbed a cook time of {timing}. " +
 					//	$"item finishes at {__instance.GetItemConversion(itemName).m_cookTime}");
 
 					if (LocalChefCooking.isTrue)
 					{
-						Jotunn.Logger.LogMessage($"Local player was cooking when that piece got removed from the oven");
+						//Jotunn.Logger.LogMessage($"Local player was cooking when that piece got removed from the oven");
 						Player player = Player.m_localPlayer;
 
 						player.RaiseSkill(SkillMan.Cooking, 
@@ -396,7 +404,7 @@ perks:
 					if (__instance.GetZDOID().m_userID != FQ.chefID)
 						chefXPReward *= CFG.GetCookingXPCustomerMult();
 
-					LevelUp.BXP(chef, SkillMan.Cooking, chefXPReward);
+					RPC.RPCMan.SendXP_RPC(chef.m_nview, chefXPReward, SkillMan.Cooking, true);
                 }
 			}
 		}

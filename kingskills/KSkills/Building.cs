@@ -274,7 +274,7 @@ perks:
             float healthChange = __instance.m_health - __instance.m_nview.m_zdo.GetFloat("health", __instance.m_health);
             if (healthChange < 0) healthChange = 0;
 
-            RPC.RPC.SendEXPRPC(playerRef.m_nview, CFG.BuildXPRepairMod.Value * healthChange, SkillMan.Building);
+            RPC.RPCMan.SendXP_RPC(playerRef.m_nview, CFG.BuildXPRepairMod.Value * healthChange, SkillMan.Building);
         }
     }
 

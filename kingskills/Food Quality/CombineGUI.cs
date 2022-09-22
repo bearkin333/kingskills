@@ -222,7 +222,7 @@ namespace kingskills.UX
         {
 			loadedAsk = true;
 			ask = nAsk;
-			Jotunn.Logger.LogMessage($"Loaded dont ask me again as {!nAsk}");
+			//Jotunn.Logger.LogMessage($"Loaded dont ask me again as {!nAsk}");
 		}
 
 		public static void OnConfirmClick()

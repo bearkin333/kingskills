@@ -23,7 +23,7 @@ namespace kingskills.Weapons
             if (player == null || !player.IsPlayer()) return;
 
             if (__instance.IsStaggering())
-                RPC.RPC.SendEXPRPC(player.m_nview,
+                RPCMan.SendXP_RPC(player.m_nview,
                     CFG.WeaponBXPSwordStagger.Value, Skills.SkillType.Swords, true, true);
         }
 
@@ -39,7 +39,7 @@ namespace kingskills.Weapons
                      hit.m_backstabBonus > 1f &&
                      Time.time - __instance.m_backstabTime > 300f)
             {
-                RPC.RPC.SendEXPRPC(player.m_nview,
+                RPCMan.SendXP_RPC(player.m_nview,
                     CFG.WeaponBXPKnifeBackstab.Value, Skills.SkillType.Knives, true, true);
             }
             
@@ -50,7 +50,7 @@ namespace kingskills.Weapons
         private static void CheckForStaggeredByPlayer(Character __instance)
         {
             ZNetView nview = __instance.m_nview;
-            if (!nview.IsOwner()) nview.ClaimOwnership();
+            //if (!nview.IsOwner()) return;
             if  (nview.m_zdo.GetBool(CFG.ZDOStaggerFlag, false))
             {
                 nview.m_zdo.Set(CFG.ZDOStaggerFlag, false);
@@ -58,7 +58,7 @@ namespace kingskills.Weapons
                 Player attacker = Player.GetPlayer(nview.m_zdo.GetLong(CFG.ZDOKiller, 0));
                 if (attacker is null) return;
 
-                RPC.RPC.SendEXPRPC(attacker.m_nview,
+                RPCMan.SendXP_RPC(attacker.m_nview,
                     CFG.GetClubBXPStagger(__instance.GetMaxHealth()), Skills.SkillType.Clubs, true, true);
             }
         }
@@ -103,7 +103,7 @@ namespace kingskills.Weapons
 
         public static void ResourceDestroyed(IDestructible __instance, ZNetView nview, string name = "")
         {
-            Jotunn.Logger.LogMessage($"{name} was destroyed");
+            //Jotunn.Logger.LogMessage($"{name} was destroyed");
 
             long killingPlayer = nview.m_zdo.GetLong(CFG.ZDOKiller, 0);
             Jotunn.Logger.LogMessage($"killer was {killingPlayer}");
@@ -114,16 +114,16 @@ namespace kingskills.Weapons
                 return;
             }
 
-            Jotunn.Logger.LogMessage($"killer was found as a player {killer.GetPlayerName()}");
+            //Jotunn.Logger.LogMessage($"killer was found as a player {killer.GetPlayerName()}");
 
             if (name.Contains("Stub"))
             {
-                RPC.RPC.SendEXPRPC(killer.m_nview,
+                RPC.RPCMan.SendXP_RPC(killer.m_nview,
                     CFG.ToolBXPWoodStubReward.Value, Skills.SkillType.WoodCutting, true, true);
             }
             else if (__instance.GetType() == typeof(TreeLog))
             {
-                RPC.RPC.SendEXPRPC(killer.m_nview,
+                RPC.RPCMan.SendXP_RPC(killer.m_nview,
                     CFG.WeaponBXPAxeTreeAmount.Value, Skills.SkillType.Axes, true, true);
             }
         }

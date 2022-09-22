@@ -208,4 +208,29 @@ namespace kingskills.Perks
         }
 
     }
+
+    [HarmonyPatch(typeof(PlayerProfile), nameof(PlayerProfile.RemoveProfile))]
+    public static class DeleteKSSave
+    {
+        [HarmonyPostfix]
+        public static void RemoveKSProfile(PlayerProfile __instance, string name, FileHelpers.FileSource fileSource)
+        {
+            string saveFolderPath = Application.persistentDataPath +
+                    "/characters/" + SaveLoad.saveDirectory + "/" + name + SaveLoad.fileEnding;
+
+            try
+            {
+                FileHelpers.Delete(saveFolderPath, fileSource);
+                Jotunn.Logger.LogMessage($"deleted {name + SaveLoad.fileEnding}");
+            }
+            catch
+            {
+                Jotunn.Logger.LogMessage("No King Skills save data to delete");
+            }
+
+
+
+        }
+
+    }
 }
