@@ -122,6 +122,7 @@ namespace kingskills.Weapons
 
                 //Jotunn.Logger.LogMessage($"To {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
 
+                hit.m_damage.Modify(CFG.GetBigStickDamageMult());
 
             }
             //Or if the attacked is the local player
@@ -232,10 +233,6 @@ namespace kingskills.Weapons
             {
                 return false;
             }
-            if (!hit.GetAttacker().IsPlayer())
-            {
-                return false;
-            }
             return true;
         }
 
@@ -249,9 +246,9 @@ namespace kingskills.Weapons
 
         public static void RPC_SetKiller(long sender, long playerID, ZDOID nviewID)
         {
-            Jotunn.Logger.LogMessage($"sender is {sender}");
-            Jotunn.Logger.LogMessage($"player is {playerID}");
-            Jotunn.Logger.LogMessage($"nview ZDOID is {nviewID}");
+            //Jotunn.Logger.LogMessage($"sender is {sender}");
+            //Jotunn.Logger.LogMessage($"player is {playerID}");
+            //Jotunn.Logger.LogMessage($"nview ZDOID is {nviewID}");
             ZNetView nview = ZNetScene.instance.FindInstance(nviewID).GetComponent<ZNetView>();
             nview.m_zdo.Set(CFG.ZDOKiller, playerID);
             nview.m_zdo.Set(CFG.ZDOStaggerFlag, true);

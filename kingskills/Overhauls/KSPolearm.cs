@@ -47,26 +47,31 @@ namespace kingskills.Patches
         [HarmonyPatch(typeof(Character))]
         [HarmonyPatch(nameof(Character.RPC_Damage))]
         [HarmonyPrefix]
-        public static void DamageArmorWatch(Character __instance, HitData hit)
+        public static void PlayerGotHurt(Character __instance, ref HitData hit)
         {
-            if (!CFG.IsSkillActive(Skills.SkillType.Polearms) ||
-                !__instance.IsPlayer() ||
-                (__instance.IsBlocking() && hit.m_blockable)) 
-                return;
+            if (!__instance.IsPlayer()) return;
+
             Character attacker = hit.GetAttacker();
-            if (!hit.HaveAttacker() || attacker == null || 
-                !__instance.IsPVPEnabled() && attacker != null && attacker.IsPlayer())
-                return;
 
-            HitData sampleHit = hit.Clone();
-            sampleHit.ApplyResistance(__instance.m_damageModifiers, out _);
-            sampleHit.ApplyArmor(__instance.GetBodyArmor());
-            float damageBlocked = hit.GetTotalDamage() - sampleHit.GetTotalDamage();
+            hit.m_damage.Modify(CFG.GetBerserkDamageRedux());
 
-            //Jotunn.Logger.LogMessage($"Just blocked {damageBlocked} damage with armor.");
+            if (attacker == null) return;
+            if (!__instance.IsPVPEnabled() && attacker.IsPlayer()) return;
 
-            RPC.RPCMan.SendXP_RPC(__instance.m_nview,
-                damageBlocked * CFG.WeaponBXPPolearmDamageMod.Value, Skills.SkillType.Polearms, true, true);
+
+            if (CFG.IsSkillActive(Skills.SkillType.Polearms) &&
+                !(__instance.IsBlocking() && hit.m_blockable))
+            {
+                HitData sampleHit = hit.Clone();
+                sampleHit.ApplyResistance(__instance.m_damageModifiers, out _);
+                sampleHit.ApplyArmor(__instance.GetBodyArmor());
+                float damageBlocked = hit.GetTotalDamage() - sampleHit.GetTotalDamage();
+
+                //Jotunn.Logger.LogMessage($"Just blocked {damageBlocked} damage with armor.");
+
+                RPC.RPCMan.SendXP_RPC(__instance.m_nview,
+                    damageBlocked * CFG.WeaponBXPPolearmDamageMod.Value, Skills.SkillType.Polearms, true, true);
+            }
         }
     }
 }

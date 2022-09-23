@@ -72,6 +72,16 @@ namespace kingskills.Perks
         {
             PerkMan.PerkType perk = openedPerks[perkKey].type;
             bool deactivated = PerkMan.IsPerkDeactivated(perk);
+            
+            if (!deactivated && perk == PerkMan.PerkType.BigStick)
+            {
+                if (P_BigStick.embiggened)
+                {
+                    Player.m_localPlayer.Message(MessageHud.MessageType.Center, "Unequip weapon first!");
+                    return;
+                }
+            }
+
             PerkMan.SetDeactivatedPerk(perk, !deactivated);
 
             SkillGUIUpdate.GUICheck();

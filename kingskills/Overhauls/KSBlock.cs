@@ -33,7 +33,7 @@ namespace kingskills
                         patchedAsguard = true;
                         yield return new CodeInstruction(OpCodes.Ldarg_0); // Humanoid this (blocker)
                         yield return new CodeInstruction(OpCodes.Call, 
-                            AccessTools.DeclaredMethod(typeof(Asguard), "BlockDirectionPatch"));
+                            AccessTools.DeclaredMethod(typeof(P_Asguard), "BlockDirectionPatch"));
                     }
                     else
                     {
@@ -115,6 +115,8 @@ namespace kingskills
             hit.BlockDamage(damage);
             float expValue = 1f;
 
+            //Jotunn.Logger.LogMessage($"Block detected");
+
             if (CFG.IsSkillActive(Skills.SkillType.Blocking)) 
             {
                 expValue *= damage * CFG.GetBlockExpMult();
@@ -122,22 +124,23 @@ namespace kingskills
                 if (isParry)
                 {
                     expValue *= CFG.GetBlockParryExpMult();
+                    P_BlackFlash.BlackFlashExplosion();
                 }
             }
 
-            __instance.RaiseSkill(Skills.SkillType.Blocking, expValue);
+            ((Player)__instance).RaiseSkill(Skills.SkillType.Blocking, expValue);
 
             if (__instance.GetCurrentBlocker() == __instance.m_unarmedWeapon.m_itemData)
                 LevelUp.BXP(__instance as Player, Skills.SkillType.Unarmed, CFG.GetFistBXPBlock(damage));
         }
 
-        private static float FixBlockPower(
+        public static float FixBlockPower(
             ItemDrop.ItemData currentBlocker,
             float skillFactor,
             bool isParry,
             Humanoid instance,
-            HitData _,
-            Character __
+            HitData _ = null,
+            Character __ = null
             )
         {
             //Jotunn.Logger.LogMessage($"block power of {currentBlocker.GetBlockPower(skillFactor)} is now mine, also am I parrying? {isParry}");

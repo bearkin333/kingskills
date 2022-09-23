@@ -7,6 +7,7 @@ using BepInEx.Configuration;
 using UnityEngine;
 using kingskills.Perks;
 using Jotunn.Managers;
+using kingskills.SE;
 
 namespace kingskills
 {
@@ -194,7 +195,7 @@ namespace kingskills
             ColorKingSkills = new Color(0.77f, 0.23f, 0.99f);
             ColorPTGreen = new Color(0.48f, 0.95f, 0.40f);
             ColorPTRed = new Color(0.92f, 0.05f, 0.05f);
-            ColorKingBlurbs = new Color(0.6f, 0.3f, 0.61f);
+            ColorKingBlurbs = new Color(0.7f, 0.4f, 0.71f);
 
             MaxSkillLevel = cfg.Bind("Generic", "Max Skill Level", 100f,
                     AdminCD("This is the level that all king skills can go up to.", true));
@@ -2755,7 +2756,7 @@ namespace kingskills
             return new Perk("Air Step",
                 $"Allows you to jump {GetAirStepExtraJumps()} additional {times} while in the air.",
                 "The laws of physics are nothing to a viking!",
-                PerkMan.PerkType.AirStep, "Icons/airstep.png",
+                PerkMan.PerkType.AirStep, Skills.SkillType.Jump, "Icons/airstep.png",
                 $"{GetAirStepExtraJumps()} extra {jumps}");
         }
 
@@ -2785,7 +2786,7 @@ namespace kingskills
             return new Perk("Always Prepared",
                 "Entering water no longer causes you to put your weapons or tools away.",
                 "Breaking news: man literally too angry to swim",
-                PerkMan.PerkType.AlwaysPrepared, "Icons/alwaysprepared.png",
+                PerkMan.PerkType.AlwaysPrepared, Skills.SkillType.Swim, "Icons/alwaysprepared.png",
                 "Equip and Attack underwater");
         }
 
@@ -2842,7 +2843,7 @@ namespace kingskills
                 $"aggressors. It takes {AquamanTimerStart.Value} seconds to start, and charges up in size and damage over the following " +
                 $"{AquamanTimeTilMax.Value} seconds.",
                 "It may not be laser eyes, but it's still an objectively cool power.",
-                PerkMan.PerkType.Aquaman, "Icons/aquaman.png",
+                PerkMan.PerkType.Aquaman, Skills.SkillType.Swim, "Icons/aquaman.png",
                 "Fish attack nearby units while in water");
         }
 
@@ -2881,7 +2882,7 @@ namespace kingskills
                 "You now block in all directions while blocking - but you can only get a perfect block when " +
                 "properly facing the attack.",
                 "Are all the stars in the sky my enemy?",
-                PerkMan.PerkType.Asguard, "Icons/asguard.png",
+                PerkMan.PerkType.Asguard, Skills.SkillType.Polearms, "Icons/asguard.png",
                 "Omnidirectional Block");
         }
 
@@ -2919,7 +2920,7 @@ namespace kingskills
                 "While you are running and unarmed, any enemy that comes close to you" +
                 " gets automatically hit with a high-speed kick. Has a 2s cooldown.",
                 "You're already in my range...",
-                PerkMan.PerkType.AttackOfOpportunity, "Icons/attackofopportunity.png",
+                PerkMan.PerkType.AttackOfOpportunity, Skills.SkillType.Unarmed, "Icons/attackofopportunity.png",
                 "Free hits while running");
         }
 
@@ -2941,11 +2942,28 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region berserkr
         #region configdef
-
+        public static ConfigEntry<float> BerserkrProcChance;
+        public static ConfigEntry<int> BerserkrMaxStacks;
+        public static ConfigEntry<float> BerserkrStaminaReduxPer;
+        public static ConfigEntry<float> BerserkrDamageReduxPer;
+        public static ConfigEntry<float> BerserkrMovespeedPer;
+        public static ConfigEntry<float> BerserkrStackDuration;
         #endregion configdef
 
         public static void InitBerserkrConfigs(ConfigFile cfg)
         {
+            BerserkrProcChance = cfg.Bind("Perks.Berserkr", "Proc Chance", 20f,
+                    AdminCD("% chance per hit taken to activate Berserk"));
+            BerserkrMaxStacks = cfg.Bind("Perks.Berserkr", "Max Stacks", 5,
+                    AdminCD("Maximum number of stacks"));
+            BerserkrStaminaReduxPer = cfg.Bind("Perks.Berserkr", "Stamina Redux Per", 10f,
+                    AdminCD("% reduction in stamina per stack"));
+            BerserkrDamageReduxPer = cfg.Bind("Perks.Berserkr", "Damage Redux Per", 6f,
+                    AdminCD("% reduction in damage per stack"));
+            BerserkrMovespeedPer = cfg.Bind("Perks.Berserkr", "Movespeed Per", 8f,
+                    AdminCD("% increase in movespeed per stack"));
+            BerserkrStackDuration = cfg.Bind("Perks.Berserkr", "Duration", 45f,
+                    AdminCD("seconds before your stacks of berserk run out"));
         }
 
         public static Perk GetPerkBerserkr()
@@ -2954,7 +2972,42 @@ namespace kingskills
                 "When you take damage, there's a small chance to enter a berserker rage, which increases" +
                 " your damage, reduces stamina costs, and increases your movespeed.",
                 "That's my secret, Cap. I'm always angry.",
-                PerkMan.PerkType.Berserkr, "Icons/berserkr.png");
+                PerkMan.PerkType.Berserkr, Skills.SkillType.Axes, "Icons/berserkr.png",
+                $"{BerserkrProcChance.Value}% chance on damage taken to get a stack of berserk, refreshing the " +
+                $"duration and providing buffs.");
+        }
+
+        public static bool GetBerserkCheck()
+        {
+            return UnityEngine.Random.Range(0f, 1f) < PerToMod(BerserkrProcChance);
+        }
+        public static float GetBerserkStaminaRedux()
+        {
+            SE_Stacking buff = (SE_Stacking)Player.m_localPlayer.GetSEMan().GetStatusEffect(KS_SEMan.ks_BerserkName);
+            if (buff is null)
+                return 1f;
+            else
+                return 1f - (PerToMod(BerserkrStaminaReduxPer) * buff.stacks);
+        }
+        public static float GetBerserkDamageRedux()
+        {
+            SE_Stacking buff = (SE_Stacking)Player.m_localPlayer.GetSEMan().GetStatusEffect(KS_SEMan.ks_BerserkName);
+            if (buff is null)
+                return 1f;
+            else
+                return 1f - (PerToMod(BerserkrDamageReduxPer) * buff.stacks);
+        }
+        public static float GetBerserkMovespeedMult()
+        {
+            SE_Stacking buff = (SE_Stacking)Player.m_localPlayer.GetSEMan().GetStatusEffect(KS_SEMan.ks_BerserkName);
+            if (buff is null)
+                return 1f;
+            else
+                return 1f + (PerToMod(BerserkrMovespeedPer) * buff.stacks);
+        }
+        public static float GetBerserkDuration()
+        {
+            return BerserkrStackDuration.Value;
         }
 
 
@@ -2967,11 +3020,20 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region BigStick
         #region configdef
+        public static ConfigEntry<float> BigStickScale;
+        public static ConfigEntry<float> BigStickStaminaMalus;
+        public static ConfigEntry<float> BigStickDamageBonus;
 
         #endregion configdef
 
         public static void InitBigStickConfigs(ConfigFile cfg)
         {
+            BigStickScale = cfg.Bind("Perks.BigStick", "Scale", 80f,
+                    AdminCD("% increase to the size of your weapon."));
+            BigStickStaminaMalus = cfg.Bind("Perks.BigStick", "Stamina Cost", 100f,
+                    AdminCD("% increase to stamina costs."));
+            BigStickDamageBonus = cfg.Bind("Perks.BigStick", "Damage Bonus", 40f,
+                    AdminCD("% damage increase"));
         }
 
         public static Perk GetPerkBigStick()
@@ -2979,9 +3041,30 @@ namespace kingskills
             return new Perk("Big Stick",
                 "Your equipped weapon increases in size, costing more stamina but also dealing more damage.",
                 "Unfortunately, does nothing for the softness of your voice.",
-                PerkMan.PerkType.BigStick, "Icons/bigstick.png");
+                PerkMan.PerkType.BigStick, Skills.SkillType.Polearms, "Icons/bigstick.png",
+                $"{BigStickScale.Value}% bigger weapon, {BigStickStaminaMalus.Value}% more stamina cost, " +
+                $"{BigStickDamageBonus.Value}% more damage");
         }
 
+        public static float GetBigStickScaleMult()
+        {
+            return PerToMult(BigStickScale);
+        }
+
+        public static float GetBigStickStaminaMult()
+        {
+            if (P_BigStick.embiggened)
+                return PerToMult(BigStickStaminaMalus);
+            else
+                return 1f;
+        }
+        public static float GetBigStickDamageMult()
+        {
+            if (P_BigStick.embiggened)
+                return PerToMult(BigStickDamageBonus);
+            else
+                return 1f;
+        }
 
 
 
@@ -2992,22 +3075,35 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region BlackFlash
         #region configdef
-
+        public static ConfigEntry<float> BlackFlashDamage;
+        public static ConfigEntry<float> BlackFlashRange;
         #endregion configdef
 
         public static void InitBlackFlashConfigs(ConfigFile cfg)
         {
+            BlackFlashDamage = cfg.Bind("Perks.BlackFlash", "Damage", 40f,
+                    AdminCD("% of your block power * parry bonus to use as damage"));
+            BlackFlashRange = cfg.Bind("Perks.BlackFlash", "Range", 5f,
+                    AdminCD("units of explosion radius"));
         }
 
         public static Perk GetPerkBlackFlash()
         {
             return new Perk("Black Flash",
-                "Perfect blocks will now cause explosions, dealing damage in an area based on your block armor" +
+                "Perfect blocks will now cause explosions, dealing damage in an area based on your block power" +
                 " and parry bonus.",
                 "'There's a sense of omnipotence, like everything else revolves around them.'",
-                PerkMan.PerkType.BlackFlash, "Icons/blackflash.png");
+                PerkMan.PerkType.BlackFlash, Skills.SkillType.Blocking, "Icons/blackflash.png",
+                $"Parries cause explosions, damage based on block power * parry bonus");
         }
 
+        public static float GetBlackFlashDamage()
+        {
+            Player player = Player.m_localPlayer;
+            ItemDrop.ItemData shield = player.GetCurrentBlocker();
+            float value = KSBlock.FixBlockPower(shield, player.GetSkillFactor(Skills.SkillType.Blocking), true, player);
+            return value * PerToMult(BlackFlashDamage);
+        }
 
 
 
@@ -3018,21 +3114,28 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region BlastWave
         #region configdef
-
+        public static ConfigEntry<float> BlastWaveScale;
         #endregion configdef
 
         public static void InitBlastWaveConfigs(ConfigFile cfg)
         {
+            BlastWaveScale = cfg.Bind("Perks.BlastWave", "Scale", 100f,
+                    AdminCD("% size to increase all AOEs by"));
         }
 
         public static Perk GetPerkBlastWave()
         {
             return new Perk("Blast Wave",
-                "All attacks you inflict that hit an area will have their size doubled.",
+                "All attacks you inflict that hit an area will have their area of effect doubled.",
                 "It was all reduced to rubble... and then, again, to ash.",
-                PerkMan.PerkType.BlastWave, "Icons/blastwave.png");
+                PerkMan.PerkType.BlastWave, Skills.SkillType.Clubs, "Icons/blastwave.png",
+                $"{BlastWaveScale.Value}% increase to AOE size");
         }
 
+        public static float GetBlastWaveScaleMult()
+        {
+            return PerToMult(BlastWaveScale);
+        }
 
 
 
@@ -3055,7 +3158,7 @@ namespace kingskills
             return new Perk("Blocking Expertise",
                 "All forms of damage are now blockable. Yes, even that.",
                 "If it breathes, you can block it.",
-                PerkMan.PerkType.BlockExpert, "Icons/blockexpert.png");
+                PerkMan.PerkType.BlockExpert, Skills.SkillType.None, "Icons/blockexpert.png");
         }
 
 
@@ -3080,7 +3183,7 @@ namespace kingskills
             return new Perk("Just a Guy with a Boomerang",
                 "Spears now automatically return to you after they're thrown.",
                 "I didn't ask for all this flying and magic!",
-                PerkMan.PerkType.Boomerang, "Icons/boomerang.png");
+                PerkMan.PerkType.Boomerang, Skills.SkillType.None, "Icons/boomerang.png");
         }
 
 
@@ -3106,7 +3209,7 @@ namespace kingskills
                 "Intensive study of the workings of plants has increased your ability read basic information about them, such as time until " +
                 "completion or yield.",
                 "Turns out, when you study plants, you learn things.",
-                PerkMan.PerkType.Botany, "Icons/botany.png");
+                PerkMan.PerkType.Botany, Skills.SkillType.None, "Icons/botany.png");
         }
 
 
@@ -3131,7 +3234,7 @@ namespace kingskills
             return new Perk("Break My Stride",
                 "Carts now only affect your movespeed 30%.",
                 "Ain't nothing gonna...",
-                PerkMan.PerkType.BreakMyStride, "Icons/breakmystride.png");
+                PerkMan.PerkType.BreakMyStride, Skills.SkillType.None, "Icons/breakmystride.png");
         }
 
 
@@ -3156,7 +3259,7 @@ namespace kingskills
             return new Perk("Butterfly",
                 "You can now jump while in water.",
                 "Beautiful form!",
-                PerkMan.PerkType.Butterfly, "Icons/butterfly.png");
+                PerkMan.PerkType.Butterfly, Skills.SkillType.None, "Icons/butterfly.png");
         }
 
 
@@ -3181,7 +3284,7 @@ namespace kingskills
             return new Perk("Cauterize",
                 "You've had the incredible idea of setting all your weapons on fire. You now do 20% extra damage as fire damage.",
                 "Anything is a torch, if you're brave enough.",
-                PerkMan.PerkType.Cauterize, "Icons/cauterize.png");
+                PerkMan.PerkType.Cauterize, Skills.SkillType.None, "Icons/cauterize.png");
         }
 
 
@@ -3206,7 +3309,7 @@ namespace kingskills
             return new Perk("Cloak of Shadows",
                 "While sneaking, you now passively regenerate a percentage of your max health per second.",
                 "You have no ally but the darkness.",
-                PerkMan.PerkType.CloakOfShadows, "Icons/cloakofshadows.png");
+                PerkMan.PerkType.CloakOfShadows, Skills.SkillType.None, "Icons/cloakofshadows.png");
         }
 
 
@@ -3231,7 +3334,7 @@ namespace kingskills
             return new Perk("Closing The Gap",
                 "Every time you stagger an enemy, you regain 5 stamina and skip towards them.",
                 "Perfect for when your flight reflex is broken.",
-                PerkMan.PerkType.ClosingTheGap, "Icons/closingthegap.png");
+                PerkMan.PerkType.ClosingTheGap, Skills.SkillType.None, "Icons/closingthegap.png");
         }
 
 
@@ -3256,7 +3359,7 @@ namespace kingskills
             return new Perk("Controlled Demolition",
                 "Trees will always fall away from you.",
                 "Instructions: Put tree between you and enemy",
-                PerkMan.PerkType.ControlledDemo, "Icons/controlleddemo.png");
+                PerkMan.PerkType.ControlledDemo, Skills.SkillType.None, "Icons/controlleddemo.png");
         }
 
 
@@ -3281,7 +3384,7 @@ namespace kingskills
             return new Perk("Couched Lance",
                 "After standing still for several seconds, you now gain a large boost to damage.",
                 "Usually for charging cavalry, now for stampeding Loxes.",
-                PerkMan.PerkType.CouchedLance, "Icons/couchedlance.png");
+                PerkMan.PerkType.CouchedLance, Skills.SkillType.None, "Icons/couchedlance.png");
         }
 
 
@@ -3307,7 +3410,7 @@ namespace kingskills
                 "You can now activate a huge explosion, sending your ship flying through the air. Better" +
                 " hold on!",
                 "And so men set sights on the Grand Line, in pursuit of their dreams.",
-                PerkMan.PerkType.CoupDeBurst, "Icons/coupdeburst.png");
+                PerkMan.PerkType.CoupDeBurst, Skills.SkillType.None, "Icons/coupdeburst.png");
         }
 
 
@@ -3332,7 +3435,7 @@ namespace kingskills
             return new Perk("Critical Blow",
                 "You have a 10% chance to deal double damage on each hit.",
                 "The kind of hit your DM would be embarassed to narrate.",
-                PerkMan.PerkType.CriticalBlow, "Icons/criticalblow.png");
+                PerkMan.PerkType.CriticalBlow, Skills.SkillType.None, "Icons/criticalblow.png");
         }
 
 
@@ -3357,7 +3460,7 @@ namespace kingskills
             return new Perk("Deadeye",
                 "You can now throw your knives, dealing half backstab damage.",
                 "They don't come back to you, though.",
-                PerkMan.PerkType.Deadeye, "Icons/deadeye.png");
+                PerkMan.PerkType.Deadeye, Skills.SkillType.None, "Icons/deadeye.png");
         }
 
 
@@ -3382,7 +3485,7 @@ namespace kingskills
             return new Perk("Decapitate",
                 "Trophies can be eaten to gain axe experience.",
                 "My ancestors are smiling at me, imperial. Can you say the same?",
-                PerkMan.PerkType.Decapitation, "Icons/decapitation.png");
+                PerkMan.PerkType.Decapitation, Skills.SkillType.None, "Icons/decapitation.png");
         }
 
 
@@ -3407,7 +3510,7 @@ namespace kingskills
             return new Perk("That Didn't Even Hurt",
                 "Any creature that deals less than 5 damage to you, while you're not blocking, now gets staggered out of fear.",
                 "Is that all you've got? Pathetic.",
-                PerkMan.PerkType.DidntHurt, "Icons/didnthurt.png");
+                PerkMan.PerkType.DidntHurt, Skills.SkillType.None, "Icons/didnthurt.png");
         }
 
 
@@ -3432,7 +3535,7 @@ namespace kingskills
             return new Perk("Disarming Smile",
                 "Knives now use their backstab bonus instead of their parry bonus for parrying.",
                 "No better defense than an alarmingly quick offense.",
-                PerkMan.PerkType.DisarmingDefense, "Icons/disarmingsmile.png");
+                PerkMan.PerkType.DisarmingDefense, Skills.SkillType.None, "Icons/disarmingsmile.png");
         }
 
 
@@ -3457,7 +3560,7 @@ namespace kingskills
             return new Perk("Extrasensory perception",
                 "You can now see lines highlighting enemy sight cones while you're sneaking.",
                 "That, or you're just starting to see things now.",
-                PerkMan.PerkType.ESP, "Icons/esp.png");
+                PerkMan.PerkType.ESP, Skills.SkillType.None, "Icons/esp.png");
         }
 
 
@@ -3482,7 +3585,7 @@ namespace kingskills
             return new Perk("Efficiency",
                 "New building techniques allow you to build new constructions at half the cost.",
                 "It's not 'cutting corners'... If those corners were completely unnecessary!",
-                PerkMan.PerkType.Efficiency, "Icons/efficiency.png");
+                PerkMan.PerkType.Efficiency, Skills.SkillType.None, "Icons/efficiency.png");
         }
 
 
@@ -3507,7 +3610,7 @@ namespace kingskills
             return new Perk("Blessing of the Einherjar",
                 "All of your projectiles now home towards the nearest target.",
                 "Alone no longer.",
-                PerkMan.PerkType.Einherjar, "Icons/einherjar.png");
+                PerkMan.PerkType.Einherjar, Skills.SkillType.None, "Icons/einherjar.png");
         }
 
 
@@ -3533,7 +3636,7 @@ namespace kingskills
                 "Advanced knowledge of civil engineering secrets have caused your support pillars" +
                 " and beams to become almost three times as sturdy as usual.",
                 "It's triangles all the way down.",
-                PerkMan.PerkType.Engineer, "Icons/engineer.png");
+                PerkMan.PerkType.Engineer, Skills.SkillType.None, "Icons/engineer.png");
         }
 
 
@@ -3558,7 +3661,7 @@ namespace kingskills
             return new Perk("Falcon Kick",
                 "Your kick now causes you to backflip into the air, and sends enemies flying.",
                 "K.O.!",
-                PerkMan.PerkType.FalconKick, "Icons/falconkick.png");
+                PerkMan.PerkType.FalconKick, Skills.SkillType.None, "Icons/falconkick.png");
         }
 
 
@@ -3584,7 +3687,7 @@ namespace kingskills
                 "Whenever you are on a ship, but not the captain, a portion of your sailing level is added to" +
                 " the captain's when determining sailing buffs.",
                 "Every man does their part.",
-                PerkMan.PerkType.FirstMate, "Icons/firstmate.png");
+                PerkMan.PerkType.FirstMate, Skills.SkillType.None, "Icons/firstmate.png");
         }
 
 
@@ -3609,7 +3712,7 @@ namespace kingskills
             return new Perk("Spearfisher's Boon",
                 "Whenever you throw a spear, a second spear will be thrown automatically towards the nearest enemy.",
                 "Where does the second spear come from? A fisherman never tells.",
-                PerkMan.PerkType.FishersBoon, "Icons/fishersboon.png");
+                PerkMan.PerkType.FishersBoon, Skills.SkillType.None, "Icons/fishersboon.png");
         }
 
 
@@ -3635,7 +3738,7 @@ namespace kingskills
                 "Hours of experimentation have led you to understanding what works and what doesn't. " +
                 "You have come up with several new recipes, both tasty and healthy.",
                 "Now you can call your compatriots idiot sandwiches and they can't complain.",
-                PerkMan.PerkType.FiveStarChef, "Icons/fivestarchef.png");
+                PerkMan.PerkType.FiveStarChef, Skills.SkillType.None, "Icons/fivestarchef.png");
         }
 
 
@@ -3660,7 +3763,7 @@ namespace kingskills
             return new Perk("Four Stomachs",
                 "All your food decays 25% slower, essentially making it last 50% longer.",
                 "I'm not calling you a cow... But...",
-                PerkMan.PerkType.FourStomachs, "Icons/fourstomachs.png");
+                PerkMan.PerkType.FourStomachs, Skills.SkillType.None, "Icons/fourstomachs.png");
         }
 
 
@@ -3686,7 +3789,7 @@ namespace kingskills
                 "When you break a rock, if there are any enemies nearby, the rocks " +
                 "and ore first pelt them for sizable damage before returning to your feet.",
                 "It's not the explosion that gets you, it's the fragments.",
-                Perks.PerkMan.PerkType.Fragmentation, "Icons/fragmentation.png");
+                Perks.PerkMan.PerkType.Fragmentation, Skills.SkillType.None, "Icons/fragmentation.png");
         }
 
 
@@ -3711,7 +3814,7 @@ namespace kingskills
             return new Perk("Frugal",
                 "You have a 50% chance not to expend ammo.",
                 "For the eco-friendly viking warrior.",
-                PerkMan.PerkType.Frugal, "Icons/frugal.png");
+                PerkMan.PerkType.Frugal, Skills.SkillType.None, "Icons/frugal.png");
         }
 
 
@@ -3736,7 +3839,7 @@ namespace kingskills
             return new Perk("Giant Smash",
                 "A special attack that ragdolls enemies into the air.",
                 "A power even the dragonborn never mastered.",
-                PerkMan.PerkType.GiantSmash, "Icons/giantsmash.png");
+                PerkMan.PerkType.GiantSmash, Skills.SkillType.None, "Icons/giantsmash.png");
         }
 
 
@@ -3761,7 +3864,7 @@ namespace kingskills
             return new Perk("God Slayer",
                 "Damage dealt to bosses is now increased by 50%.",
                 "A god, are you? Good. I was just thinking there was an empty wall above my hearth.",
-                PerkMan.PerkType.GodSlayingStrike, "Icons/godslayer.png");
+                PerkMan.PerkType.GodSlayingStrike, Skills.SkillType.None, "Icons/godslayer.png");
         }
 
 
@@ -3786,7 +3889,7 @@ namespace kingskills
             return new Perk("Goomba Stomp",
                 "You now deal damage when landing on an enemy's head.",
                 "Yahoo!",
-                PerkMan.PerkType.GoombaStomp, "Icons/goombastomp.png");
+                PerkMan.PerkType.GoombaStomp, Skills.SkillType.None, "Icons/goombastomp.png");
         }
 
 
@@ -3812,7 +3915,7 @@ namespace kingskills
                 "Your natural talent for growing plants has manifested, giving you an extra insight into information such as time until " +
                 "completion or yield.",
                 "Much better than a yellow foot, which you ought to bring up with your doctor.",
-                PerkMan.PerkType.GreenThumb, "Icons/greenthumb.png");
+                PerkMan.PerkType.GreenThumb, Skills.SkillType.None, "Icons/greenthumb.png");
         }
 
 
@@ -3837,7 +3940,7 @@ namespace kingskills
             return new Perk("Gut and Run",
                 "Each attack against an enemy with full health will now cause them to start bleeding.",
                 "Sorry to drop in out of nowhere, but...",
-                PerkMan.PerkType.GutAndRun, "Icons/gutandrun.png");
+                PerkMan.PerkType.GutAndRun, Skills.SkillType.None, "Icons/gutandrun.png");
         }
 
 
@@ -3863,7 +3966,7 @@ namespace kingskills
                 "You have gotten so experienced that entire fields will seem to pick themselves before your very eyes. " +
                 "You now harvest in a large radius.",
                 "The botanical version of strip mining.",
-                PerkMan.PerkType.Harvester, "Icons/harvester.png");
+                PerkMan.PerkType.Harvester, Skills.SkillType.None, "Icons/harvester.png");
         }
 
 
@@ -3888,7 +3991,7 @@ namespace kingskills
             return new Perk("Heart of the Forest",
                 "Every hit on a tree stacks up a buff that reduces the stagger damage you take.",
                 "For when you literally can't be bothered to entertain the greydwarves swarming you.",
-                PerkMan.PerkType.HeartOfTheForest, "Icons/heartoftheforest.png");
+                PerkMan.PerkType.HeartOfTheForest, Skills.SkillType.None, "Icons/heartoftheforest.png");
         }
 
 
@@ -3913,7 +4016,7 @@ namespace kingskills
             return new Perk("Heart of the Monkey",
                 "By holding space while in the air, you can now cling to walls such as trees and cliffs. Drains stamina as though you were running.",
                 "The will of D now lives inside you.",
-                PerkMan.PerkType.HeartOfTheMonkey, "Icons/heartofthemonkey.png");
+                PerkMan.PerkType.HeartOfTheMonkey, Skills.SkillType.None, "Icons/heartofthemonkey.png");
         }
 
 
@@ -3939,7 +4042,7 @@ namespace kingskills
                 "Running for an extended period of time without interruption will cause you to slowly accelerate " +
                 "up to a point.",
                 "Your world has been blessed with Speed!",
-                PerkMan.PerkType.HermesBoots, "Icons/hermesboots.png");
+                PerkMan.PerkType.HermesBoots, Skills.SkillType.None, "Icons/hermesboots.png");
         }
 
 
@@ -3964,7 +4067,7 @@ namespace kingskills
             return new Perk("Hide in Plain Sight",
                 "No matter the light conditions, you are always considered to be in pitch blackness.",
                 "Much more effective than burying your head.",
-                PerkMan.PerkType.HideInPlainSight, "Icons/hideinplainsight.png");
+                PerkMan.PerkType.HideInPlainSight, Skills.SkillType.None, "Icons/hideinplainsight.png");
         }
 
 
@@ -3989,7 +4092,7 @@ namespace kingskills
             return new Perk("Highlander",
                 "Increases your max health by 100.",
                 "There can only be one - and it will be you.",
-                PerkMan.PerkType.Highlander, "Icons/highlander.png");
+                PerkMan.PerkType.Highlander, Skills.SkillType.None, "Icons/highlander.png");
         }
 
 
@@ -4014,7 +4117,7 @@ namespace kingskills
             return new Perk("Wings of Hraesvelg",
                 "Shots fired will now be accompanied by a pillar of wind, knocking back enemies that have gotten too close as well as yourself.",
                 "The great eagle guides you. Fall damage reduction not included.",
-                PerkMan.PerkType.Hraesvelg, "Icons/hraesvelg.png");
+                PerkMan.PerkType.Hraesvelg, Skills.SkillType.None, "Icons/hraesvelg.png");
         }
 
 
@@ -4039,7 +4142,7 @@ namespace kingskills
             return new Perk("Hydrodynamic Form",
                 "You are no longer affected by the 'Wet' Debuff.",
                 "It just... slides right off.",
-                PerkMan.PerkType.Hydrodynamic, "Icons/hydrodynamic.png");
+                PerkMan.PerkType.Hydrodynamic, Skills.SkillType.None, "Icons/hydrodynamic.png");
         }
 
 
@@ -4065,7 +4168,7 @@ namespace kingskills
                 "When you dodgeroll through an enemy, they take damage as though you backstabbed them. Has a " +
                 "20 second cooldown.",
                 "Lion song.",
-                PerkMan.PerkType.Iai, "Icons/iai.png");
+                PerkMan.PerkType.Iai, Skills.SkillType.None, "Icons/iai.png");
         }
 
 
@@ -4090,7 +4193,7 @@ namespace kingskills
             return new Perk("Iron Skin",
                 "While you're not wearing armor, you get armor based on half of your unarmed damage.",
                 "Breaking all those boards finally paid off.",
-                PerkMan.PerkType.IronSkin, "Icons/ironskin.png");
+                PerkMan.PerkType.IronSkin, Skills.SkillType.None, "Icons/ironskin.png");
         }
 
 
@@ -4115,7 +4218,7 @@ namespace kingskills
             return new Perk("JoJo Pose",
                 "When treading water, you now regenerate stamina.",
                 "Become the kind of man Jotaro Kujo expects you to be",
-                PerkMan.PerkType.JoJoPose, "Icons/jojopose.png");
+                PerkMan.PerkType.JoJoPose, Skills.SkillType.None, "Icons/jojopose.png");
         }
 
 
@@ -4141,7 +4244,7 @@ namespace kingskills
                 "Your overall size increases. You'll have to duck through short doorways now, but your carrying " +
                 "capacity and health will increase.",
                 "What's the weather like up there?",
-                PerkMan.PerkType.Jotunn, "Icons/jotunn.png");
+                PerkMan.PerkType.Jotunn, Skills.SkillType.None, "Icons/jotunn.png");
         }
 
 
@@ -4167,7 +4270,7 @@ namespace kingskills
                 "Running into obstacles like trees and rocks will simply cause them to get obliterated " +
                 "rather than slowing you down.",
                 "Now you just need to find an immovable object.",
-                PerkMan.PerkType.Juggernaut, "Icons/juggernaut.png");
+                PerkMan.PerkType.Juggernaut, Skills.SkillType.None, "Icons/juggernaut.png");
         }
 
 
@@ -4193,7 +4296,7 @@ namespace kingskills
                 "Your nose is so powerful that you can detect what's in a dish without even seeing it. This lets you garner addition information " +
                 "about cooking food, such as time until completion.",
                 "Smells like... Cardamum and basil. And the lightest hint of lime...",
-                PerkMan.PerkType.KeenNose, "Icons/keennose.png");
+                PerkMan.PerkType.KeenNose, Skills.SkillType.None, "Icons/keennose.png");
         }
 
 
@@ -4218,7 +4321,7 @@ namespace kingskills
             return new Perk("Lightning Reflexes",
                 "Automatically catch arrows and rocks that enter your range of attack.",
                 "Nothing goes over my head. My reflexes are too fast. I would catch it.",
-                PerkMan.PerkType.LightningReflex, "Icons/lightningreflex.png");
+                PerkMan.PerkType.LightningReflex, Skills.SkillType.None, "Icons/lightningreflex.png");
         }
 
 
@@ -4243,7 +4346,7 @@ namespace kingskills
             return new Perk("Living Stone",
                 "All knockback effects on you are greatly reduced, and you gain 10 flat armor.",
                 "Now you just need to find an unstoppable force.",
-                PerkMan.PerkType.LivingStone, "Icons/livingstone.png");
+                PerkMan.PerkType.LivingStone, Skills.SkillType.None, "Icons/livingstone.png");
         }
 
 
@@ -4269,7 +4372,7 @@ namespace kingskills
                 "When you start hitting an ore vein, a point of light appears. Hitting this point of light will " +
                 "cause the entire vein to take full damage.",
                 "Copper veins, watch out. I'm coming.",
-                PerkMan.PerkType.LodeBearingStone, "Icons/lodebearingstone.png");
+                PerkMan.PerkType.LodeBearingStone, Skills.SkillType.None, "Icons/lodebearingstone.png");
         }
 
 
@@ -4294,7 +4397,7 @@ namespace kingskills
             return new Perk("Log Horizon",
                 "Fallen logs can be picked up to be used as a single use attack, dealing incredible damage.",
                 "You swing the log. The enemy sees the horizon... Now <i>that's</i> living in the database.",
-                PerkMan.PerkType.LogHorizon, "Icons/loghorizon.png");
+                PerkMan.PerkType.LogHorizon, Skills.SkillType.None, "Icons/loghorizon.png");
         }
 
 
@@ -4319,7 +4422,7 @@ namespace kingskills
             return new Perk("Loki's Gift",
                 "Teleport to a target's back, backstabbing them immediately. Distance scales on sneak skill.",
                 "Burdened with glorious purpose.",
-                PerkMan.PerkType.LokisGift, "Icons/lokisgift.png");
+                PerkMan.PerkType.LokisGift, Skills.SkillType.None, "Icons/lokisgift.png");
         }
 
 
@@ -4344,7 +4447,7 @@ namespace kingskills
             return new Perk("Magnetic Personality",
                 "You are now magnetic, dramatically increasing your auto-pickup range.",
                 "All that time rubbing metals together has finally affected you. Sure, that's how magnets work, why not?",
-                PerkMan.PerkType.Magnetic, "Icons/magnetic.png");
+                PerkMan.PerkType.Magnetic, Skills.SkillType.None, "Icons/magnetic.png");
         }
 
 
@@ -4369,7 +4472,7 @@ namespace kingskills
             return new Perk("Man Overboard",
                 "While captaining a ship, you can now press B to automatically suck in all nearby players.",
                 "Much better option than everyone jumping ship.",
-                PerkMan.PerkType.ManOverboard, "Icons/manoverboard.png");
+                PerkMan.PerkType.ManOverboard, Skills.SkillType.None, "Icons/manoverboard.png");
         }
 
 
@@ -4395,7 +4498,7 @@ namespace kingskills
                 "While you're swimming in the ocean, you gain a slowly stacking bonus to move speed, damage reduction, and stamina " +
                 "regeneration.",
                 "You're just on a roll.",
-                PerkMan.PerkType.MarathonSwimmer, "Icons/marathonswimmer.png");
+                PerkMan.PerkType.MarathonSwimmer, Skills.SkillType.None, "Icons/marathonswimmer.png");
         }
 
 
@@ -4420,7 +4523,7 @@ namespace kingskills
             return new Perk("The Market Gardener",
                 "You now do 50% extra damage to enemies while in the air.",
                 "Screamin' Eagles!",
-                PerkMan.PerkType.MarketGardener, "Icons/marketgardener.png");
+                PerkMan.PerkType.MarketGardener, Skills.SkillType.None, "Icons/marketgardener.png");
         }
 
 
@@ -4446,7 +4549,7 @@ namespace kingskills
                 "Increases your overall size even more. Your skin toughens like hide, causing you to be resistant to slashing, lightning, " +
                 "and frost damage.",
                 "You're gonna need to build a bigger house.",
-                PerkMan.PerkType.MassiveStature, "Icons/massivestature.png");
+                PerkMan.PerkType.MassiveStature, Skills.SkillType.None, "Icons/massivestature.png");
         }
 
 
@@ -4471,7 +4574,7 @@ namespace kingskills
             return new Perk("Master of the Log",
                 "You are now immune to falling logs.",
                 "You will be the last figure standing when the smoke clears.",
-                PerkMan.PerkType.MasterOfTheLog, "Icons/masterofthelog.png");
+                PerkMan.PerkType.MasterOfTheLog, Skills.SkillType.None, "Icons/masterofthelog.png");
         }
 
 
@@ -4497,7 +4600,7 @@ namespace kingskills
                 "Meditate by using the /sit emote shortly after battle to massively increase your " +
                 "experience gain.",
                 "Perfect for use while all your peers are partying.",
-                PerkMan.PerkType.Meditation, "Icons/meditation.png");
+                PerkMan.PerkType.Meditation, Skills.SkillType.None, "Icons/meditation.png");
         }
 
 
@@ -4523,7 +4626,7 @@ namespace kingskills
                 "When you fall far enough, you make a huge crater and send a shockwave that deals damage " +
                 "based on how far you fell.",
                 "No promises that you'll survive it.",
-                PerkMan.PerkType.MeteorDrop, "Icons/meteordrop.png");
+                PerkMan.PerkType.MeteorDrop, Skills.SkillType.None, "Icons/meteordrop.png");
         }
 
 
@@ -4548,7 +4651,7 @@ namespace kingskills
             return new Perk("Mjolnir",
                 "You deal an additional 20% of damage as lightning damage.",
                 "Whosoever holds this hammer, if they be worthy, shall possess the power of... you?",
-                PerkMan.PerkType.Mjolnir, "Icons/mjolnir.png");
+                PerkMan.PerkType.Mjolnir, Skills.SkillType.None, "Icons/mjolnir.png");
         }
 
 
@@ -4573,7 +4676,7 @@ namespace kingskills
             return new Perk("Mountain Goat",
                 "You can now run up nearly sheer angled surfaces, dramatically increasing your mountain mobility.",
                 "The undisputed GOAT.",
-                PerkMan.PerkType.MountainGoat, "Icons/mountaingoat.png");
+                PerkMan.PerkType.MountainGoat, Skills.SkillType.None, "Icons/mountaingoat.png");
         }
 
 
@@ -4599,7 +4702,7 @@ namespace kingskills
                 "Your strength and precision have caused your repair efforts to accelerate rapidly. You now " +
                 "repair in a large radius with every swing of the hammer.",
                 "When all you have is a hammer...",
-                PerkMan.PerkType.Nailgun, "Icons/nailgun.png");
+                PerkMan.PerkType.Nailgun, Skills.SkillType.None, "Icons/nailgun.png");
         }
 
 
@@ -4626,7 +4729,7 @@ namespace kingskills
                 "dish. You can now imbue your dishes with resistances to blunt, slashing, and piercing, " +
                 "or move speed.",
                 "The taste, however...",
-                PerkMan.PerkType.Nutrition, "Icons/nutrition.png");
+                PerkMan.PerkType.Nutrition, Skills.SkillType.None, "Icons/nutrition.png");
         }
 
 
@@ -4651,7 +4754,7 @@ namespace kingskills
             return new Perk("Odin's Jump",
                 "After concentration, you safely leap thousands of meters forwards.",
                 "Now possible without getting hit by a giant first!",
-                PerkMan.PerkType.OdinJump, "Icons/odinjump.png");
+                PerkMan.PerkType.OdinJump, Skills.SkillType.None, "Icons/odinjump.png");
         }
 
 
@@ -4676,7 +4779,7 @@ namespace kingskills
             return new Perk("Offering to Ullr",
                 "Regular offerings to Ullr have blessed your luck, causing monsters to drop better items.",
                 "The norse god of the hunt recognizes your skill.",
-                PerkMan.PerkType.OfferToUllr, "Icons/ullr.png");
+                PerkMan.PerkType.OfferToUllr, Skills.SkillType.None, "Icons/ullr.png");
         }
 
 
@@ -4702,7 +4805,7 @@ namespace kingskills
                 "Standing in place for 20 seconds near a tree will cause a special target to appear. Striking it will cause a " +
                 "shockwave that fells an entire forest.",
                 "You might want to take cover first.",
-                PerkMan.PerkType.PandemoniumPoint, "Icons/pandemoniumpoint.png");
+                PerkMan.PerkType.PandemoniumPoint, Skills.SkillType.None, "Icons/pandemoniumpoint.png");
         }
 
 
@@ -4727,7 +4830,7 @@ namespace kingskills
             return new Perk("Perfect Combo",
                 "Each uninterrupted hit now stacks a damage buff. Combo is lost on taking damage.",
                 "C-C-COMBO BREAKER!",
-                PerkMan.PerkType.PerfectCombo, "Icons/perfectcombo.png");
+                PerkMan.PerkType.PerfectCombo, Skills.SkillType.None, "Icons/perfectcombo.png");
         }
 
 
@@ -4752,7 +4855,7 @@ namespace kingskills
             return new Perk("Plus Ultra",
                 "Enemies can no longer be resistant to blunt damage.",
                 "What do you do when punching something isn't working? Just punch it harder, obviously.",
-                PerkMan.PerkType.PlusUltra, "Icons/plusultra.png");
+                PerkMan.PerkType.PlusUltra, Skills.SkillType.None, "Icons/plusultra.png");
         }
 
 
@@ -4777,7 +4880,7 @@ namespace kingskills
             return new Perk("Power Draw",
                 "A special shot that takes much more energy to draw, but fires with incredible speed and damage.",
                 "For when you absolutely need that deer gone.",
-                PerkMan.PerkType.PowerDraw, "Icons/powerdraw.png");
+                PerkMan.PerkType.PowerDraw, Skills.SkillType.None, "Icons/powerdraw.png");
         }
 
 
@@ -4802,7 +4905,7 @@ namespace kingskills
                 "Each attack against an enemy causes a stacking debuff, slowing them and decreasing" +
                 " their damage dealt.",
                 "Like acupuncture, with significantly less medical benefit.",
-                PerkMan.PerkType.PressurePoints, "Icons/pressurepoints.png");
+                PerkMan.PerkType.PressurePoints, Skills.SkillType.None, "Icons/pressurepoints.png");
         }
 
 
@@ -4828,7 +4931,7 @@ namespace kingskills
                 "For every 3 seconds that you sail without changing directon, you slowly gain a stacking movespeed increase. The bonus increases " +
                 "multiplicatively and does not have a limit.",
                 "Brace for impact! Does not come with damage reduction.",
-                PerkMan.PerkType.RammingSpeed, "Icons/rammingspeed.png");
+                PerkMan.PerkType.RammingSpeed, Skills.SkillType.None, "Icons/rammingspeed.png");
         }
 
 
@@ -4853,7 +4956,7 @@ namespace kingskills
             return new Perk("Responsible Lumberjacking",
                 "Stumps now get destroyed in one hit, and if possible, will automatically get replanted as saplings.",
                 "Sustainable farming is the work of the finest lumberjacks!",
-                PerkMan.PerkType.ResponsibleLumberjack, "Icons/responsiblelumberjack.png");
+                PerkMan.PerkType.ResponsibleLumberjack, Skills.SkillType.None, "Icons/responsiblelumberjack.png");
         }
 
 
@@ -4878,7 +4981,7 @@ namespace kingskills
             return new Perk("Rock Dodger",
                 "Significantly improves several ship manuverability values.",
                 "I am a leaf on the wind.",
-                PerkMan.PerkType.RockDodger, "Icons/rockdodger.png");
+                PerkMan.PerkType.RockDodger, Skills.SkillType.None, "Icons/rockdodger.png");
         }
 
 
@@ -4903,7 +5006,7 @@ namespace kingskills
             return new Perk("Rock Hauler",
                 "Rocks and metals now weigh 80% less.",
                 "When you've handled so many, they all just sorta phase together.",
-                PerkMan.PerkType.RockHauler, "Icons/rockhauler.png");
+                PerkMan.PerkType.RockHauler, Skills.SkillType.None, "Icons/rockhauler.png");
         }
 
 
@@ -4928,7 +5031,7 @@ namespace kingskills
             return new Perk("Runed Arrows",
                 "There's a 75% chance for your arrows to automatically return to you - the other 25% disappear.",
                 "It takes pretty long to rune each arrowhead, but luckily, that part happens off-screen.",
-                PerkMan.PerkType.RunedArrows, "Icons/runedarrows.png");
+                PerkMan.PerkType.RunedArrows, Skills.SkillType.None, "Icons/runedarrows.png");
         }
 
 
@@ -4953,7 +5056,7 @@ namespace kingskills
             return new Perk("Sea Shanty",
                 "All crew members aboard your boat gain increased move speed, damage reduction, and damage.",
                 "Anyone who boards your vessel will have a belly full of mead and a throat full of song.",
-                PerkMan.PerkType.SeaShanty, "Icons/seashanty.png");
+                PerkMan.PerkType.SeaShanty, Skills.SkillType.None, "Icons/seashanty.png");
         }
 
 
@@ -4978,7 +5081,7 @@ namespace kingskills
             return new Perk("Seed Satchel",
                 "You now carry around an extra pouch, accessible from the inventory, which can store an unlimited number of seeds.",
                 "What is a botanist without seeds?",
-                PerkMan.PerkType.SeedSatchel, "Icons/seedsatchel.png");
+                PerkMan.PerkType.SeedSatchel, Skills.SkillType.None, "Icons/seedsatchel.png");
         }
 
 
@@ -5004,7 +5107,7 @@ namespace kingskills
                 "Pre-dug holes allow you to sprinkle seeds and vastly improve your planting rate. You now plant" +
                 " in a large radius.",
                 "Gaia ain't got nothing on you.",
-                PerkMan.PerkType.Seeding, "Icons/seeding.png");
+                PerkMan.PerkType.Seeding, Skills.SkillType.None, "Icons/seeding.png");
         }
 
 
@@ -5031,7 +5134,7 @@ namespace kingskills
                 "you hit. If you have maximum stacks, 60, hitting a tree will cause it to immediately get turned into wood. There's a 10 second " +
                 "cooldown before the stacks begin building again.",
                 "Be the kind of man Captain America believes you can be.",
-                PerkMan.PerkType.ShatterStrike, "Icons/shatterstrike.png");
+                PerkMan.PerkType.ShatterStrike, Skills.SkillType.None, "Icons/shatterstrike.png");
         }
 
 
@@ -5056,7 +5159,7 @@ namespace kingskills
             return new Perk("Silent Sprinter",
                 "Adds 30% of your run speed to your sneak speed.",
                 "Get back here, you goddamn boar -",
-                PerkMan.PerkType.SilentSprinter, "Icons/silentsprinter.png");
+                PerkMan.PerkType.SilentSprinter, Skills.SkillType.None, "Icons/silentsprinter.png");
         }
 
 
@@ -5081,7 +5184,7 @@ namespace kingskills
             return new Perk("Sleight of Hand",
                 "You can now bring certain items through portals.",
                 "With a quick enough hand, you can even trick game devs.",
-                PerkMan.PerkType.SleightOfHand, "Icons/sleightofhand.png");
+                PerkMan.PerkType.SleightOfHand, Skills.SkillType.None, "Icons/sleightofhand.png");
         }
 
 
@@ -5106,7 +5209,7 @@ namespace kingskills
             return new Perk("Smoke Bomb",
                 "When you enter stealth, all enemies will lose track of you momentarily. Has a 20 second cooldown.",
                 "Where'd he go? Must have been the wind.",
-                PerkMan.PerkType.SmokeBomb, "Icons/smokebomb.png");
+                PerkMan.PerkType.SmokeBomb, Skills.SkillType.None, "Icons/smokebomb.png");
         }
 
 
@@ -5131,7 +5234,7 @@ namespace kingskills
             return new Perk("Soil Mixing",
                 "New techniques allow you to plant any crop anywhere, regardless of biome limitations.",
                 "Why go to the biome when you can bring the biome to you?",
-                PerkMan.PerkType.SoilMixing, "Icons/soilworking.png");
+                PerkMan.PerkType.SoilMixing, Skills.SkillType.None, "Icons/soilworking.png");
         }
 
 
@@ -5156,7 +5259,7 @@ namespace kingskills
             return new Perk("In Spearit",
                 "Your spear now deals 30% additional spirit damage.",
                 "I'm not sorry.",
-                PerkMan.PerkType.Spearit, "Icons/spearit.png");
+                PerkMan.PerkType.Spearit, Skills.SkillType.None, "Icons/spearit.png");
         }
 
 
@@ -5182,7 +5285,7 @@ namespace kingskills
                 "Your mastery of spices has entered a legendarily gourmet realm. You can now " +
                 "imbue your food with extra damage, experience gain, and damage reduction.",
                 "A power even the dragonborn never mastered.",
-                PerkMan.PerkType.SpiceMaster, "Icons/spicemaster.png");
+                PerkMan.PerkType.SpiceMaster, Skills.SkillType.None, "Icons/spicemaster.png");
         }
 
 
@@ -5208,7 +5311,7 @@ namespace kingskills
                 "The discovery of several new spices has revolutionized your cooking. You can now" +
                 " imbue your dishes with resistances to fire, cold, lightning, or poison.",
                 "Cornerstones of any refined chef's palate.",
-                PerkMan.PerkType.SpicySweet, "Icons/spicysweet.png");
+                PerkMan.PerkType.SpicySweet, Skills.SkillType.None, "Icons/spicysweet.png");
         }
 
 
@@ -5233,7 +5336,7 @@ namespace kingskills
             return new Perk("Spiked Shield",
                 "Whenever you block an attack, you reflect 50% of the blocked damage to the attacker.",
                 "Who needs a sword?",
-                PerkMan.PerkType.SpikedShield, "Icons/spikedshield.png");
+                PerkMan.PerkType.SpikedShield, Skills.SkillType.None, "Icons/spikedshield.png");
         }
 
 
@@ -5258,7 +5361,7 @@ namespace kingskills
             return new Perk("Spirit Guide",
                 "The ghosts of slain woodland creatures now haunt you, providing an excellent light source while hunting down their children.",
                 "They say you should use every part of the animal, why not the soul?",
-                PerkMan.PerkType.SpiritGuide, "Icons/spiritguide.png");
+                PerkMan.PerkType.SpiritGuide, Skills.SkillType.None, "Icons/spiritguide.png");
         }
 
 
@@ -5283,7 +5386,7 @@ namespace kingskills
             return new Perk("Stretch",
                 "Increases the range of your pickaxe swings by 50%.",
                 "When you just barely can't reach that last rock.",
-                PerkMan.PerkType.Stretch, "Icons/stretch.png");
+                PerkMan.PerkType.Stretch, Skills.SkillType.None, "Icons/stretch.png");
         }
 
 
@@ -5308,7 +5411,7 @@ namespace kingskills
             return new Perk("Superfuel",
                 "Constructions you build, such as torches or campfires, no longer require additional fuel to keep running.",
                 "It's even renewable!",
-                PerkMan.PerkType.Superfuel, "Icons/superfuel.png");
+                PerkMan.PerkType.Superfuel, Skills.SkillType.None, "Icons/superfuel.png");
         }
 
 
@@ -5334,7 +5437,7 @@ namespace kingskills
                 "Running into an enemy causes a huge knockback effect and causes you to gain a quickly fading " +
                 "burst of movespeed.",
                 "Outta the way, I'm walkin' here!",
-                PerkMan.PerkType.Tackle, "Icons/tackle.png");
+                PerkMan.PerkType.Tackle, Skills.SkillType.None, "Icons/tackle.png");
         }
 
 
@@ -5360,7 +5463,7 @@ namespace kingskills
                 "The simple act of taste testing the food has led you to be able to garner information about a piece of food, " +
                 "such as time until completion.",
                 "Hmmm. Needs more salt.",
-                PerkMan.PerkType.TasteTesting, "Icons/tastetesting.png");
+                PerkMan.PerkType.TasteTesting, Skills.SkillType.None, "Icons/tastetesting.png");
         }
 
 
@@ -5385,7 +5488,7 @@ namespace kingskills
             return new Perk("Throwback",
                 "You can now throw your axe like a spear. This attack one-shots all trees it hits.",
                 "For when you can't quite reach.",
-                PerkMan.PerkType.Throwback, "Icons/throwback.png");
+                PerkMan.PerkType.Throwback, Skills.SkillType.None, "Icons/throwback.png");
         }
 
 
@@ -5410,7 +5513,7 @@ namespace kingskills
             return new Perk("Titan Endurance",
                 "Increases your stagger limit by an additional 20% of your max health.",
                 "On that day, mankind receieved a grim reminder...",
-                PerkMan.PerkType.TitanEndurance, "Icons/titanendurance.png");
+                PerkMan.PerkType.TitanEndurance, Skills.SkillType.None, "Icons/titanendurance.png");
         }
 
 
@@ -5435,7 +5538,7 @@ namespace kingskills
             return new Perk("Titan Strength",
                 "You are no longer encumbered by shields.",
                 "If you win, you live. If you lose, you die. If you don't fight, you can't win!",
-                PerkMan.PerkType.TitanStrength, "Icons/titanstrength.png");
+                PerkMan.PerkType.TitanStrength, Skills.SkillType.None, "Icons/titanstrength.png");
         }
 
 
@@ -5460,7 +5563,7 @@ namespace kingskills
             return new Perk("Poisoned Blade",
                 "Your attacks deal an additional 40% damage as poison damage.",
                 "The hardest part is remembering to wear gloves when you apply the poison.",
-                PerkMan.PerkType.Toxic, "Icons/toxic.png");
+                PerkMan.PerkType.Toxic, Skills.SkillType.None, "Icons/toxic.png");
         }
 
 
@@ -5486,7 +5589,7 @@ namespace kingskills
                 "Your cunning has resulted in several new inventive blueprints of death. Adds several " +
                 "new traps to your arsenal.",
                 "Some people think it's either building or combat. Why not both?",
-                PerkMan.PerkType.Trapmaster, "Icons/trapmaster.png");
+                PerkMan.PerkType.Trapmaster, Skills.SkillType.None, "Icons/trapmaster.png");
         }
 
 
@@ -5511,7 +5614,7 @@ namespace kingskills
             return new Perk("Trench Digger",
                 "Increases the depth and width of your pickaxe strikes on the ground.",
                 "We both know why you're here.",
-                PerkMan.PerkType.TrenchDigger, "Icons/trenchdigger.png");
+                PerkMan.PerkType.TrenchDigger, Skills.SkillType.None, "Icons/trenchdigger.png");
         }
 
 
@@ -5536,7 +5639,7 @@ namespace kingskills
             return new Perk("Flight of the Valkyries",
                 "When you hit with a thrown spear, a mark is formed. Pressing B will teleport you to that mark, consuming it.",
                 "To valhalla leads the way",
-                PerkMan.PerkType.ValkyrieFlight, "Icons/valkyrieflight.png");
+                PerkMan.PerkType.ValkyrieFlight, Skills.SkillType.None, "Icons/valkyrieflight.png");
         }
 
 
@@ -5561,7 +5664,7 @@ namespace kingskills
             return new Perk("Vital Study",
                 "Any sneak attack now gains you bonus sneak experience.",
                 "They say the appendix serves no function, but when you rip it out, people die? Think for yourself, sheeple.",
-                PerkMan.PerkType.VitalStudy, "Icons/vitalstudy.png");
+                PerkMan.PerkType.VitalStudy, Skills.SkillType.None, "Icons/vitalstudy.png");
         }
 
 
@@ -5587,7 +5690,7 @@ namespace kingskills
                 "Your constructions are so sturdy and precise that you've managed to squeeze an extra few" +
                 " inventory spaces into almost all forms of storage.",
                 "Master of time and space. Well, space, at least.",
-                PerkMan.PerkType.Warehousing, "Icons/warehousing.png");
+                PerkMan.PerkType.Warehousing, Skills.SkillType.None, "Icons/warehousing.png");
         }
 
 
@@ -5612,7 +5715,7 @@ namespace kingskills
             return new Perk("Warrior of Light",
                 "You take less damage based on how much light you are in.",
                 "Now you truly do have the power of god and anime on your side.",
-                PerkMan.PerkType.WarriorOfLight, "Icons/warrioroflight.png");
+                PerkMan.PerkType.WarriorOfLight, Skills.SkillType.None, "Icons/warrioroflight.png");
         }
 
 
@@ -5637,7 +5740,7 @@ namespace kingskills
             return new Perk("Water Running",
                 "You can now run on water.",
                 "When you don't want to wait for the boat.",
-                PerkMan.PerkType.WaterRunning, "Icons/waterrunning.png");
+                PerkMan.PerkType.WaterRunning, Skills.SkillType.None, "Icons/waterrunning.png");
         }
 
 
@@ -5663,7 +5766,7 @@ namespace kingskills
                 "Hours of meditation upon your material lifestyle has lead to an epiphany. You gain timeless wisdom of the ages..." +
                 " and 50% increased experience gain.",
                 "Material gwurl!",
-                PerkMan.PerkType.Worldly, "Icons/worldly.png");
+                PerkMan.PerkType.Worldly, Skills.SkillType.None, "Icons/worldly.png");
         }
 
 
@@ -5688,7 +5791,7 @@ namespace kingskills
             return new Perk("Memories of Ymir",
                 "Tapping into the land's ancient heritage, you gain a 20% extra frost damage with each attack.",
                 "Let's hope Odin is not a jealous god.",
-                PerkMan.PerkType.Ymir, "Icons/ymir.png");
+                PerkMan.PerkType.Ymir, Skills.SkillType.None, "Icons/ymir.png");
         }
 
 
@@ -5836,7 +5939,7 @@ namespace kingskills
             return new Perk("P",
                 "",
                 "",
-                Perks.PerkMan.PerkType., "Icons/.png",
+                Perks.PerkMan.PerkType., Skills.SkillType.None, "Icons/.png",
                 "");
         }
 

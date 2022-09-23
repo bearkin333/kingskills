@@ -9,7 +9,7 @@ using UnityEngine;
 namespace kingskills.Perks
 {
     [HarmonyPatch(typeof(Character))]
-    class Aquaman
+    class P_Aquaman
     {
         public static Aoe fishAoe = null;
         public static float fishTimer = 0f;

@@ -98,7 +98,8 @@ namespace kingskills.Patches
             float mod = 1f;
             mod *= GetSkillMovespeedMod(player) 
                 * GetEncumberanceRedux(player) 
-                * GetEquipmentMult(player);
+                * GetEquipmentMult(player)
+                * CFG.GetBerserkMovespeedMult();
             return mod;
         }
 

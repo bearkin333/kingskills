@@ -9,7 +9,7 @@ using UnityEngine;
 namespace kingskills.Perks
 {
     [HarmonyPatch(typeof(Humanoid))]
-    class Asguard
+    class P_Asguard
     {
         public static float BlockDirectionPatch(Vector3 hitdir, Vector3 player_forward, Humanoid player)
         {

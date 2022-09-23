@@ -9,7 +9,7 @@ using UnityEngine;
 namespace kingskills.Perks
 {
     [HarmonyPatch]
-    class AttackOfOpportunity
+    class P_AttackOfOpportunity
     {
         public static float hitTimer = CFG.AOOPCooldown.Value;
         public static AOOPZone aoopZone;
@@ -104,7 +104,7 @@ namespace kingskills.Perks
             Character hitChar = other.GetComponent<Character>();
             if (hitChar is null) return;
             if (!hitChar.IsMonsterFaction()) return;
-            AttackOfOpportunity.OnHitTrigger(hitChar);
+            P_AttackOfOpportunity.OnHitTrigger(hitChar);
         }
     }
 }

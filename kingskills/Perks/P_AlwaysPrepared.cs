@@ -8,7 +8,7 @@ using HarmonyLib;
 namespace kingskills.Perks
 {
     [HarmonyPatch(typeof(Humanoid))]
-    class AlwaysPrepared
+    class P_AlwaysPrepared
     {
         public const string IsChecking = "AP Swim Check";
 

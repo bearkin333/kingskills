@@ -8,7 +8,7 @@ using HarmonyLib;
 namespace kingskills.Perks
 {
     [HarmonyPatch(typeof(Character))]
-    class AirStep
+    class P_AirStep
     {
         public const string IsJumping = "AS Jumping";
         public const string NumJumps = "AS Num Jumps";

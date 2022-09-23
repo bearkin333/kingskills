@@ -492,7 +492,11 @@ namespace kingskills.Perks
         {
             if (loaded)
             {
-                if (perkLearned.TryGetValue(perk, out bool value))
+                if (!CFG.IsSkillActive(perkList[perk].skill))
+                {
+                    return false;
+                }
+                else if (perkLearned.TryGetValue(perk, out bool value))
                 {
                     if (perkDeactivated.TryGetValue(perk, out bool deactiveValue))
                     {
@@ -627,9 +631,10 @@ namespace kingskills.Perks
         public bool learned;
         public bool learnable;
         public PerkMan.PerkType type;
+        public Skills.SkillType skill;
         public Sprite icon;
 
-        public Perk(string nName, string nDescription, string nTooltip, PerkMan.PerkType nType, string nIcon, string nEffects = "")
+        public Perk(string nName, string nDescription, string nTooltip, PerkMan.PerkType nType, Skills.SkillType nSkill, string nIcon, string nEffects = "")
         {
             name = nName;
             description = nDescription;
@@ -637,6 +642,7 @@ namespace kingskills.Perks
             learned = false;
             learnable = true;
             type = nType;
+            skill = nSkill;
             icon = Assets.AssetLoader.LoadSpriteFromFilename(nIcon);
             effects = nEffects;
         }

@@ -52,7 +52,7 @@ namespace kingskills.Overhauls
     {
         public void FallDamageOverride()
         {
-            Perks.AirStep.ResetJumps(this);
+            Perks.P_AirStep.ResetJumps(this);
 
             float fallHeight = Mathf.Max(0f, m_maxAirAltitude - this.GetTransform().position.y);
             float skillFactor = GetSkillFactor(Skills.SkillType.Jump);
