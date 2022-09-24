@@ -16,6 +16,97 @@ namespace kingskills
     [HarmonyPatch(typeof(Humanoid), "BlockAttack")]
     class KSBlock : Humanoid
     {
+
+        [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.BlockAttack))]
+        [HarmonyPrefix]
+        public static bool BlockAttackTakeover(Humanoid __instance, HitData hit, Character attacker, ref bool __result)
+        {
+            //largely stolen from the game. this was my only option
+            //I swear
+
+            if (!__instance.IsPlayer() && __instance != Player.m_localPlayer) return CFG.DontSkipOriginal;
+            Player t = (Player)__instance;
+
+            if (P_Asguard.BlockDirectionPatch(hit.m_dir, t.transform.forward, t) > 0f)
+            {
+                __result = false;
+                return CFG.SkipOriginal;
+            }
+            ItemDrop.ItemData currentBlocker = t.GetCurrentBlocker();
+            if (currentBlocker == null)
+            {
+                __result = false;
+                return CFG.SkipOriginal;
+            }
+
+            bool isParry = currentBlocker.m_shared.m_timedBlockBonus > 1f && t.m_blockTimer != -1f && t.m_blockTimer < 0.25f;
+            float skillFactor = t.GetSkillFactor(Skills.SkillType.Blocking);
+            float blockPower = FixBlockPower(currentBlocker, skillFactor, isParry, t);
+
+            if (isParry)
+            {
+                blockPower *= currentBlocker.m_shared.m_timedBlockBonus;
+            }
+            if (currentBlocker.m_shared.m_damageModifiers.Count > 0)
+            {
+                HitData.DamageModifiers modifiers = default(HitData.DamageModifiers);
+                modifiers.Apply(currentBlocker.m_shared.m_damageModifiers);
+                hit.ApplyResistance(modifiers, out var _);
+            }
+
+            HitData.DamageTypes damageTypes = hit.m_damage.Clone();
+            damageTypes.ApplyArmor(blockPower);
+            float totalBlockableDamage = hit.GetTotalBlockableDamage();
+            float totalBlockableDamage2 = damageTypes.GetTotalBlockableDamage();
+            float blockableDmgAfterArmor = totalBlockableDamage - totalBlockableDamage2;
+            float blockedDamage = Mathf.Clamp01(blockableDmgAfterArmor / blockPower);
+            float stamina = (isParry ? t.m_blockStaminaDrain : (t.m_blockStaminaDrain * blockedDamage));
+            UseBlockStamina(t, stamina);
+            float totalStaggerDamage = damageTypes.GetTotalStaggerDamage();
+            bool staggered = t.AddStaggerDamage(totalStaggerDamage, hit.m_dir);
+            bool hasStamina = t.HaveStamina();
+            bool succeedBlock = hasStamina && !staggered;
+            if (succeedBlock)
+            {
+                hit.m_statusEffect = "";
+                BlockDamageExpPatch(hit, blockableDmgAfterArmor, t, isParry);
+                DamageText.instance.ShowText(DamageText.TextType.Blocked, hit.m_point + Vector3.up * 0.5f, blockableDmgAfterArmor);
+            }
+            if (currentBlocker.m_shared.m_useDurability)
+            {
+                float durabilityDrain = currentBlocker.m_shared.m_useDurabilityDrain * (totalBlockableDamage / blockPower);
+                currentBlocker.m_durability -= durabilityDrain;
+            }
+
+            currentBlocker.m_shared.m_blockEffect.Create(hit.m_point, Quaternion.identity);
+            if (!(attacker is null) && isParry && succeedBlock)
+            {
+                t.m_perfectBlockEffect.Create(hit.m_point, Quaternion.identity);
+                if (attacker.m_staggerWhenBlocked)
+                {
+                    attacker.Stagger(-hit.m_dir);
+                }
+                //t.UseStamina(t.m_blockStaminaDrain);
+            }
+            if (succeedBlock)
+            {
+                hit.m_pushForce *= blockedDamage;
+                if (!(attacker is null) && !hit.m_ranged)
+                {
+                    float num6 = 1f - Mathf.Clamp01(blockedDamage * 0.5f);
+                    HitData hitData = new HitData();
+                    hitData.m_pushForce = currentBlocker.GetDeflectionForce() * num6;
+                    hitData.m_dir = attacker.transform.position - t.transform.position;
+                    hitData.m_dir.y = 0f;
+                    hitData.m_dir = Vector3.Normalize(hitData.m_dir);
+                    attacker.Damage(hitData);
+                }
+            }
+
+            return CFG.SkipOriginal;
+        }
+
+        /*
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             bool sawBlockPower = false;
@@ -96,17 +187,18 @@ namespace kingskills
                 }
             }
         }
+        */
 
-        private static void UseBlockStamina(Humanoid __instance, float stamina)
+        private static void UseBlockStamina(Humanoid player, float stamina)
         {
             if (CFG.IsSkillActive(Skills.SkillType.Blocking))
             {
-                float skillFactor = __instance.GetSkillFactor(Skills.SkillType.Blocking);
+                float skillFactor = player.GetSkillFactor(Skills.SkillType.Blocking);
                 //Jotunn.Logger.LogMessage($"Stamina before redux is {stamina}");
                 stamina *= CFG.GetBlockStaminaRedux(skillFactor);
                 //Jotunn.Logger.LogMessage($"Stamina after redux is {stamina}");
             }
-            __instance.UseStamina(stamina);
+            player.UseStamina(stamina);
         }
 
 
@@ -138,9 +230,7 @@ namespace kingskills
             ItemDrop.ItemData currentBlocker,
             float skillFactor,
             bool isParry,
-            Humanoid instance,
-            HitData _ = null,
-            Character __ = null
+            Humanoid instance
             )
         {
             //Jotunn.Logger.LogMessage($"block power of {currentBlocker.GetBlockPower(skillFactor)} is now mine, also am I parrying? {isParry}");
@@ -187,5 +277,7 @@ namespace kingskills
 
             return blockPower;
         }
+
+
     }
 }

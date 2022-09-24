@@ -10,6 +10,13 @@ namespace kingskills.Perks
     [HarmonyPatch]
     class P_BlastWave
     {
-
+        [HarmonyPatch(typeof(Attack), nameof(Attack.DoAreaAttack))]
+        [HarmonyPrefix]
+        public static void CheckAOEIncrease(Attack __instance)
+        {
+            if (!CFG.CheckPlayerAndActive(__instance.m_character, PerkMan.PerkType.BlastWave)) return;
+            __instance.m_attackRayWidth *= CFG.GetBlastWaveScaleMult();
+            //Jotunn.Logger.LogMessage($"New attack area is {__instance.m_attackRayWidth}");
+        }
     }
 }

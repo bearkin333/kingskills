@@ -11,8 +11,7 @@ namespace kingskills.Perks
         public static void BlackFlashExplosion()
         {
             if (!PerkMan.IsPerkActive(PerkMan.PerkType.BlackFlash)) return;
-
-
+            Jotunn.Logger.LogMessage($"Initiating black flash");
 
         }
     }

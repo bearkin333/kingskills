@@ -906,14 +906,14 @@ namespace kingskills.UX
         {
             OpenPerks.OpenPerksByType(Skills.SkillType.Blocking,
                 //perk 1
-                PerkMan.PerkType.TitanEndurance,
                 PerkMan.PerkType.SpikedShield,
+                PerkMan.PerkType.TitanEndurance,
                 //perk 2
                 PerkMan.PerkType.BlockExpert,
                 PerkMan.PerkType.TitanStrength,
                 //perk 3
-                PerkMan.PerkType.BlackFlash,
-                PerkMan.PerkType.DidntHurt);
+                PerkMan.PerkType.DidntHurt,
+                PerkMan.PerkType.BlackFlash);
         }
 
         public override void oTips()

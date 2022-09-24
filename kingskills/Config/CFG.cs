@@ -3158,7 +3158,8 @@ namespace kingskills
             return new Perk("Blocking Expertise",
                 "All forms of damage are now blockable. Yes, even that.",
                 "If it breathes, you can block it.",
-                PerkMan.PerkType.BlockExpert, Skills.SkillType.None, "Icons/blockexpert.png");
+                PerkMan.PerkType.BlockExpert, Skills.SkillType.None, "Icons/blockexpert.png",
+                $"Everything is blockable");
         }
 
 

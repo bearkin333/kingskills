@@ -222,12 +222,12 @@ perks:
 
             //You may enter the palace
             if (skillLevel >= skillRQ)
-                return true;
+                return CFG.DontSkipOriginal;
 
             Player.m_localPlayer.Message(MessageHud.MessageType.Center, 
                 $"Your sailing skill is too low. You need {CFG.ColorPTRedFF}" + skillRQ.ToString("F0") + 
                 $" sailing{CFG.ColorEnd} to commandeer this vessel!");
-            return false;
+            return CFG.SkipOriginal;
         }
     }
 
