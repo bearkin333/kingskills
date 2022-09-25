@@ -166,7 +166,7 @@ namespace kingskills.UX
 				width: 500f,
 				height: 80f,
 				addContentSizeFitter: false);
-			ConfirmationTextA.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+			ConfirmationTextB.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
 
 
 			YesBtn = GUIManager.Instance.CreateButton(
@@ -200,7 +200,7 @@ namespace kingskills.UX
 				position: new Vector2(0f, -38f),
 				width: 250f,
 				height: 55f);
-			btn = NoBtn.GetComponent<Button>();
+			btn = DontAskBtn.GetComponent<Button>();
 			btn.onClick.AddListener(DontAsk);
 
 		}
@@ -221,7 +221,8 @@ namespace kingskills.UX
 		public static void LoadAskSetting(bool nAsk)
         {
 			loadedAsk = true;
-			ask = nAsk;
+			//ask = nAsk;
+			ask = true;
 			//Jotunn.Logger.LogMessage($"Loaded dont ask me again as {!nAsk}");
 		}
 
@@ -229,6 +230,11 @@ namespace kingskills.UX
 		{
 			SaveFoodQuality FQ = item.Extended().GetComponent<SaveFoodQuality>();
 			SaveFoodQuality FQAt = itemAt.Extended().GetComponent<SaveFoodQuality>();
+			if (FQ is null || FQAt is null)
+            {
+				CloseWindow();
+				return;
+            }
 
 			float newQuality;
 			long newChef;
@@ -262,10 +268,15 @@ namespace kingskills.UX
 
 				if (item.m_stack <= 0)
 				{
-					Dragging.invRef.m_dragInventory.RemoveItem(item);
-					Dragging.invRef.SetupDragItem(null, null, 0);
-					//invReference.RemoveItem(item);
-
+					if (!Dragging.isTrue)
+					{
+						invReference.RemoveItem(item);
+					}
+					else
+					{
+						Dragging.invRef.m_dragInventory.RemoveItem(item);
+						Dragging.invRef.SetupDragItem(null, null, 0);
+					}
 				}
 
 				invReference.Changed();
@@ -314,6 +325,7 @@ namespace kingskills.UX
 			{
 				quickConfirm = true;
 			}
+            else
 			{
 				ItemImg.GetComponent<Image>().sprite = item.GetIcon();
 				ItemImg.GetComponent<Image>().enabled = true;
@@ -325,11 +337,9 @@ namespace kingskills.UX
 				ItemAtQuality.GetComponent<Text>().text =
 					PT.Prettify(itemAt.Extended().GetComponent<SaveFoodQuality>().foodQuality * 100f, 0, PT.TType.TextlessPercent);
 
-
 				CombineWindow.SetActive(true);
 				GUIManager.BlockInput(true);
 			}
-
 		}
 	}
 

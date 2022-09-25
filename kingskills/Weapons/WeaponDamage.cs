@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using kingskills.RPC;
 
 namespace kingskills.Weapons
 {
@@ -35,7 +36,7 @@ namespace kingskills.Weapons
 
                 ZNetView nview = __instance.m_nview;
 
-                IAmKiller_RPC(nview);
+                RPCMan.IAmKiller_RPC(nview);
 
                 //Jotunn.Logger.LogMessage($"This attack begins as having {hit.m_damage.GetTotalDamage()} damage");
                 //First, we add the randomness back in
@@ -164,7 +165,7 @@ namespace kingskills.Weapons
 
             if (hit.m_toolTier < minToolTier) return;
 
-            IAmKiller_RPC(nview);
+            RPCMan.IAmKiller_RPC(nview);
 
             if (hit.m_attacker == Player.m_localPlayer.GetZDOID())
             {
@@ -235,28 +236,5 @@ namespace kingskills.Weapons
             }
             return true;
         }
-
-        public static void IAmKiller_RPC(ZNetView nview)
-        {
-            if (!nview.m_functions.ContainsKey("RPC_SetKiller".GetStableHashCode()))
-                nview.Register<long, ZDOID>("RPC_SetKiller", RPC_SetKiller);
-
-            nview.InvokeRPC("RPC_SetKiller", Game.instance.GetPlayerProfile().GetPlayerID(), nview.m_zdo.m_uid);
-        }
-
-        public static void RPC_SetKiller(long sender, long playerID, ZDOID nviewID)
-        {
-            //Jotunn.Logger.LogMessage($"sender is {sender}");
-            //Jotunn.Logger.LogMessage($"player is {playerID}");
-            //Jotunn.Logger.LogMessage($"nview ZDOID is {nviewID}");
-            ZNetView nview = ZNetScene.instance.FindInstance(nviewID).GetComponent<ZNetView>();
-            nview.m_zdo.Set(CFG.ZDOKiller, playerID);
-            nview.m_zdo.Set(CFG.ZDOStaggerFlag, true);
-
-            ZDOMan.instance.ForceSendZDO(sender, nviewID);
-            nview.m_zdo.SetOwner(sender);
-        }
     }
-    
-
 }

@@ -39,6 +39,7 @@ namespace kingskills.UX
 			//Jotunn.Logger.LogMessage($"item is {item}");
 
 			if (item is null) return;
+			if (!item.IsExtended() || item.Extended().GetComponent<SaveFoodQuality>() is null) return;
 
 			//Jotunn.Logger.LogMessage($"found hovered item {item.m_dropPrefab.name}");
 

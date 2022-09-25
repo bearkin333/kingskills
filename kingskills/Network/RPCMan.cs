@@ -63,5 +63,57 @@ namespace kingskills.RPC
                 player.RaiseSkill(skill, factor);
             }
         }
+
+
+        [HarmonyPatch(typeof(MineRock), nameof(MineRock.Start)), HarmonyPostfix]
+        static void MineRockRegister(MineRock __instance) =>
+            RegisterSetKiller(__instance.m_nview);
+
+        [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.Start)), HarmonyPostfix]
+        static void MineRock5Register(MineRock5 __instance) =>
+            RegisterSetKiller(__instance.m_nview);
+
+        [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Awake)), HarmonyPostfix]
+        static void TreeBaseRegister(TreeBase __instance) =>
+            RegisterSetKiller(__instance.m_nview);
+
+        [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Awake)), HarmonyPostfix]
+        static void TreeLogRegister(TreeLog __instance) =>
+            RegisterSetKiller(__instance.m_nview);
+
+        [HarmonyPatch(typeof(Destructible), nameof(Destructible.Start)), HarmonyPostfix]
+        static void DestructibleRegister(Destructible __instance) =>
+            RegisterSetKiller(__instance.m_nview);
+
+        [HarmonyPatch(typeof(Character), nameof(Character.Awake)), HarmonyPostfix]
+        static void CharacterRegister(Character __instance) =>
+            RegisterSetKiller(__instance.m_nview);
+
+        public static void RegisterSetKiller(ZNetView nview)
+        {
+            if (nview != null && nview.m_zdo != null)
+                nview.Register<long, ZDOID>("RPC_SetKiller", RPC_SetKiller);
+        }
+
+        public static void RPC_SetKiller(long sender, long playerID, ZDOID nviewID)
+        {
+            //Jotunn.Logger.LogMessage($"sender is {sender}");
+            //Jotunn.Logger.LogMessage($"player is {playerID}");
+            //Jotunn.Logger.LogMessage($"nview ZDOID is {nviewID}");
+            ZNetView nview = ZNetScene.instance.FindInstance(nviewID).GetComponent<ZNetView>();
+            nview.m_zdo.Set(CFG.ZDOKiller, playerID);
+            nview.m_zdo.Set(CFG.ZDOStaggerFlag, true);
+
+            ZDOMan.instance.ForceSendZDO(sender, nviewID);
+            nview.m_zdo.SetOwner(sender);
+        }
+
+        public static void IAmKiller_RPC(ZNetView nview)
+        {
+            if (!nview.m_functions.ContainsKey("RPC_SetKiller".GetStableHashCode()))
+                nview.Register<long, ZDOID>("RPC_SetKiller", RPC_SetKiller);
+
+            nview.InvokeRPC("RPC_SetKiller", Game.instance.GetPlayerProfile().GetPlayerID(), nview.m_zdo.m_uid);
+        }
     }
 }

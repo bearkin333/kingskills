@@ -7,10 +7,12 @@ using HarmonyLib;
 
 namespace kingskills.Perks
 {
+    /*
     [HarmonyPatch]
     class P_BlockExpert
     {
         [HarmonyPatch(typeof(Attack), nameof(Attack.DoAreaAttack))]
         [HarmonyPrefix]
     }
+    */
 }

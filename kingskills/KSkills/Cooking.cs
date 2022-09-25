@@ -218,12 +218,13 @@ perks:
 		public static void ReduceCookTime(CookingStation __instance, ref CookingStation.ItemConversion __result)
 		{
 			if (!LocalChefCooking.isTrue) return;
+			if (__result is null) return;
 
 			ZDO zdo = __instance.m_nview.m_zdo;
-			if (zdo == null) return;
+			if (zdo is null) return;
 
 			Player player = Player.m_localPlayer;
-			if (player == null) return;
+			if (player is null) return;
 
 			if (!__instance.m_nview.IsOwner()) __instance.m_nview.ClaimOwnership();
 

@@ -108,7 +108,7 @@ namespace kingskills.UX
                 parent: MiniTooltipWindow.transform,
                 anchorMin: new Vector2(0.5f, 0f),
                 anchorMax: new Vector2(0.5f, 0f),
-                position: new Vector2(0f, 30f),
+                position: new Vector2(0f, 50f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 13,
                 color: CFG.ColorKingBlurbs,
@@ -119,6 +119,23 @@ namespace kingskills.UX
                 addContentSizeFitter: false);
             MiniBlurb.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
             MiniBlurb.GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Wrap;
+
+            GameObject obj = GUIManager.Instance.CreateText(
+                text: $"Press {CFG.ColorTitleFF}[Shift]{CFG.ColorEnd} for more details.",
+                parent: MiniTooltipWindow.transform,
+                anchorMin: new Vector2(0.5f, 0f),
+                anchorMax: new Vector2(0.5f, 0f),
+                position: new Vector2(0f, 15f),
+                font: GUIManager.Instance.AveriaSerifBold,
+                fontSize: 13,
+                color: CFG.ColorKingBlurbs,
+                outline: true,
+                outlineColor: Color.black,
+                width: 300f,
+                height: 40f,
+                addContentSizeFitter: false);
+            obj.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+            obj.GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Wrap;
         }
 
         public static void InitDetailedTooltip()

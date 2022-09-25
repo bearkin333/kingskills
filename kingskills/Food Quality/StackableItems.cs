@@ -180,7 +180,11 @@ namespace kingskills
 
 		public static void CheckDrag()
 		{
-			if (invRef == null) return;
+			if (invRef == null)
+			{
+				isTrue = false;
+				return;
+			}
 			if (invRef.m_dragGo == null)
 				isTrue = false;
 			else

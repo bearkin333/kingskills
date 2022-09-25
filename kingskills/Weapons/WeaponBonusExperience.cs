@@ -67,18 +67,16 @@ namespace kingskills.Weapons
     [HarmonyPatch]
     class TreeWatch
     {
-        [HarmonyPatch(typeof(MineRock), nameof(MineRock.AllDestroyed))] [HarmonyPostfix]
+        [HarmonyPatch(typeof(MineRock), nameof(MineRock.AllDestroyed)), HarmonyPostfix]
         static void MineRock_Destroy(MineRock __instance, bool __result)
         {
-            if (!__result) return;
-            ResourceDestroyed(__instance, __instance.m_nview);
+            if (__result) ResourceDestroyed(__instance, __instance.m_nview);
         }
 
-        [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.AllDestroyed))] [HarmonyPostfix]
+        [HarmonyPatch(typeof(MineRock5), nameof(MineRock5.AllDestroyed)), HarmonyPostfix]
         static void MineRock5_Destroy(MineRock5 __instance, bool __result)
         {
-            if (!__result) return;
-            ResourceDestroyed(__instance, __instance.m_nview);
+            if (__result) ResourceDestroyed(__instance, __instance.m_nview);
         }
         /*
         [HarmonyPatch(typeof(TreeBase), nameof(TreeBase.Destroy))]
@@ -89,13 +87,13 @@ namespace kingskills.Weapons
             ResourceDestroyed(__instance, __instance.m_nview);
         }
         */
-        [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Destroy))] [HarmonyPrefix]
+        [HarmonyPatch(typeof(TreeLog), nameof(TreeLog.Destroy)), HarmonyPrefix]
         static void TreeLog_Destroy(TreeLog __instance)
         {
             ResourceDestroyed(__instance, __instance.m_nview);
         }
 
-        [HarmonyPatch(typeof(Destructible), nameof(Destructible.Destroy))] [HarmonyPrefix]
+        [HarmonyPatch(typeof(Destructible), nameof(Destructible.Destroy)), HarmonyPrefix]
         static void Destructible_Destroy(Destructible __instance)
         {
             ResourceDestroyed(__instance, __instance.m_nview, __instance.gameObject.name);
@@ -118,12 +116,12 @@ namespace kingskills.Weapons
 
             if (name.Contains("Stub"))
             {
-                RPC.RPCMan.SendXP_RPC(killer.m_nview,
+                RPCMan.SendXP_RPC(killer.m_nview,
                     CFG.ToolBXPWoodStubReward.Value, Skills.SkillType.WoodCutting, true, true);
             }
             else if (__instance.GetType() == typeof(TreeLog))
             {
-                RPC.RPCMan.SendXP_RPC(killer.m_nview,
+                RPCMan.SendXP_RPC(killer.m_nview,
                     CFG.WeaponBXPAxeTreeAmount.Value, Skills.SkillType.Axes, true, true);
             }
         }

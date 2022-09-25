@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using kingskills.RPC;
 
 namespace kingskills.KSkills
 {
@@ -53,7 +54,7 @@ perks:
             Player botanist = Player.GetPlayer(botanistID);
             if (botanist is null) return;
 
-            RPC.RPCMan.SendXP_RPC(botanist.m_nview, reward, SkillMan.Agriculture);
+            RPCMan.SendXP_RPC(botanist.m_nview, reward, SkillMan.Agriculture);
         }
     }
 
@@ -122,25 +123,28 @@ perks:
         {
             if (!__instance.m_nview) return;
 
-            __instance.m_nview.Register<long, ZDOID>("RPC_RequestPickable", RPC_RequestPickable);
+            __instance.m_nview.Register<long, ZDOID>("RPC_RequestPick", RPC_RequestPick);
         }
 
 
         [HarmonyPatch(typeof(Pickable), nameof(Pickable.Interact))]
         [HarmonyPrefix]
-        public static void BeforeInteract(Pickable __instance)
+        public static bool BeforeInteract(Pickable __instance)
         {
             ZNetView nview = __instance.m_nview;
-            if (!nview.IsValid()) return;
-            if (nview.IsOwner()) return;
-            nview.InvokeRPC("RPC_RequestPickable", Game.instance.GetPlayerProfile().GetPlayerID(), 
+            if (!nview.IsValid()) return CFG.DontSkipOriginal;
+            if (nview.IsOwner()) return CFG.DontSkipOriginal;
+            nview.InvokeRPC("RPC_RequestPick", Game.instance.GetPlayerProfile().GetPlayerID(), 
                 __instance.m_nview.m_zdo.m_uid);
+            return CFG.SkipOriginal;
         }
 
-        public static void RPC_RequestPickable(long uid, long playerID, ZDOID pickableZDOID)
+        public static void RPC_RequestPick(long uid, long playerID, ZDOID pickableZDOID)
         {
             ZDOMan.instance.ForceSendZDO(uid, pickableZDOID);
-            ZNetScene.instance.FindInstance(pickableZDOID).GetComponent<ZNetView>().m_zdo.SetOwner(uid);
+            ZNetView nview = ZNetScene.instance.FindInstance(pickableZDOID).GetComponent<ZNetView>();
+            nview.m_zdo.SetOwner(uid);
+            nview.InvokeRPC("Pick");
         }
     }
 

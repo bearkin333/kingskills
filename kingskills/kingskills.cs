@@ -82,7 +82,7 @@ namespace kingskills
                 Name = "OpenSkillWindow",
                 Config = CFG.KeyBindingSkillGUI,
                 ActiveInCustomGUI = true,
-                ActiveInGUI = true
+                ActiveInGUI = false
             };
             InputManager.Instance.AddButton(PluginGUID, OpenSkillWindowBtn);
             CollapseFoodBtn = new ButtonConfig
