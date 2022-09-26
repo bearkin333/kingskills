@@ -22,6 +22,7 @@ namespace kingskills.UX
         public static Image image = null;
         public static Text text = null;
         public static GameObject obj = null;
+        public static Button button = null;
 
         public const int NumTipParagraphs = 6;
 
@@ -46,10 +47,11 @@ namespace kingskills.UX
             InitEffectsPanel();
             InitTipsPanel();
             InitPerksPanel();
+            InitSettingsPanel();
 
 
             SkillGUIWindow.SetActive(false);
-            SkillGUIUpdate.SetTipsTab(false);
+            SkillGUIUpdate.SetTab(0);
 
             SkillGUIUpdate.GUICheck();
         }
@@ -73,6 +75,7 @@ namespace kingskills.UX
 
         public static GameObject LPTipsTabBtn;
         public static GameObject LPEffectsTabBtn;
+        public static GameObject LPSettingsTabBtn;
         #endregion var
         public static void InitSkillWindow()
         {
@@ -177,7 +180,7 @@ namespace kingskills.UX
                 height: 45f);
 
             // Add a listener to the button to close the panel again
-            Button button = CloseBtn.GetComponent<Button>();
+            button = CloseBtn.GetComponent<Button>();
             button.onClick.AddListener(SkillGUIUpdate.CloseSkillGUI);
 
             // Create the close button
@@ -200,7 +203,7 @@ namespace kingskills.UX
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(0f, 0f),
                 anchorMax: new Vector2(0f, 0f),
-                position: new Vector2(110f, 90f),
+                position: new Vector2(80f, 90f),
                 width: 100f,
                 height: 40f);
 
@@ -214,13 +217,27 @@ namespace kingskills.UX
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(0f, 0f),
                 anchorMax: new Vector2(0f, 0f),
-                position: new Vector2(240f, 90f),
+                position: new Vector2(210f, 90f),
                 width: 100f,
                 height: 40f);
 
             // Add a listener to the button to close the panel again
             button = LPTipsTabBtn.GetComponent<Button>();
             button.onClick.AddListener(SkillGUIUpdate.OnTipsTab);
+
+
+            LPSettingsTabBtn = GUIManager.Instance.CreateButton(
+                text: "Settings",
+                parent: SkillGUIWindow.transform,
+                anchorMin: new Vector2(0f, 0f),
+                anchorMax: new Vector2(0f, 0f),
+                position: new Vector2(340f, 90f),
+                width: 100f,
+                height: 40f);
+
+            // Add a listener to the button to close the panel again
+            button = LPSettingsTabBtn.GetComponent<Button>();
+            button.onClick.AddListener(SkillGUIUpdate.OnSettingsTab);
 
             // Create a dropdown
             SkillDropDown =
@@ -1013,6 +1030,153 @@ namespace kingskills.UX
                  i++;
             }
             Jotunn.Logger.LogMessage(logDD);*/
+
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #region var
+        public static GameObject LeftPanelSettingsTab;
+        public static GameObject LPSetScroll;
+
+        public static List<GameObject> LPSetButtons;
+        #endregion var
+        public static void InitSettingsPanel()
+        {
+            LeftPanelSettingsTab =
+            GUIManager.Instance.CreateWoodpanel(
+                    parent: SkillGUIWindow.transform,
+                    anchorMin: new Vector2(0.5f, 0.5f),
+                    anchorMax: new Vector2(0.5f, 0.5f),
+                    position: new Vector2(-185f, -15f),
+                    width: 350,
+                    height: 530,
+                    draggable: false);
+            LeftPanelSettingsTab.AddComponent<Mask>();
+            LeftPanelSettingsTab.GetComponent<Mask>().enabled = true;
+            LeftPanelSettingsTab.SetActive(false);
+
+
+            LPSetScroll =
+            GUIManager.Instance.CreateScrollView(
+                parent: LeftPanelSettingsTab.transform,
+                showHorizontalScrollbar: false,
+                showVerticalScrollbar: true,
+                handleSize: 10f,
+                handleDistanceToBorder: 0f,
+                handleColors: GUIManager.Instance.ValheimScrollbarHandleColorBlock,
+                slidingAreaBackgroundColor: Color.blue,
+                width: 310f,
+                height: 400f
+                );
+            LPSetScroll.transform.localScale = Vector3.one;
+            rect = LPSetScroll.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(350, 500);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0, 0);
+            LPSetScroll.AddComponent<ScrollRect>();
+            ScrollRect scrollSet = LPSetScroll.GetComponent<ScrollRect>();
+            scrollSet.horizontal = false;
+            scrollSet.vertical = true;
+            scrollSet.enabled = true;
+
+            scrollSet.scrollSensitivity = 100f;
+
+            GameObject scrollVert = GameObject.Instantiate(LPSetScroll);
+            GameObject.Destroy(scrollVert.GetComponent<ScrollRect>());
+            GameObject.Destroy(scrollVert.GetComponent<Scrollbar>());
+            GameObject.Destroy(scrollVert.GetComponent<Mask>());
+            scrollVert.transform.SetParent(LPSetScroll.transform);
+
+            GameObject scrollBar = GameObject.Instantiate(scrollVert);
+            scrollBar.transform.SetParent(LPSetScroll.transform);
+            Scrollbar scrollB = scrollBar.AddComponent<Scrollbar>();
+            rect = scrollBar.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(100, 500);
+
+            scrollSet.verticalScrollbar = scrollB;
+
+            rect = scrollVert.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(300, 425);
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0, 0);
+
+            VerticalLayoutGroup vertSettings = scrollVert.AddComponent(typeof(VerticalLayoutGroup)) as VerticalLayoutGroup;
+            vertSettings.spacing = 10f;
+            vertSettings.childControlWidth = true;
+
+            ContentSizeFitter sizeFitter = scrollVert.AddComponent(typeof(ContentSizeFitter)) as ContentSizeFitter;
+            sizeFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+
+
+            scrollSet.content = rect;
+            scrollSet.verticalNormalizedPosition = 1;
+
+            LPSetButtons = new List<GameObject>();
+
+            //Create the settings title
+            LPSetButtons.Add(GUIManager.Instance.CreateText(
+                text: "      Settings\n",
+                parent: scrollVert.transform,
+                anchorMin: new Vector2(0f, 1f),
+                anchorMax: new Vector2(0f, 1f),
+                position: new Vector2(50f, 0f),
+                font: GUIManager.Instance.AveriaSerifBold,
+                fontSize: 30,
+                color: CFG.ColorTitle,
+                outline: true,
+                outlineColor: Color.black,
+                width: 250f,
+                height: 70f,
+                addContentSizeFitter: false));
+            text = LPSetButtons[0].GetComponent<Text>();
+            text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.alignment = TextAnchor.MiddleCenter;
+
+            obj = GUIManager.Instance.CreateButton(
+                text: "General",
+                parent: scrollVert.transform,
+                anchorMin: new Vector2(0.5f, 0.5f),
+                anchorMax: new Vector2(0.5f, 0.5f),
+                position: new Vector2(0f, 0),
+                width: 200f,
+                height: 70f);
+
+            button = obj.GetComponent<Button>();
+            button.onClick.AddListener(GeneralSettingGUI.Open);
+            LPSetButtons.Add(button.gameObject);
+
+
+            obj = GUIManager.Instance.CreateButton(
+                text: "Weapon Enchants",
+                parent: scrollVert.transform,
+                anchorMin: new Vector2(0.5f, 0.5f),
+                anchorMax: new Vector2(0.5f, 0.5f),
+                position: new Vector2(0f, 0),
+                width: 200f,
+                height: 70f);
+
+            button = obj.GetComponent<Button>();
+            button.onClick.AddListener(WeaponEnchantGUI.Open);
+            button.enabled = true;
+            LPSetButtons.Add(button.gameObject);
+
+
+            obj = GUIManager.Instance.CreateButton(
+                text: "Cooking Buffs",
+                parent: scrollVert.transform,
+                anchorMin: new Vector2(0.5f, 0.5f),
+                anchorMax: new Vector2(0.5f, 0.5f),
+                position: new Vector2(0f, 0),
+                width: 200f,
+                height: 70f);
+
+            button = obj.GetComponent<Button>();
+            button.onClick.AddListener(CookingBuffGUI.Open);
+            button.enabled = true;
+            LPSetButtons.Add(button.gameObject);
+
 
         }
     }

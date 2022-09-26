@@ -121,7 +121,10 @@
     <Compile Include="Util\CustomTextMan.cs" />
     <Compile Include="Food Quality\SaveFoodQuality.cs" />
     <Compile Include="Food Quality\StackableItems.cs" />
-    <Compile Include="UX\AscendConfirmGUI.cs" />
+    <Compile Include="UX\Settings\CookingBuffGUI.cs" />
+    <Compile Include="UX\Settings\GeneralSettingGUI.cs" />
+    <Compile Include="UX\Settings\WeaponEnchantGUI.cs" />
+    <Compile Include="UX\Windows\AscendConfirmGUI.cs" />
     <Compile Include="Food Quality\CombineGUI.cs" />
     <Compile Include="UX\PT.cs" />
     <Compile Include="UX\SkillGUIData.cs" />
@@ -140,9 +143,9 @@
     <Compile Include="Properties\IgnoreAccessModifiers.cs" />
     <Compile Include="kingskills.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UX\PerkTooltipGUI.cs" />
+    <Compile Include="UX\Windows\PerkTooltipGUI.cs" />
     <Compile Include="UX\SkillGUIUpdate.cs" />
-    <Compile Include="UX\LearnConfirmationGUI.cs" />
+    <Compile Include="UX\Windows\LearnConfirmationGUI.cs" />
     <Compile Include="Perks\Managers\OpenPerks.cs" />
     <Compile Include="UX\SkillGUI.cs" />
     <Compile Include="Weapons\WeaponExperience.cs" />

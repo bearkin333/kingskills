@@ -125,12 +125,22 @@ namespace kingskills.UX
             }
         }
         public static void PinGUI() => GUIManager.BlockInput(false);
-        public static void OnEffectsTab() => SetTipsTab(false);
-        public static void OnTipsTab() => SetTipsTab(true);
-        public static void SetTipsTab(bool isActive)
+        public static void OnEffectsTab() => SetTab(0);
+        public static void OnTipsTab() => SetTab(1);
+        public static void OnSettingsTab() => SetTab(2);
+        public static void SetTab(int i)
         {
-            SkillGUI.LeftPanelEffectsTab.SetActive(!isActive);
-            SkillGUI.LeftPanelTipsTab.SetActive(isActive);
+            bool effects = false;
+            bool tips = false;
+            bool settings = false;
+
+            if (i == 0) effects = true;
+            else if (i == 1) tips = true;
+            else if (i == 2) settings = true;
+
+            SkillGUI.LeftPanelEffectsTab.SetActive(effects);
+            SkillGUI.LeftPanelTipsTab.SetActive(tips);
+            SkillGUI.LeftPanelSettingsTab.SetActive(settings);
         }
 
         public static void SetInteractable(bool interactable)
