@@ -35,6 +35,8 @@ namespace kingskills.Perks
         public static void GetWeaponOnEquip(VisEquipment __instance, bool __result)
         {
             if (!(__result && embiggened)) return;
+            Player localP = __instance.GetComponentInParent<Player>();
+            if (!localP || localP != Player.m_localPlayer) return;
             MakeBig(__instance);
         }
 

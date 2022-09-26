@@ -39,7 +39,7 @@ namespace kingskills.UX
                     anchorMin: new Vector2(0.5f, 0.5f),
                     anchorMax: new Vector2(0.5f, 0.5f),
                     position: new Vector2(0f, 0),
-                    width: 600,
+                    width: 800,
                     height: 300,
                     draggable: true);
             LearnConfirmWindow.SetActive(false);
@@ -69,11 +69,11 @@ namespace kingskills.UX
                 anchorMax: new Vector2(0.5f, 1f),
                 position: new Vector2(0f, -115f),
                 font: GUIManager.Instance.AveriaSerifBold,
-                fontSize: 50,
+                fontSize: 48,
                 color: GUIManager.Instance.ValheimOrange,
                 outline: true,
                 outlineColor: Color.black,
-                width: 600f,
+                width: 800f,
                 height: 80f,
                 addContentSizeFitter: false);
             LCPerkTitle.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;

@@ -50,7 +50,12 @@ namespace kingskills.RPC
 
             if (player is null) return;
             if (!player.m_nview.IsOwner()) player.m_nview.ClaimOwnership();
-            if (WeaponRequired && Util.GetPlayerWeapon(player).m_shared.m_skillType != skill) return;
+            if (WeaponRequired)
+            {
+                ItemDrop.ItemData weapon = Util.GetPlayerWeapon(player);
+                if (weapon is null) return;
+                if (weapon.m_shared.m_skillType != skill) return;
+            }
 
             Jotunn.Logger.LogMessage($"Just got a successfull call from the server to raise my skill {skill}. If you say so, buddy!");
 

@@ -81,9 +81,9 @@ namespace kingskills.UX
                     parent: SkillGUI.RightPanel.transform,
                     anchorMin: new Vector2(.5f, 1f),
                     anchorMax: new Vector2(.5f, 1f),
-                    position: new Vector2(0f, -380),
+                    position: new Vector2(0f, -385),
                     width: 320,
-                    height: 80,
+                    height: 100,
                     draggable: true);
             MiniTooltipWindow.SetActive(false);
 
@@ -92,7 +92,7 @@ namespace kingskills.UX
                 parent: MiniTooltipWindow.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(0f, -25f),
+                position: new Vector2(0f, -22f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 16,
                 color: CFG.ColorTitle,

@@ -100,6 +100,10 @@
     <Compile Include="Perks\P_BlackFlash.cs" />
     <Compile Include="Perks\P_BlastWave.cs" />
     <Compile Include="Perks\P_BlockExpert.cs" />
+    <Compile Include="Perks\P_Boomerang.cs" />
+    <Compile Include="Perks\P_Botany.cs" />
+    <Compile Include="Perks\P_BreakMyStride.cs" />
+    <Compile Include="Perks\P_Butterfly.cs" />
     <Compile Include="SE\SE_Stacking.cs" />
     <Compile Include="SE\KS_SEMan.cs" />
     <Compile Include="SE\SE_Berserk.cs" />

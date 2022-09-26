@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using kingskills.RPC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -262,7 +263,7 @@ perks:
         [HarmonyPrefix]
         public static void OnRPCRepair(WearNTear __instance)
         {
-            if (!__instance.m_nview.IsValid() || !__instance.m_nview.IsOwner()) return;
+            //if (!__instance.m_nview.IsValid() || !__instance.m_nview.IsOwner()) return;
             Player playerRef = null;
             foreach (Player player in Player.GetAllPlayers())
             {
@@ -270,11 +271,12 @@ perks:
                     playerRef = player;
             }
             if (playerRef is null) return;
+            Jotunn.Logger.LogMessage($"Repairing player was {playerRef.GetPlayerName()}");
 
             float healthChange = __instance.m_health - __instance.m_nview.m_zdo.GetFloat("health", __instance.m_health);
             if (healthChange < 0) healthChange = 0;
 
-            RPC.RPCMan.SendXP_RPC(playerRef.m_nview, CFG.BuildXPRepairMod.Value * healthChange, SkillMan.Building);
+            RPCMan.SendXP_RPC(playerRef.m_nview, CFG.BuildXPRepairMod.Value * healthChange, SkillMan.Building);
         }
     }
 

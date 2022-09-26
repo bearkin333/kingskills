@@ -488,6 +488,21 @@ namespace kingskills.Perks
             }
         }
 
+        public static bool IsPerkLearned(PerkType perk)
+        {
+            if (loaded)
+            {
+                if (perkLearned.TryGetValue(perk, out bool value))
+                    return value;
+                return false;
+            }
+            else
+            {
+                Jotunn.Logger.LogWarning("perklearned not loaded yet!");
+                return false;
+            }
+        }
+
         public static bool IsPerkActive(PerkType perk)
         {
             if (loaded)
@@ -613,6 +628,7 @@ namespace kingskills.Perks
                 perk.Value.learned = false;
                 SetLearnedPerk(perk.Key, false);
             }
+            OpenPerks.UpdateLearnables();
         }
 
         public static void ResetAscensions()

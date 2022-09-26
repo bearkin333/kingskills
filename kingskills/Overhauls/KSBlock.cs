@@ -25,28 +25,28 @@ namespace kingskills
             //I swear
 
             if (!__instance.IsPlayer() && __instance != Player.m_localPlayer) return CFG.DontSkipOriginal;
-            Player t = (Player)__instance;
+            Player localPlayer = (Player)__instance;
 
-            if (P_Asguard.BlockDirectionPatch(hit.m_dir, t.transform.forward, t) > 0f)
+            float blockAngle = Vector3.Dot(hit.m_dir, localPlayer.transform.forward);
+            bool asguard = CFG.CheckPlayerAndActive(localPlayer, PerkMan.PerkType.Asguard);
+            if (!asguard && blockAngle > 0f)
             {
                 __result = false;
                 return CFG.SkipOriginal;
             }
-            ItemDrop.ItemData currentBlocker = t.GetCurrentBlocker();
-            if (currentBlocker == null)
+            ItemDrop.ItemData currentBlocker = localPlayer.GetCurrentBlocker();
+            if (currentBlocker is null)
             {
                 __result = false;
                 return CFG.SkipOriginal;
             }
 
-            bool isParry = currentBlocker.m_shared.m_timedBlockBonus > 1f && t.m_blockTimer != -1f && t.m_blockTimer < 0.25f;
-            float skillFactor = t.GetSkillFactor(Skills.SkillType.Blocking);
-            float blockPower = FixBlockPower(currentBlocker, skillFactor, isParry, t);
+            bool isParry = currentBlocker.m_shared.m_timedBlockBonus > 1f && localPlayer.m_blockTimer != -1f && localPlayer.m_blockTimer < 0.25f;
+            if (asguard && blockAngle > 0f) isParry = false;
 
-            if (isParry)
-            {
-                blockPower *= currentBlocker.m_shared.m_timedBlockBonus;
-            }
+            float skillFactor = localPlayer.GetSkillFactor(Skills.SkillType.Blocking);
+            float blockPower = KSBlockPower(currentBlocker, skillFactor, isParry, localPlayer);
+
             if (currentBlocker.m_shared.m_damageModifiers.Count > 0)
             {
                 HitData.DamageModifiers modifiers = default(HitData.DamageModifiers);
@@ -56,21 +56,35 @@ namespace kingskills
 
             HitData.DamageTypes damageTypes = hit.m_damage.Clone();
             damageTypes.ApplyArmor(blockPower);
-            float totalBlockableDamage = hit.GetTotalBlockableDamage();
-            float totalBlockableDamage2 = damageTypes.GetTotalBlockableDamage();
-            float blockableDmgAfterArmor = totalBlockableDamage - totalBlockableDamage2;
-            float blockedDamage = Mathf.Clamp01(blockableDmgAfterArmor / blockPower);
-            float stamina = (isParry ? t.m_blockStaminaDrain : (t.m_blockStaminaDrain * blockedDamage));
-            UseBlockStamina(t, stamina);
+
+            float totalBlockableDamage;
+            float totalDamageAfterBlock;
+
+            if (PerkMan.IsPerkActive(PerkMan.PerkType.BlockExpert))
+            {
+                totalBlockableDamage = hit.GetTotalDamage();
+                totalDamageAfterBlock = damageTypes.GetTotalDamage();
+            }
+            else
+            {
+                totalBlockableDamage = hit.GetTotalBlockableDamage();
+                totalDamageAfterBlock = damageTypes.GetTotalBlockableDamage();
+            }
+
+            float damageBlocked = totalBlockableDamage - totalDamageAfterBlock;
+            float blockFactor = Mathf.Clamp01(damageBlocked / blockPower);
+            float stamina = (isParry ? localPlayer.m_blockStaminaDrain : (localPlayer.m_blockStaminaDrain * blockFactor));
+            UseBlockStamina(localPlayer, stamina);
             float totalStaggerDamage = damageTypes.GetTotalStaggerDamage();
-            bool staggered = t.AddStaggerDamage(totalStaggerDamage, hit.m_dir);
-            bool hasStamina = t.HaveStamina();
+            bool staggered = localPlayer.AddStaggerDamage(totalStaggerDamage, hit.m_dir);
+            bool hasStamina = localPlayer.HaveStamina();
             bool succeedBlock = hasStamina && !staggered;
             if (succeedBlock)
             {
                 hit.m_statusEffect = "";
-                BlockDamageExpPatch(hit, blockableDmgAfterArmor, t, isParry);
-                DamageText.instance.ShowText(DamageText.TextType.Blocked, hit.m_point + Vector3.up * 0.5f, blockableDmgAfterArmor);
+                hit.BlockDamage(damageBlocked);
+                BlockExpPatch(hit, damageBlocked, localPlayer, isParry);
+                DamageText.instance.ShowText(DamageText.TextType.Blocked, hit.m_point + Vector3.up * 0.5f, damageBlocked);
             }
             if (currentBlocker.m_shared.m_useDurability)
             {
@@ -81,7 +95,7 @@ namespace kingskills
             currentBlocker.m_shared.m_blockEffect.Create(hit.m_point, Quaternion.identity);
             if (!(attacker is null) && isParry && succeedBlock)
             {
-                t.m_perfectBlockEffect.Create(hit.m_point, Quaternion.identity);
+                localPlayer.m_perfectBlockEffect.Create(hit.m_point, Quaternion.identity);
                 if (attacker.m_staggerWhenBlocked)
                 {
                     attacker.Stagger(-hit.m_dir);
@@ -90,19 +104,20 @@ namespace kingskills
             }
             if (succeedBlock)
             {
-                hit.m_pushForce *= blockedDamage;
+                hit.m_pushForce *= blockFactor;
                 if (!(attacker is null) && !hit.m_ranged)
                 {
-                    float num6 = 1f - Mathf.Clamp01(blockedDamage * 0.5f);
+                    float num6 = 1f - Mathf.Clamp01(blockFactor * 0.5f);
                     HitData hitData = new HitData();
                     hitData.m_pushForce = currentBlocker.GetDeflectionForce() * num6;
-                    hitData.m_dir = attacker.transform.position - t.transform.position;
+                    hitData.m_dir = attacker.transform.position - localPlayer.transform.position;
                     hitData.m_dir.y = 0f;
                     hitData.m_dir = Vector3.Normalize(hitData.m_dir);
                     attacker.Damage(hitData);
                 }
             }
 
+            __result = true;
             return CFG.SkipOriginal;
         }
 
@@ -202,9 +217,8 @@ namespace kingskills
         }
 
 
-        private static void BlockDamageExpPatch(HitData hit, float damage, Humanoid __instance, bool isParry)
+        private static void BlockExpPatch(HitData hit, float damage, Humanoid __instance, bool isParry)
         {
-            hit.BlockDamage(damage);
             float expValue = 1f;
 
             //Jotunn.Logger.LogMessage($"Block detected");
@@ -226,7 +240,7 @@ namespace kingskills
                 LevelUp.BXP(__instance as Player, Skills.SkillType.Unarmed, CFG.GetFistBXPBlock(damage));
         }
 
-        public static float FixBlockPower(
+        public static float KSBlockPower(
             ItemDrop.ItemData currentBlocker,
             float skillFactor,
             bool isParry,
@@ -262,18 +276,23 @@ namespace kingskills
             //Skill bonus for block level
             if (CFG.IsSkillActive(Skills.SkillType.Blocking))
                 blockPower *= CFG.GetBlockPowerMult(skillFactor);
+
             //Otherwise, we have to use base numbers
             else
-            {
                 blockPower *= CFG.GetVanillaBlockMult(skillFactor);
+
+
+            //Bonuses to power on parry
+            if (isParry)
+            {
+                blockPower *= currentBlocker.m_shared.m_timedBlockBonus; 
+
+                if (CFG.IsSkillActive(Skills.SkillType.Swords))
+                    blockPower *=
+                        CFG.GetSwordParryMult(instance.GetSkillFactor(Skills.SkillType.Swords));
             }
 
-            //Here's the additional bonus to sword parry
-            if (CFG.IsSkillActive(Skills.SkillType.Swords) && isParry)
-            { 
-                blockPower *= 
-                    CFG.GetSwordParryMult(instance.GetSkillFactor(Skills.SkillType.Swords));
-            }
+            
 
             return blockPower;
         }

@@ -97,7 +97,7 @@ namespace kingskills.Perks
             openedPerks[perk].learned = true;
             openedPerks[perk].learnable = false;
             Jotunn.Logger.LogMessage($"{openedPerks[perk].name} just got learned, making it now unlearnable.");
-            PerkMan.perkLearned.Add(openedPerks[perk].type, true);
+            PerkMan.SetLearnedPerk(openedPerks[perk].type, true);
 
             UpdateLearnables();
             SkillGUIUpdate.GUICheck();
@@ -108,6 +108,11 @@ namespace kingskills.Perks
         {
             if (openedPerks == null) return;
             bool ascended = PerkMan.IsSkillAscended(openSkill);
+
+            foreach (Perk perk in openedPerks)
+            {
+                perk.learned = PerkMan.IsPerkLearned(perk.type);
+            }
 
 
             if (openedPerks[0].learned)
@@ -211,7 +216,7 @@ namespace kingskills.Perks
         {
             openSkill = skill;
             skillLevel = Player.m_localPlayer.GetSkillFactor(openSkill);
-            if (openedPerks == null) Init();
+            if (openedPerks is null) Init();
 
             openedPerks.Clear();
             openedPerks.Add(PerkMan.perkList[perk1a]);
@@ -272,7 +277,8 @@ namespace kingskills.Perks
             GameObject tint = SkillGUI.RPPerkBoxes[perkBoxString + "Tint"];
             Image tintImg = tint.GetComponent<Image>();
 
-            if (PerkMan.IsSkillAscended(openSkill) && openedPerks[perk].learned)
+            //PerkMan.IsSkillAscended(openSkill) && 
+            if (openedPerks[perk].learned)
             {
                 perkClickable[perk] = false;
                 perkImage.sprite = openedPerks[perk].icon;

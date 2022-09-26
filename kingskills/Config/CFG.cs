@@ -1240,9 +1240,12 @@ namespace kingskills
             return Mathf.Lerp(PerToMod(AgricultureYieldMin), 
                 PerToMod(AgricultureYieldMax), skillFactor);
         }
-        public static int GetAgricultureRandomAdditionalYield(float skillFactor, int baseYield)
+        public static int GetAgricultureRandomAdditionalYield(float skillFactor, int baseYield, float nonRand = 10f)
         {
-            float rand = UnityEngine.Random.Range(0f, 1f);
+            float rand;
+            if (nonRand == 10f) rand = UnityEngine.Random.Range(0f, 1f);
+            else rand = nonRand;
+
             float yieldMult = GetAgricultureYieldMod(skillFactor);
             float bestCase = baseYield * yieldMult;
             float modifier = Mathf.Lerp(-yieldMult / 2, yieldMult / 2, rand);
@@ -3101,7 +3104,7 @@ namespace kingskills
         {
             Player player = Player.m_localPlayer;
             ItemDrop.ItemData shield = player.GetCurrentBlocker();
-            float value = KSBlock.FixBlockPower(shield, player.GetSkillFactor(Skills.SkillType.Blocking), true, player);
+            float value = KSBlock.KSBlockPower(shield, player.GetSkillFactor(Skills.SkillType.Blocking), true, player);
             return value * PerToMult(BlackFlashDamage);
         }
 
@@ -3183,8 +3186,9 @@ namespace kingskills
         {
             return new Perk("Just a Guy with a Boomerang",
                 "Spears now automatically return to you after they're thrown.",
-                "I didn't ask for all this flying and magic!",
-                PerkMan.PerkType.Boomerang, Skills.SkillType.None, "Icons/boomerang.png");
+                "Boomerang! You DO always come back!",
+                PerkMan.PerkType.Boomerang, Skills.SkillType.Spears, "Icons/boomerang.png",
+                "Returning spears");
         }
 
 
@@ -3210,7 +3214,8 @@ namespace kingskills
                 "Intensive study of the workings of plants has increased your ability read basic information about them, such as time until " +
                 "completion or yield.",
                 "Turns out, when you study plants, you learn things.",
-                PerkMan.PerkType.Botany, Skills.SkillType.None, "Icons/botany.png");
+                PerkMan.PerkType.Botany, SkillMan.Agriculture, "Icons/botany.png",
+                "1 level of plant info");
         }
 
 
@@ -3223,21 +3228,28 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region BreakMyStride
         #region configdef
-
+        public static ConfigEntry<float> BreakMyStrideMassMod;
         #endregion configdef
 
         public static void InitBreakMyStrideConfigs(ConfigFile cfg)
         {
+            BreakMyStrideMassMod = cfg.Bind("Perks.BreakMyStride", "Mass", 10f,
+                AdminCD("% to multiply cart mass by"));
         }
 
         public static Perk GetPerkBreakMyStride()
         {
             return new Perk("Break My Stride",
-                "Carts now only affect your movespeed 30%.",
+                "Carts now reduce your speed by a signficantly less amount.",
                 "Ain't nothing gonna...",
-                PerkMan.PerkType.BreakMyStride, Skills.SkillType.None, "Icons/breakmystride.png");
+                PerkMan.PerkType.BreakMyStride, Skills.SkillType.Run, "Icons/breakmystride.png",
+                $"Cart mass reduced to {BreakMyStrideMassMod.Value}%");
         }
 
+        public static float GetBreakMyStrideMassMod()
+        {
+            return PerToMod(BreakMyStrideMassMod);
+        }
 
 
 
@@ -3260,7 +3272,8 @@ namespace kingskills
             return new Perk("Butterfly",
                 "You can now jump while in water.",
                 "Beautiful form!",
-                PerkMan.PerkType.Butterfly, Skills.SkillType.None, "Icons/butterfly.png");
+                PerkMan.PerkType.Butterfly, Skills.SkillType.Swim, "Icons/butterfly.png",
+                "Jump while swimming");
         }
 
 
@@ -3916,7 +3929,8 @@ namespace kingskills
                 "Your natural talent for growing plants has manifested, giving you an extra insight into information such as time until " +
                 "completion or yield.",
                 "Much better than a yellow foot, which you ought to bring up with your doctor.",
-                PerkMan.PerkType.GreenThumb, Skills.SkillType.None, "Icons/greenthumb.png");
+                PerkMan.PerkType.GreenThumb, SkillMan.Agriculture, "Icons/greenthumb.png",
+                "1 level of plant info");
         }
 
 
