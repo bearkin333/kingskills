@@ -20,6 +20,7 @@ namespace kingskills.UX
 
         public static float timeSinceUpdate = 0f;
         public static bool closable = true;
+        public static bool pinned = false;
 
         [HarmonyPatch(typeof(Player), nameof(Player.FixedUpdate))]
         [HarmonyPrefix]
@@ -52,7 +53,13 @@ namespace kingskills.UX
         public static void ToggleSkillGUI()
         {
             if (!GoodInput()) return;
-            if (SkillGUI.SkillGUIWindow.activeSelf) CloseSkillGUI();
+            if (SkillGUI.SkillGUIWindow.activeSelf)
+            {
+                if (pinned)
+                    GrabMouse(true);
+                else
+                    CloseSkillGUI();
+            }
             else OpenSkillGUI();
         }
 
@@ -78,7 +85,7 @@ namespace kingskills.UX
             if (!GoodInput()) return;
 
             SkillGUI.SkillGUIWindow.SetActive(true);
-            GUIManager.BlockInput(true);
+            GrabMouse(true);
             GUICheck();
         }
 
@@ -87,7 +94,9 @@ namespace kingskills.UX
             if (!GoodInput()) return;
 
             SkillGUI.SkillGUIWindow.SetActive(false);
-            GUIManager.BlockInput(false);
+            WeaponEnchantGUI.Close();
+
+            GrabMouse(false);
         }
 
 
@@ -124,7 +133,7 @@ namespace kingskills.UX
                 SkillGUI.dd.value--;
             }
         }
-        public static void PinGUI() => GUIManager.BlockInput(false);
+        public static void PinGUI() => GrabMouse(false);
         public static void OnEffectsTab() => SetTab(0);
         public static void OnTipsTab() => SetTab(1);
         public static void OnSettingsTab() => SetTab(2);
@@ -143,6 +152,20 @@ namespace kingskills.UX
             SkillGUI.LeftPanelSettingsTab.SetActive(settings);
         }
 
+        public static void GrabMouse(bool value)
+        {
+            GUIManager.BlockInput(value);
+            pinned = !value;
+            if (value)
+            {
+                SkillGUI.PinBtn.GetComponentInChildren<Text>().text = $"Pin";
+            }
+            else
+            {
+                SkillGUI.PinBtn.GetComponentInChildren<Text>().text = $"Pinned!\nPress {CFG.KeyBindingSkillGUI} to unpin";
+            }
+        }
+
         public static void SetInteractable(bool interactable)
         {
             SkillGUI.dd.interactable = interactable;
@@ -158,6 +181,7 @@ namespace kingskills.UX
 
         public static void GUICheck()
         {
+            WeaponEnchantGUI.UpdateShouldDisplay();
             //Jotunn.Logger.LogMessage($"Detected a dropdown value change.");
             SkillGUIData data = new SkillGUIData();
             Player player = Player.m_localPlayer;

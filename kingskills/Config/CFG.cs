@@ -167,12 +167,18 @@ namespace kingskills
         public static Color ColorPTRed;
         public static Color ColorKingBlurbs;
 
-        public static string ColorBonusBlueFF = "<color=#33E0EDFF>";
-        public static string ColorAscendedGreenFF = "<color=#73EA52FF>";
-        public static string ColorExperienceYellowFF = "<color=#FAF53BFF>";
-        public static string ColorTitleFF = "<color=#FAF56EFF>";
-        public static string ColorWhiteFF = "<color=#FFFFFFFF>";
-        public static string ColorKingSkillsFF = "<color=#C43BFDFF>";
+        public const string ColorBonusBlueFF = "<color=#33E0EDFF>";
+        public const string ColorAscendedGreenFF = "<color=#73EA52FF>";
+        public const string ColorExperienceYellowFF = "<color=#FAF53BFF>";
+        public const string ColorTitleFF = "<color=#FAF56EFF>";
+        public const string ColorWhiteFF = "<color=#FFFFFFFF>";
+        public const string ColorKingSkillsFF = "<color=#C43BFDFF>";
+
+        public const string ColorFireFF = "<color=#FF0829FF>";
+        public const string ColorLightningFF = "<color=#FFE814FF>";
+        public const string ColorSpiritFF = "<color=#A7F7FCFF>";
+        public const string ColorPoisonFF = "<color=#1FED18FF>";
+        public const string ColorFrostFF = "<color=#2462F2FF>";
 
         public const string ColorPTGreenFF = "<color=#7AF365FF>";
         public const string ColorPTRedFF = "<color=#EA0C0CFF>";
@@ -2596,6 +2602,7 @@ namespace kingskills
         public static ConfigEntry<float> PerkTwoLVLThreshold;
         public static ConfigEntry<float> PerkThreeLVLThreshold;
         public static ConfigEntry<float> PerkFourLVLThreshold;
+        public static ConfigEntry<float> PerkWeaponEnchantDamage;
         #endregion configdef
         public static void InitPerkConfig(ConfigFile cfg)
         {
@@ -2610,6 +2617,9 @@ namespace kingskills
                     AdminCD("mod of max level before you unlock the third set of perks", true));
             PerkFourLVLThreshold = cfg.Bind("Perks", "FourthThreshold", 10f,
                     AdminCD("mod of max level before you unlock the fourth set of perks - NOT IMPLEMENTED"));
+
+            PerkWeaponEnchantDamage = cfg.Bind("Perks", "Weapon Enchant Damage", 10f,
+                    AdminCD("% of extra damage added by weapon enchants"));
 
             InitAllPerkConfigs(cfg);
         }
@@ -2729,6 +2739,11 @@ namespace kingskills
             InitWaterRunningConfigs(cfg);
             InitWorldlyConfigs(cfg);
             InitYmirConfigs(cfg);
+        }
+
+        public static float GetPerkWeaponEnchantMod()
+        {
+            return PerToMod(PerkWeaponEnchantDamage);
         }
 
         #endregion genericperks
@@ -3296,9 +3311,11 @@ namespace kingskills
         public static Perk GetPerkCauterize()
         {
             return new Perk("Cauterize",
-                "You've had the incredible idea of setting all your weapons on fire. You now do 20% extra damage as fire damage.",
-                "Anything is a torch, if you're brave enough.",
-                PerkMan.PerkType.Cauterize, Skills.SkillType.None, "Icons/cauterize.png");
+                $"You've had the incredible idea of setting all your weapons on fire. You now do " +
+                $"{CFG.PerkWeaponEnchantDamage.Value}% extra damage as fire damage.",
+                "Anything can be a torch, if you're brave enough.",
+                PerkMan.PerkType.Cauterize, Skills.SkillType.Axes, "Icons/cauterize.png",
+                $"Unlocked fire weapon enchant");
         }
 
 
@@ -4664,9 +4681,10 @@ namespace kingskills
         public static Perk GetPerkMjolnir()
         {
             return new Perk("Mjolnir",
-                "You deal an additional 20% of damage as lightning damage.",
+                $"You deal an additional {CFG.PerkWeaponEnchantDamage.Value}% of damage as lightning damage.",
                 "Whosoever holds this hammer, if they be worthy, shall possess the power of... you?",
-                PerkMan.PerkType.Mjolnir, Skills.SkillType.None, "Icons/mjolnir.png");
+                PerkMan.PerkType.Mjolnir, Skills.SkillType.Clubs, "Icons/mjolnir.png",
+                "Unlocked lightning enchant");
         }
 
 
@@ -5272,9 +5290,10 @@ namespace kingskills
         public static Perk GetPerkSpearit()
         {
             return new Perk("In Spearit",
-                "Your spear now deals 30% additional spirit damage.",
+                $"Your spear now deals {CFG.PerkWeaponEnchantDamage.Value}% additional spirit damage.",
                 "I'm not sorry.",
-                PerkMan.PerkType.Spearit, Skills.SkillType.None, "Icons/spearit.png");
+                PerkMan.PerkType.Spearit, Skills.SkillType.Spears, "Icons/spearit.png",
+                "Unlocked spirit enchant");
         }
 
 
@@ -5576,9 +5595,10 @@ namespace kingskills
         public static Perk GetPerkToxic()
         {
             return new Perk("Poisoned Blade",
-                "Your attacks deal an additional 40% damage as poison damage.",
+                $"Your attacks deal an additional {CFG.PerkWeaponEnchantDamage.Value}% damage as poison damage.",
                 "The hardest part is remembering to wear gloves when you apply the poison.",
-                PerkMan.PerkType.Toxic, Skills.SkillType.None, "Icons/toxic.png");
+                PerkMan.PerkType.Toxic, Skills.SkillType.Swords, "Icons/toxic.png",
+                "Unlocked poison enchant");
         }
 
 
@@ -5804,12 +5824,12 @@ namespace kingskills
         public static Perk GetPerkYmir()
         {
             return new Perk("Memories of Ymir",
-                "Tapping into the land's ancient heritage, you gain a 20% extra frost damage with each attack.",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
                 "Let's hope Odin is not a jealous god.",
-                PerkMan.PerkType.Ymir, Skills.SkillType.None, "Icons/ymir.png");
+                PerkMan.PerkType.Ymir, Skills.SkillType.Polearms, "Icons/ymir.png",
+                "Unlocked frost enchant");
         }
-
-
 
 
         #endregion Ymir

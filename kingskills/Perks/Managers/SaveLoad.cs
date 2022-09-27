@@ -59,6 +59,7 @@ namespace kingskills.Perks
                 SaveFlagsToZPackage(ref zPackage, savePerkDeactivated);
                 SaveFlagsToZPackage(ref zPackage, saveSkillAscended);
                 zPackage.Write(CombineGUI.ask);
+                zPackage.Write((int)P_WeaponEnchants.activeEnchant);
             }
             else
             {
@@ -114,10 +115,21 @@ namespace kingskills.Perks
                 Dictionary<int, bool> loadPerkDeactivated = new Dictionary<int, bool>();
                 Dictionary<int, bool> loadSkillAscended = new Dictionary<int, bool>();
 
-                loadPerkLearned = LoadFlagsFromZPackage(zPackage);
-                loadPerkDeactivated = LoadFlagsFromZPackage(zPackage);
-                loadSkillAscended = LoadFlagsFromZPackage(zPackage);
-                CombineGUI.LoadAskSetting(zPackage.ReadBool());
+                try { loadPerkLearned = LoadFlagsFromZPackage(zPackage); }
+                catch { }
+                
+                try { loadPerkDeactivated = LoadFlagsFromZPackage(zPackage); }
+                catch { }
+                
+                try { loadSkillAscended = LoadFlagsFromZPackage(zPackage); }
+                catch { }
+                
+                try { CombineGUI.LoadAskSetting(zPackage.ReadBool()); }
+                catch { CombineGUI.LoadAskSetting(true); }
+                
+                try { WeaponEnchantGUI.LoadWeaponEnchant(zPackage.ReadInt()); }
+                catch { WeaponEnchantGUI.LoadWeaponEnchant((int)WeaponEnchant.None); }
+                
 
                 foreach (KeyValuePair<int, bool> datum in loadPerkLearned)
                 {
@@ -138,7 +150,7 @@ namespace kingskills.Perks
             }
             catch
             {
-                Jotunn.Logger.LogWarning("Didn't load from King Skills");
+                Jotunn.Logger.LogError("Failed loading from kingskills");
                 return;
             }
             PerkMan.UpdatePerkList();

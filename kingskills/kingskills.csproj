@@ -104,6 +104,7 @@
     <Compile Include="Perks\P_Botany.cs" />
     <Compile Include="Perks\P_BreakMyStride.cs" />
     <Compile Include="Perks\P_Butterfly.cs" />
+    <Compile Include="Perks\P_WeaponEnchants.cs" />
     <Compile Include="SE\SE_Stacking.cs" />
     <Compile Include="SE\KS_SEMan.cs" />
     <Compile Include="SE\SE_Berserk.cs" />

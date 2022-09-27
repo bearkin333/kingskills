@@ -16,9 +16,9 @@ namespace kingskills.UX
 
         public static void OpenLearnConfirmation(int confirmPerk)
         {
-            if (LearnConfirmWindow == null) AwakeLearnConfirmation();
+            if (!Window) Init();
 
-            LearnConfirmWindow.SetActive(true);
+            Window.SetActive(true);
             GUIManager.BlockInput(true);
             confirmPerkKey = confirmPerk;
 
@@ -26,15 +26,15 @@ namespace kingskills.UX
             LCPerkDescription.GetComponent<Text>().text = OpenPerks.openedPerks[confirmPerk].description;
         }
 
-        public static GameObject LearnConfirmWindow;
+        public static GameObject Window;
         public static GameObject LCPerkTitle;
         public static GameObject LCPerkDescription;
         public static GameObject LCYesBtn;
         public static GameObject LCNoBtn;
 
-        public static void AwakeLearnConfirmation()
+        public static void Init()
         {
-            LearnConfirmWindow = GUIManager.Instance.CreateWoodpanel(
+            Window = GUIManager.Instance.CreateWoodpanel(
                     parent: GUIManager.CustomGUIFront.transform,
                     anchorMin: new Vector2(0.5f, 0.5f),
                     anchorMax: new Vector2(0.5f, 0.5f),
@@ -42,12 +42,12 @@ namespace kingskills.UX
                     width: 800,
                     height: 300,
                     draggable: true);
-            LearnConfirmWindow.SetActive(false);
+            Window.SetActive(false);
 
 
             GameObject obj = GUIManager.Instance.CreateText(
                 text: "Are you sure you want to learn",
-                parent: LearnConfirmWindow.transform,
+                parent: Window.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
                 position: new Vector2(0f, -75f),
@@ -64,7 +64,7 @@ namespace kingskills.UX
 
             LCPerkTitle = GUIManager.Instance.CreateText(
                 text: "",
-                parent: LearnConfirmWindow.transform,
+                parent: Window.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
                 position: new Vector2(0f, -115f),
@@ -81,7 +81,7 @@ namespace kingskills.UX
 
             LCPerkDescription = GUIManager.Instance.CreateText(
                 text: "",
-                parent: LearnConfirmWindow.transform,
+                parent: Window.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
                 position: new Vector2(0f, -190f),
@@ -100,7 +100,7 @@ namespace kingskills.UX
 
             LCYesBtn = GUIManager.Instance.CreateButton(
                 text: "Yes",
-                parent: LearnConfirmWindow.transform,
+                parent: Window.transform,
                 anchorMin: new Vector2(0.5f, 0f),
                 anchorMax: new Vector2(0.5f, 0f),
                 position: new Vector2(-120f, 38f),
@@ -111,14 +111,14 @@ namespace kingskills.UX
 
             LCNoBtn = GUIManager.Instance.CreateButton(
                 text: "No",
-                parent: LearnConfirmWindow.transform,
+                parent: Window.transform,
                 anchorMin: new Vector2(0.5f, 0f),
                 anchorMax: new Vector2(0.5f, 0f),
                 position: new Vector2(120f, 38f),
                 width: 120f,
                 height: 55f);
             btn = LCNoBtn.GetComponent<Button>();
-            btn.onClick.AddListener(CloseLearnConfirmWindow);
+            btn.onClick.AddListener(Close);
 
             confirmPerkKey = OpenPerks.NoPerk;
         }
@@ -126,12 +126,13 @@ namespace kingskills.UX
         public static void OnConfirmClick()
         {
             OpenPerks.LearnPerk(confirmPerkKey);
-            CloseLearnConfirmWindow();
+            Close();
         }
 
-        public static void CloseLearnConfirmWindow()
+        public static void Close()
         {
-            LearnConfirmWindow.SetActive(false);
+            if (!Window) Init();
+            Window.SetActive(false);
             GUIManager.BlockInput(false);
 
             confirmPerkKey = OpenPerks.NoPerk;
@@ -139,8 +140,8 @@ namespace kingskills.UX
 
         public static bool IsConfirmOpen()
         {
-            if (LearnConfirmWindow == null) return false;
-            else return LearnConfirmWindow.activeSelf;
+            if (Window == null) return false;
+            else return Window.activeSelf;
         }
 
     }

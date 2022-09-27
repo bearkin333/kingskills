@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using kingskills.RPC;
+using kingskills.Perks;
 
 namespace kingskills.Weapons
 {
@@ -124,6 +125,7 @@ namespace kingskills.Weapons
                 //Jotunn.Logger.LogMessage($"To {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
 
                 hit.m_damage.Modify(CFG.GetBigStickDamageMult());
+                P_WeaponEnchants.ApplyWeaponEnchant(ref hit.m_damage);
 
             }
             //Or if the attacked is the local player

@@ -1159,7 +1159,7 @@ namespace kingskills.UX
 
             button = obj.GetComponent<Button>();
             button.onClick.AddListener(WeaponEnchantGUI.Open);
-            button.enabled = true;
+            obj.SetActive(false);
             LPSetButtons.Add(button.gameObject);
 
 
@@ -1174,7 +1174,7 @@ namespace kingskills.UX
 
             button = obj.GetComponent<Button>();
             button.onClick.AddListener(CookingBuffGUI.Open);
-            button.enabled = true;
+            obj.SetActive(false);
             LPSetButtons.Add(button.gameObject);
 
 
