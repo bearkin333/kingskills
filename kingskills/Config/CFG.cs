@@ -15,6 +15,7 @@ namespace kingskills
     //mod by shortening the name, so... oh well. Makes things more readable.
     //Actually stands for Cool Fucking Game
     //Currently 773 references throughout the code. high score!
+    //822 and climbing
     class CFG
     {
         /*
@@ -3388,7 +3389,7 @@ namespace kingskills
 
         public static void InitClosingTheGapConfigs(ConfigFile cfg)
         {
-            ClosingTheGapForce = cfg.Bind("Perks.ClosingTheGap", "Distance", 80f,
+            ClosingTheGapForce = cfg.Bind("Perks.ClosingTheGap", "Distance", 55f,
                 AdminCD("force towards enemy on stagger"));
             ClosingTheGapStaminaRegain = cfg.Bind("Perks.ClosingTheGap", "Stamina", 5f,
                 AdminCD("amount of stamina to regain on stagger"));
@@ -3422,7 +3423,7 @@ namespace kingskills
         {
             ControlledDemoDetectRange = cfg.Bind("Perks.ControlledDemo", "Detection Range", 50f,
                 AdminCD("Distance away trees can detect nearby enemies or trees"));
-            ControlledDemoForce = cfg.Bind("Perks.ControlledDemo", "Force", 400f,
+            ControlledDemoForce = cfg.Bind("Perks.ControlledDemo", "Force", 90f,
                 AdminCD("Force that logs are launched at nearby enemies or trees"));
         }
 
@@ -3458,7 +3459,8 @@ namespace kingskills
             return new Perk("Couched Lance",
                 "After standing still for several seconds, you now gain a large boost to damage.",
                 "Usually for charging cavalry, now for stampeding Loxes.",
-                PerkMan.PerkType.CouchedLance, Skills.SkillType.None, "Icons/couchedlance.png");
+                PerkMan.PerkType.CouchedLance, Skills.SkillType.Spears, "Icons/couchedlance.png",
+                "extra damage while standing still");
         }
 
 

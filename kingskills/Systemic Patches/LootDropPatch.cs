@@ -16,7 +16,7 @@ namespace kingskills.Patches
         [HarmonyPostfix]
         public static void DropTableFix(ref DropTable __instance, ref List<GameObject> __result, int amount)
         {
-            Jotunn.Logger.LogMessage("I think we're responsible for this kill, so I'm running the drop table change");
+            //Jotunn.Logger.LogMessage("I think we're responsible for this kill, so I'm running the drop table change");
             Player playerRef = Player.m_localPlayer;
             
             //Check for player and do player stuff here
