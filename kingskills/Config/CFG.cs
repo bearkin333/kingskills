@@ -401,6 +401,18 @@ namespace kingskills
             return hitData;
         }
 
+        public static bool GetKillerExists(ZNetView instanceNView, ref Player killer)
+        {
+            long killingPlayer = instanceNView.m_zdo.GetLong(ZDOKiller, 0);
+            Jotunn.Logger.LogMessage($"killer was {killingPlayer}");
+            killer = Player.GetPlayer(killingPlayer);
+            if (killer == null)
+            {
+                Jotunn.Logger.LogMessage($"no killer");
+                return false;
+            }
+            return true;
+        }
 
         public static string ConditionalPluralize(float num, string text)
         {

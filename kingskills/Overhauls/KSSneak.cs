@@ -99,7 +99,7 @@ namespace kingskills.Patches
 			return false;
 		}
 
-			public static Character GetStrongestEnemyInSight(Player player, float range=0f)
+		public static Character GetStrongestEnemyInSight(Player player, float range=0f)
         {
 			List<BaseAI> inRangeEnemies = new List<BaseAI>();
 			Character strongest = null;

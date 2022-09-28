@@ -108,14 +108,8 @@ namespace kingskills.Weapons
         {
             //Jotunn.Logger.LogMessage($"{name} was destroyed");
 
-            long killingPlayer = nview.m_zdo.GetLong(CFG.ZDOKiller, 0);
-            Jotunn.Logger.LogMessage($"killer was {killingPlayer}");
-            Player killer = Player.GetPlayer(killingPlayer);
-            if (killer == null)
-            {
-                Jotunn.Logger.LogMessage($"no killer");
-                return;
-            }
+            Player killer = null;
+            if (!CFG.GetKillerExists(nview, ref killer)) return;
 
             //Jotunn.Logger.LogMessage($"killer was found as a player {killer.GetPlayerName()}");
 
@@ -130,5 +124,6 @@ namespace kingskills.Weapons
                     CFG.WeaponBXPAxeTreeAmount.Value, Skills.SkillType.Axes, true, true);
             }
         }
+
     }
 }
