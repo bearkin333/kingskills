@@ -28,7 +28,7 @@ namespace kingskills.Perks
 
         public static void OnHitTrigger()
         {
-            if (!CFG.CheckPlayerAndActive(Player.m_localPlayer, PerkMan.PerkType.Berserkr)) return;
+            if (!CFG.CheckPlayerActivePerk(Player.m_localPlayer, PerkMan.PerkType.Berserkr)) return;
             SEMan seman = Player.m_localPlayer.GetSEMan();
             if (seman is null) return;
 

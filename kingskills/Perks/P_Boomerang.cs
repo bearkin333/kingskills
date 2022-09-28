@@ -19,7 +19,7 @@ namespace kingskills.Perks
             if (__instance.m_owner.GetZDOID() != player.GetZDOID()) return;
             //Jotunn.Logger.LogMessage($"Player is local player");
 
-            if (!CFG.CheckPlayerAndActive(player, PerkMan.PerkType.Boomerang)) return;
+            if (!CFG.CheckPlayerActivePerk(player, PerkMan.PerkType.Boomerang)) return;
             //Jotunn.Logger.LogMessage($"Boomerang is active");
 
             if (__instance.m_spawnItem is null || !__instance.m_spawnItem.m_dropPrefab.name.Contains("Spear")) return;

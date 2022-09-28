@@ -20,7 +20,7 @@ namespace kingskills.Perks
         [HarmonyPostfix]
         public static void AquamanUpdate(Player __instance, float dt)
         {
-            if (!CFG.CheckPlayerAndActive(__instance, PerkMan.PerkType.Aquaman)) return;
+            if (!CFG.CheckPlayerActivePerk(__instance, PerkMan.PerkType.Aquaman)) return;
             if (fishAoe is null || fishAoe.gameObject == null) SetupAOE();
 
             if (!__instance.InLiquidSwimDepth())

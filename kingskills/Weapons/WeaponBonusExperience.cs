@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using kingskills.Patches;
 using kingskills.RPC;
+using kingskills.Perks;
 
 namespace kingskills.Weapons
 {
@@ -46,21 +47,25 @@ namespace kingskills.Weapons
         }
 
         [HarmonyPatch(nameof(Character.RPC_Stagger))]
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         private static void CheckForStaggeredByPlayer(Character __instance)
         {
             ZNetView nview = __instance.m_nview;
             //if (!nview.IsOwner()) return;
-            if  (nview.m_zdo.GetBool(CFG.ZDOStaggerFlag, false))
-            {
-                nview.m_zdo.Set(CFG.ZDOStaggerFlag, false);
+            Jotunn.Logger.LogMessage($"Stagger flag for {__instance.m_name}: {nview.m_zdo.GetBool(CFG.ZDOStaggerFlag, false)}");
 
-                Player attacker = Player.GetPlayer(nview.m_zdo.GetLong(CFG.ZDOKiller, 0));
-                if (attacker is null) return;
+            if (__instance.IsStaggering()) return;
+            if (!nview.m_zdo.GetBool(CFG.ZDOStaggerFlag, false)) return;
 
-                RPCMan.SendXP_RPC(attacker.m_nview,
-                    CFG.GetClubBXPStagger(__instance.GetMaxHealth()), Skills.SkillType.Clubs, true, true);
-            }
+            nview.m_zdo.Set(CFG.ZDOStaggerFlag, false);
+
+                
+            Player attacker = Player.GetPlayer(nview.m_zdo.GetLong(CFG.ZDOKiller, 0));
+            if (attacker is null) return;
+                
+            P_ClosingTheGap.GapClose(__instance, attacker);
+                
+            RPCMan.SendXP_RPC(attacker.m_nview,CFG.GetClubBXPStagger(__instance.GetMaxHealth()), Skills.SkillType.Clubs, true, true);
         }
     }
 

@@ -70,7 +70,7 @@ namespace kingskills.UX
                 position: new Vector2(0f, -115f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 48,
-                color: GUIManager.Instance.ValheimOrange,
+                color: CFG.ColorTitle,
                 outline: true,
                 outlineColor: Color.black,
                 width: 800f,

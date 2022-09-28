@@ -104,6 +104,9 @@
     <Compile Include="Perks\P_Botany.cs" />
     <Compile Include="Perks\P_BreakMyStride.cs" />
     <Compile Include="Perks\P_Butterfly.cs" />
+    <Compile Include="Perks\P_CloakOfShadows.cs" />
+    <Compile Include="Perks\P_ClosingTheGap.cs" />
+    <Compile Include="Perks\P_ControlledDemo.cs" />
     <Compile Include="Perks\P_WeaponEnchants.cs" />
     <Compile Include="SE\SE_Stacking.cs" />
     <Compile Include="SE\KS_SEMan.cs" />

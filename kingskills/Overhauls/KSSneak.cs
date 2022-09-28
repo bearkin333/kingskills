@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using kingskills.Perks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +69,8 @@ namespace kingskills.Patches
 			//It pretty much seems like the only way.
 			//Aside from a messy transpile that I won't be able to pull off myself.
 			if (!CFG.IsSkillActive(Skills.SkillType.Sneak)) return true;
+
+			P_CloakOfShadows.UpdateOnSneak(dt);
 
 			__instance.m_stealthFactorUpdateTimer += dt;
 			if (__instance.m_stealthFactorUpdateTimer > 0.5f)

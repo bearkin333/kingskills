@@ -189,8 +189,8 @@ namespace kingskills.UX
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(1f, 1f),
                 anchorMax: new Vector2(1f, 1f),
-                position: new Vector2(-90f, -85f),
-                width: 120f,
+                position: new Vector2(-130f, -85f),
+                width: 200f,
                 height: 45f);
 
             // Add a listener to the button to close the panel again

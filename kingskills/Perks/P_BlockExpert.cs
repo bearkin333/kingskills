@@ -13,7 +13,7 @@ namespace kingskills.Perks
         [HarmonyPatch(typeof(Character),nameof(Character.RPC_Damage)), HarmonyPrefix]
         public static void CheckBlockValues(Character __instance, ref HitData hit)
         {
-            if (!CFG.CheckPlayerAndActive(__instance, PerkMan.PerkType.BlockExpert)) return;
+            if (!CFG.CheckPlayerActivePerk(__instance, PerkMan.PerkType.BlockExpert)) return;
             hit.m_blockable = true;
         }
     }

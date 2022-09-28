@@ -16,7 +16,7 @@ namespace kingskills.Perks
         [HarmonyPatch(typeof(Humanoid),nameof(Humanoid.EquipItem))] [HarmonyPostfix]
         public static void IncreaseWeaponSize(Humanoid __instance, ItemDrop.ItemData item, bool __result)
         {
-            if (!CFG.CheckPlayerAndActive(__instance, PerkMan.PerkType.BigStick)) return;
+            if (!CFG.CheckPlayerActivePerk(__instance, PerkMan.PerkType.BigStick)) return;
             if (__result && item.IsWeapon())
             {
                 embiggened = true;

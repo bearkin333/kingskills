@@ -21,7 +21,7 @@ namespace kingskills.Perks
         {
             //Jotunn.Logger.LogMessage($"Check run supposedly returning: {__result}");
 
-            if (__result && CFG.CheckPlayerAndActive(__instance, PerkMan.PerkType.AttackOfOpportunity) &&
+            if (__result && CFG.CheckPlayerActivePerk(__instance, PerkMan.PerkType.AttackOfOpportunity) &&
                 Util.GetPlayerWeapon(__instance) == __instance.m_unarmedWeapon.m_itemData)
             {
                 if (!aoopZone || !aoopZone.obj) InitAOOP();

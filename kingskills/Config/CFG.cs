@@ -363,7 +363,7 @@ namespace kingskills
                 new ConfigurationManagerAttributes { Browsable = false });
         }
 
-        public static bool CheckPlayerAndActive(Character player, PerkMan.PerkType perk)
+        public static bool CheckPlayerActivePerk(Character player, PerkMan.PerkType perk)
         {
             if (player == null ||
                 Player.m_localPlayer == null ||
@@ -376,7 +376,7 @@ namespace kingskills
 
         public static bool SetZDOVariable(Character player, PerkMan.PerkType perk, string var, bool value)
         {
-            if (!CheckPlayerAndActive(player, perk)) return false;
+            if (!CheckPlayerActivePerk(player, perk)) return false;
             //Jotunn.Logger.LogMessage("perk active and valid, changing ZDO value");
 
             ZDO zdo = player.m_nview.m_zdo;
@@ -401,6 +401,12 @@ namespace kingskills
             return hitData;
         }
 
+
+        public static string ConditionalPluralize(float num, string text)
+        {
+            if (num > 1) return text + "s";
+            return text;
+        }
 
         #endregion genericfunc
 
@@ -2764,18 +2770,15 @@ namespace kingskills
 
         public static Perk GetPerkAirStep()
         {
-            string times = "time";
-            string jumps = "jump";
-            if (GetAirStepExtraJumps() > 1)
-            {
-                times += "s";
-                jumps += "s";
-            }
+            int jumpNum = GetAirStepExtraJumps();
+            string times = ConditionalPluralize(jumpNum, "time");
+            string jumps = ConditionalPluralize(jumpNum, "jump");
+
             return new Perk("Air Step",
-                $"Allows you to jump {GetAirStepExtraJumps()} additional {times} while in the air.",
+                $"Allows you to jump {jumpNum} additional {times} while in the air.",
                 "The laws of physics are nothing to a viking!",
                 PerkMan.PerkType.AirStep, Skills.SkillType.Jump, "Icons/airstep.png",
-                $"{GetAirStepExtraJumps()} extra {jumps}");
+                $"{jumpNum} extra {jumps}");
         }
 
         public static int GetAirStepExtraJumps()
@@ -3328,21 +3331,35 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region CloakOfShadows
         #region configdef
-
+        public static ConfigEntry<float> CloakOfShadowsTimer;
+        public static ConfigEntry<float> CloakOfShadowsHealthRegen;
         #endregion configdef
 
         public static void InitCloakOfShadowsConfigs(ConfigFile cfg)
         {
+            CloakOfShadowsTimer = cfg.Bind("Perks.CloakOfShadows", "Timer", 1f,
+                AdminCD("seconds between regeneration ticks"));
+            CloakOfShadowsHealthRegen = cfg.Bind("Perks.CloakOfShadows", "Health Regen", 5f,
+                AdminCD("% of max health to regenerate every tick"));
         }
 
         public static Perk GetPerkCloakOfShadows()
         {
+            float heal = CloakOfShadowsHealthRegen.Value;
+            float secs = CloakOfShadowsTimer.Value;
+            string seconds = ConditionalPluralize(secs, "second");
             return new Perk("Cloak of Shadows",
-                "While sneaking, you now passively regenerate a percentage of your max health per second.",
+                $"While sneaking, you now passively regenerate {heal}% of your max health " +
+                $"every {secs} {seconds}.",
                 "You have no ally but the darkness.",
-                PerkMan.PerkType.CloakOfShadows, Skills.SkillType.None, "Icons/cloakofshadows.png");
+                PerkMan.PerkType.CloakOfShadows, Skills.SkillType.Sneak, "Icons/cloakofshadows.png",
+                $"While sneaking, {heal}% heal every {secs} {seconds}");
         }
 
+        public static float GetCloakOfShadowsHealthRegenMod()
+        {
+            return PerToMod(CloakOfShadowsHealthRegen);
+        }
 
 
 
@@ -3353,19 +3370,26 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region ClosingTheGap
         #region configdef
-
+        public static ConfigEntry<float> ClosingTheGapForce;
+        public static ConfigEntry<float> ClosingTheGapStaminaRegain;
         #endregion configdef
 
         public static void InitClosingTheGapConfigs(ConfigFile cfg)
         {
+            ClosingTheGapForce = cfg.Bind("Perks.ClosingTheGap", "Distance", 80f,
+                AdminCD("force towards enemy on stagger"));
+            ClosingTheGapStaminaRegain = cfg.Bind("Perks.ClosingTheGap", "Stamina", 5f,
+                AdminCD("amount of stamina to regain on stagger"));
         }
 
         public static Perk GetPerkClosingTheGap()
         {
+            float stamina = ClosingTheGapStaminaRegain.Value;
             return new Perk("Closing The Gap",
-                "Every time you stagger an enemy, you regain 5 stamina and skip towards them.",
+                $"Every time you stagger an enemy, you regain {stamina} stamina and skip towards them.",
                 "Perfect for when your flight reflex is broken.",
-                PerkMan.PerkType.ClosingTheGap, Skills.SkillType.None, "Icons/closingthegap.png");
+                PerkMan.PerkType.ClosingTheGap, Skills.SkillType.Clubs, "Icons/closingthegap.png",
+                $"{stamina} stamina and gap close on stagger");
         }
 
 
@@ -3378,19 +3402,26 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region ControlledDemo
         #region configdef
-
+        public static ConfigEntry<float> ControlledDemoDetectRange;
+        public static ConfigEntry<float> ControlledDemoForce;
         #endregion configdef
 
         public static void InitControlledDemoConfigs(ConfigFile cfg)
         {
+            ControlledDemoDetectRange = cfg.Bind("Perks.ControlledDemo", "Detection Range", 50f,
+                AdminCD("Distance away trees can detect nearby enemies or trees"));
+            ControlledDemoForce = cfg.Bind("Perks.ControlledDemo", "Force", 400f,
+                AdminCD("Force that logs are launched at nearby enemies or trees"));
         }
 
         public static Perk GetPerkControlledDemo()
         {
             return new Perk("Controlled Demolition",
-                "Trees will always fall away from you.",
+                "When you chop down a tree, the resulting log will blast towards any nearby enemies. If no enemies are " +
+                "nearby, it will instead target another tree. Be careful not to stand in it's way!",
                 "Instructions: Put tree between you and enemy",
-                PerkMan.PerkType.ControlledDemo, Skills.SkillType.None, "Icons/controlleddemo.png");
+                PerkMan.PerkType.ControlledDemo, Skills.SkillType.WoodCutting, "Icons/controlleddemo.png",
+                "Fallen logs fling at enemies or trees");
         }
 
 

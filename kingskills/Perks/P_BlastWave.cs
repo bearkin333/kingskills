@@ -14,7 +14,7 @@ namespace kingskills.Perks
         [HarmonyPrefix]
         public static void CheckAOEIncrease(Attack __instance)
         {
-            if (!CFG.CheckPlayerAndActive(__instance.m_character, PerkMan.PerkType.BlastWave)) return;
+            if (!CFG.CheckPlayerActivePerk(__instance.m_character, PerkMan.PerkType.BlastWave)) return;
             __instance.m_attackRayWidth *= CFG.GetBlastWaveScaleMult();
             //Jotunn.Logger.LogMessage($"New attack area is {__instance.m_attackRayWidth}");
         }

@@ -28,7 +28,7 @@ namespace kingskills
             Player localPlayer = (Player)__instance;
 
             float blockAngle = Vector3.Dot(hit.m_dir, localPlayer.transform.forward);
-            bool asguard = CFG.CheckPlayerAndActive(localPlayer, PerkMan.PerkType.Asguard);
+            bool asguard = CFG.CheckPlayerActivePerk(localPlayer, PerkMan.PerkType.Asguard);
             if (!asguard && blockAngle > 0f)
             {
                 __result = false;
