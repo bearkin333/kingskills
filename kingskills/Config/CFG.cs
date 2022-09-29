@@ -3501,28 +3501,35 @@ namespace kingskills
         public static ConfigEntry<float> CoupDeBurstNoise;
         public static ConfigEntry<float> CoupDeBurstAngle;
         public static ConfigEntry<KeyCode> CoupDeBurstHotkey;
+        public static ConfigEntry<float> CoupDeBurstCooldown;
+        public static ConfigEntry<float> CoupDeBurstJumpDeadzone;
         #endregion configdef
 
         public static void InitCoupDeBurstConfigs(ConfigFile cfg)
         {
-            CoupDeBurstForce = cfg.Bind("Perks.CoupDeBurst", "Force", 500f,
+            CoupDeBurstForce = cfg.Bind("Perks.CoupDeBurst", "Force", 80000f,
                     AdminCD("Amount of force to push the ship with"));
-            CoupDeBurstNoise = cfg.Bind("Perks.CoupDeBurst", "Noise", 10f,
+            CoupDeBurstNoise = cfg.Bind("Perks.CoupDeBurst", "Noise", 100f,
                     AdminCD("Hitnoise to apply when pushing ship"));
             CoupDeBurstAngle = cfg.Bind("Perks.CoupDeBurst", "Angle", .5f,
                     AdminCD("Angle to push the ship. Between 0 and 1, 0 being forward and 1 being straight up"));
-            CoupDeBurstHotkey = cfg.Bind("Perks.CoupDeBurst", "Hotkey", KeyCode.Space,
+            CoupDeBurstHotkey = cfg.Bind("Perks.CoupDeBurst", "Hotkey", KeyCode.T,
                     AdminCD("Shortcut to activate jump"));
+            CoupDeBurstCooldown = cfg.Bind("Perks.CoupDeBurst", "Cooldown", 60f,
+                    AdminCD("Number of seconds after which you can use again"));
+            CoupDeBurstJumpDeadzone = cfg.Bind("Perks.CoupDeBurst", "Jump deadzone", 1f,
+                    AdminCD("Number of seconds before checking for hitting the water after jump"));
         }
 
         public static Perk GetPerkCoupDeBurst()
         {
             return new Perk("Coup De Burst",
-                "You can now activate a huge explosion, sending your ship flying through the air. Better" +
-                " hold on!",
+                "While captaining a ship, you can now activate a huge explosion, sending your ship flying through the air. Has a " +
+                $"{CoupDeBurstCooldown} second cooldown after use. Also stabilizes the boat " +
+                $"during the jump, but only while you sit at the captain's helm. Better tell your first mate to grab the mast!!",
                 "And so men set sights on the Grand Line, in pursuit of their dreams.",
                 PerkMan.PerkType.CoupDeBurst, SkillMan.Sailing, "Icons/coupdeburst.png",
-                "Press space while sailing to jump");
+                $"Press {CoupDeBurstHotkey.Value} while sailing to jump");
         }
 
 
@@ -3547,7 +3554,7 @@ namespace kingskills
             return new Perk("Critical Blow",
                 "You have a 10% chance to deal double damage on each hit.",
                 "The kind of hit your DM would be embarassed to narrate.",
-                PerkMan.PerkType.CriticalBlow, Skills.SkillType.None, "Icons/criticalblow.png");
+                PerkMan.PerkType.CriticalBlow, Skills.SkillType.Swords, "Icons/criticalblow.png");
         }
 
 

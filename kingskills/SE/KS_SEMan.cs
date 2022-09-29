@@ -18,10 +18,14 @@ namespace kingskills.SE
         public static StatusEffect ks_CouchedLance;
         public const string ks_CouchedLanceName = "KS_SE_CouchedLance";
 
+        public static StatusEffect ks_CoupDeBurst;
+        public const string ks_CoupDeBurstName = "KS_SE_CoupDeBurst";
+
         public static void InitSE()
         {
             ks_Berserk = ScriptableObject.CreateInstance<SE_Berserk>();
             ks_CouchedLance = ScriptableObject.CreateInstance<SE_CouchedLance>();
+            ks_CoupDeBurst = ScriptableObject.CreateInstance<SE_CoupDeBurst>();
 
 
 
@@ -30,6 +34,7 @@ namespace kingskills.SE
 
             ItemManager.Instance.AddStatusEffect(new CustomStatusEffect(ks_Berserk, fixReference: false));
             ItemManager.Instance.AddStatusEffect(new CustomStatusEffect(ks_CouchedLance, fixReference: false));
+            ItemManager.Instance.AddStatusEffect(new CustomStatusEffect(ks_CoupDeBurst, fixReference: false));
         }
     }
 }

@@ -36,7 +36,7 @@ namespace kingskills.Perks
             }
             else
             {
-                SE_Berserk buff = (SE_Berserk)seman.AddStatusEffect((SE_Berserk)ScriptableObject.CreateInstance(typeof(SE_Berserk)));
+                SE_Berserk buff = (SE_Berserk)seman.AddStatusEffect(ScriptableObject.CreateInstance<SE_Berserk>());
                 buff.AddStack();
             }
 

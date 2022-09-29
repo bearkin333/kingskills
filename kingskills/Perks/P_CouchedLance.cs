@@ -51,7 +51,7 @@ namespace kingskills.Perks
 
                 if (!seman.HaveStatusEffect(KS_SEMan.ks_CouchedLanceName))
                 {
-                    seman.AddStatusEffect((SE_CouchedLance)ScriptableObject.CreateInstance(typeof(SE_CouchedLance)));
+                    seman.AddStatusEffect(ScriptableObject.CreateInstance<SE_CouchedLance>());
                 }
                 else
                 {

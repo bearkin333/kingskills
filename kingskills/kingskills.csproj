@@ -111,6 +111,7 @@
     <Compile Include="Perks\P_CoupDeBurst.cs" />
     <Compile Include="Perks\P_WeaponEnchants.cs" />
     <Compile Include="SE\SE_CouchedLance.cs" />
+    <Compile Include="SE\SE_CoupDeBurst.cs" />
     <Compile Include="SE\SE_Stacking.cs" />
     <Compile Include="SE\KS_SEMan.cs" />
     <Compile Include="SE\SE_Berserk.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Util\CustomTextMan.cs" />
     <Compile Include="Food Quality\SaveFoodQuality.cs" />
     <Compile Include="Food Quality\StackableItems.cs" />
+    <Compile Include="Util\RotationConstraint.cs" />
     <Compile Include="UX\Settings\CookingBuffGUI.cs" />
     <Compile Include="UX\Settings\GeneralSettingGUI.cs" />
     <Compile Include="UX\Settings\WeaponEnchantGUI.cs" />
