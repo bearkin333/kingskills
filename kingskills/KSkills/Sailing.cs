@@ -40,7 +40,7 @@ perks:
     public class ShipPatch
     {
 
-        public static float controlTimer = 0;
+        public static float controlTimer = 0f;
         [HarmonyPatch(nameof(Ship.FixedUpdate))]
         [HarmonyPostfix]
         public static void FixedUpdatePatch(Ship __instance)
@@ -58,7 +58,7 @@ perks:
             if (controlTimer < CFG.SailControlTimer.Value)
                 return;
 
-            controlTimer -= CFG.SailControlTimer.Value;
+            controlTimer = 0f;
 
             ZDO zdo = __instance?.m_nview?.GetZDO();
             if (zdo == null) return;

@@ -3447,22 +3447,46 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region CouchedLance
         #region configdef
-
+        public static ConfigEntry<float> CouchedLanceTimer;
+        public static ConfigEntry<float> CouchedLanceCheckTimer;
+        public static ConfigEntry<float> CouchedLanceDeadzone;
+        public static ConfigEntry<float> CouchedLanceDamage;
+        public static ConfigEntry<float> CouchedLanceDuration;
         #endregion configdef
 
         public static void InitCouchedLanceConfigs(ConfigFile cfg)
         {
+            CouchedLanceTimer = cfg.Bind("Perks.CouchedLance", "Timer", 5f,
+                AdminCD("Seconds you need to stand still to activate couched lance"));
+            CouchedLanceCheckTimer = cfg.Bind("Perks.CouchedLance", "Check Timer", .4f,
+                AdminCD("Seconds between each position check for standing still"));
+            CouchedLanceDeadzone = cfg.Bind("Perks.CouchedLance", "Deadzone", .4f,
+                AdminCD("Maximum distance you can move in the check timer before couched lance deactivates"));
+            CouchedLanceDamage = cfg.Bind("Perks.CouchedLance", "Damage", 30f,
+                AdminCD("% damage increase when couched lance is activated"));
+            CouchedLanceDuration = cfg.Bind("Perks.CouchedLance", "Duration", 3f,
+                AdminCD("Seconds couched lance lasts after you move"));
         }
 
         public static Perk GetPerkCouchedLance()
         {
+            float secs = CouchedLanceTimer.Value;
+            string seconds = ConditionalPluralize(secs, "second");
+            float damage = CouchedLanceDamage.Value;
+            float buffDur = CouchedLanceDuration.Value;
+            string buffSeconds = ConditionalPluralize(buffDur, "second");
             return new Perk("Couched Lance",
-                "After standing still for several seconds, you now gain a large boost to damage.",
+                $"After standing still for {secs} {seconds}, you gain a buff that increases your damage by {damage}%. " +
+                $"The buff will persist for {buffDur} {buffSeconds} after you start moving again.",
                 "Usually for charging cavalry, now for stampeding Loxes.",
                 PerkMan.PerkType.CouchedLance, Skills.SkillType.Spears, "Icons/couchedlance.png",
-                "extra damage while standing still");
+                $"Stand still for {secs} {seconds} and gain a {damage}% damage buff");
         }
 
+        public static float GetCouchedLanceDamageMult()
+        {
+            return PerToMult(CouchedLanceDamage);
+        }
 
 
 
@@ -3473,11 +3497,22 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region CoupDeBurst
         #region configdef
-
+        public static ConfigEntry<float> CoupDeBurstForce;
+        public static ConfigEntry<float> CoupDeBurstNoise;
+        public static ConfigEntry<float> CoupDeBurstAngle;
+        public static ConfigEntry<KeyCode> CoupDeBurstHotkey;
         #endregion configdef
 
         public static void InitCoupDeBurstConfigs(ConfigFile cfg)
         {
+            CoupDeBurstForce = cfg.Bind("Perks.CoupDeBurst", "Force", 500f,
+                    AdminCD("Amount of force to push the ship with"));
+            CoupDeBurstNoise = cfg.Bind("Perks.CoupDeBurst", "Noise", 10f,
+                    AdminCD("Hitnoise to apply when pushing ship"));
+            CoupDeBurstAngle = cfg.Bind("Perks.CoupDeBurst", "Angle", .5f,
+                    AdminCD("Angle to push the ship. Between 0 and 1, 0 being forward and 1 being straight up"));
+            CoupDeBurstHotkey = cfg.Bind("Perks.CoupDeBurst", "Hotkey", KeyCode.Space,
+                    AdminCD("Shortcut to activate jump"));
         }
 
         public static Perk GetPerkCoupDeBurst()
@@ -3486,7 +3521,8 @@ namespace kingskills
                 "You can now activate a huge explosion, sending your ship flying through the air. Better" +
                 " hold on!",
                 "And so men set sights on the Grand Line, in pursuit of their dreams.",
-                PerkMan.PerkType.CoupDeBurst, Skills.SkillType.None, "Icons/coupdeburst.png");
+                PerkMan.PerkType.CoupDeBurst, SkillMan.Sailing, "Icons/coupdeburst.png",
+                "Press space while sailing to jump");
         }
 
 

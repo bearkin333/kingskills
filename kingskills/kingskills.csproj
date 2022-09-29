@@ -108,7 +108,9 @@
     <Compile Include="Perks\P_ClosingTheGap.cs" />
     <Compile Include="Perks\P_ControlledDemo.cs" />
     <Compile Include="Perks\P_CouchedLance.cs" />
+    <Compile Include="Perks\P_CoupDeBurst.cs" />
     <Compile Include="Perks\P_WeaponEnchants.cs" />
+    <Compile Include="SE\SE_CouchedLance.cs" />
     <Compile Include="SE\SE_Stacking.cs" />
     <Compile Include="SE\KS_SEMan.cs" />
     <Compile Include="SE\SE_Berserk.cs" />

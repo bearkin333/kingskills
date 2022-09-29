@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Jotunn.Entities;
 using Jotunn.Managers;
 using kingskills.Perks;
+using UnityEngine;
 
 namespace kingskills.SE
 {
@@ -14,10 +15,13 @@ namespace kingskills.SE
         public static StatusEffect ks_Berserk;
         public const string ks_BerserkName = "KS_SE_Berserk";
 
+        public static StatusEffect ks_CouchedLance;
+        public const string ks_CouchedLanceName = "KS_SE_CouchedLance";
+
         public static void InitSE()
         {
-            ks_Berserk = P_Berserkr.GetEffectData();
-
+            ks_Berserk = ScriptableObject.CreateInstance<SE_Berserk>();
+            ks_CouchedLance = ScriptableObject.CreateInstance<SE_CouchedLance>();
 
 
 
@@ -25,6 +29,7 @@ namespace kingskills.SE
 
 
             ItemManager.Instance.AddStatusEffect(new CustomStatusEffect(ks_Berserk, fixReference: false));
+            ItemManager.Instance.AddStatusEffect(new CustomStatusEffect(ks_CouchedLance, fixReference: false));
         }
     }
 }

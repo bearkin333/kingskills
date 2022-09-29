@@ -12,12 +12,6 @@ namespace kingskills.Perks
     [HarmonyPatch]
     class P_Berserkr
     {
-        public static SE_Berserk GetEffectData()
-        {
-            SE_Berserk berserk = ScriptableObject.CreateInstance<SE_Berserk>();
-
-            return berserk;
-        }
 
         [HarmonyPatch(typeof(Player),nameof(Player.OnDamaged))]
         [HarmonyPrefix]

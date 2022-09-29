@@ -45,6 +45,11 @@ namespace kingskills.Perks
             visEquip.m_rightItemInstance.transform.localScale *= CFG.GetBigStickScaleMult();
         }
 
+        public static void ApplyDamage(ref HitData hit)
+        {
+            hit.m_damage.Modify(CFG.GetBigStickDamageMult());
+        }
+
         /*
         Transform itemInstance = Player.m_localPlayer.m_visEquipment.m_rightItemInstance.transform;
         itemInstance.localScale *= CFG.GetBigStickScaleMult();

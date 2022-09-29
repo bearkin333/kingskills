@@ -123,9 +123,9 @@ namespace kingskills.Weapons
                 //Jotunn.Logger.LogMessage($"Now, thanks to the b/p/s bonuses, the damage is {hit.m_damage.GetTotalDamage()}");
 
                 //Jotunn.Logger.LogMessage($"To {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
-
-                hit.m_damage.Modify(CFG.GetBigStickDamageMult());
-                P_WeaponEnchants.ApplyWeaponEnchant(ref hit.m_damage);
+                P_CouchedLance.ApplyDamage(ref hit);
+                P_BigStick.ApplyDamage(ref hit);
+                P_WeaponEnchants.ApplyDamage(ref hit);
 
             }
             //Or if the attacked is the local player

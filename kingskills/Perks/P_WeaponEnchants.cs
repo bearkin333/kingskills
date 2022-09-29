@@ -11,8 +11,9 @@ namespace kingskills.Perks
     {
         public static WeaponEnchant activeEnchant = WeaponEnchant.None;
 
-        public static void ApplyWeaponEnchant(ref HitData.DamageTypes damage)
+        public static void ApplyDamage(ref HitData hit)
         {
+            HitData.DamageTypes damage = hit.m_damage;
             float extraDamage = damage.GetTotalDamage() * CFG.GetPerkWeaponEnchantMod();
             switch (activeEnchant)
             {

@@ -30,11 +30,6 @@ namespace kingskills
 
 
         Harmony harmony = new Harmony(PluginGUID);
-        public ButtonConfig OpenSkillWindowBtn;
-        public ButtonConfig CollapseFoodBtn;
-        public ButtonConfig ConfirmShortcutBtn;
-        public ButtonConfig ExitSkillGUIBtn;
-        public ButtonConfig DetailedPerkBtn;
 
         // Use this class to add your own localization to the game
         public static CustomLocalization Localization = LocalizationManager.Instance.GetLocalization();
@@ -66,6 +61,7 @@ namespace kingskills
 
                 CombineGUI.CombineUpdate(ConfirmShortcutBtn.Name);
                 OpenPerks.UpdateOpenPerks(DetailedPerkBtn.Name);
+                P_CoupDeBurst.JumpCheck(CoupDeBurstBtn.Name);
             }
 
         }
@@ -74,6 +70,14 @@ namespace kingskills
         {
             CFG.Init(Config);
         }
+
+
+        public ButtonConfig OpenSkillWindowBtn;
+        public ButtonConfig CollapseFoodBtn;
+        public ButtonConfig ConfirmShortcutBtn;
+        public ButtonConfig ExitSkillGUIBtn;
+        public ButtonConfig DetailedPerkBtn;
+        public ButtonConfig CoupDeBurstBtn;
 
         private void AddInputs()
         {
@@ -117,6 +121,14 @@ namespace kingskills
                 ActiveInGUI = true
             };
             InputManager.Instance.AddButton(PluginGUID, DetailedPerkBtn);
+            CoupDeBurstBtn = new ButtonConfig
+            {
+                Name = "CoupDeBurst",
+                Config = CFG.CoupDeBurstHotkey,
+                ActiveInCustomGUI = true,
+                ActiveInGUI = true
+            };
+            InputManager.Instance.AddButton(PluginGUID, CoupDeBurstBtn);
         }
 
         private void InitCommands()
