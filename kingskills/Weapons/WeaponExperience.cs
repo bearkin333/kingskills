@@ -133,7 +133,7 @@ namespace kingskills.Weapons
                 return;
             }
 
-            ItemDrop.ItemData weapon = Util.GetPlayerWeapon(__instance);
+            ItemDrop.ItemData weapon = CFG.GetPlayerWeapon(__instance);
             if (weapon == null)
             {
                 last = null;

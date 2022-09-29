@@ -109,6 +109,8 @@
     <Compile Include="Perks\P_ControlledDemo.cs" />
     <Compile Include="Perks\P_CouchedLance.cs" />
     <Compile Include="Perks\P_CoupDeBurst.cs" />
+    <Compile Include="Perks\P_CriticalBlow.cs" />
+    <Compile Include="Perks\P_Deadeye.cs" />
     <Compile Include="Perks\P_WeaponEnchants.cs" />
     <Compile Include="SE\SE_CouchedLance.cs" />
     <Compile Include="SE\SE_CoupDeBurst.cs" />
@@ -145,7 +147,6 @@
     <Compile Include="Weapons\WeaponStamina.cs" />
     <Compile Include="Perks\Managers\PerkMan.cs" />
     <Compile Include="Perks\Managers\SaveLoad.cs" />
-    <Compile Include="Util\Utilities.cs" />
     <Compile Include="Util\TestCommands.cs" />
     <Compile Include="Config\CFG.cs" />
     <Compile Include="Systemic Patches\ProjectilePatch.cs" />

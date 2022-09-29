@@ -62,6 +62,7 @@ namespace kingskills
                 CombineGUI.CombineUpdate(ConfirmShortcutBtn.Name);
                 OpenPerks.UpdateOpenPerks(DetailedPerkBtn.Name);
                 P_CoupDeBurst.JumpCheck(CoupDeBurstBtn.Name);
+                P_Deadeye.ThrowCheck(ThrowBtn.Name);
             }
 
         }
@@ -78,6 +79,7 @@ namespace kingskills
         public ButtonConfig ExitSkillGUIBtn;
         public ButtonConfig DetailedPerkBtn;
         public ButtonConfig CoupDeBurstBtn;
+        public ButtonConfig ThrowBtn;
 
         private void AddInputs()
         {
@@ -129,6 +131,14 @@ namespace kingskills
                 ActiveInGUI = true
             };
             InputManager.Instance.AddButton(PluginGUID, CoupDeBurstBtn);
+            ThrowBtn = new ButtonConfig
+            {
+                Name = "Throw",
+                Config = CFG.DeadeyeHotkey,
+                ActiveInCustomGUI = true,
+                ActiveInGUI = true
+            };
+            InputManager.Instance.AddButton(PluginGUID, ThrowBtn);
         }
 
         private void InitCommands()

@@ -22,7 +22,7 @@ namespace kingskills.Perks
             //Jotunn.Logger.LogMessage($"Check run supposedly returning: {__result}");
 
             if (__result && CFG.CheckPlayerActivePerk(__instance, PerkMan.PerkType.AttackOfOpportunity) &&
-                Util.GetPlayerWeapon(__instance) == __instance.m_unarmedWeapon.m_itemData)
+                CFG.GetPlayerWeapon(__instance) == __instance.m_unarmedWeapon.m_itemData)
             {
                 if (!aoopZone || !aoopZone.obj) InitAOOP();
                 //Jotunn.Logger.LogMessage($"Activating AOOP zone");

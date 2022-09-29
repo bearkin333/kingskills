@@ -123,8 +123,9 @@ namespace kingskills.Weapons
                 //Jotunn.Logger.LogMessage($"Now, thanks to the b/p/s bonuses, the damage is {hit.m_damage.GetTotalDamage()}");
 
                 //Jotunn.Logger.LogMessage($"To {hit.m_pushForce} and {hit.m_damage.GetTotalStaggerDamage()}");
-                P_CouchedLance.ApplyDamage(ref hit);
                 P_BigStick.ApplyDamage(ref hit);
+                P_CouchedLance.ApplyDamage(ref hit);
+                P_CriticalBlow.ApplyDamage(ref hit);
                 P_WeaponEnchants.ApplyDamage(ref hit);
 
             }

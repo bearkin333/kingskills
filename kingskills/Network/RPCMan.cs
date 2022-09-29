@@ -52,7 +52,7 @@ namespace kingskills.RPC
             if (!player.m_nview.IsOwner()) player.m_nview.ClaimOwnership();
             if (WeaponRequired)
             {
-                ItemDrop.ItemData weapon = Util.GetPlayerWeapon(player);
+                ItemDrop.ItemData weapon = CFG.GetPlayerWeapon(player);
                 if (weapon is null) return;
                 if (weapon.m_shared.m_skillType != skill) return;
             }

@@ -421,6 +421,27 @@ namespace kingskills
             return text;
         }
 
+        // Get the actual weapon a player would swing with, or null if the player couldn't swing in this state.
+        // Compared to Player.GetCurrentWeapon(), for example, this returns null if the player is holding
+        // a hammer or pickaxe, but will return unarmed even if the player is holding a shield.
+        public static ItemDrop.ItemData GetPlayerWeapon(Player p)
+        {
+            if (p.m_rightItem != null && p.m_rightItem.IsWeapon() && p.m_rightItem.m_shared.m_skillType != Skills.SkillType.Pickaxes)
+            {
+                return p.m_rightItem;
+            }
+            if (p.m_leftItem != null && p.m_leftItem.IsWeapon() && p.m_leftItem.m_shared.m_skillType != Skills.SkillType.Pickaxes)
+            {
+                return p.m_leftItem;
+            }
+            if (p.m_rightItem == null && (p.m_leftItem == null
+                || p.m_leftItem.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Shield))
+            {
+                return p.m_unarmedWeapon.m_itemData;
+            }
+            return null;
+        }
+
         #endregion genericfunc
 
         ////////////////////////////////////////////////////////////////////////////////////////
@@ -3542,19 +3563,38 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region CriticalBlow
         #region configdef
-
+        public static ConfigEntry<float> CriticalBlowChance;
+        public static ConfigEntry<float> CriticalBlowDamage;
+        public static ConfigEntry<int> CriticalBlowFontSize;
         #endregion configdef
 
         public static void InitCriticalBlowConfigs(ConfigFile cfg)
         {
+            CriticalBlowChance = cfg.Bind("Perks.CriticalBlow", "Chance", 10f,
+                    AdminCD("% chance on hit to get a crit"));
+            CriticalBlowDamage = cfg.Bind("Perks.CriticalBlow", "Damage", 70f,
+                    AdminCD("% increased damage on critical hit"));
+            CriticalBlowFontSize = cfg.Bind("Perks.CriticalBlow", "Font Size", 40,
+                    AdminCD("Size of the font for the critical blow text"));
         }
 
         public static Perk GetPerkCriticalBlow()
         {
             return new Perk("Critical Blow",
-                "You have a 10% chance to deal double damage on each hit.",
+                $"Every attack has a {CriticalBlowChance.Value}% chance to deal {CriticalBlowDamage.Value}% additional damage.",
                 "The kind of hit your DM would be embarassed to narrate.",
-                PerkMan.PerkType.CriticalBlow, Skills.SkillType.Swords, "Icons/criticalblow.png");
+                PerkMan.PerkType.CriticalBlow, Skills.SkillType.Swords, "Icons/criticalblow.png",
+                $"{CriticalBlowChance.Value}% crit chance for {CriticalBlowDamage.Value}% damage");
+        }
+
+        public static bool GetIsCriticalBlow()
+        {
+            return UnityEngine.Random.Range(0f, 1f) > PerToMod(CriticalBlowChance);
+        }
+
+        public static float GetCriticalBlowDamageMult()
+        {
+            return PerToMult(CriticalBlowDamage);
         }
 
 
@@ -3567,11 +3607,13 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region Deadeye
         #region configdef
-
+        public static ConfigEntry<KeyCode> DeadeyeHotkey;
         #endregion configdef
 
         public static void InitDeadeyeConfigs(ConfigFile cfg)
         {
+            DeadeyeHotkey = cfg.Bind("Perks.Deadeye", "Hotkey", KeyCode.T,
+                    AdminCD("Hotkey for throwing knives"));
         }
 
         public static Perk GetPerkDeadeye()
@@ -3579,7 +3621,8 @@ namespace kingskills
             return new Perk("Deadeye",
                 "You can now throw your knives, dealing half backstab damage.",
                 "They don't come back to you, though.",
-                PerkMan.PerkType.Deadeye, Skills.SkillType.None, "Icons/deadeye.png");
+                PerkMan.PerkType.Deadeye, Skills.SkillType.Knives, "Icons/deadeye.png",
+                "All knives throwable - hotkey ");
         }
 
 
