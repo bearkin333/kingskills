@@ -2013,15 +2013,14 @@ namespace kingskills
             return Mathf.Lerp(MiningCarryCapacityMin.Value,
                 MiningCarryCapacityMax.Value, skillFactor);
         }
-        public static float GetMiningXPEatRock(ItemDrop.ItemData rock)
+        public static float GetMiningXPEatRock(ItemDrop.ItemData item)
         {
-            if (rock == null) return 0f;
-            string rockName = rock.m_dropPrefab.name;
-            if (MiningBXPTable.ContainsKey(rockName))
-            {
-                return MiningBXPTable[rockName];
-            }
+            if (item is null) return 0f;
+            string itemName = item.m_dropPrefab.name;
+            if (MiningBXPTable.ContainsKey(itemName)) return MiningBXPTable[itemName];
+
             return 0f;
+
         }
 
 
@@ -3635,21 +3634,23 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region Decapitation
         #region configdef
-
+        public static ConfigEntry<float> DecapitationExp;
         #endregion configdef
 
         public static void InitDecapitationConfigs(ConfigFile cfg)
         {
+            DecapitationExp = cfg.Bind("Perks.Decapitation", "EXP", 20f,
+                    AdminCD("Amount of experience per eaten trophy"));
         }
 
         public static Perk GetPerkDecapitation()
         {
             return new Perk("Decapitate",
-                "Trophies can be eaten to gain axe experience.",
+                $"Trophies can be eaten to gain {DecapitationExp.Value} axe experience.",
                 "My ancestors are smiling at me, imperial. Can you say the same?",
-                PerkMan.PerkType.Decapitation, Skills.SkillType.None, "Icons/decapitation.png");
+                PerkMan.PerkType.Decapitation, Skills.SkillType.Axes, "Icons/decapitation.png",
+                $"Eat trophies for {DecapitationExp.Value} xp");
         }
-
 
 
 
@@ -3660,19 +3661,22 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region DidntHurt
         #region configdef
-
+        public static ConfigEntry<float> DidntHurtStaggerThreshold;
         #endregion configdef
 
         public static void InitDidntHurtConfigs(ConfigFile cfg)
         {
+            DidntHurtStaggerThreshold = cfg.Bind("Perks.DidntHurt", "Stagger Threshold", 5f,
+                    AdminCD("Damage below which an enemy staggers upon hitting you"));
         }
 
         public static Perk GetPerkDidntHurt()
         {
             return new Perk("That Didn't Even Hurt",
-                "Any creature that deals less than 5 damage to you, while you're not blocking, now gets staggered out of fear.",
+                $"Any creature that deals less than 5 damage to you, while you're not blocking, now gets staggered out of fear.",
                 "Is that all you've got? Pathetic.",
-                PerkMan.PerkType.DidntHurt, Skills.SkillType.None, "Icons/didnthurt.png");
+                PerkMan.PerkType.DidntHurt, Skills.SkillType.Blocking, "Icons/didnthurt.png",
+                $"Weak enemies stagger when they hit you");
         }
 
 
@@ -3697,7 +3701,8 @@ namespace kingskills
             return new Perk("Disarming Smile",
                 "Knives now use their backstab bonus instead of their parry bonus for parrying.",
                 "No better defense than an alarmingly quick offense.",
-                PerkMan.PerkType.DisarmingDefense, Skills.SkillType.None, "Icons/disarmingsmile.png");
+                PerkMan.PerkType.DisarmingDefense, Skills.SkillType.Knives, "Icons/disarmingsmile.png",
+                "Knife parry bonus is now backstab bonus");
         }
 
 

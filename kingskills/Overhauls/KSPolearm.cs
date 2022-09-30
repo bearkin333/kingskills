@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using kingskills.Perks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,8 +60,7 @@ namespace kingskills.Patches
             if (!__instance.IsPVPEnabled() && attacker.IsPlayer()) return;
 
 
-            if (CFG.IsSkillActive(Skills.SkillType.Polearms) &&
-                !(__instance.IsBlocking() && hit.m_blockable))
+            if (!(__instance.IsBlocking() && hit.m_blockable))
             {
                 HitData sampleHit = hit.Clone();
                 sampleHit.ApplyResistance(__instance.m_damageModifiers, out _);
@@ -69,8 +69,11 @@ namespace kingskills.Patches
 
                 //Jotunn.Logger.LogMessage($"Just blocked {damageBlocked} damage with armor.");
 
-                RPC.RPCMan.SendXP_RPC(__instance.m_nview,
-                    damageBlocked * CFG.WeaponBXPPolearmDamageMod.Value, Skills.SkillType.Polearms, true, true);
+                P_DidntHurt.CheckStagger(sampleHit);
+
+                if (CFG.IsSkillActive(Skills.SkillType.Polearms))
+                    RPC.RPCMan.SendXP_RPC(__instance.m_nview, damageBlocked * CFG.WeaponBXPPolearmDamageMod.Value, 
+                        Skills.SkillType.Polearms, true, true);
             }
         }
     }

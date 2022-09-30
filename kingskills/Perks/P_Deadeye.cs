@@ -92,6 +92,11 @@ namespace kingskills.Perks
             if (atkSucceed)
             {
                 throwAtk.OnAttackTrigger();
+                foreach (Component comp in projPrefab.GetComponentsInChildren<Component>())
+                {
+                    Jotunn.Logger.LogMessage($"component: {comp}");
+                }
+                projPrefab.gameObject.SetActive(true);
             }
         }
     }

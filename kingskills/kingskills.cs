@@ -128,15 +128,15 @@ namespace kingskills
                 Name = "CoupDeBurst",
                 Config = CFG.CoupDeBurstHotkey,
                 ActiveInCustomGUI = true,
-                ActiveInGUI = true
+                ActiveInGUI = false
             };
             InputManager.Instance.AddButton(PluginGUID, CoupDeBurstBtn);
             ThrowBtn = new ButtonConfig
             {
                 Name = "Throw",
                 Config = CFG.DeadeyeHotkey,
-                ActiveInCustomGUI = true,
-                ActiveInGUI = true
+                ActiveInCustomGUI = false,
+                ActiveInGUI = false
             };
             InputManager.Instance.AddButton(PluginGUID, ThrowBtn);
         }

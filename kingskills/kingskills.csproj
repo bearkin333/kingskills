@@ -94,7 +94,9 @@
     <Compile Include="Network\RPCMan.cs" />
     <Compile Include="Overhauls\KSBlock.cs" />
     <Compile Include="Overhauls\KSJump.cs" />
-    <Compile Include="Overhauls\KSMining.cs" />
+    <Compile Include="Perks\P_DisarmingDefense.cs" />
+    <Compile Include="Perks\P_ESP.cs" />
+    <Compile Include="Systemic Patches\EatRocksPatch.cs" />
     <Compile Include="Perks\P_Berserkr.cs" />
     <Compile Include="Perks\P_BigStick.cs" />
     <Compile Include="Perks\P_BlackFlash.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Perks\P_CoupDeBurst.cs" />
     <Compile Include="Perks\P_CriticalBlow.cs" />
     <Compile Include="Perks\P_Deadeye.cs" />
+    <Compile Include="Perks\P_DidntHurt.cs" />
     <Compile Include="Perks\P_WeaponEnchants.cs" />
     <Compile Include="SE\SE_CouchedLance.cs" />
     <Compile Include="SE\SE_CoupDeBurst.cs" />
@@ -137,7 +140,7 @@
     <Compile Include="UX\Settings\WeaponEnchantGUI.cs" />
     <Compile Include="UX\Windows\AscendConfirmGUI.cs" />
     <Compile Include="Food Quality\CombineGUI.cs" />
-    <Compile Include="UX\PT.cs" />
+    <Compile Include="Util\PT.cs" />
     <Compile Include="UX\SkillGUIData.cs" />
     <Compile Include="UX\Tutorials.cs" />
     <Compile Include="Weapons\WeaponBonusExperience.cs" />

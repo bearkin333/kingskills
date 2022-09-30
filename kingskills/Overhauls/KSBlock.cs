@@ -285,7 +285,14 @@ namespace kingskills
             //Bonuses to power on parry
             if (isParry)
             {
-                blockPower *= currentBlocker.m_shared.m_timedBlockBonus; 
+                if (P_DisarmingDefense.CheckDisarm(currentBlocker))
+                {
+                    blockPower *= currentBlocker.m_shared.m_backstabBonus;
+                }
+                else
+                {
+                    blockPower *= currentBlocker.m_shared.m_timedBlockBonus;
+                }
 
                 if (CFG.IsSkillActive(Skills.SkillType.Swords))
                     blockPower *=
