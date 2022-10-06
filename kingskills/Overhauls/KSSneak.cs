@@ -18,11 +18,16 @@ namespace kingskills.Patches
         {
 			//This code is pretty much ripped straight from valheim
 			//since I have to replace or transpile it to do most of what I want to do
-			if (!CFG.IsSkillActive(Skills.SkillType.Sneak)) return true;
+			if (!CFG.IsSkillActive(Skills.SkillType.Sneak)) return CFG.DontSkipOriginal;
 
 			float staminaUse = CFG.GetSneakStaminaDrain(__instance.GetSkillFactor(Skills.SkillType.Sneak));
+			if (PerkMan.IsPerkActive(PerkMan.PerkType.ESP))
+            {
+				staminaUse *= CFG.GetESPStaminaMult();
+            }
 
 			__instance.UseStamina(dt * staminaUse);
+			P_CloakOfShadows.UpdateOnSneak(dt);
 
 			if (!__instance.HaveStamina())
 			{
@@ -44,7 +49,7 @@ namespace kingskills.Patches
 				}
 			}
 
-			return false;
+			return CFG.SkipOriginal;
 		}
 
 		public static float GetDangerEXPMult(Player player)
@@ -61,40 +66,40 @@ namespace kingskills.Patches
 		}
 
 
-		[HarmonyPatch(nameof(Player.OnSneaking))]
+		[HarmonyPatch(nameof(Player.UpdateStealth))]
 		[HarmonyPrefix]
 		public static bool UpdateStealthTakeover(Player __instance, float dt)
 		{
 			//Again, this function is entirely taken over.
 			//It pretty much seems like the only way.
 			//Aside from a messy transpile that I won't be able to pull off myself.
-			if (!CFG.IsSkillActive(Skills.SkillType.Sneak)) return true;
+			if (!CFG.IsSkillActive(Skills.SkillType.Sneak)) return CFG.DontSkipOriginal;
 
-			P_CloakOfShadows.UpdateOnSneak(dt);
+			Player p = __instance;
 
-			__instance.m_stealthFactorUpdateTimer += dt;
-			if (__instance.m_stealthFactorUpdateTimer > 0.5f)
+			p.m_stealthFactorUpdateTimer += dt;
+			if (p.m_stealthFactorUpdateTimer > 0.5f)
 			{
-				__instance.m_stealthFactorUpdateTimer = 0f;
-				__instance.m_stealthFactorTarget = 0f;
-				if (__instance.IsCrouching())
+				p.m_stealthFactorUpdateTimer = 0f;
+				p.m_stealthFactorTarget = 0f;
+				if (p.IsCrouching())
 				{
-					__instance.m_lastStealthPosition = __instance.transform.position;
-					float skillFactor = __instance.GetSkillFactor(Skills.SkillType.Sneak);
-					float lightFactor = StealthSystem.instance.GetLightFactor(__instance.GetCenterPoint());
+					p.m_lastStealthPosition = p.transform.position;
+					float skillFactor = p.GetSkillFactor(Skills.SkillType.Sneak);
+					float lightFactor = StealthSystem.instance.GetLightFactor(p.GetCenterPoint());
 					//Jotunn.Logger.LogMessage($"Your light factor is currently {lightFactor}");
-					__instance.m_stealthFactorTarget = CFG.GetSneakFactor(skillFactor, lightFactor);
-					__instance.m_stealthFactorTarget = Mathf.Clamp01(__instance.m_stealthFactorTarget);
-					__instance.m_seman.ModifyStealth(__instance.m_stealthFactorTarget, ref __instance.m_stealthFactorTarget);
-					__instance.m_stealthFactorTarget = Mathf.Clamp01(__instance.m_stealthFactorTarget);
+					p.m_stealthFactorTarget = CFG.GetSneakFactor(skillFactor, lightFactor);
+					p.m_stealthFactorTarget = Mathf.Clamp01(p.m_stealthFactorTarget);
+					p.m_seman.ModifyStealth(p.m_stealthFactorTarget, ref p.m_stealthFactorTarget);
+					p.m_stealthFactorTarget = Mathf.Clamp01(p.m_stealthFactorTarget);
 				}
 				else
 				{
-					__instance.m_stealthFactorTarget = 1f;
+					p.m_stealthFactorTarget = 1f;
 				}
 			}
-			__instance.m_stealthFactor = Mathf.MoveTowards(__instance.m_stealthFactor, __instance.m_stealthFactorTarget, dt / 4f);
-			__instance.m_nview.GetZDO().Set("Stealth", __instance.m_stealthFactor);
+			p.m_stealthFactor = Mathf.MoveTowards(p.m_stealthFactor, p.m_stealthFactorTarget, dt / 4f);
+			p.m_nview.m_zdo.Set("Stealth", p.m_stealthFactor);
 
 			return false;
 		}

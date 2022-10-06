@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using kingskills.Perks;
 using kingskills.RPC;
 using System;
 using System.Collections.Generic;
@@ -33,11 +34,11 @@ perks:
 	all chests you build now have extra slots
     */
 
+
     [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.OnPlaced))]
     public class WNTPlaced
     {
-        public static bool isFree = false;
-
+        public static float costMod = 1f;
         [HarmonyPostfix]
         public static void AfterPlacement(WearNTear __instance)
         {
@@ -50,27 +51,32 @@ perks:
                 Player player = Player.m_localPlayer;
                 float skill = player.GetSkillFactor(SkillMan.Building);
 
-                //We decide if this is free
-                isFree = CFG.GetBuildingRandomFreeChance(skill);
                 //Jotunn.Logger.LogMessage($"This building being free {isFree}");
 
-                if (isFree) 
+
+                //We decide if this is free
+                if (CFG.GetBuildingRandomFreeChance(skill)) 
                 {
                     CustomWorldTextManager.AddCustomWorldText(CFG.ColorTitle,
                         __instance.transform.position + Vector3.up * 1.5f,
                         30, "Free Building!");
+                    costMod = 0f;
+                }
+                else if (PerkMan.IsPerkActive(PerkMan.PerkType.Efficiency))
+                {
+                    costMod = CFG.GetEfficiencyCostRedux();
                 }
 
 
                 //When we place a piece down, it now remembers who we are and our skill level
-                zdo.Set("Building Level", skill);
-                zdo.Set("Building Owner", player.GetPlayerID());
-                zdo.Set("Is Free", isFree);
+                zdo.Set(CFG.BuildZDOLevel, skill);
+                zdo.Set(CFG.BuildZDOOwner, player.GetPlayerID());
+                zdo.Set(CFG.BuildZDOCost, costMod);
 
                 Aoe trap = __instance.GetComponentInChildren<Aoe>();
                 if (trap)
                 {
-                    zdo.Set("Trap", true);
+                    zdo.Set(CFG.BuildZDOIsTrap, true);
                     //Jotunn.Logger.LogMessage("Set a trap!");
                 }
 
@@ -84,16 +90,17 @@ perks:
     }
 
 
+    //This is put out so that our consume resources function can recognize we're
+    //in the middle of a build place
     [HarmonyPatch(typeof(Player), nameof(Player.UpdatePlacement))]
     public class AfterPlacement
     {
         [HarmonyFinalizer]
-        private static void ResetFreeFlag()
+        private static void ResetCostMod()
         {
-            WNTPlaced.isFree = false;
+            WNTPlaced.costMod = 1f;
         }
     }
-
 
     //This will update the building to the correct health every time it is 
     //recreated
@@ -106,10 +113,9 @@ perks:
             ZDO zdo = __instance.m_nview?.m_zdo;
             if (zdo == null) return;
 
-            float skill = zdo.GetFloat("Building Level", 0f);
+            float skill = zdo.GetFloat(CFG.BuildZDOLevel, 0f);
             if (skill > 0)
                 __instance.m_health *= CFG.GetBuildingHealthMult(skill);
-
 
         }
     }
@@ -138,7 +144,7 @@ perks:
                 //Jotunn.Logger.LogMessage("Checked with the right player");
             }
             else
-                skill = zdo.GetFloat("Building Level", 0f);
+                skill = zdo.GetFloat(CFG.BuildZDOLevel, 0f);
 
             float supportMult = CFG.GetBuildingStabilityMult(skill);
             float lossRedux = CFG.GetBuildingStabilityLossRedux(skill);
@@ -155,11 +161,35 @@ perks:
     {
         [HarmonyPrefix]
         [HarmonyPriority(Priority.First)]
-        public static bool FreeCheck()
+        public static bool FreeCheck(Player __instance, Piece.Requirement[] requirements, int qualityLevel)
         {
-            if (WNTPlaced.isFree) return false;
+            float costMod = WNTPlaced.costMod;
+            if (costMod == 1f) return CFG.DontSkipOriginal;
+            if (costMod == 0f) return CFG.SkipOriginal;
 
-            return true;
+
+            //Jotunn.Logger.LogMessage($"Requirement check:");
+            foreach (Piece.Requirement requirement in requirements)
+            {
+                if (requirement.m_resItem is null) continue;
+
+
+                int baseAmount = requirement.m_amount;
+                int amount = Mathf.RoundToInt(baseAmount * costMod);
+                if (baseAmount >= 1 && amount == 0) amount = 1;
+
+
+                //Jotunn.Logger.LogMessage($"{requirement.m_resItem.m_itemData.m_shared.m_name}: " +
+                //    $"was {baseAmount}, now {amount}");
+
+                if (amount > 0)
+                {
+                    __instance.m_inventory.RemoveItem(requirement.m_resItem.m_itemData.m_shared.m_name, amount);
+                }
+
+            }
+
+            return CFG.SkipOriginal;
         }
     }
 
@@ -170,8 +200,13 @@ perks:
         [HarmonyPrefix]
         private static bool CheckFree(Piece __instance)
         {
-            //returns false if the building was free, which refuses to run drop resources
-            return !__instance.GetComponent<ZNetView>().GetZDO().GetBool("Is Free");
+            float costMod = __instance.GetComponent<ZNetView>().GetZDO().GetFloat(CFG.BuildZDOCost, 1f);
+            if (costMod == 0f) return CFG.SkipOriginal;
+            if (costMod == 1f) return CFG.DontSkipOriginal;
+
+            CFG.BuildCostChange(ref __instance.m_resources, costMod);
+
+            return CFG.DontSkipOriginal;
         }
     }
 
@@ -188,7 +223,7 @@ perks:
             {
                 //Jotunn.Logger.LogWarning($"WNT damage on building");
 
-                float skill = __instance.m_nview.GetZDO().GetFloat("Building Level", 0f);
+                float skill = __instance.m_nview.GetZDO().GetFloat(CFG.BuildZDOLevel, 0f);
 
                 hit.m_damage.Modify(CFG.GetBuildingWNTRedux(skill));
             }
@@ -196,7 +231,7 @@ perks:
             {
                 //Jotunn.Logger.LogWarning($"monster damage on building");
 
-                Player player = Player.GetPlayer(__instance.m_nview.GetZDO().GetLong("Building Owner", 0));
+                Player player = Player.GetPlayer(__instance.m_nview.GetZDO().GetLong(CFG.BuildZDOOwner, 0));
                 if (player != null)
                 {
                     player.RaiseSkill(SkillMan.Building, 
@@ -213,11 +248,11 @@ perks:
         [HarmonyPostfix]
         public static void GetMyDamage(Aoe __instance, ref HitData.DamageTypes __result)
         {
-            if (__instance.m_nview?.GetZDO() == null || !__instance.m_nview.GetZDO().GetBool("Trap", false)) return;
+            if (__instance.m_nview?.GetZDO() == null || !__instance.m_nview.GetZDO().GetBool(CFG.BuildZDOIsTrap, false)) return;
             //Jotunn.Logger.LogMessage("Trap dealt damage");
                 
             Player player = Player.m_localPlayer;
-            if (player.GetPlayerID() != __instance.m_nview.GetZDO().GetLong("Building Owner")) return;
+            if (player.GetPlayerID() != __instance.m_nview.GetZDO().GetLong(CFG.BuildZDOOwner)) return;
 
             __result.Modify(CFG.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building)));
             //Jotunn.Logger.LogMessage($"Just multiplied the damage of this shit by {CFG.GetBuildingDamageMult(player.GetSkillFactor(SkillMan.Building))}");
@@ -227,10 +262,10 @@ perks:
         [HarmonyPostfix]
         public static void GetXPBounty(Aoe __instance, Collider collider)
         {
-            if (__instance.m_nview?.GetZDO() == null || !__instance.m_nview.GetZDO().GetBool("Trap", false)) return;
+            if (__instance.m_nview?.GetZDO() == null || !__instance.m_nview.GetZDO().GetBool(CFG.BuildZDOIsTrap, false)) return;
 
             Player player = Player.m_localPlayer;
-            if (player.GetPlayerID() != (long)__instance.m_nview.GetZDO().GetLong("Building Owner")) return;
+            if (player.GetPlayerID() != (long)__instance.m_nview.GetZDO().GetLong(CFG.BuildZDOOwner)) return;
 
             Character enemy = collider.GetComponent<Character>();
             if (enemy == null || !enemy.IsMonsterFaction()) return;
@@ -249,10 +284,10 @@ perks:
     {
         //I hate this caret, but it is just a space efficient way of doing {  }
         [HarmonyPrefix]
-        public static void StartRepair(Player __instance) => __instance.m_nview.m_zdo.Set("Is Repairing", true);
+        public static void StartRepair(Player __instance) => __instance.m_nview.m_zdo.Set(CFG.BuildZDOPlayerRepairing, true);
 
         [HarmonyFinalizer]
-        public static void FinishRepair(Player __instance) => __instance.m_nview.m_zdo.Set("Is Repairing", false);
+        public static void FinishRepair(Player __instance) => __instance.m_nview.m_zdo.Set(CFG.BuildZDOPlayerRepairing, false);
     }
 
 
@@ -267,7 +302,7 @@ perks:
             Player playerRef = null;
             foreach (Player player in Player.GetAllPlayers())
             {
-                if (player.m_nview.m_zdo.GetBool("Is Repairing", false))
+                if (player.m_nview.m_zdo.GetBool(CFG.BuildZDOPlayerRepairing, false))
                     playerRef = player;
             }
             if (playerRef is null) return;
@@ -287,7 +322,7 @@ perks:
         [HarmonyPrefix]
         public static void BeforeCost(Player __instance, ref float v)
         {
-            if (Player.m_localPlayer.m_nview.m_zdo.GetBool("Is Repairing", false) || LocalPlayerPlacing.isTrue)
+            if (Player.m_localPlayer.m_nview.m_zdo.GetBool(CFG.BuildZDOPlayerRepairing, false) || LocalPlayerPlacing.isTrue)
                 v *= CFG.GetBuildingStaminaRedux(Player.m_localPlayer.GetSkillFactor(SkillMan.Building));
         }
     }

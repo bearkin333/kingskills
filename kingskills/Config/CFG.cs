@@ -303,7 +303,7 @@ namespace kingskills
 
         public static string GetNameFromSkill(Skills.SkillType skill)
         {
-            switch (skill){
+            switch (skill) {
                 case Skills.SkillType.Axes: return "Axes";
                 case Skills.SkillType.Blocking: return "Blocking";
                 case Skills.SkillType.Bows: return "Bows";
@@ -328,29 +328,29 @@ namespace kingskills
         }
 
         public static Skills.SkillType GetSkillFromName(string name)
-        {   
-            switch (name){
-                    case "Agriculture": return SkillMan.Agriculture;
-                    case "Axes": return Skills.SkillType.Axes;
-                    case "Blocking": return Skills.SkillType.Blocking;
-                    case "Bows": return Skills.SkillType.Bows;
-                    case "Building": return SkillMan.Building;
-                    case "Clubs": return Skills.SkillType.Clubs;
-                    case "Cooking": return SkillMan.Cooking;
-                    case "Fists": return Skills.SkillType.Unarmed;
-                    case "Jump": return Skills.SkillType.Jump;
-                    case "Knives": return Skills.SkillType.Knives;
-                    case "Mining": return Skills.SkillType.Pickaxes;
-                    case "Polearms": return Skills.SkillType.Polearms;
-                    case "Run": return Skills.SkillType.Run;
-                    case "Sailing": return SkillMan.Sailing;
-                    case "Spears": return Skills.SkillType.Spears;
-                    case "Sneak": return Skills.SkillType.Sneak;
-                    case "Swim": return Skills.SkillType.Swim;
-                    case "Swords": return Skills.SkillType.Swords;
-                    case "Woodcutting": return Skills.SkillType.WoodCutting;
-                } return Skills.SkillType.None;
-            }
+        {
+            switch (name) {
+                case "Agriculture": return SkillMan.Agriculture;
+                case "Axes": return Skills.SkillType.Axes;
+                case "Blocking": return Skills.SkillType.Blocking;
+                case "Bows": return Skills.SkillType.Bows;
+                case "Building": return SkillMan.Building;
+                case "Clubs": return Skills.SkillType.Clubs;
+                case "Cooking": return SkillMan.Cooking;
+                case "Fists": return Skills.SkillType.Unarmed;
+                case "Jump": return Skills.SkillType.Jump;
+                case "Knives": return Skills.SkillType.Knives;
+                case "Mining": return Skills.SkillType.Pickaxes;
+                case "Polearms": return Skills.SkillType.Polearms;
+                case "Run": return Skills.SkillType.Run;
+                case "Sailing": return SkillMan.Sailing;
+                case "Spears": return Skills.SkillType.Spears;
+                case "Sneak": return Skills.SkillType.Sneak;
+                case "Swim": return Skills.SkillType.Swim;
+                case "Swords": return Skills.SkillType.Swords;
+                case "Woodcutting": return Skills.SkillType.WoodCutting;
+            } return Skills.SkillType.None;
+        }
 
         public static ConfigDescription AdminCD(string description, bool browsable = false)
         {
@@ -783,7 +783,7 @@ namespace kingskills
         }
         public static float GetFistDamageFlat(float skillFactor)
         {
-            return Mathf.Lerp(FistDamageFlatMin.Value, FistDamageFlatMax.Value, 
+            return Mathf.Lerp(FistDamageFlatMin.Value, FistDamageFlatMax.Value,
                 Mathf.Pow(skillFactor, FistDamageFlatFactor.Value));
         }
         public static float GetFistBlockArmor(float skillFactor)
@@ -1222,7 +1222,7 @@ namespace kingskills
             if (pickableObj == null) return 0f;
             Pickable pick = pickableObj.GetComponent<Pickable>();
             if (pick == null) return 0f;
-            
+
             string name = pick.m_itemPrefab.name;
             if (pick.name.Contains("Wild")) name += "W";
             if (AgriculturePickableRewards.ContainsKey(name))
@@ -1283,7 +1283,7 @@ namespace kingskills
         }
         public static float GetAgricultureYieldMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMod(AgricultureYieldMin), 
+            return Mathf.Lerp(PerToMod(AgricultureYieldMin),
                 PerToMod(AgricultureYieldMax), skillFactor);
         }
         public static int GetAgricultureRandomAdditionalYield(float skillFactor, int baseYield, float nonRand = 10f)
@@ -1306,17 +1306,17 @@ namespace kingskills
         }
         public static float GetAgricultureGrowTimeRedux(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(AgricultureGrowReduxMin, true), 
+            return Mathf.Lerp(PerToMult(AgricultureGrowReduxMin, true),
                 PerToMult(AgricultureGrowReduxMax, true), skillFactor);
         }
         public static float GetAgricultureFoodQualityMult(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(AgricultureAvgFQMin), 
+            return Mathf.Lerp(PerToMult(AgricultureAvgFQMin),
                 PerToMult(AgricultureAvgFQMax), skillFactor);
         }
         public static float GetAgricultureHealthRegain(float skillFactor)
         {
-            return Mathf.Lerp(AgricultureHealthRegainMin.Value, 
+            return Mathf.Lerp(AgricultureHealthRegainMin.Value,
                 AgricultureHealthRegainMax.Value, skillFactor);
         }
         //public static float Get(float skillFactor)
@@ -1432,6 +1432,12 @@ namespace kingskills
         public static ConfigEntry<float> BuildFreeChanceFactor;
         public static ConfigEntry<float> BuildStaminaReduxMin;
         public static ConfigEntry<float> BuildStaminaReduxMax;
+
+        public const string BuildZDOLevel = "KSBuilding Level";
+        public const string BuildZDOOwner = "KSBuilding Owner";
+        public const string BuildZDOCost = "KSBuilding Cost";
+        public const string BuildZDOIsTrap = "KSIs Trap";
+        public const string BuildZDOPlayerRepairing = "KSIs Repairing";
         #endregion configdef
 
         private static void InitBuildConfig(ConfigFile cfg)
@@ -1486,12 +1492,12 @@ namespace kingskills
 
         public static float GetBuildingHealthMult(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(BuildHealthMin), 
+            return Mathf.Lerp(PerToMult(BuildHealthMin),
                 PerToMult(BuildHealthMax), skillFactor);
         }
         public static float GetBuildingStabilityMult(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(BuildStabilityMin), 
+            return Mathf.Lerp(PerToMult(BuildStabilityMin),
                 PerToMult(BuildStabilityMax), skillFactor);
         }
         public static float GetBuildingStabilityLossRedux(float skillFactor)
@@ -1501,12 +1507,12 @@ namespace kingskills
         }
         public static float GetBuildingDamageMult(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(BuildDamageMin), 
+            return Mathf.Lerp(PerToMult(BuildDamageMin),
                 PerToMult(BuildDamageMax), skillFactor);
         }
         public static float GetBuildingWNTRedux(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(BuildWNTReduxMin, true), 
+            return Mathf.Lerp(PerToMult(BuildWNTReduxMin, true),
                 PerToMult(BuildWNTReduxMax, true), skillFactor);
         }
         public static float GetFCMinLevelAsMod()
@@ -1519,7 +1525,7 @@ namespace kingskills
             float newSkillFactor = Mathf.Clamp01((skillFactor - minLevel) / (MaxSkillLevel.Value - minLevel));
 
             //This gets an exponential curve that doesn't start until the minimum level, supposedly
-            return Mathf.Lerp(PerToMod(BuildFreeChanceMin), PerToMod(BuildFreeChanceMax), 
+            return Mathf.Lerp(PerToMod(BuildFreeChanceMin), PerToMod(BuildFreeChanceMax),
                 Mathf.Pow(newSkillFactor, BuildFreeChanceFactor.Value));
         }
         public static bool GetBuildingRandomFreeChance(float skillFactor)
@@ -1531,19 +1537,36 @@ namespace kingskills
         }
         public static float GetBuildingStaminaRedux(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(BuildStaminaReduxMin, true), 
+            return Mathf.Lerp(PerToMult(BuildStaminaReduxMin, true),
                 PerToMult(BuildStaminaReduxMax, true), skillFactor);
         }
-        /*
-        public static float Get(float skillFactor)
+
+        public static void BuildCostChange(ref Piece.Requirement[] reqArray, float costMod)
         {
-            return Mathf.Lerp(PerToMult(), PerToMult(), skillFactor);
+            List<Piece.Requirement> requirementClone = new List<Piece.Requirement>();
+
+            //Jotunn.Logger.LogMessage($"Original requirements:");
+            foreach (Piece.Requirement reqItem in reqArray)
+            {
+                if (reqItem.m_resItem is null) continue;
+
+                //Jotunn.Logger.LogMessage($"{reqItem.m_resItem.m_itemData.m_shared.m_name}: {reqItem.m_amount}");
+
+                Piece.Requirement newReq = reqItem;
+                int newAmt = Mathf.RoundToInt(newReq.m_amount * costMod);
+                if (newAmt == 0) newAmt = 1;
+                newReq.m_amount = newAmt;
+                requirementClone.Add(newReq);
+            }
+
+            //Jotunn.Logger.LogMessage($"New requirements:");
+            foreach (Piece.Requirement reqItem in requirementClone)
+            {
+                if (reqItem.m_resItem is null) continue;
+                //Jotunn.Logger.LogMessage($"{reqItem.m_resItem.m_itemData.m_shared.m_name}: {reqItem.m_amount}");
+            }
+            reqArray = requirementClone.ToArray();
         }
-        public static float Get(float skillFactor)
-        {
-            return Mathf.Lerp(PerToMult(), PerToMult(), skillFactor);
-        }
-        */
 
         #endregion build
 
@@ -1673,12 +1696,12 @@ namespace kingskills
         }
         public static float GetCookingAverageFoodQualityMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMod(CookingAverageFQMin), 
+            return Mathf.Lerp(PerToMod(CookingAverageFQMin),
                 PerToMod(CookingAverageFQMax), skillFactor);
         }
         public static float GetCookingFoodQualityRangeMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMod(CookingFQRangeMin), 
+            return Mathf.Lerp(PerToMod(CookingFQRangeMin),
                 PerToMod(CookingFQRangeMax), skillFactor);
         }
         //Timing should be a number between 0 and 1 that reflects how close to perfect
@@ -1686,14 +1709,14 @@ namespace kingskills
         public static float GetCookingTimingRandomFQ(float skillFactor, float timingPercent)
         {
             float baseQ = GetCookingAverageFoodQualityMod(skillFactor);
-            float range = GetCookingFoodQualityRangeMod(skillFactor)/2;
+            float range = GetCookingFoodQualityRangeMod(skillFactor) / 2;
             float timingMod = PerToMod(CookingFQRangeTimingPercent);
             float randomFactor = UnityEngine.Random.Range(0f, 1f);
 
             //the change to the overall quality is based (timingPercent)% on the timing,
             //and the rest on random chance.
             //at this point the negatives no longer serve us, so we're getting rid of them
-            float timingAndRandom = (Mathf.Abs(timingPercent) * timingMod) + 
+            float timingAndRandom = (Mathf.Abs(timingPercent) * timingMod) +
                 (randomFactor * (1f - timingMod));
 
             //then we parabolize.
@@ -1786,12 +1809,12 @@ namespace kingskills
         }
         public static float GetCookingTimeRedux(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(CookingTimeReduxMin, true), 
+            return Mathf.Lerp(PerToMult(CookingTimeReduxMin, true),
                 PerToMult(CookingTimeReduxMax, true), skillFactor);
         }
         public static float GetCookingFermentTimeRedux(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(CookingFermentTimeReduxMin, true), 
+            return Mathf.Lerp(PerToMult(CookingFermentTimeReduxMin, true),
                 PerToMult(CookingFermentTimeReduxMin, true), skillFactor);
         }
 
@@ -2153,7 +2176,7 @@ namespace kingskills
         public static float GetEncumberanceCurveRedux(float encumberanceMod)
         {
             return Mathf.Lerp(PerToMult(RunEncumberancePercentMin, true),
-                PerToMult(RunEncumberancePercentMax, true), 
+                PerToMult(RunEncumberancePercentMax, true),
                 Mathf.Pow(encumberanceMod, RunEncumberanceCurveFactor.Value));
             //ShapeFactorSin(encumberanceMod));
 
@@ -2355,14 +2378,14 @@ namespace kingskills
         }
         public static float GetSailXPWindMult(float windFactor)
         {
-            return Mathf.Lerp(PerToMult(SailXPWindMin), 
+            return Mathf.Lerp(PerToMult(SailXPWindMin),
                 PerToMult(SailXPWindMax), windFactor);
         }
         public static float GetSailXPTierMult(Ship ship)
         {
             if (ship == null) return 1f;
             string name = ship.m_nview.GetPrefabName();
-            if (SailShipDefs.ContainsKey(name)) 
+            if (SailShipDefs.ContainsKey(name))
                 return 1f + SailShipDefs[name].Tier * PerToMod(SailXPTierBonus);
 
             return 1f;
@@ -2373,22 +2396,22 @@ namespace kingskills
         }
         public static float GetSailSpeedMult(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(SailSpeedMin), 
+            return Mathf.Lerp(PerToMult(SailSpeedMin),
                 PerToMult(SailSpeedMax), skillFactor);
         }
         public static float GetSailWindNudgeMod(float skillFactor)
         {
-            return Mathf.Lerp(PerToMod(SailWindNudgeMin), 
+            return Mathf.Lerp(PerToMod(SailWindNudgeMin),
                 PerToMult(SailWindNudgeMax), skillFactor);
         }
         public static float GetSailExploreRange(float skillFactor)
         {
-            return Mathf.Lerp(SailExploreRangeMin.Value, 
+            return Mathf.Lerp(SailExploreRangeMin.Value,
                 SailExploreRangeMax.Value, skillFactor);
         }
         public static float GetSailPaddleSpeedMult(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(SailPaddleSpeedMin), 
+            return Mathf.Lerp(PerToMult(SailPaddleSpeedMin),
                 PerToMult(SailPaddleSpeedMax), skillFactor);
         }
         public static float GetSailRudderSpeedMult(float skillFactor)
@@ -2398,7 +2421,7 @@ namespace kingskills
         }
         public static float GetSailDamageRedux(float skillFactor)
         {
-            return Mathf.Lerp(PerToMult(SailDamageReduxMin, true), 
+            return Mathf.Lerp(PerToMult(SailDamageReduxMin, true),
                 PerToMult(SailDamageReduxMax, true), skillFactor);
         }
 
@@ -3715,19 +3738,36 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region ESP
         #region configdef
-
+        public static ConfigEntry<float> ESPMoveRedux;
+        public static ConfigEntry<float> ESPStamina;
         #endregion configdef
 
         public static void InitESPConfigs(ConfigFile cfg)
         {
+            ESPMoveRedux = cfg.Bind("Perks.ESP", "Move Redux", 60f,
+                    AdminCD("% reduction in sneak move speed"));
+            ESPStamina= cfg.Bind("Perks.ESP", "Staina", 100f,
+                    AdminCD("% extra stamina cost while sneaking"));
         }
 
         public static Perk GetPerkESP()
         {
-            return new Perk("Extrasensory perception",
-                "You can now see lines highlighting enemy sight cones while you're sneaking.",
-                "That, or you're just starting to see things now.",
-                PerkMan.PerkType.ESP, Skills.SkillType.None, "Icons/esp.png");
+            return new Perk("Inattentional Blindness",
+                $"Your sneak is now {ESPMoveRedux.Value}% slower and takes {ESPStamina.Value}% more stamina, but you cannot " +
+                $"be detected so long as you are sneaking.",
+                "I’ve mastered the ability of standing so incredibly still… That I become invisible to the eye. Watch.",
+                PerkMan.PerkType.ESP, Skills.SkillType.Sneak, "Icons/esp.png",
+                $"{ESPMoveRedux.Value}% slower sneak, costs {ESPStamina.Value}% more stamina, total invisibility");
+        }
+
+        public static float GetESPMoveRedux()
+        {
+            return PerToMult(ESPMoveRedux, true);
+        }
+
+        public static float GetESPStaminaMult()
+        {
+            return PerToMult(ESPStamina);
         }
 
 
@@ -3740,21 +3780,28 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region Efficiency
         #region configdef
-
+        public static ConfigEntry<float> EfficiencyCostRedux;
         #endregion configdef
 
         public static void InitEfficiencyConfigs(ConfigFile cfg)
         {
+            EfficiencyCostRedux = cfg.Bind("Perks.Efficiency", "Cost Reduction", 50f,
+                    AdminCD("% less building resources to use"));
         }
 
         public static Perk GetPerkEfficiency()
         {
             return new Perk("Efficiency",
-                "New building techniques allow you to build new constructions at half the cost.",
+                $"New building techniques allow you to build new constructions using {EfficiencyCostRedux.Value}% less resources",
                 "It's not 'cutting corners'... If those corners were completely unnecessary!",
-                PerkMan.PerkType.Efficiency, Skills.SkillType.None, "Icons/efficiency.png");
+                PerkMan.PerkType.Efficiency, SkillMan.Building, "Icons/efficiency.png",
+                $"{EfficiencyCostRedux.Value}% cheaper buildings");
         }
 
+        public static float GetEfficiencyCostRedux()
+        {
+            return PerToMult(EfficiencyCostRedux, true);
+        }
 
 
 

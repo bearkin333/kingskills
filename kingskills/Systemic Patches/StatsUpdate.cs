@@ -140,6 +140,7 @@ namespace kingskills.Patches
 
             player.m_crouchSpeed = CFG.BaseCrouchSpeed *
                 CFG.GetSneakSpeedMult(player.GetSkillFactor(Skills.SkillType.Sneak));
+            if (PerkMan.IsPerkActive(PerkMan.PerkType.ESP)) player.m_crouchSpeed *= CFG.GetESPMoveRedux();
         }
         public static void WoodcuttingUpdate(Player player)
         {
