@@ -72,6 +72,7 @@ perks:
                 zdo.Set(CFG.BuildZDOLevel, skill);
                 zdo.Set(CFG.BuildZDOOwner, player.GetPlayerID());
                 zdo.Set(CFG.BuildZDOCost, costMod);
+                zdo.Set(CFG.EngineerZDOActive, PerkMan.IsPerkActive(PerkMan.PerkType.Engineer));
 
                 Aoe trap = __instance.GetComponentInChildren<Aoe>();
                 if (trap)
@@ -132,6 +133,7 @@ perks:
             if (zdo == null) return;
 
             float skill;
+            bool engineerActive;
             Player player = Player.m_localPlayer;
             Piece piece = __instance.GetComponent<Piece>();
 
@@ -141,13 +143,23 @@ perks:
             if (piece != null && piece.IsCreator() && player != null)
             {
                 skill = player.GetSkillFactor(SkillMan.Building);
+                engineerActive = PerkMan.IsPerkActive(PerkMan.PerkType.Engineer);
                 //Jotunn.Logger.LogMessage("Checked with the right player");
             }
             else
+            {
                 skill = zdo.GetFloat(CFG.BuildZDOLevel, 0f);
+                engineerActive = zdo.GetBool(CFG.EngineerZDOActive, false);
+            }
 
             float supportMult = CFG.GetBuildingStabilityMult(skill);
             float lossRedux = CFG.GetBuildingStabilityLossRedux(skill);
+
+            if (engineerActive && P_Engineer.IsPillar(__instance))
+            {
+                supportMult *= CFG.GetEngineerStabilityMult();
+                lossRedux *= CFG.GetEngineerSupportLossRedux();
+            }
 
             maxSupport *= supportMult;
             horizontalLoss *= lossRedux;

@@ -16,22 +16,19 @@ namespace kingskills.Patches
         [HarmonyPrefix]
         public static void OnFirstUpdate(Projectile __instance)
         {
-            if (__instance.m_didHit == true ||
-                __instance.m_nview is null ||
-                !__instance.m_nview.IsValid() ||
-                __instance.m_owner is null ||
-                !__instance.m_owner.IsPlayer()) return;
+            if (__instance.m_didHit || !__instance.m_nview.IsValid() || !__instance.m_nview.IsOwner() ||
+                __instance.m_owner is null || !__instance.m_owner.IsPlayer()) return;
 
             //Jotunn.Logger.LogMessage("");
 
             ZDO zdo = __instance.m_nview.m_zdo;
 
-            if (zdo.GetLong("Projectile Owner", 0) != 0) return;
-            //Jotunn.Logger.LogMessage($"This projectile's owner was read as {zdo.GetLong("Projectile Owner")}. since that's 0, " +
+            if (zdo.GetLong(CFG.SpearZDOOwner, 0) != 0) return;
+            //Jotunn.Logger.LogMessage($"This projectile's owner was read as {zdo.GetLong(CFG.SpearZDOOwner)}. since that's 0, " +
             //    $"we are setting it's owner now to {__instance.m_owner.GetZDOID()}, the ZDOID of the projectile's m_owner");
 
-            zdo.Set("Projectile Owner", __instance.m_owner.GetZDOID().m_userID);
-            zdo.Set("Start Pos", __instance.transform.position);
+            zdo.Set(CFG.SpearZDOOwner, __instance.m_owner.GetZDOID().m_userID);
+            zdo.Set(CFG.SpearZDOStartPos, __instance.transform.position);
 
             Player playerRef = Player.m_localPlayer;
             //Jotunn.Logger.LogMessage($"the associated skill is {__instance.m_skill}");
@@ -67,9 +64,9 @@ namespace kingskills.Patches
         public static void RaiseProjectileSkill (Character player, Skills.SkillType skill, float useless, Projectile instance)
         {
             ZDO zdo = instance.m_nview.m_zdo;
-            if (zdo.GetLong("Projectile Owner", 0) != Player.m_localPlayer.GetZDOID().m_userID) return;
+            if (zdo.GetLong(CFG.SpearZDOOwner, 0) != Player.m_localPlayer.GetZDOID().m_userID) return;
 
-            float distanceTravelled = (zdo.GetVec3("Start Pos", Vector3.zero) - instance.transform.position).magnitude;
+            float distanceTravelled = (zdo.GetVec3(CFG.SpearZDOStartPos, Vector3.zero) - instance.transform.position).magnitude;
             //Jotunn.Logger.LogMessage($"That projectile travelled {distanceTravelled} units");
 
             if (skill == Skills.SkillType.Spears)

@@ -442,6 +442,35 @@ namespace kingskills
             return null;
         }
 
+        public static Character GetNearestEnemy(Transform detectingPos, float range)
+        {
+            Character closest = null;
+            float savedDistance = 0f;
+
+            foreach (BaseAI allInstance in BaseAI.GetAllInstances())
+            {
+                float distance = Vector3.Distance(allInstance.transform.position, detectingPos.position);
+                if (distance < range)
+                {
+                    if (closest is null)
+                    {
+                        closest = allInstance.m_character;
+                        savedDistance = distance;
+                    }
+                    else
+                    {
+                        if (distance < savedDistance)
+                        {
+                            closest = allInstance.m_character;
+                            savedDistance = distance;
+                        }
+                    }
+                }
+            }
+
+            return closest;
+        }
+
         #endregion genericfunc
 
         ////////////////////////////////////////////////////////////////////////////////////////
@@ -976,6 +1005,8 @@ namespace kingskills
         public static ConfigEntry<float> SpearProjectileDamagePercentMin;
         public static ConfigEntry<float> SpearBlockArmorMax;
         public static ConfigEntry<float> SpearBlockArmorMin;
+        public const string SpearZDOOwner = "Projectile Owner";
+        public const string SpearZDOStartPos = "Start Pos";
         #endregion configdef
 
         public static void InitSpearConfigs(ConfigFile cfg)
@@ -3812,11 +3843,20 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region Einherjar
         #region configdef
-
+        public static ConfigEntry<float> EinherjarDetectRange;
+        public static ConfigEntry<float> EinherjarHomeSpeed;
+        public static ConfigEntry<float> EinherjarAngleDeadzone;
         #endregion configdef
 
         public static void InitEinherjarConfigs(ConfigFile cfg)
         {
+            EinherjarDetectRange = cfg.Bind("Perks.Einherjar", "Detection Range", 10f,
+                    AdminCD("distance to find enemies to home towards"));
+            EinherjarHomeSpeed = cfg.Bind("Perks.Einherjar", "Homing Speed", .0135f,
+                    AdminCD("number to move towards the perfect direction every fixed update. deals with normalized vectors, " +
+                    "meaning any value greater than .1 would equal instant, perfect homing. should be very low"));
+            EinherjarAngleDeadzone = cfg.Bind("Perks.Einherjar", "Angle Deadzone", 55f,
+                    AdminCD("angle radius (0-180) from current velocity past which einherjar will not detect enemies"));
         }
 
         public static Perk GetPerkEinherjar()
@@ -3824,9 +3864,14 @@ namespace kingskills
             return new Perk("Blessing of the Einherjar",
                 "All of your projectiles now home towards the nearest target.",
                 "Alone no longer.",
-                PerkMan.PerkType.Einherjar, Skills.SkillType.None, "Icons/einherjar.png");
+                PerkMan.PerkType.Einherjar, Skills.SkillType.Spears, "Icons/einherjar.png",
+                "Missile homing");
         }
 
+        public static float GetEinherjarAngleDeadzone()
+        {
+            return EinherjarAngleDeadzone.Value;
+        }
 
 
 
@@ -3837,22 +3882,49 @@ namespace kingskills
         ////////////////////////////////////////////////////////////////////////////////////////
         #region Engineer
         #region configdef
+        public static ConfigEntry<float> EngineerStabilityBonus;
+        public static ConfigEntry<float> EngineerSupportLossRedux;
 
+        public const string EngineerZDOActive = "Engineer is Active";
+
+        public static List<string> EngineerPillarTable = new List<string>();
         #endregion configdef
 
         public static void InitEngineerConfigs(ConfigFile cfg)
         {
+            EngineerStabilityBonus = cfg.Bind("Perks.Engineer", "Stability Bonus", 275f,
+                    AdminCD("% extra support for pillars."));
+            EngineerSupportLossRedux = cfg.Bind("Perks.Engineer", "Support Loss Redux", 50f,
+                    AdminCD("% less support loss for pillars"));
+
+            EngineerPillarTable.Clear();
+            EngineerPillarTable.Add("pillar");
+            EngineerPillarTable.Add("pole");
+            EngineerPillarTable.Add("beam");
+            EngineerPillarTable.Add("arch");
+            EngineerPillarTable.Add("log");
         }
 
         public static Perk GetPerkEngineer()
         {
             return new Perk("Structural Engineer",
-                "Advanced knowledge of civil engineering secrets have caused your support pillars" +
-                " and beams to become almost three times as sturdy as usual.",
+                $"Advanced knowledge of civil engineering secrets have caused your support pillars" +
+                $" and beams to have {EngineerStabilityBonus.Value}% extra base support and {EngineerSupportLossRedux.Value}% less " +
+                $"support loss over distance.",
                 "It's triangles all the way down.",
-                PerkMan.PerkType.Engineer, Skills.SkillType.None, "Icons/engineer.png");
+                PerkMan.PerkType.Engineer, SkillMan.Building, "Icons/engineer.png",
+                $"{EngineerStabilityBonus.Value}% extra pillar support, {EngineerSupportLossRedux.Value}% less pillar support loss");
         }
 
+        public static float GetEngineerStabilityMult()
+        {
+            return PerToMult(EngineerStabilityBonus);
+        }
+
+        public static float GetEngineerSupportLossRedux()
+        {
+            return PerToMult(EngineerSupportLossRedux, true);
+        }
 
 
 

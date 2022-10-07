@@ -95,6 +95,8 @@
     <Compile Include="Overhauls\KSBlock.cs" />
     <Compile Include="Overhauls\KSJump.cs" />
     <Compile Include="Perks\P_DisarmingDefense.cs" />
+    <Compile Include="Perks\P_Einherjar.cs" />
+    <Compile Include="Perks\P_Engineer.cs" />
     <Compile Include="Perks\P_ESP.cs" />
     <Compile Include="Systemic Patches\EatRocksPatch.cs" />
     <Compile Include="Perks\P_Berserkr.cs" />
