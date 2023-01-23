@@ -1600,7 +1600,9 @@ namespace kingskills
 
         public const string ColorCookHealthFF = "<color=#F9582EFF>";
         public const string ColorCookStaminaFF = "<color=#F9DE2EFF>";
-        public const string ColorCookDurationFF = "<color=#E9E9E9ff>";
+        public const string ColorCookDurationFF = "<color=#E9E9E9FF>";
+        public const string ColorCookEitrFF = "<color=#2596BEFF>";
+        public const string ColorCookRegenFF = "<color=#4DFF4DFF>";
         public const float MinimumFQ = -2f;
         public const float MaximumFQ = 50f;
         #endregion configdef

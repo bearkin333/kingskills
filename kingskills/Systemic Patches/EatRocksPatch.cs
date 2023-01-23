@@ -59,7 +59,6 @@ namespace kingskills.Patches
             return CFG.SkipOriginal;
 
 
-
         }
     }
 }

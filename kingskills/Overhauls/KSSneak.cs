@@ -31,7 +31,7 @@ namespace kingskills.Patches
 
 			if (!__instance.HaveStamina())
 			{
-				Hud.instance.StaminaBarNoStaminaFlash();
+				Hud.instance.StaminaBarEmptyFlash();
 			}
 			__instance.m_sneakSkillImproveTimer += dt;
 			if (__instance.m_sneakSkillImproveTimer > 1f)

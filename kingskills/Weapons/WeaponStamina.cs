@@ -71,14 +71,17 @@ namespace kingskills.Weapons
         }
 
         [HarmonyPatch(typeof(ItemDrop.ItemData))]
-        [HarmonyPatch(nameof(ItemDrop.ItemData.GetHoldStaminaDrain))]
+        [HarmonyPatch(nameof(ItemDrop.ItemData.GetDrawStaminaDrain))]
         [HarmonyPrefix]
         public static bool StaminaHoldPatch(ItemDrop.ItemData __instance, ref float __result)
         {
+            /* TODO:
+             * FIX
+             * 
             Skills.SkillType skillT = __instance.m_shared.m_skillType;
             if (!CFG.IsSkillActive(skillT)) return CFG.DontSkipOriginal;
 
-            float stamina = __instance.m_shared.m_holdStaminaDrain;
+            float stamina = __instance.m_shared;
             float skillFactor = Player.m_localPlayer.GetSkillFactor(skillT);
             if (stamina <= 0f) __result = 0;
 
@@ -91,7 +94,7 @@ namespace kingskills.Weapons
             //Jotunn.Logger.LogMessage($"But we end up turning it into {stamina }"); 
 
             __result = stamina;
-
+            */
             return CFG.SkipOriginal;
         }
     }

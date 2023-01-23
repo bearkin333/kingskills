@@ -129,7 +129,7 @@ namespace kingskills.Perks
             hit.m_backstabBonus = CFG.AquamanBackstab.Value;
             hit.m_damage = damage;
 
-            fishAoe.Setup(player, Vector3.zero, 0f, hit, null);
+            fishAoe.Setup(player, Vector3.zero, 0f, hit, null, null);
             fishAoe.Start();
             obj.SetActive(false);
         }
