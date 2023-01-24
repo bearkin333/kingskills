@@ -79,7 +79,7 @@ namespace kingskills.Weapons
             Skills.SkillType skillT = __instance.m_shared.m_skillType;
             if (!CFG.IsSkillActive(skillT)) return CFG.DontSkipOriginal;
 
-            float stamina = __instance.m_shared.m_foodStamina;
+            float stamina = __instance.m_shared.m_attack.m_drawStaminaDrain;
             float skillFactor = Player.m_localPlayer.GetSkillFactor(skillT);
             if (stamina <= 0f) __result = 0;
 

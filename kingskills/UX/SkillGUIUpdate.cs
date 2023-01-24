@@ -52,7 +52,7 @@ namespace kingskills.UX
 
         public static void ToggleSkillGUI()
         {
-            if (!GoodInput()) return;
+            if (!IsGoodInput()) return;
             if (SkillGUI.SkillGUIWindow.activeSelf)
             {
                 if (pinned)
@@ -63,7 +63,7 @@ namespace kingskills.UX
             else OpenSkillGUI();
         }
 
-        public static bool GoodInput()
+        public static bool IsGoodInput()
         {
             if (Player.m_localPlayer == null)
             {
@@ -82,7 +82,7 @@ namespace kingskills.UX
 
         public static void OpenSkillGUI()
         {
-            if (!GoodInput()) return;
+            if (!IsGoodInput()) return;
 
             SkillGUI.SkillGUIWindow.SetActive(true);
             GrabMouse(true);
@@ -91,7 +91,7 @@ namespace kingskills.UX
 
         public static void CloseSkillGUI()
         {
-            if (!GoodInput()) return;
+            if (!IsGoodInput()) return;
 
             SkillGUI.SkillGUIWindow.SetActive(false);
             WeaponEnchantGUI.Close();
