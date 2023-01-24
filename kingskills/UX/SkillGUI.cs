@@ -251,8 +251,8 @@ namespace kingskills.UX
                 height: 28f);
             dd = SkillDropDown.GetComponent<Dropdown>();
             dd.AddOptions(new List<string>{
-                "Agriculture", "Axes", "Blocking", "Bows", "Building", "Clubs", "Cooking",
-                "Fists", "Jump", "Knives", "Mining", "Polearms", "Run", "Sailing", "Spears",
+                "Agriculture", "Axes", "Blocking", "Blood Magic", "Bows", "Building", "Clubs", "Cooking", "Crossbows",
+                "Elemental Magic", "Fishing", "Fists", "Jump", "Knives", "Mining", "Polearms", "Run", "Sailing", "Spears",
                 "Sneak", "Swim", "Swords", "Woodcutting"
             });
             dd.onValueChanged.AddListener(

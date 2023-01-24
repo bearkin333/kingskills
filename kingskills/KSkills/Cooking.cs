@@ -372,10 +372,12 @@ perks:
 		public static float food = 0;
 		public static float foodStam = 0;
 		public static float foodDuration = 0;
+		public static float foodEitr = 0;
+		public static float foodRegen = 0;
 		[HarmonyPrefix]
 		public static void TemporaryFQBoost(Player __instance, ItemDrop.ItemData item, bool __result)
 		{
-			if (item.m_shared.m_food <= 0 || item.m_shared.m_foodStamina <= 0) return;
+			if (item.m_shared.m_food <= 0 || item.m_shared.m_foodStamina <= 0 || item.m_shared.m_foodEitr <= 0 ) return;
 			if (item.IsExtended())
             {
 				SaveFoodQuality FQ = item.Extended().GetComponent<SaveFoodQuality>();
@@ -387,12 +389,16 @@ perks:
 				float foodMult = 1f + FQ.foodQuality;
 
 				food = item.m_shared.m_food;
+				foodRegen = item.m_shared.m_foodRegen;
 				foodStam = item.m_shared.m_foodStamina;
 				foodDuration = item.m_shared.m_foodBurnTime;
+				foodEitr = item.m_shared.m_foodEitr;
 
 				item.m_shared.m_food = Mathf.Floor(item.m_shared.m_food * foodMult);
 				item.m_shared.m_foodStamina = Mathf.Floor(item.m_shared.m_foodStamina * foodMult);
 				item.m_shared.m_foodBurnTime = Mathf.Floor(item.m_shared.m_foodBurnTime * foodMult);
+				item.m_shared.m_foodEitr = Mathf.Floor(item.m_shared.m_foodEitr * foodMult);
+				item.m_shared.m_foodRegen = Mathf.Floor(item.m_shared.m_foodRegen * foodMult);
 
 				float chefXPReward = item.m_shared.m_food + item.m_shared.m_foodStamina;
 				chefXPReward *= CFG.CookingXPStatMod.Value;
@@ -418,6 +424,8 @@ perks:
 				item.m_shared.m_food = food;
 				item.m_shared.m_foodStamina = foodStam;
 				item.m_shared.m_foodBurnTime = foodDuration;
+				item.m_shared.m_foodRegen = foodRegen;
+				item.m_shared.m_foodEitr = foodEitr;
 			}
 		}
 	}
@@ -452,20 +460,22 @@ perks:
 	{
 		public static void Postfix(ItemDrop.ItemData item, bool crafting, ref string __result)
 		{
-			if ((item.m_shared.m_food > 0 && item.m_shared.m_foodStamina > 0) &&
+			if ((item.m_shared.m_food > 0 || item.m_shared.m_foodStamina > 0 || item.m_shared.m_foodEitr > 0) &&
 				item.IsExtended())
 			{
 				SaveFoodQuality FQ = item.Extended().GetComponent<SaveFoodQuality>();
 				if (FQ == null) return;
 
-				float fq = FQ.foodQuality;
-				if (fq != 0)
+				float fq = FQ.foodQuality + 1f;
+				if (fq != 1f)
 				{
-					float newFood = Mathf.Round((fq + 1f) * item.m_shared.m_food);
-					float newFoodStamina = Mathf.Round((fq + 1f) * item.m_shared.m_foodStamina);
-					float newFoodDuration = (fq + 1f) * item.m_shared.m_foodBurnTime;
+					float newFood = Mathf.Round(fq * item.m_shared.m_food);
+					float newFoodStamina = Mathf.Round(fq * item.m_shared.m_foodStamina);
+					float newFoodDuration = (fq * item.m_shared.m_foodBurnTime);
 					newFoodDuration /= 60;
 					newFoodDuration = Mathf.Round(newFoodDuration);
+					float newFoodRegen = Mathf.Round(fq * item.m_shared.m_foodRegen);
+					float newFoodEitr = Mathf.Round(fq * item.m_shared.m_foodEitr);
 
 					__result = new Regex("(\\$item_food_health.*?</color>)").Replace(__result, 
 						$"$1 ({CFG.ColorCookHealthFF}{newFood}{CFG.ColorEnd})");
@@ -473,8 +483,12 @@ perks:
 						$"$1 ({CFG.ColorCookStaminaFF}{newFoodStamina}{CFG.ColorEnd})");
 					__result = new Regex("(\\$item_food_duration.*?</color>)").Replace(__result, 
 						$"$1 ({CFG.ColorCookDurationFF}{newFoodDuration}m{CFG.ColorEnd})");
+					__result = new Regex("(\\$item_food_eitr.*?</color>)").Replace(__result,
+                        $"$1 ({CFG.ColorCookEitrFF}{newFoodEitr}m{CFG.ColorEnd})");
+                    __result = new Regex("(\\$item_food_regen.*?</color>)").Replace(__result,
+                        $"$1 ({CFG.ColorCookRegenFF}{newFoodRegen}m{CFG.ColorEnd})");
 
-					__result += "\nQuality: " + PT.Prettify(FQ.foodQuality*100f, 0, PT.TType.TextlessPercent);
+                    __result += "\nQuality: " + PT.Prettify(FQ.foodQuality*100f, 0, PT.TType.TextlessPercent);
 
 					Player player = Player.GetPlayer(FQ.chefID);
 

@@ -17,7 +17,7 @@ namespace kingskills.Perks
             return CFG.SkipOriginal;
         }
 
-        [HarmonyPatch(typeof(BaseAI), nameof(BaseAI.CanHearTarget)), HarmonyPrefix]
+        [HarmonyPatch(typeof(BaseAI), nameof(BaseAI.CanHearTarget), new Type[] { typeof(Character) }), HarmonyPrefix]
         public static bool TotalInvisHearPatch(BaseAI __instance, Character target, ref bool __result)
         {
             if (!IsInvisible(target, ref __result)) return CFG.DontSkipOriginal;

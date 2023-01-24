@@ -23,7 +23,7 @@ namespace kingskills.Perks
 
         public static void CreateAndStartCustomThrowAttack(Player p, ItemDrop.ItemData weapon)
         {
-            p.AbortEquipQueue();
+            p.ClearActionQueue();
             //Attack start checks
             if ((p.InAttack() && !p.HaveQueuedChain()) || p.InDodge() || !p.CanMove() ||
                 p.IsKnockedBack() || p.IsStaggering() || p.InMinorAction())
