@@ -98,6 +98,7 @@
     <Compile Include="Perks\P_Einherjar.cs" />
     <Compile Include="Perks\P_Engineer.cs" />
     <Compile Include="Perks\P_ESP.cs" />
+    <Compile Include="Perks\P_FalconKick.cs" />
     <Compile Include="Systemic Patches\EatRocksPatch.cs" />
     <Compile Include="Perks\P_Berserkr.cs" />
     <Compile Include="Perks\P_BigStick.cs" />

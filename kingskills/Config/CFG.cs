@@ -27,7 +27,7 @@ namespace kingskills
          * 
          * Redux (or Reduction) refers to a percent that will be subtracted from 
          * the whole. NO REDUX SHOULD BE OVER 100!
-         * Ex: A redux of 50% implies the final number will have a final value of 50%
+         * Ex: A redux of 75% implies the final number will have a final value of 25%
          * 
          * Mod (or modifier) is a version of a percentage that multiplies something to
          * change the entire number.
@@ -3764,47 +3764,6 @@ namespace kingskills
 
         #endregion DisarmingDefense
 
-        ////////////////////////////////////////////////////////////////////////////////////////
-        ///                                 ESP
-        ////////////////////////////////////////////////////////////////////////////////////////
-        #region ESP
-        #region configdef
-        public static ConfigEntry<float> ESPMoveRedux;
-        public static ConfigEntry<float> ESPStamina;
-        #endregion configdef
-
-        public static void InitESPConfigs(ConfigFile cfg)
-        {
-            ESPMoveRedux = cfg.Bind("Perks.ESP", "Move Redux", 60f,
-                    AdminCD("% reduction in sneak move speed"));
-            ESPStamina= cfg.Bind("Perks.ESP", "Staina", 100f,
-                    AdminCD("% extra stamina cost while sneaking"));
-        }
-
-        public static Perk GetPerkESP()
-        {
-            return new Perk("Inattentional Blindness",
-                $"Your sneak is now {ESPMoveRedux.Value}% slower and takes {ESPStamina.Value}% more stamina, but you cannot " +
-                $"be detected so long as you are sneaking.",
-                "I’ve mastered the ability of standing so incredibly still… That I become invisible to the eye. Watch.",
-                PerkMan.PerkType.ESP, Skills.SkillType.Sneak, "Icons/esp.png",
-                $"{ESPMoveRedux.Value}% slower sneak, costs {ESPStamina.Value}% more stamina, total invisibility");
-        }
-
-        public static float GetESPMoveRedux()
-        {
-            return PerToMult(ESPMoveRedux, true);
-        }
-
-        public static float GetESPStaminaMult()
-        {
-            return PerToMult(ESPStamina);
-        }
-
-
-
-
-        #endregion ESP
 
         ////////////////////////////////////////////////////////////////////////////////////////
         ///                                 Efficiency
@@ -3931,25 +3890,77 @@ namespace kingskills
         #endregion Engineer
 
         ////////////////////////////////////////////////////////////////////////////////////////
-        ///                                 FalconKick
+        ///                                 ESP
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region ESP
+        #region configdef
+        public static ConfigEntry<float> ESPMoveRedux;
+        public static ConfigEntry<float> ESPStamina;
+        #endregion configdef
+
+        public static void InitESPConfigs(ConfigFile cfg)
+        {
+            ESPMoveRedux = cfg.Bind("Perks.ESP", "Move Redux", 60f,
+                    AdminCD("% reduction in sneak move speed"));
+            ESPStamina = cfg.Bind("Perks.ESP", "Staina", 100f,
+                    AdminCD("% extra stamina cost while sneaking"));
+        }
+
+        public static Perk GetPerkESP()
+        {
+            return new Perk("Inattentional Blindness",
+                $"Your sneak is now {ESPMoveRedux.Value}% slower and takes {ESPStamina.Value}% more stamina, but you cannot " +
+                $"be detected so long as you are sneaking.",
+                "I’ve mastered the ability of standing so incredibly still… That I become invisible to the eye. Watch.",
+                PerkMan.PerkType.ESP, Skills.SkillType.Sneak, "Icons/esp.png",
+                $"{ESPMoveRedux.Value}% slower sneak, costs {ESPStamina.Value}% more stamina, total invisibility");
+        }
+
+        public static float GetESPMoveRedux()
+        {
+            return PerToMult(ESPMoveRedux, true);
+        }
+
+        public static float GetESPStaminaMult()
+        {
+            return PerToMult(ESPStamina);
+        }
+
+
+
+
+        #endregion ESP
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 FalconKick UNFINISHED
         ////////////////////////////////////////////////////////////////////////////////////////
         #region FalconKick
         #region configdef
-
+        public static ConfigEntry<float> FalconKickDamageBonus;
+        public static ConfigEntry<float> FalconKickKnockback;
         #endregion configdef
 
         public static void InitFalconKickConfigs(ConfigFile cfg)
         {
+            FalconKickDamageBonus = cfg.Bind("Perks.FalconKick", "Damage bonus", 20f,
+                    AdminCD("Flat fire damage to add to falcon kick"));
+            FalconKickKnockback = cfg.Bind("Perks.FalconKick", "Knockback", 300f,
+                    AdminCD("% increase to knockback for falcon kick"));
         }
 
         public static Perk GetPerkFalconKick()
         {
             return new Perk("Falcon Kick",
-                "Your kick now causes you to backflip into the air, and sends enemies flying.",
+                $"Your kick now causes an additional {FalconKickDamageBonus.Value} fire damage, and knocks enemies very far.",
                 "K.O.!",
-                PerkMan.PerkType.FalconKick, Skills.SkillType.None, "Icons/falconkick.png");
+                PerkMan.PerkType.FalconKick, Skills.SkillType.Unarmed, "Icons/falconkick.png",
+                $"Super kicks with {FalconKickDamageBonus.Value} extra fire damage");
         }
 
+        public static float GetFalconKickKnockbackMult()
+        {
+            return PerToMult(FalconKickKnockback);
+        }
 
 
 
@@ -3973,7 +3984,8 @@ namespace kingskills
                 "Whenever you are on a ship, but not the captain, a portion of your sailing level is added to" +
                 " the captain's when determining sailing buffs.",
                 "Every man does their part.",
-                PerkMan.PerkType.FirstMate, Skills.SkillType.None, "Icons/firstmate.png");
+                PerkMan.PerkType.FirstMate, SkillMan.Sailing, "Icons/firstmate.png",
+                $"");
         }
 
 
