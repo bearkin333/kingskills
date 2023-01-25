@@ -34,10 +34,14 @@ namespace kingskills.Assets
             skillIconSprites.Add("Agriculture", LoadSpriteFromFilename("SkillIcons/Agriculture.png"));
             skillIconSprites.Add("Axes", LoadSpriteFromFilename("SkillIcons/Axes.png"));
             skillIconSprites.Add("Blocking", LoadSpriteFromFilename("SkillIcons/Blocking.png"));
+            skillIconSprites.Add("Blood Magic", LoadSpriteFromFilename("SkillIcons/BloodMagic.png"));
             skillIconSprites.Add("Bows", LoadSpriteFromFilename("SkillIcons/Bows.png"));
             skillIconSprites.Add("Building", LoadSpriteFromFilename("SkillIcons/Building.png"));
             skillIconSprites.Add("Clubs", LoadSpriteFromFilename("SkillIcons/Clubs.png"));
             skillIconSprites.Add("Cooking", LoadSpriteFromFilename("SkillIcons/Cooking.png"));
+            skillIconSprites.Add("Crossbows", LoadSpriteFromFilename("SkillIcons/Crossbows.png"));
+            skillIconSprites.Add("Elemental Magic", LoadSpriteFromFilename("SkillIcons/ElementalMagic.png"));
+            skillIconSprites.Add("Fishing", LoadSpriteFromFilename("SkillIcons/Fishing.png"));
             skillIconSprites.Add("Fists", LoadSpriteFromFilename("SkillIcons/Fists.png"));
             skillIconSprites.Add("Jump", LoadSpriteFromFilename("SkillIcons/Jump.png"));
             skillIconSprites.Add("Knives", LoadSpriteFromFilename("SkillIcons/Knives.png"));

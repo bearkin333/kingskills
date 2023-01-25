@@ -570,6 +570,9 @@ namespace kingskills.Perks
             //Blocking
             TitanEndurance, SpikedShield, TitanStrength, BlackFlash, BlockExpert, DidntHurt,
 
+            //Blood Magic
+            Blood1A, Blood1B, Blood2A, Blood2B, Blood3A, Blood3B,
+
             //Bow
             PowerDraw, Frugal, RunedArrows, OfferToUllr, SpiritGuide, Hraesvelg,
 
@@ -579,8 +582,17 @@ namespace kingskills.Perks
             //Club
             ClosingTheGap, BlastWave, GiantSmash, PlusUltra, Mjolnir, LogHorizon,
 
+            //Crossbows
+            Crbow1A, Crbow1B, Crbow2A, Crbow2B, Crbow3A, Crbow3B,
+
             //Cooking
             SpicySweet, Nutrition, FiveStarChef, SpiceMaster, TasteTesting, KeenNose,
+
+            //Elemental Magic
+            Elmnt1A, Elmnt1B, Elmnt2A, Elmnt2B, Elmnt3A, Elmnt3B,
+
+            //Fishing
+            Fish1A, Fish1B, Fish2A, Fish2B, Fish3A, Fish3B,
 
             //Unarmed
             IronSkin, LightningReflex, FalconKick, PressurePoints, AttackOfOpportunity, Worldly,

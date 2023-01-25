@@ -205,6 +205,9 @@ namespace kingskills.UX
                 case "Blocking":
                     data = new BlockGUI();
                     break;
+                case "Blood Magic":
+                    data = new BloodMagicGUI();
+                    break;
                 case "Bows":
                     data = new BowGUI();
                     break;
@@ -216,6 +219,15 @@ namespace kingskills.UX
                     break;
                 case "Cooking":
                     data = new CookGUI();
+                    break;
+                case "Crossbows":
+                    data = new CrossbowGUI();
+                    break;
+                case "Elemental Magic":
+                    data = new ElementalMagicGUI();
+                    break;
+                case "Fishing":
+                    data = new FishingGUI();
                     break;
                 case "Fists":
                     data = new FistGUI();

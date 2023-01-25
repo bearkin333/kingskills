@@ -126,6 +126,7 @@ namespace kingskills.UX
         }
     }
 
+
     ////////////////////////////////////////////////////////////////////////////////////////
     /// 
     ///                             WEAPONS
@@ -302,6 +303,87 @@ namespace kingskills.UX
                 $"bonus experience scales with the level of the enemy, so finding high level foes is worth your time.{CFG.ColorEnd}";
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    /// 
+    ///                             WEAPONS
+    ///              
+    ///                             Crossbows
+    /// 
+    ////////////////////////////////////////////////////////////////////////////////////////
+    public class CrossbowGUI : SkillGUIData
+    {
+        public override bool isOutsideFactors() => false;
+
+        public override void oPanels()
+        {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Crossbows);
+
+            //float axeDamage = PT.MultToPer(CFG.GetAxeDamageMult(skill));
+            //float axeStaminaRedux = PT.MultToPer(CFG.GetAxeStaminaRedux(skill), true);
+            //float axeStaminaGain = CFG.GetAxeStamina(skill);
+            //float axeChopBonus = PT.MultToPer(1f + CFG.GetAxeChopDamageMod(skill));
+            //float axeCarryCapacity = CFG.GetAxeCarryCapacity(skill);
+
+            //string axeDamageS = PT.Prettify(axeDamage, 1, PT.TType.Percent);
+            //string axeStaminaReduxS = PT.Prettify(axeStaminaRedux, 1, PT.TType.PercentRedux);
+            //string axeStaminaGainS = PT.Prettify(axeStaminaGain, 0, PT.TType.Flat);
+            //string axeChopBonusS = PT.Prettify(axeChopBonus, 1, PT.TType.Percent);
+            //string axeCarryCapacityS = PT.Prettify(axeCarryCapacity, 0, PT.TType.Flat);
+
+
+            SkillGUI.LPEffectsTexts["f1"].GetComponent<Text>().text =
+                "Not implemented yet";
+
+            SkillGUI.LPEffectsTexts["f2"].GetComponent<Text>().text =
+                "";// axeStaminaReduxS + " stamina usage with axes";
+
+            SkillGUI.LPEffectsTexts["f3"].GetComponent<Text>().text =
+                "";//axeStaminaGainS + " higher base stamina";
+
+            SkillGUI.LPEffectsTexts["f4"].GetComponent<Text>().text =
+                "";//axeChopBonusS + " chop damage";
+
+            SkillGUI.LPEffectsTexts["f5"].GetComponent<Text>().text =
+                "";//axeCarryCapacityS + " extra carry capacity";
+
+            //outside factors text
+            SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text = "";
+        }
+
+        public override void oPerks()
+        {
+            OpenPerks.OpenPerksByType(Skills.SkillType.Crossbows,
+                //perk 1
+                PerkMan.PerkType.Crbow1A,
+                PerkMan.PerkType.Crbow1B,
+                //perk 2
+                PerkMan.PerkType.Crbow2A,
+                PerkMan.PerkType.Crbow2B,
+                //perk 3
+                PerkMan.PerkType.Crbow3A,
+                PerkMan.PerkType.Crbow3B);
+        }
+
+        public override void oTips()
+        {
+            SkillGUI.LPTipsTexts[1].GetComponent<Text>().text =
+                $"Crossbow flavor paragraph";
+            SkillGUI.LPTipsTexts[2].GetComponent<Text>().text =
+                $"Crossbow strategy/gameplay explanation";
+            SkillGUI.LPTipsTexts[3].GetComponent<Text>().text =
+                $"With all weapons in King's Skills, there are 4 ways to earn experience." +
+                $"\n{CFG.ColorWhiteFF}Hold:{CFG.ColorEnd} You earn experience over time slowly while holding a weapon" +
+                $"\n{CFG.ColorWhiteFF}Swing:{CFG.ColorEnd} You earn a small amount of experience whenever you swing with a weapon" +
+                $"\n{CFG.ColorWhiteFF}Strike:{CFG.ColorEnd} You earn a percentage of the damage you deal with a weapon as experience" +
+                $"\n{CFG.ColorWhiteFF}Bonus:{CFG.ColorEnd} Every weapon has a different bonus task that can earn you extra XP";
+            SkillGUI.LPTipsTexts[4].GetComponent<Text>().text =
+                $"Crossbow experience strategy explanation";
+            SkillGUI.LPTipsTexts[5].GetComponent<Text>().text =
+                $"{CFG.ColorBonusBlueFF}Crossbow bonus experience mission{CFG.ColorEnd}";
+        }
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////
     /// 
@@ -938,6 +1020,87 @@ namespace kingskills.UX
     /// 
     ///                             SKILLS
     ///              
+    ///                             Blood Magic
+    /// 
+    ////////////////////////////////////////////////////////////////////////////////////////
+    public class BloodMagicGUI : SkillGUIData
+    {
+        public override bool isOutsideFactors() => false;
+
+        public override void oPanels()
+        {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.BloodMagic);
+
+            //float axeDamage = PT.MultToPer(CFG.GetAxeDamageMult(skill));
+            //float axeStaminaRedux = PT.MultToPer(CFG.GetAxeStaminaRedux(skill), true);
+            //float axeStaminaGain = CFG.GetAxeStamina(skill);
+            //float axeChopBonus = PT.MultToPer(1f + CFG.GetAxeChopDamageMod(skill));
+            //float axeCarryCapacity = CFG.GetAxeCarryCapacity(skill);
+
+            //string axeDamageS = PT.Prettify(axeDamage, 1, PT.TType.Percent);
+            //string axeStaminaReduxS = PT.Prettify(axeStaminaRedux, 1, PT.TType.PercentRedux);
+            //string axeStaminaGainS = PT.Prettify(axeStaminaGain, 0, PT.TType.Flat);
+            //string axeChopBonusS = PT.Prettify(axeChopBonus, 1, PT.TType.Percent);
+            //string axeCarryCapacityS = PT.Prettify(axeCarryCapacity, 0, PT.TType.Flat);
+
+
+            SkillGUI.LPEffectsTexts["f1"].GetComponent<Text>().text =
+                "Not implemented yet";
+
+            SkillGUI.LPEffectsTexts["f2"].GetComponent<Text>().text =
+                "";// axeStaminaReduxS + " stamina usage with axes";
+
+            SkillGUI.LPEffectsTexts["f3"].GetComponent<Text>().text =
+                "";//axeStaminaGainS + " higher base stamina";
+
+            SkillGUI.LPEffectsTexts["f4"].GetComponent<Text>().text =
+                "";//axeChopBonusS + " chop damage";
+
+            SkillGUI.LPEffectsTexts["f5"].GetComponent<Text>().text =
+                "";//axeCarryCapacityS + " extra carry capacity";
+
+            //outside factors text
+            SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text = "";
+        }
+
+        public override void oPerks()
+        {
+            OpenPerks.OpenPerksByType(Skills.SkillType.BloodMagic,
+                //perk 1
+                PerkMan.PerkType.Blood1A,
+                PerkMan.PerkType.Blood1B,
+                //perk 2
+                PerkMan.PerkType.Blood2A,
+                PerkMan.PerkType.Blood2B,
+                //perk 3
+                PerkMan.PerkType.Blood3A,
+                PerkMan.PerkType.Blood3B);
+        }
+
+        public override void oTips()
+        {
+            SkillGUI.LPTipsTexts[1].GetComponent<Text>().text =
+                $"Blood Magic flavor paragraph";
+            SkillGUI.LPTipsTexts[2].GetComponent<Text>().text =
+                $"Blood Magic strategy/gameplay explanation";
+            SkillGUI.LPTipsTexts[3].GetComponent<Text>().text =
+                $"With all weapons in King's Skills, there are 4 ways to earn experience." +
+                $"\n{CFG.ColorWhiteFF}Hold:{CFG.ColorEnd} You earn experience over time slowly while holding a weapon" +
+                $"\n{CFG.ColorWhiteFF}Swing:{CFG.ColorEnd} You earn a small amount of experience whenever you swing with a weapon" +
+                $"\n{CFG.ColorWhiteFF}Strike:{CFG.ColorEnd} You earn a percentage of the damage you deal with a weapon as experience" +
+                $"\n{CFG.ColorWhiteFF}Bonus:{CFG.ColorEnd} Every weapon has a different bonus task that can earn you extra XP";
+            SkillGUI.LPTipsTexts[4].GetComponent<Text>().text =
+                $"Blood Magic experience strategy explanation";
+            SkillGUI.LPTipsTexts[5].GetComponent<Text>().text =
+                $"{CFG.ColorBonusBlueFF}Blood Magicbonus experience mission{CFG.ColorEnd}";
+        }
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    /// 
+    ///                             SKILLS
+    ///              
     ///                             Building
     /// 
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -1107,6 +1270,167 @@ namespace kingskills.UX
                 $"quality will increase the food's health, stamina, and duration. Items that you harvest or cook will get a " +
                 $"random amount that is influenced by your Agriculture or Cooking skill, respectively. Packaging foods together with different " +
                 $"qualities will normally flatten both of their quality levels to whichever was the lowest.";
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    /// 
+    ///                             SKILLS
+    ///              
+    ///                             Elemental Magic
+    /// 
+    ////////////////////////////////////////////////////////////////////////////////////////
+    public class ElementalMagicGUI : SkillGUIData
+    {
+        public override bool isOutsideFactors() => false;
+
+        public override void oPanels()
+        {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.ElementalMagic);
+
+            //float axeDamage = PT.MultToPer(CFG.GetAxeDamageMult(skill));
+            //float axeStaminaRedux = PT.MultToPer(CFG.GetAxeStaminaRedux(skill), true);
+            //float axeStaminaGain = CFG.GetAxeStamina(skill);
+            //float axeChopBonus = PT.MultToPer(1f + CFG.GetAxeChopDamageMod(skill));
+            //float axeCarryCapacity = CFG.GetAxeCarryCapacity(skill);
+
+            //string axeDamageS = PT.Prettify(axeDamage, 1, PT.TType.Percent);
+            //string axeStaminaReduxS = PT.Prettify(axeStaminaRedux, 1, PT.TType.PercentRedux);
+            //string axeStaminaGainS = PT.Prettify(axeStaminaGain, 0, PT.TType.Flat);
+            //string axeChopBonusS = PT.Prettify(axeChopBonus, 1, PT.TType.Percent);
+            //string axeCarryCapacityS = PT.Prettify(axeCarryCapacity, 0, PT.TType.Flat);
+
+
+            SkillGUI.LPEffectsTexts["f1"].GetComponent<Text>().text =
+                "Not implemented yet";
+
+            SkillGUI.LPEffectsTexts["f2"].GetComponent<Text>().text =
+                "";// axeStaminaReduxS + " stamina usage with axes";
+
+            SkillGUI.LPEffectsTexts["f3"].GetComponent<Text>().text =
+                "";//axeStaminaGainS + " higher base stamina";
+
+            SkillGUI.LPEffectsTexts["f4"].GetComponent<Text>().text =
+                "";//axeChopBonusS + " chop damage";
+
+            SkillGUI.LPEffectsTexts["f5"].GetComponent<Text>().text =
+                "";//axeCarryCapacityS + " extra carry capacity";
+
+            //outside factors text
+            SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text = "";
+        }
+
+        public override void oPerks()
+        {
+            OpenPerks.OpenPerksByType(Skills.SkillType.ElementalMagic,
+                //perk 1
+                PerkMan.PerkType.Elmnt1A,
+                PerkMan.PerkType.Elmnt1B,
+                //perk 2
+                PerkMan.PerkType.Elmnt2A,
+                PerkMan.PerkType.Elmnt2B,
+                //perk 3
+                PerkMan.PerkType.Elmnt3A,
+                PerkMan.PerkType.Elmnt3B);
+        }
+
+        public override void oTips()
+        {
+            SkillGUI.LPTipsTexts[1].GetComponent<Text>().text =
+                $"Elemental Magic flavor paragraph";
+            SkillGUI.LPTipsTexts[2].GetComponent<Text>().text =
+                $"Elemental Magic strategy/gameplay explanation";
+            SkillGUI.LPTipsTexts[3].GetComponent<Text>().text =
+                $"With all weapons in King's Skills, there are 4 ways to earn experience." +
+                $"\n{CFG.ColorWhiteFF}Hold:{CFG.ColorEnd} You earn experience over time slowly while holding a weapon" +
+                $"\n{CFG.ColorWhiteFF}Swing:{CFG.ColorEnd} You earn a small amount of experience whenever you swing with a weapon" +
+                $"\n{CFG.ColorWhiteFF}Strike:{CFG.ColorEnd} You earn a percentage of the damage you deal with a weapon as experience" +
+                $"\n{CFG.ColorWhiteFF}Bonus:{CFG.ColorEnd} Every weapon has a different bonus task that can earn you extra XP";
+            SkillGUI.LPTipsTexts[4].GetComponent<Text>().text =
+                $"Elemental Magic experience strategy explanation";
+            SkillGUI.LPTipsTexts[5].GetComponent<Text>().text =
+                $"{CFG.ColorBonusBlueFF}Elemental Magic bonus experience mission{CFG.ColorEnd}";
+        }
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    /// 
+    ///                             SKILLS
+    ///              
+    ///                             Fishing
+    /// 
+    ////////////////////////////////////////////////////////////////////////////////////////
+    public class FishingGUI : SkillGUIData
+    {
+        public override bool isOutsideFactors() => false;
+
+        public override void oPanels()
+        {
+            float skill = Player.m_localPlayer.GetSkillFactor(Skills.SkillType.Fishing);
+
+            //float axeDamage = PT.MultToPer(CFG.GetAxeDamageMult(skill));
+            //float axeStaminaRedux = PT.MultToPer(CFG.GetAxeStaminaRedux(skill), true);
+            //float axeStaminaGain = CFG.GetAxeStamina(skill);
+            //float axeChopBonus = PT.MultToPer(1f + CFG.GetAxeChopDamageMod(skill));
+            //float axeCarryCapacity = CFG.GetAxeCarryCapacity(skill);
+
+            //string axeDamageS = PT.Prettify(axeDamage, 1, PT.TType.Percent);
+            //string axeStaminaReduxS = PT.Prettify(axeStaminaRedux, 1, PT.TType.PercentRedux);
+            //string axeStaminaGainS = PT.Prettify(axeStaminaGain, 0, PT.TType.Flat);
+            //string axeChopBonusS = PT.Prettify(axeChopBonus, 1, PT.TType.Percent);
+            //string axeCarryCapacityS = PT.Prettify(axeCarryCapacity, 0, PT.TType.Flat);
+
+
+            SkillGUI.LPEffectsTexts["f1"].GetComponent<Text>().text =
+                "Not implemented yet";
+
+            SkillGUI.LPEffectsTexts["f2"].GetComponent<Text>().text =
+                "";// axeStaminaReduxS + " stamina usage with axes";
+
+            SkillGUI.LPEffectsTexts["f3"].GetComponent<Text>().text =
+                "";//axeStaminaGainS + " higher base stamina";
+
+            SkillGUI.LPEffectsTexts["f4"].GetComponent<Text>().text =
+                "";//axeChopBonusS + " chop damage";
+
+            SkillGUI.LPEffectsTexts["f5"].GetComponent<Text>().text =
+                "";//axeCarryCapacityS + " extra carry capacity";
+
+            //outside factors text
+            SkillGUI.LPEffectsTexts["x1"].GetComponent<Text>().text = "";
+        }
+
+        public override void oPerks()
+        {
+            OpenPerks.OpenPerksByType(Skills.SkillType.ElementalMagic,
+                //perk 1
+                PerkMan.PerkType.Fish1A,
+                PerkMan.PerkType.Fish1B,
+                //perk 2
+                PerkMan.PerkType.Fish2A,
+                PerkMan.PerkType.Fish2B,
+                //perk 3
+                PerkMan.PerkType.Fish3A,
+                PerkMan.PerkType.Fish3B);
+        }
+
+        public override void oTips()
+        {
+            SkillGUI.LPTipsTexts[1].GetComponent<Text>().text =
+                $"Fish flavor paragraph";
+            SkillGUI.LPTipsTexts[2].GetComponent<Text>().text =
+                $"Fish strategy/gameplay explanation";
+            SkillGUI.LPTipsTexts[3].GetComponent<Text>().text =
+                $"With all weapons in King's Skills, there are 4 ways to earn experience." +
+                $"\n{CFG.ColorWhiteFF}Hold:{CFG.ColorEnd} You earn experience over time slowly while holding a weapon" +
+                $"\n{CFG.ColorWhiteFF}Swing:{CFG.ColorEnd} You earn a small amount of experience whenever you swing with a weapon" +
+                $"\n{CFG.ColorWhiteFF}Strike:{CFG.ColorEnd} You earn a percentage of the damage you deal with a weapon as experience" +
+                $"\n{CFG.ColorWhiteFF}Bonus:{CFG.ColorEnd} Every weapon has a different bonus task that can earn you extra XP";
+            SkillGUI.LPTipsTexts[4].GetComponent<Text>().text =
+                $"Fish experience strategy explanation";
+            SkillGUI.LPTipsTexts[5].GetComponent<Text>().text =
+                $"{CFG.ColorBonusBlueFF}Fish bonus experience mission{CFG.ColorEnd}";
         }
     }
 
