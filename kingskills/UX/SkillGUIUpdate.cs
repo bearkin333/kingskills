@@ -162,7 +162,7 @@ namespace kingskills.UX
             }
             else
             {
-                SkillGUI.PinBtn.GetComponentInChildren<Text>().text = $"-{CFG.KeyBindingSkillGUI}-\nto unpin";
+                SkillGUI.PinBtn.GetComponentInChildren<Text>().text = $"-{CFG.KeyBindingSkillGUI.Value}-\nto unpin";
             }
         }
 

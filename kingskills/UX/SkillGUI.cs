@@ -117,7 +117,7 @@ namespace kingskills.UX
             rect.SetParent(SkillGUIWindow.transform);
             rect.anchorMin = new Vector2(0f, 1f);
             rect.anchorMax = new Vector2(0f, 1f);
-            rect.anchoredPosition = new Vector2(150f, -60f);
+            rect.anchoredPosition = new Vector2(100f, -60f);
             rect.sizeDelta = new Vector2(90f, 90f);
 
             //Create skill icon
@@ -128,7 +128,7 @@ namespace kingskills.UX
             rect.SetParent(SkillGUIWindow.transform);
             rect.anchorMin = new Vector2(0f, 1f);
             rect.anchorMax = new Vector2(0f, 1f);
-            rect.anchoredPosition = new Vector2(150f, -60f);
+            rect.anchoredPosition = new Vector2(100f, -60f);
             //rect.localPosition = new Vector2(-40f, -30f);
             rect.sizeDelta = new Vector2(80f, 80f);
 
@@ -140,7 +140,7 @@ namespace kingskills.UX
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(0.5f, 1f),
                 anchorMax: new Vector2(0.5f, 1f),
-                position: new Vector2(-200f, -125f),
+                position: new Vector2(-150f, -125f),
                 font: GUIManager.Instance.AveriaSerifBold,
                 fontSize: 25,
                 color: CFG.ColorExperienceYellow,
@@ -189,7 +189,7 @@ namespace kingskills.UX
                 parent: SkillGUIWindow.transform,
                 anchorMin: new Vector2(1f, 1f),
                 anchorMax: new Vector2(1f, 1f),
-                position: new Vector2(-130f, -85f),
+                position: new Vector2(-80f, -85f),
                 width: 100f,
                 height: 45f);
 
