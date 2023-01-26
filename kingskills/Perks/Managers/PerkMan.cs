@@ -33,10 +33,14 @@ namespace kingskills.Perks
             skillAscended.Add(SkillMan.Agriculture, false);
             skillAscended.Add(Skills.SkillType.Axes, false);
             skillAscended.Add(Skills.SkillType.Blocking, false);
+            skillAscended.Add(Skills.SkillType.BloodMagic, false);
             skillAscended.Add(Skills.SkillType.Bows, false);
             skillAscended.Add(SkillMan.Building, false);
             skillAscended.Add(Skills.SkillType.Clubs, false);
             skillAscended.Add(SkillMan.Cooking, false);
+            skillAscended.Add(Skills.SkillType.Crossbows, false);
+            skillAscended.Add(Skills.SkillType.ElementalMagic, false);
+            skillAscended.Add(Skills.SkillType.Fishing, false);
             skillAscended.Add(Skills.SkillType.Jump, false);
             skillAscended.Add(Skills.SkillType.Knives, false);
             skillAscended.Add(Skills.SkillType.Pickaxes, false);
@@ -121,6 +125,26 @@ namespace kingskills.Perks
             perk = CFG.GetPerkDidntHurt();
             perkList.Add(perk.type, perk);
 
+            /////////////////////////////////////////////////////////////////////////////////////
+            //Blood Magic
+            perk = CFG.GetPerkBlood1A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkBlood1B();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkBlood2A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkBlood2B();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkBlood3A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkBlood3B();
+            perkList.Add(perk.type, perk);
+
 
             /////////////////////////////////////////////////////////////////////////////////////
             //Bows
@@ -203,6 +227,66 @@ namespace kingskills.Perks
             perkList.Add(perk.type, perk);
 
             perk = CFG.GetPerkKeenNose();
+            perkList.Add(perk.type, perk);
+
+            /////////////////////////////////////////////////////////////////////////////////////
+            //Crossbows
+            perk = CFG.GetPerkCrbow1A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkCrbow1B();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkCrbow2A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkCrbow2B();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkCrbow3A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkCrbow3B();
+            perkList.Add(perk.type, perk);
+
+            /////////////////////////////////////////////////////////////////////////////////////
+            //Elemental Magic
+            perk = CFG.GetPerkElmnt1A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkElmnt1B();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkElmnt2A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkElmnt2B();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkElmnt3A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkElmnt3B();
+            perkList.Add(perk.type, perk);
+
+            /////////////////////////////////////////////////////////////////////////////////////
+            //Fishing
+            perk = CFG.GetPerkFish1A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkFish1B();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkFish2A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkFish2B();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkFish3A();
+            perkList.Add(perk.type, perk);
+
+            perk = CFG.GetPerkFish3B();
             perkList.Add(perk.type, perk);
 
 

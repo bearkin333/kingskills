@@ -162,7 +162,7 @@ namespace kingskills.UX
             }
             else
             {
-                SkillGUI.PinBtn.GetComponentInChildren<Text>().text = $"Pinned!\nPress {CFG.KeyBindingSkillGUI} to unpin";
+                SkillGUI.PinBtn.GetComponentInChildren<Text>().text = $"-{CFG.KeyBindingSkillGUI}-\nto unpin";
             }
         }
 
@@ -188,6 +188,7 @@ namespace kingskills.UX
             Skills.SkillType skill = Skills.SkillType.None;
 
             string skillName = SkillGUI.dd.options[SkillGUI.dd.value].text;
+            //Jotunn.Logger.LogMessage($"Loading information for skill : {skillName}");
             StatsUpdate.UpdateStats(player);
             ResetText();
 

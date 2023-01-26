@@ -88,10 +88,14 @@ namespace kingskills
             InitBotanyConfig(cfg);
             InitAxeConfigs(cfg);
             InitBlockConfigs(cfg);
+            InitBloodMagicConfigs(cfg);
             InitBowConfigs(cfg);
             InitBuildConfig(cfg);
             InitClubConfigs(cfg);
             InitCookConfig(cfg);
+            InitCrossbowConfigs(cfg);
+            InitElementalMagicConfigs(cfg);
+            InitFishingConfigs(cfg);
             InitFistConfigs(cfg);
             InitJumpConfigs(cfg);
             InitKnifeConfigs(cfg);
@@ -118,10 +122,14 @@ namespace kingskills
             SkillActive.Add(SkillMan.Agriculture, ActiveSkillBotany.Value);
             SkillActive.Add(Skills.SkillType.Axes, ActiveSkillAxe.Value);
             SkillActive.Add(Skills.SkillType.Blocking, ActiveSkillBlock.Value);
+            SkillActive.Add(Skills.SkillType.BloodMagic, ActiveSkillBloodMagic.Value);
             SkillActive.Add(Skills.SkillType.Bows, ActiveSkillBow.Value);
             SkillActive.Add(SkillMan.Building, ActiveSkillBuild.Value);
             SkillActive.Add(Skills.SkillType.Clubs, ActiveSkillClub.Value);
             SkillActive.Add(SkillMan.Cooking, ActiveSkillCook.Value);
+            SkillActive.Add(Skills.SkillType.Crossbows, ActiveSkillCrossbow.Value);
+            SkillActive.Add(Skills.SkillType.ElementalMagic, ActiveSkillElementalMagic.Value);
+            SkillActive.Add(Skills.SkillType.Fishing, ActiveSkillFishing.Value);
             SkillActive.Add(Skills.SkillType.Unarmed, ActiveSkillFist.Value);
             SkillActive.Add(Skills.SkillType.Jump, ActiveSkillJump.Value);
             SkillActive.Add(Skills.SkillType.Knives, ActiveSkillKnife.Value);
@@ -333,10 +341,14 @@ namespace kingskills
                 case "Agriculture": return SkillMan.Agriculture;
                 case "Axes": return Skills.SkillType.Axes;
                 case "Blocking": return Skills.SkillType.Blocking;
+                case "Blood Magic": return Skills.SkillType.BloodMagic;
                 case "Bows": return Skills.SkillType.Bows;
                 case "Building": return SkillMan.Building;
                 case "Clubs": return Skills.SkillType.Clubs;
                 case "Cooking": return SkillMan.Cooking;
+                case "Crossbows": return Skills.SkillType.Crossbows;
+                case "Elemental Magic": return Skills.SkillType.ElementalMagic;
+                case "Fishing": return Skills.SkillType.Fishing;
                 case "Fists": return Skills.SkillType.Unarmed;
                 case "Jump": return Skills.SkillType.Jump;
                 case "Knives": return Skills.SkillType.Knives;
@@ -738,6 +750,24 @@ namespace kingskills
 
 
         #endregion club
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                             Crossbows
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region crossbow
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillCrossbow;
+        #endregion configdef
+
+        public static void InitCrossbowConfigs(ConfigFile cfg)
+        {
+            ActiveSkillCrossbow = cfg.Bind("Generic.Active", "Crossbows", true,
+                    AdminCD("Whether or not to activate king's skills version of the crossbows skill", true));
+        }
+
+
+
+        #endregion crossbow
 
         ////////////////////////////////////////////////////////////////////////////////////////
         ///                             Fists
@@ -1438,6 +1468,24 @@ namespace kingskills
         #endregion block
 
         ////////////////////////////////////////////////////////////////////////////////////////
+        ///                             Blood Magic
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region bloodmg
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillBloodMagic;
+        #endregion configdef
+
+        public static void InitBloodMagicConfigs(ConfigFile cfg)
+        {
+            ActiveSkillBloodMagic = cfg.Bind("Generic.Active", "Blood Magic", true,
+                    AdminCD("Whether or not to activate king's skills version of the blood magic skill", true));
+        }
+
+
+
+        #endregion bloodmg
+
+        ////////////////////////////////////////////////////////////////////////////////////////
         ///                             Building
         ////////////////////////////////////////////////////////////////////////////////////////
         #region build
@@ -1852,6 +1900,42 @@ namespace kingskills
         }
 
         #endregion cook
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                             Elemental Magic
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region elementalmg
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillElementalMagic;
+        #endregion configdef
+
+        public static void InitElementalMagicConfigs(ConfigFile cfg)
+        {
+            ActiveSkillElementalMagic = cfg.Bind("Generic.Active", "Elemental Magic", true,
+                    AdminCD("Whether or not to activate king's skills version of the elemental magic skill", true));
+        }
+
+
+
+        #endregion elementalmg
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                             Fishing
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region fish
+        #region configdef
+        public static ConfigEntry<bool> ActiveSkillFishing;
+        #endregion configdef
+
+        public static void InitFishingConfigs(ConfigFile cfg)
+        {
+            ActiveSkillFishing = cfg.Bind("Generic.Active", "Fishing", true,
+                    AdminCD("Whether or not to activate king's skills version of the fishing skill", true));
+        }
+
+
+
+        #endregion fish
 
         ////////////////////////////////////////////////////////////////////////////////////////
         ///                             Jumping
@@ -6102,6 +6186,609 @@ namespace kingskills
 
 
         #endregion Ymir
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Blood1A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Blood1A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBlood1AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBlood1A()
+        {
+            return new Perk("Memories of Blood1A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Blood1A, Skills.SkillType.BloodMagic, "Icons/Blood1A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Blood1A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Blood1B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Blood1B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBlood1BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBlood1B()
+        {
+            return new Perk("Memories of Blood1B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Blood1B, Skills.SkillType.BloodMagic, "Icons/Blood1B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Blood1B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Blood2A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Blood2A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBlood2AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBlood2A()
+        {
+            return new Perk("Memories of Blood2A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Blood2A, Skills.SkillType.BloodMagic, "Icons/Blood2A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Blood2A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Blood2B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Blood2B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBlood2BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBlood2B()
+        {
+            return new Perk("Memories of Blood2B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Blood2B, Skills.SkillType.BloodMagic, "Icons/Blood2B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Blood2B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Blood3A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Blood3A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBlood3AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBlood3A()
+        {
+            return new Perk("Memories of Blood3A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Blood3A, Skills.SkillType.BloodMagic, "Icons/Blood3A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Blood3A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Blood3B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Blood3B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitBlood3BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkBlood3B()
+        {
+            return new Perk("Memories of Blood3B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Blood3B, Skills.SkillType.BloodMagic, "Icons/Blood3B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Blood3B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Crbow1A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Crbow1A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCrbow1AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCrbow1A()
+        {
+            return new Perk("Memories of Crbow1A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Crbow1A, Skills.SkillType.Crossbows, "Icons/Crbow1A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Crbow1A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Crbow1B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Crbow1B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCrbow1BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCrbow1B()
+        {
+            return new Perk("Memories of Crbow1B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Crbow1B, Skills.SkillType.Crossbows, "Icons/Crbow1B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Crbow1B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Crbow2A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Crbow2A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCrbow2AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCrbow2A()
+        {
+            return new Perk("Memories of Crbow2A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Crbow2A, Skills.SkillType.Crossbows, "Icons/Crbow2A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Crbow2A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Crbow2B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Crbow2B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCrbow2BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCrbow2B()
+        {
+            return new Perk("Memories of Crbow2B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Crbow2B, Skills.SkillType.Crossbows, "Icons/Crbow2B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Crbow2B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Crbow3A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Crbow3A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCrbow3AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCrbow3A()
+        {
+            return new Perk("Memories of Crbow3A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Crbow3A, Skills.SkillType.Crossbows, "Icons/Crbow3A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Crbow3A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Crbow3B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Crbow3B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitCrbow3BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkCrbow3B()
+        {
+            return new Perk("Memories of Crbow3B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Crbow3B, Skills.SkillType.Crossbows, "Icons/Crbow3B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Crbow3B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Elmnt1A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Elmnt1A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitElmnt1AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkElmnt1A()
+        {
+            return new Perk("Memories of Elmnt1A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Elmnt1A, Skills.SkillType.ElementalMagic, "Icons/Elmnt1A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Elmnt1A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Elmnt1B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Elmnt1B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitElmnt1BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkElmnt1B()
+        {
+            return new Perk("Memories of Elmnt1B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Elmnt1B, Skills.SkillType.ElementalMagic, "Icons/Elmnt1B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Elmnt1B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Elmnt2A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Elmnt2A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitElmnt2AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkElmnt2A()
+        {
+            return new Perk("Memories of Elmnt2A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Elmnt2A, Skills.SkillType.ElementalMagic, "Icons/Elmnt2A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Elmnt2A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Elmnt2B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Elmnt2B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitElmnt2BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkElmnt2B()
+        {
+            return new Perk("Memories of Elmnt2B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Elmnt2B, Skills.SkillType.ElementalMagic, "Icons/Elmnt2B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Elmnt2B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Elmnt3A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Elmnt3A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitElmnt3AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkElmnt3A()
+        {
+            return new Perk("Memories of Elmnt3A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Elmnt3A, Skills.SkillType.ElementalMagic, "Icons/Elmnt3A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Elmnt3A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Elmnt3B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Elmnt3B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitElmnt3BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkElmnt3B()
+        {
+            return new Perk("Memories of Elmnt3B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Elmnt3B, Skills.SkillType.ElementalMagic, "Icons/Elmnt3B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Elmnt3B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Fish1A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Fish1A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFish1AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFish1A()
+        {
+            return new Perk("Memories of Fish1A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Fish1A, Skills.SkillType.Fishing, "Icons/Fish1A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Fish1A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Fish1B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Fish1B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFish1BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFish1B()
+        {
+            return new Perk("Memories of Fish1B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Fish1B, Skills.SkillType.Fishing, "Icons/Fish1B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Fish1B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Fish2A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Fish2A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFish2AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFish2A()
+        {
+            return new Perk("Memories of Fish2A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Fish2A, Skills.SkillType.Fishing, "Icons/Fish2A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Fish2A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Fish2B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Fish2B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFish2BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFish2B()
+        {
+            return new Perk("Memories of Fish2B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Fish2B, Skills.SkillType.Fishing, "Icons/Fish2B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Fish2B
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Fish3A
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Fish3A
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFish3AConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFish3A()
+        {
+            return new Perk("Memories of Fish3A",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Fish3A, Skills.SkillType.Fishing, "Icons/Fish3A.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Fish3A
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        ///                                 Fish3B
+        ////////////////////////////////////////////////////////////////////////////////////////
+        #region Fish3B
+        #region configdef
+
+        #endregion configdef
+
+        public static void InitFish3BConfigs(ConfigFile cfg)
+        {
+        }
+
+        public static Perk GetPerkFish3B()
+        {
+            return new Perk("Memories of Fish3B",
+                $"Tapping into the land's ancient heritage, you gain a {CFG.PerkWeaponEnchantDamage.Value}% " +
+                $"extra frost damage with each attack.",
+                "Let's hope Odin is not a jealous god.",
+                PerkMan.PerkType.Fish3B, Skills.SkillType.Fishing, "Icons/Fish3B.png",
+                "Unlocked frost enchant");
+        }
+
+
+        #endregion Fish3B
+
+
 
         #endregion perks
 

@@ -50,7 +50,7 @@ namespace kingskills
                         skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Blocking"];
                         break;
                     case Skills.SkillType.BloodMagic:
-                        //skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Blood Magic"];
+                        skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Blood Magic"];
                         break;
                     case Skills.SkillType.Bows:
                         skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Bows"];
@@ -59,13 +59,13 @@ namespace kingskills
                         skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Clubs"];
                         break;
                     case Skills.SkillType.Crossbows:
-                        //skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Crossbows"];
+                        skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Crossbows"];
                         break;
                     case Skills.SkillType.ElementalMagic:
-                        //skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Elemental Magic"];
+                        skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Elemental Magic"];
                         break;
                     case Skills.SkillType.Fishing:
-                        //skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Fishing"];
+                        skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Fishing"];
                         break;
                     case Skills.SkillType.Jump:
                         skillDef.m_icon = Assets.AssetLoader.skillIconSprites["Jump"];

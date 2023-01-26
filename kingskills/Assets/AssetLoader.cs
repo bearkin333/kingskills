@@ -68,7 +68,7 @@ namespace kingskills.Assets
             }
             catch
             {
-                Jotunn.Logger.LogMessage($"Could not load sprite '{filename}'");
+                //Jotunn.Logger.LogMessage($"Could not load sprite '{filename}'");
                 return GUIManager.Instance.GetSprite("ArmorBronzeChest");
             }
         }
