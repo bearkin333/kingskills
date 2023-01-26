@@ -6,7 +6,7 @@ Did you ever think it was strange that a crazed, naked bearded man blocking pebb
 
 That's why I made this mod. King's Skills aims to totally overhaul the skill system in Valheim. The focus is to make the experience of levelling up more challenging, but also more interesting - asking you to consider each skill as it's own gameplay style. Furthermore, King's Skills rewards you for the effort by really making you feel like a superhuman viking war hero for each skill you do master.
 
-##Full Changes:
+## Full Changes:
 - Each one of the 20 existing base skills has been given a total mechanical makeover, adding on average 3 new ways to earn experience and 4 new effects. (The 4 new skills in the Mistlands update are not yet finished!)
 - All of the weapon skills now give you permanent bonuses that affect you even when you're not using that weapon - a clubmaster will have higher knockback with all weapons, and a knife master will have increased sneak attack damage across the board!
 - 4 new skills are added - Cooking, Agriculture, Building, and Sailing.  
